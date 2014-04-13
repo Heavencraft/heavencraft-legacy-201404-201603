@@ -1,0 +1,229 @@
+package fr.heavencraft.NavalConflicts.Extras;
+
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
+
+import fr.heavencraft.NavalConflicts.GameMechanics.Settings;
+import fr.heavencraft.NavalConflicts.Handlers.Arena;
+import fr.heavencraft.NavalConflicts.Handlers.Lobby;
+import fr.heavencraft.NavalConflicts.Handlers.Lobby.GameState;
+import fr.heavencraft.NavalConflicts.Handlers.Player.NCPlayer;
+import fr.heavencraft.NavalConflicts.Handlers.Player.NCPlayerManager;
+import fr.heavencraft.NavalConflicts.Messages.RandomChatColor;
+
+public class ScoreBoard {
+	NCPlayer ip;
+
+	public ScoreBoard(NCPlayer ip)
+	{
+		this.ip = ip;
+	}
+
+	public enum ScoreBoards
+	{
+		Regular, Stats
+	};
+
+	private ScoreBoards showing = ScoreBoards.Regular;
+
+	/**
+	 * @return the scoreboard theyre seeing
+	 */
+	public ScoreBoards getShowing() {
+		return showing;
+	}
+
+	/**
+	 * Toggles the scoreboard they're seeing
+	 */
+	public void switchShowing() {
+		if (getShowing() == ScoreBoards.Regular)
+			showing = ScoreBoards.Stats;
+		else
+			showing = ScoreBoards.Regular;
+	}
+
+	/**
+	 * Shows proper scoreboard for what they're SUPPOSED to see(Also used to
+	 * update a scoreboard)
+	 */
+	public void showProperBoard() {
+		if (showing == ScoreBoards.Regular)
+			showRegular();
+		else
+			showStats();
+	}
+
+	/**
+	 * Force seeing the regular scoreboard(Votes, Players)
+	 */
+	public void showRegular() {
+		showing = ScoreBoards.Regular;
+		Player player = ip.getPlayer();
+
+		// Create a new scoreboard
+		ScoreboardManager manager = Bukkit.getScoreboardManager();
+		Scoreboard sb = manager.getNewScoreboard();
+		Objective ob = sb.registerNewObjective("NavalConflicts", "dummy");
+		ob.setDisplaySlot(DisplaySlot.SIDEBAR);
+
+		// Now set all the scores and the title
+		ob.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + ChatColor.UNDERLINE + "Rankings");
+
+		if (Lobby.getGameState() == GameState.Started )
+		{
+			ob.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + ChatColor.UNDERLINE + "Points:");
+			Score score = ob.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "" + ChatColor.ITALIC + "Bleu:"));
+			if (Lobby.getBlue().size() != 0)
+				//TODO changer en points de l'équipe..
+				score.setScore(Lobby.getBlue().size());
+			else
+			{
+				score.setScore(1);
+				score.setScore(0);
+			}
+			Score score2 = ob.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + "" + ChatColor.ITALIC + "Rouges:"));
+			if (Lobby.getRed().size() != 0)
+				score2.setScore(Lobby.getRed().size());
+			else
+			{
+				score2.setScore(1);
+				score2.setScore(0);
+			}
+
+		} else if (Lobby.getGameState() == GameState.InLobby || Lobby.getGameState() == GameState.Voting)
+		{
+			ob.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + ChatColor.UNDERLINE + "Vote For An Arena!");
+			int i = 1;
+			for (Arena arena : Lobby.getArenas())
+			{
+				if (Lobby.isArenaValid(arena))
+				{
+					Score score;
+					if (arena == Lobby.getActiveArena())
+						score = ob.getScore(Bukkit.getOfflinePlayer("" + RandomChatColor.getColor(ChatColor.AQUA, ChatColor.GOLD, ChatColor.RED, ChatColor.LIGHT_PURPLE) + ChatColor.BOLD + ">" + arena.getName().substring(0, Math.min(11, arena.getName().length()))));
+					else
+						score = ob.getScore(Bukkit.getOfflinePlayer("" + ChatColor.YELLOW + ChatColor.ITALIC + arena.getName().substring(0, Math.min(12, arena.getName().length()))));
+					if (i > 15)
+					{
+						for (OfflinePlayer op : sb.getPlayers())
+						{
+							if (ob.getScore(op).getScore() == 0)
+							{
+								sb.resetScores(op);
+								break;
+
+							}
+						}
+					}
+					score.setScore(1);
+					score.setScore(arena.getVotes());
+					i++;
+				}
+			}
+		}
+
+		player.setScoreboard(sb);
+	}
+
+	/**
+	 * Force showing the stats scoreboard (Layout is set in the config (Mainly
+	 * because i was to lazy to make it myself...))
+	 */
+	public void showStats() {
+		showing = ScoreBoards.Stats;
+		Player player = ip.getPlayer();
+
+		// Create a new scoreboard
+		ScoreboardManager manager = Bukkit.getScoreboardManager();
+		Scoreboard sb = manager.getNewScoreboard();
+		Objective ob = sb.registerNewObjective("NavalConflicts", "dummy");
+		ob.setDisplaySlot(DisplaySlot.SIDEBAR);
+
+		// Now set all the scores and the title
+		ob.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + "Stats");
+
+		int row = 0;
+		int spaces = 0;
+
+		List<String> list = Settings.getScoreBoardRows();
+
+		for (@SuppressWarnings("unused")
+		// loop through all the list
+		String s : list)
+		{
+			Score score = null;
+
+			// Get the string my using the row
+			String line = list.get(row);
+
+			// If the line is just a space, set the offline player to a
+			// color code
+			// This way it'll show as a blank line, and not be merged with
+			// similar color codes
+			if (ScoreBoardVariables.getLine(line, player).equalsIgnoreCase(" "))
+			{
+				String space = "&" + spaces;
+				spaces++;
+				score = ob.getScore(Bukkit.getOfflinePlayer(ScoreBoardVariables.getLine(space, player)));
+			} else
+			{
+				// If its just a regular message, just set it
+				score = ob.getScore(Bukkit.getOfflinePlayer(ScoreBoardVariables.getLine(line, player)));
+
+			}
+			score.setScore(list.size() - 1 - row);
+			row++;
+		}
+
+		player.setScoreboard(sb);
+	}
+}
+
+
+class ScoreBoardVariables {
+
+	/**
+	 * Replace the regular line of text with the one that is all fancy
+	 * 
+	 * @param string
+	 *            - The line of text
+	 * @param user
+	 *            - the player who will see this line
+	 * @return The new line with the variables replaced and color added
+	 */
+	public static String getLine(String string, Player user) {
+
+		NCPlayer ip = NCPlayerManager.getNCPlayer(user);
+		String newString = string;
+		// Replace all variables we need
+
+		newString = newString.replaceAll("<kills>", String.valueOf(ip.getKills()));
+		newString = newString.replaceAll("<deaths>", String.valueOf(ip.getDeaths()));
+		newString = newString.replaceAll("<highestkillstreak>", String.valueOf(ip.getHighestKillStreak()));
+		newString = newString.replaceAll("<points>", String.valueOf(ip.getPoints()));
+		newString = newString.replaceAll("<score>", String.valueOf(ip.getScore()));
+		newString = newString.replaceAll("<players>", String.valueOf(ip.getScore()));
+
+		// Replace color codes
+
+		newString = newString.replaceAll("&x", RandomChatColor.getColor().toString());
+		newString = newString.replaceAll("&y", RandomChatColor.getFormat().toString());
+		newString = ChatColor.translateAlternateColorCodes('&', newString);
+
+		// Make sure string isnt to long
+		if (newString.length() > 16)
+			newString = newString.substring(0, Math.min(newString.length(), 16));
+
+		return newString;
+	}
+}
