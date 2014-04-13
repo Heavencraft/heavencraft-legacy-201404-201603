@@ -3,8 +3,8 @@ package fr.heavencraft.heavenproxy.commands;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
 import fr.heavencraft.heavenproxy.Utils;
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
 
@@ -29,7 +29,7 @@ public class SayCommand extends HeavenCommand {
         Matcher matcher = Pattern.compile("\\&([0-9A-Fa-f])").matcher(message);
         message = matcher.replaceAll("§$1");
         
-        BungeeCord.getInstance().broadcast(message);
+        ProxyServer.getInstance().broadcast(message);
 	}
 	
 	private void sendUsage(CommandSender sender)
