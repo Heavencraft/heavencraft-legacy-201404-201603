@@ -3,7 +3,7 @@ package fr.heavencraft.heavenproxy;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.ProxyServer;
 
 public class AutoMessageTask implements Runnable
 {
@@ -66,7 +66,7 @@ public class AutoMessageTask implements Runnable
 */
 	public AutoMessageTask()
 	{
-		BungeeCord.getInstance().getScheduler()
+		ProxyServer.getInstance().getScheduler()
 				.schedule(HeavenProxy.getInstance(), this, PERIOD, PERIOD, TimeUnit.MINUTES);
 	}
 
@@ -75,6 +75,6 @@ public class AutoMessageTask implements Runnable
 	{
 		int index = rand.nextInt(messages.length);
 
-		BungeeCord.getInstance().broadcast(PREFIX + messages[index]);
+		ProxyServer.getInstance().broadcast(PREFIX + messages[index]);
 	}
 }

@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import fr.heavencraft.heavenproxy.ban.BanCommand;
 import fr.heavencraft.heavenproxy.ban.UnbanCommand;
@@ -86,7 +86,7 @@ public class HeavenProxy extends Plugin
 		catch (Throwable t)
 		{
 			t.printStackTrace();
-			BungeeCord.getInstance().stop();
+			ProxyServer.getInstance().stop();
 		}
 	}
 
@@ -115,7 +115,7 @@ public class HeavenProxy extends Plugin
 		catch (SQLException ex)
 		{
 			ex.printStackTrace();
-			BungeeCord.getInstance().stop();
+			ProxyServer.getInstance().stop();
 		}
 
 		return _connection;
@@ -133,7 +133,7 @@ public class HeavenProxy extends Plugin
 		catch (SQLException ex)
 		{
 			ex.printStackTrace();
-			BungeeCord.getInstance().stop();
+			ProxyServer.getInstance().stop();
 		}
 
 		return _mainConnection;

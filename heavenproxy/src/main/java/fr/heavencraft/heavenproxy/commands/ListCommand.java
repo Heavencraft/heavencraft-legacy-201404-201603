@@ -6,8 +6,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import fr.heavencraft.heavenproxy.Utils;
@@ -25,7 +25,7 @@ public class ListCommand extends HeavenCommand
 		
 		allServers = "";
 		
-		for (ServerInfo server : BungeeCord.getInstance().getServers().values())
+		for (ServerInfo server : ProxyServer.getInstance().getServers().values())
 			allServers += (allServers.isEmpty() ? "" : "|") + server.getName();
 	}
 	
@@ -40,7 +40,7 @@ public class ListCommand extends HeavenCommand
 	
 	private void listAll(CommandSender sender)
 	{
-		sendList(sender, BungeeCord.getInstance().getPlayers());
+		sendList(sender, ProxyServer.getInstance().getPlayers());
 		
 		Utils.sendMessage(sender, "Pour avoir la liste d'un monde en paticulier :");
 		Utils.sendMessage(sender, "/{list} <%1$s>", allServers);
@@ -48,7 +48,7 @@ public class ListCommand extends HeavenCommand
 	
 	private void listServer(CommandSender sender, String serverName)
 	{
-		ServerInfo server = BungeeCord.getInstance().getServerInfo(serverName);
+		ServerInfo server = ProxyServer.getInstance().getServerInfo(serverName);
 		
 		if (server == null)
 			listAll(sender);

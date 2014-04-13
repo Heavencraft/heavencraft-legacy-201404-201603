@@ -5,9 +5,9 @@ import com.mojang.api.profiles.Profile;
 import com.mojang.api.profiles.ProfileCriteria;
 import com.mojang.api.profiles.ProfileRepository;
 
-import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
 import fr.heavencraft.heavenproxy.exceptions.PlayerNotConnectedException;
@@ -23,7 +23,7 @@ public class Utils {
 	
 	public static ProxiedPlayer getPlayer(String name) throws PlayerNotConnectedException
 	{
-		for (ProxiedPlayer player : BungeeCord.getInstance().getPlayers())
+		for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers())
 			if (player.getName().toLowerCase().startsWith(name.toLowerCase()))
 				return player;
 		
@@ -108,7 +108,7 @@ public class Utils {
 		message = GOLD + message.replace(BEGIN, RED).replace(END, GOLD);
 
 		for (String line : message.split("\n"))
-			BungeeCord.getInstance().broadcast(line);
+			ProxyServer.getInstance().broadcast(line);
 	}
 	
 	public static void broadcastMessage(String message, Object... args)
@@ -118,7 +118,7 @@ public class Utils {
 	
 	public static void broadcast(String message, String permission)
 	{
-		for (ProxiedPlayer player : BungeeCord.getInstance().getPlayers())
+		for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers())
 			if (player.hasPermission(permission))
 				player.sendMessage(message);
 	}

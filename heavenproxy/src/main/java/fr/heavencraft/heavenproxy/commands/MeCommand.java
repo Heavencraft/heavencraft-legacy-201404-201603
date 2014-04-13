@@ -1,7 +1,7 @@
 package fr.heavencraft.heavenproxy.commands;
 
-import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
 import fr.heavencraft.heavenproxy.Utils;
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
 import fr.heavencraft.heavenproxy.mute.MuteManager;
@@ -28,7 +28,7 @@ public class MeCommand extends HeavenCommand {
 			return;
 		
 		String message = String.format(ME_MESSAGE, sender.getName(), Utils.ArrayToString(args, 0, " "));
-        BungeeCord.getInstance().broadcast(message);
+		ProxyServer.getInstance().broadcast(message);
 	}
 	
 	private void sendUsage(CommandSender sender)
