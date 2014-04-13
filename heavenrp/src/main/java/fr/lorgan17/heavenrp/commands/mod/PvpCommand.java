@@ -1,0 +1,73 @@
+package fr.lorgan17.heavenrp.commands.mod;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import fr.heavencraft.HeavenCommand;
+import fr.heavencraft.Utils;
+import fr.heavencraft.exceptions.HeavenException;
+import fr.lorgan17.heavenrp.listeners.PVPManager;
+
+
+public class PvpCommand extends HeavenCommand
+{
+	public PvpCommand()
+	{
+		super("pvp", "heavenrp.moderator.pvp");
+	}
+
+	@Override
+	protected void onPlayerCommand(Player player, String[] args) throws HeavenException
+	{
+		if (args.length == 1 && args[0].equalsIgnoreCase("stop"))
+		{
+			PVPManager.StopBattle();
+			return;
+		}
+		
+		if (args.length == 2 && args[0].equalsIgnoreCase("setspawn"))
+		{
+			PVPManager.setSpawn(player.getLocation(), args[1]);
+			Utils.sendMessage(player, "Le point de spawn a bien été défini.");
+			return;
+		}
+		
+		if (args.length != 3)
+		{
+			sendUsage(player);
+			return;
+		}
+
+		List<Player> team1 = new ArrayList<Player>();
+		List<Player> team2 = new ArrayList<Player>();
+
+		for (String playerName : args[0].split(","))
+			team1.add(Utils.getPlayer(playerName));
+		
+		for (String playerName : args[1].split(","))
+			team2.add(Utils.getPlayer(playerName));
+		
+		int maxPoints = Utils.toUint(args[2]);
+			
+		
+		PVPManager.StartBattle(team1, team2, maxPoints);
+	}
+
+	@Override
+	protected void onConsoleCommand(CommandSender sender, String[] args) throws HeavenException
+	{
+		Utils.sendMessage(sender, "Cette commande n'est pas utilisable depuis la console.");
+	}
+
+	@Override
+	protected void sendUsage(CommandSender sender)
+	{
+		Utils.sendMessage(sender, "duel : {/pvp} joueur1 joueur2 nombreDePointsPourGagner");
+		Utils.sendMessage(sender, "équipe : {/pvp} joueur1,joueur2,... joueur3,joueur4,... nombreDePointsPourGagner");
+		Utils.sendMessage(sender, "spawn : {/pvp} setspawn numéroEquipe");
+		Utils.sendMessage(sender, "{/pvp} stop");
+	}
+}
