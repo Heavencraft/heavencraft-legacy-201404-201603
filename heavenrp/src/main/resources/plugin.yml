@@ -1,0 +1,87 @@
+name: HeavenRP
+version: 0.1
+main: fr.heavencraft.heavenrp.HeavenRP
+commands:
+#
+# Economy
+#
+  entreprise:
+  bourse:
+  livretpro:
+  money:
+  payer:
+#
+# Others
+#
+  spawnmob:
+  rejoindre:
+  accepter:
+  head:
+  go:
+  creacheat:
+  poof:
+  pvp4:
+  pvp:
+  tp:
+  tphere:
+  licence:
+  modpack:
+  roucoups:
+  tppos:
+  warp:
+  home:
+  inventory:
+  buyhome:
+  hps:
+  tphome:
+  endercheat:
+  event:
+  maire:
+  maires:
+  money:
+  parcelle:
+  sethome:
+  spawn:
+  tuto:
+  sound:
+  enchere:
+  cheval:
+  travaux:
+  world:
+permissions:
+  heavenrp.moderator.*:
+    children:
+      heavencraft.sign.livret: true
+      heavencraft.sign.warp: true
+      heavencraft.commands.warp: true
+      heavenrp.moderator.colorchat: true
+      heavenrp.moderator.colorsign: true
+      heavenrp.moderator.inventory: true
+      heavenrp.moderator.pvp4: true
+      heavenrp.moderator.pvp: true
+      heavenrp.moderator.tp: true
+      heavenrp.moderator.tphere: true
+      heavenrp.moderator.tppos: true
+      heavenrp.moderator.warp: true
+      heavenrp.moderator.sign.warp: true
+      heavenrp.moderator.sign.lien: true
+      heavenrp.moderator.sign.province: true
+      heavenrp.moderator.modpack: true
+      heavenrp.moderator.roucoups: true
+      heavenrp.moderator.tphome: true
+      heavenrp.moderator.endercheat: true
+      heavenrp.moderator.event: true
+      heavenrp.moderator.cheveaux: true
+  heavenrp.administrator.*:
+    children:
+      heavencraft.commands.livretpro: true
+      heavencraft.sign.livretpro: true
+      heavencraft.sign.province: true
+      heavenrp.administrator.creacheat: true
+      heavenrp.administrator.head: true
+      heavenrp.administrator.go: true
+      heavenrp.administrator.poof: true
+      heavenrp.administrator.sound: true
+      heavenrp.administrator.sign.adminshop: true
+      heavenrp.administrator.travaux: true
+      heavenrp.administrator.world: true
