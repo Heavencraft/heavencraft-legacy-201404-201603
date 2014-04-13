@@ -1,0 +1,5 @@
+main: fr.heavencraft.almanac.AlmanacPlugin
+version: 1.0
+name: Almanac
+commands:
+  almanac:
