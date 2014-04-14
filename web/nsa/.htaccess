@@ -1,0 +1,8 @@
+AuthUserFile /home/website/.htpasswd_nsa
+AuthGroupFile /dev/null
+AuthName ByPassword
+AuthType Basic
+
+<limit GET>
+require valid-user
+</Limit>
