@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
@@ -102,7 +103,7 @@ public class ChatListener implements Listener
 
 		String chatMessage = String.format(CHAT_MESSAGE, prefix, color, player.getName(), message);
 
-		ProxyServer.getInstance().broadcast(chatMessage);
+		ProxyServer.getInstance().broadcast(TextComponent.fromLegacyText(chatMessage));
 	}
 
 	@EventHandler
@@ -131,7 +132,7 @@ public class ChatListener implements Listener
 			onPlayerJoin(name, player.getAddress().getAddress(), true);
 		}
 		
-		HeavenProxy.getInstance().getLogger().info(player.getName() + " = " + player.getUUID());
+		HeavenProxy.getInstance().getLogger().info(player.getName() + " = " + player.getUniqueId());
 	}
 
 	@EventHandler

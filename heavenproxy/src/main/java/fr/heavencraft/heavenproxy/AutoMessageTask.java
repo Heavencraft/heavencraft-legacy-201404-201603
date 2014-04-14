@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class AutoMessageTask implements Runnable
 {
@@ -75,6 +76,6 @@ public class AutoMessageTask implements Runnable
 	{
 		int index = rand.nextInt(messages.length);
 
-		ProxyServer.getInstance().broadcast(PREFIX + messages[index]);
+		ProxyServer.getInstance().broadcast(TextComponent.fromLegacyText(PREFIX + messages[index]));
 	}
 }
