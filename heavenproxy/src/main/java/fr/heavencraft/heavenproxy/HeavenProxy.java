@@ -30,6 +30,7 @@ import fr.heavencraft.heavenproxy.listeners.SpyListener;
 import fr.heavencraft.heavenproxy.listeners.TabListener;
 import fr.heavencraft.heavenproxy.managers.RequestsManager;
 import fr.heavencraft.heavenproxy.mute.MuteCommand;
+import fr.heavencraft.heavenproxy.warn.WarnCommand;
 
 public class HeavenProxy extends Plugin
 {
@@ -75,6 +76,7 @@ public class HeavenProxy extends Plugin
 			new UnbanCommand();
 
 			new MuteCommand();
+			new WarnCommand();
 
 			new AutoMessageTask();
 

@@ -8,7 +8,7 @@ import fr.heavencraft.heavenproxy.exceptions.HeavenException;
 
 public class WarnCommand extends HeavenCommand
 {
-	public WarnCommand(String name, String permission, String[] aliases)
+	public WarnCommand()
 	{
 		super("warn", "heavencraft.commands.warn", new String[] {});
 	}
