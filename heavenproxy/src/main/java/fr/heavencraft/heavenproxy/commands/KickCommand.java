@@ -5,6 +5,7 @@ import fr.heavencraft.heavenproxy.exceptions.HeavenException;
 import fr.heavencraft.heavenproxy.managers.KickManager;
 import fr.heavencraft.heavenproxy.managers.LogsManager;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class KickCommand extends HeavenCommand {
@@ -46,7 +47,7 @@ public class KickCommand extends HeavenCommand {
 		KickManager.addReason(player.getName(), String.format(KICK, kickedBy, reason));
 		LogsManager.addKick(kickedBy, player.getName(), reason);
 		
-		player.disconnect(String.format(KICK_MESSAGE, kickedBy, reason));
+		player.disconnect(TextComponent.fromLegacyText(String.format(KICK_MESSAGE, kickedBy, reason)));
 	}
 
 	private static void sendUsage(CommandSender sender)

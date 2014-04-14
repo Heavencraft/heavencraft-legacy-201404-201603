@@ -8,6 +8,7 @@ import com.mojang.api.profiles.ProfileRepository;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
 import fr.heavencraft.heavenproxy.exceptions.PlayerNotConnectedException;
@@ -94,7 +95,7 @@ public class Utils {
 			message = GOLD + message.replace(BEGIN, RED).replace(END, GOLD);
 			
 			for (String line : message.split("\n"))
-				sender.sendMessage(line);
+				sender.sendMessage(TextComponent.fromLegacyText(line));
 		}
 	}
 	
@@ -108,7 +109,7 @@ public class Utils {
 		message = GOLD + message.replace(BEGIN, RED).replace(END, GOLD);
 
 		for (String line : message.split("\n"))
-			ProxyServer.getInstance().broadcast(line);
+			ProxyServer.getInstance().broadcast(TextComponent.fromLegacyText(line));
 	}
 	
 	public static void broadcastMessage(String message, Object... args)
@@ -120,7 +121,7 @@ public class Utils {
 	{
 		for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers())
 			if (player.hasPermission(permission))
-				player.sendMessage(message);
+				sendMessage(player, message);
 	}
 	
 	public static String ArrayToString(String[] array, int start, String separator)

@@ -116,7 +116,7 @@ public class FloodListener implements Listener
 			case 2:
 				// KickCommand.kickPlayer(player, "le Prof. Chen",
 				// "Ce n'est pas le moment de flooder !");
-				player.sendMessage(WARNING);
+				Utils.sendMessage(player, WARNING);
 				break;
 			case 3:
 				BanCommand.banPlayer(playerName, "le Prof. Chen",

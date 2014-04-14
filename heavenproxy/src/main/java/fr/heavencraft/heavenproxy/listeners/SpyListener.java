@@ -7,6 +7,7 @@ import fr.heavencraft.heavenproxy.HeavenProxy;
 import fr.heavencraft.heavenproxy.Utils;
 import fr.heavencraft.heavenproxy.exceptions.PlayerNotConnectedException;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
@@ -62,7 +63,7 @@ public class SpyListener implements Listener
 		{
 			try
 			{
-				Utils.getPlayer(playerName).sendMessage(message);
+				Utils.getPlayer(playerName).sendMessage(TextComponent.fromLegacyText(message));
 			}
 			catch (PlayerNotConnectedException ex)
 			{
