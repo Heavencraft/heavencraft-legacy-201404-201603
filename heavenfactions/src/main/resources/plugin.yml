@@ -1,9 +1,0 @@
-name: HeavenFactions
-version: 1.0
-main: fr.heavencraft.heavenfactions.HeavenFactions
-depend: [Factions]
-commands:
-  fchat:
-    aliases: fc
-  falliance:
-    aliases: fa
