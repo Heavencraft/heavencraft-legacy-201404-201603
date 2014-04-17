@@ -51,5 +51,5 @@ public abstract class HeavenCommand implements CommandExecutor
 	
 	protected abstract void onConsoleCommand(CommandSender sender, String[] args) throws HeavenException;
 	
-	protected abstract void sendUsage(CommandSender sender);
+	protected abstract void sendUsage(CommandSender sender) throws HeavenException;
 }
