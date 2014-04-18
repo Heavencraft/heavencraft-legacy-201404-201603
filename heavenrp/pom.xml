@@ -5,7 +5,7 @@
 	<artifactId>heavenrp</artifactId>
 	<version>1.0</version>
 
-	<properties> <!-- Fix encoding warnings -->
+	<properties><!-- Fix encoding warnings -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -30,13 +30,13 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.7.2-R0.3</version>
+			<version>1.7.9-R0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.sk89q</groupId>
 			<artifactId>worldedit</artifactId>
-			<version>5.6</version>
+			<version>5.6.1</version>
 		</dependency>
 
 		<dependency>
@@ -48,13 +48,13 @@
 		<dependency>
 			<groupId>org.kitteh</groupId>
 			<artifactId>tagapi</artifactId>
-			<version>3.0</version>
+			<version>3.0.4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.29</version>
+			<version>5.1.30</version>
 		</dependency>
 	</dependencies>
 </project>
