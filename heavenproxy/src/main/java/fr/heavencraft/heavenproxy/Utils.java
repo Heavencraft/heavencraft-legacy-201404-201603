@@ -2,7 +2,6 @@ package fr.heavencraft.heavenproxy;
 
 import com.mojang.api.profiles.HttpProfileRepository;
 import com.mojang.api.profiles.Profile;
-import com.mojang.api.profiles.ProfileCriteria;
 import com.mojang.api.profiles.ProfileRepository;
 
 import net.md_5.bungee.api.ChatColor;
@@ -77,10 +76,8 @@ public class Utils {
 	
 	public static String getUUID(String playerName)
 	{
-        ProfileRepository repository = new HttpProfileRepository();
-        ProfileCriteria criteria = new ProfileCriteria(playerName, MINECRAFT);
-
-        Profile[] profiles = repository.findProfilesByCriteria(criteria);
+        ProfileRepository repository = new HttpProfileRepository(MINECRAFT);
+        Profile[] profiles = repository.findProfilesByNames(playerName);
         
         if (profiles.length == 1)
         	return profiles[0].getId();
