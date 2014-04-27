@@ -1,16 +1,26 @@
 package fr.heavencraft.heavenproxy;
 
-import com.mojang.api.profiles.HttpProfileRepository;
-import com.mojang.api.profiles.Profile;
-import com.mojang.api.profiles.ProfileRepository;
+import java.io.File;
+import java.net.InetAddress;
+import java.util.logging.Logger;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.PendingConnection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.plugin.Listener;
+
+import com.maxmind.geoip2.DatabaseReader;
+import com.maxmind.geoip2.model.CountryResponse;
+import com.mojang.api.profiles.HttpProfileRepository;
+import com.mojang.api.profiles.Profile;
+import com.mojang.api.profiles.ProfileRepository;
+
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
 import fr.heavencraft.heavenproxy.exceptions.PlayerNotConnectedException;
+import fr.heavencraft.heavenproxy.exceptions.UUIDNotFoundException;
 
 public class Utils {
 	
@@ -18,8 +28,6 @@ public class Utils {
 	private final static String END = "}";
 	private final static String GOLD = ChatColor.GOLD.toString();
 	private final static String RED = ChatColor.RED.toString();
-	
-	private final static String MINECRAFT = "minecraft";
 	
 	public static ProxiedPlayer getPlayer(String name) throws PlayerNotConnectedException
 	{
@@ -73,17 +81,92 @@ public class Utils {
 			
 		return i;
 	}
+
+	/*
+	 * Plugin
+	 */
 	
-	public static String getUUID(String playerName)
+	public static void registerListener(Listener listener)
 	{
-        ProfileRepository repository = new HttpProfileRepository(MINECRAFT);
-        Profile[] profiles = repository.findProfilesByNames(playerName);
-        
-        if (profiles.length == 1)
-        	return profiles[0].getId();
-        else
-        	return "";
+		ProxyServer.getInstance().getPluginManager().registerListener(HeavenProxy.getInstance(), listener);
 	}
+	
+	/*
+	 * UUID
+	 */
+
+	public static String getUUID(PendingConnection player)
+	{
+		return player.getUniqueId().toString().replaceAll("-", "");
+	}
+
+	public static String getUUID(ProxiedPlayer player)
+	{
+		return player.getUniqueId().toString().replaceAll("-", "");
+	}
+
+	public static String getUUID(String playerName) throws HeavenException
+	{
+		try
+		{
+			return getUUID(getPlayer(playerName));
+		}
+		catch (PlayerNotConnectedException ex)
+		{
+			ProfileRepository repository = new HttpProfileRepository("minecraft");
+			Profile[] profiles = repository.findProfilesByNames(playerName);
+
+			if (profiles.length == 1)
+				return profiles[0].getId();
+			else
+				throw new UUIDNotFoundException(playerName);
+		}
+	}
+	
+	/*
+	 * Logger
+	 */
+	
+	public static Logger getLogger()
+	{
+		return HeavenProxy.getInstance().getLogger();
+	}
+	
+	/*
+	 * Location
+	 */
+
+	private static DatabaseReader _databaseReader;
+	
+	public static String getLocation(final InetAddress address)
+	{
+		try
+		{
+			if (_databaseReader == null)
+				_databaseReader = new DatabaseReader.Builder(new File("GeoLite2-Country.mmdb")).build();
+			
+			CountryResponse response = _databaseReader.country(address);
+			return response.getCountry().getNames().get("fr");
+		}
+		catch (Throwable t)
+		{
+			t.printStackTrace();
+			return "France";
+		}
+	}
+	
+	/*
+	 * Kick
+	 */
+	
+	public static void kickPlayer(ProxiedPlayer player, String reason)
+	{
+		player.disconnect(TextComponent.fromLegacyText(reason));
+	}
+	
+	/*
+	 * Send message to a player
+	 */
 	
 	public static void sendMessage(CommandSender sender, String message)
 	{
@@ -101,6 +184,10 @@ public class Utils {
 		sendMessage(sender, String.format(message, args));
 	}
 
+	/*
+	 * Send message to all players
+	 */
+	
 	public static void broadcastMessage(String message)
 	{
 		message = GOLD + message.replace(BEGIN, RED).replace(END, GOLD);
@@ -153,8 +240,6 @@ public class Utils {
 			return "TNT";
 		else if (serverName.equalsIgnoreCase("ultrahard"))
 			return "UH";
-		else if (serverName.equalsIgnoreCase("backbone"))
-			return "BB";
 		else if (serverName.equalsIgnoreCase("paintball"))
 			return "PB";
 		else

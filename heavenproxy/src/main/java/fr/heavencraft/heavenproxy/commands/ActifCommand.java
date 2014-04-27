@@ -5,8 +5,8 @@ import java.util.Calendar;
 import net.md_5.bungee.api.CommandSender;
 import fr.heavencraft.heavenproxy.Utils;
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
-import fr.heavencraft.heavenproxy.managers.UsersManager;
-import fr.heavencraft.heavenproxy.managers.UsersManager.User;
+import fr.heavencraft.heavenproxy.users.UsersManager;
+import fr.heavencraft.heavenproxy.users.User;
 
 public class ActifCommand extends HeavenCommand
 {

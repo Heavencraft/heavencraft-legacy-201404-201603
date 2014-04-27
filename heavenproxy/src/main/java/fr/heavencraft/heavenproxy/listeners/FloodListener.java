@@ -5,31 +5,33 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
-import fr.heavencraft.heavenproxy.Utils;
-import fr.heavencraft.heavenproxy.ban.BanCommand;
-import fr.heavencraft.heavenproxy.commands.KickCommand;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.plugin.Listener;
-import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
+import fr.heavencraft.heavenproxy.Utils;
+import fr.heavencraft.heavenproxy.ban.BanCommand;
+import fr.heavencraft.heavenproxy.exceptions.HeavenException;
 
 public class FloodListener implements Listener
 {
+	private static final String TAG = "[FloodListener] ";
+
 	private final static String WARNING = "§d[de Prof. Chen]§r Arrêtes d'écrire le même message.";
 
-	private List<String> toIgnore = new ArrayList<String>();
-	private List<String> bannedWords = new ArrayList<String>();
+	private final Logger log = Utils.getLogger();
 
-	Map<String, String> _history = new HashMap<String, String>();
-	Map<String, Calendar> _timestamps = new HashMap<String, Calendar>();
-	Map<String, Integer> _counter = new HashMap<String, Integer>();
+	private final List<String> toIgnore = new ArrayList<String>();
+	private final Map<String, String> _history = new HashMap<String, String>();
+	private final Map<String, Calendar> _timestamps = new HashMap<String, Calendar>();
+	private final Map<String, Integer> _counter = new HashMap<String, Integer>();
 
-	public FloodListener(Plugin plugin)
+	public FloodListener()
 	{
-		plugin.getProxy().getPluginManager().registerListener(plugin, this);
+		Utils.registerListener(this);
 
 		toIgnore.add("I'm chatting on my iPhone using Minecraft Connect! Check it out, it's free :)".toLowerCase());
 		toIgnore.add("I'm chatting on my iPhone using Minecraft Connect!  Check it out, it's free :)".toLowerCase());
@@ -42,18 +44,7 @@ public class FloodListener implements Listener
 		toIgnore.add("connected with an iPod touch using MineChat".toLowerCase());
 		toIgnore.add("Connected via \"MC Chat\" for Android!".toLowerCase());
 
-		bannedWords.add("batar");	// Batard, batar
-		bannedWords.add("connass");
-		bannedWords.add("encul");	// encule, enculé, enculer
-		bannedWords.add("fuck");	// fuck, fucking, fucktard, motherfucker
-		bannedWords.add("salau");	// salaud
-		bannedWords.add("salop");	// salop, salope, salopard
-
-		bannedWords.add("putin");
-		bannedWords.add("putain");
-		bannedWords.add("bitch");
-		bannedWords.add("biatch");
-		bannedWords.add("dumbass");
+		log.info(TAG + "Initialized");
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -61,6 +52,8 @@ public class FloodListener implements Listener
 	{
 		if (event.isCancelled())
 			return;
+
+		log.info(TAG + event);
 
 		if (!(event.getSender() instanceof ProxiedPlayer))
 			return;
@@ -70,7 +63,7 @@ public class FloodListener implements Listener
 		// Si c'est une commande autre que /m, /me ou /send -> on fait rien
 		if (event.isCommand() && !message.startsWith("/m ") && !message.startsWith("/msg ")
 				&& !message.startsWith("/t ") && !message.startsWith("/tell ") && !message.startsWith("/w ")
-				&& !message.startsWith("/me ") && !message.startsWith("/send "))
+				&& !message.startsWith("/me ") && !message.startsWith("/envoyer "))
 			return;
 
 		// Si c'est un des messages à filter -> on annule le message
@@ -83,15 +76,6 @@ public class FloodListener implements Listener
 		ProxiedPlayer player = (ProxiedPlayer) event.getSender();
 		String playerName = player.getName();
 
-		// Mots interdits
-		for (String bannedWord : bannedWords)
-			if (message.contains(bannedWord))
-			{
-				KickCommand.kickPlayer(player, "le Prof. Chen", "Insulte");
-				event.setCancelled(true);
-				return;
-			}
-		
 		// BUGFIX : Si c'est pour la banque Semi-RP -> on fait rien
 		if (player.getServer().getInfo().getName().equalsIgnoreCase("semirp") && Utils.isInteger(message))
 		{
@@ -111,17 +95,26 @@ public class FloodListener implements Listener
 			Integer counter = _counter.get(playerName) + 1;
 			_counter.put(playerName, counter);
 
-			switch (counter) {
-			case 1:
-			case 2:
-				// KickCommand.kickPlayer(player, "le Prof. Chen",
-				// "Ce n'est pas le moment de flooder !");
-				Utils.sendMessage(player, WARNING);
-				break;
-			case 3:
-				BanCommand.banPlayer(playerName, "le Prof. Chen",
-						String.format("Flood abusif : '%1$s'", message));
-				break;
+			switch (counter)
+			{
+				case 1:
+				case 2:
+					// KickCommand.kickPlayer(player, "le Prof. Chen",
+					// "Ce n'est pas le moment de flooder !");
+					Utils.sendMessage(player, WARNING);
+					break;
+				case 3:
+					try
+					{
+						BanCommand.banPlayer(playerName, "le Prof. Chen",
+								String.format("Flood abusif : '%1$s'", message));
+					}
+					catch (HeavenException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					break;
 			}
 		}
 		else

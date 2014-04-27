@@ -9,27 +9,30 @@ import java.sql.SQLException;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import fr.heavencraft.heavenproxy.ban.BanCommand;
+import fr.heavencraft.heavenproxy.ban.BanListener;
 import fr.heavencraft.heavenproxy.ban.UnbanCommand;
+import fr.heavencraft.heavenproxy.chat.ChatListener;
+import fr.heavencraft.heavenproxy.chat.TabCompleteListener;
 import fr.heavencraft.heavenproxy.commands.ActifCommand;
-import fr.heavencraft.heavenproxy.commands.KickCommand;
 import fr.heavencraft.heavenproxy.commands.ListCommand;
 import fr.heavencraft.heavenproxy.commands.MeCommand;
 import fr.heavencraft.heavenproxy.commands.ModoCommand;
 import fr.heavencraft.heavenproxy.commands.NexusCommand;
-import fr.heavencraft.heavenproxy.commands.RagequitCommand;
 import fr.heavencraft.heavenproxy.commands.SayCommand;
 import fr.heavencraft.heavenproxy.commands.SendCommand;
 import fr.heavencraft.heavenproxy.commands.SpyCommand;
 import fr.heavencraft.heavenproxy.commands.TellCommand;
-import fr.heavencraft.heavenproxy.listeners.ChatListener;
-import fr.heavencraft.heavenproxy.listeners.FloodListener;
+import fr.heavencraft.heavenproxy.exceptions.HeavenException;
+import fr.heavencraft.heavenproxy.kick.KickCommand;
+import fr.heavencraft.heavenproxy.kick.RagequitCommand;
 import fr.heavencraft.heavenproxy.listeners.LogListener;
-import fr.heavencraft.heavenproxy.listeners.NexusListener;
 import fr.heavencraft.heavenproxy.listeners.OnlineLogListener;
 import fr.heavencraft.heavenproxy.listeners.SpyListener;
-import fr.heavencraft.heavenproxy.listeners.TabListener;
 import fr.heavencraft.heavenproxy.managers.RequestsManager;
 import fr.heavencraft.heavenproxy.mute.MuteCommand;
+import fr.heavencraft.heavenproxy.mute.MuteListener;
+import fr.heavencraft.heavenproxy.users.TabListener;
+import fr.heavencraft.heavenproxy.users.UsersListener;
 import fr.heavencraft.heavenproxy.warn.WarnCommand;
 
 public class HeavenProxy extends Plugin
@@ -53,29 +56,42 @@ public class HeavenProxy extends Plugin
 
 			_instance = this;
 
-			new ChatListener(this);
-			new FloodListener(this);
-			new LogListener(this);
-			new NexusListener(this);
+			new LogListener();
 			new OnlineLogListener(this);
-			new TabListener();
 			new SpyListener();
 
 			new ActifCommand();
-			new BanCommand();
-			new KickCommand();
 			new ListCommand();
 			new MeCommand();
 			new ModoCommand();
 			new NexusCommand();
-			new RagequitCommand();
 			new SayCommand();
 			new SendCommand();
 			new SpyCommand();
 			new TellCommand();
-			new UnbanCommand();
 
+			// Ban
+			new BanCommand();
+			new BanListener();
+			new UnbanCommand();
+			
+			// Chat
+			new ChatListener();
+			new TabCompleteListener();
+			
+			// Kick
+			new KickCommand();
+			new RagequitCommand();
+			
+			// Mute
 			new MuteCommand();
+			new MuteListener();
+			
+			// Users
+			new TabListener();
+			new UsersListener();
+			
+			// Warn
 			new WarnCommand();
 
 			new AutoMessageTask();
@@ -155,15 +171,22 @@ public class HeavenProxy extends Plugin
 
 			while (rs.next())
 			{
-				String name = rs.getString("name");
-				String uuid = Utils.getUUID(name);
-
-				PreparedStatement ps2 = getConnection().prepareStatement("UPDATE banlist SET uuid = ? WHERE name = ?");
-				ps2.setString(1, uuid);
-				ps2.setString(2, name);
-
-				ps2.executeUpdate();
-				System.out.println(name + " -> " + uuid);
+				try
+				{
+					String name = rs.getString("name");
+					String uuid = Utils.getUUID(name);
+	
+					PreparedStatement ps2 = getConnection().prepareStatement("UPDATE banlist SET uuid = ? WHERE name = ?");
+					ps2.setString(1, uuid);
+					ps2.setString(2, name);
+	
+					ps2.executeUpdate();
+					System.out.println(name + " -> " + uuid);
+				}
+				catch (HeavenException ex)
+				{
+					System.out.println(ex.getMessage());
+				}
 			}
 
 		}
@@ -188,16 +211,23 @@ public class HeavenProxy extends Plugin
 
 					while (rs.next())
 					{
-						String name = rs.getString("name");
-						String uuid = Utils.getUUID(name);
-
-						PreparedStatement ps2 = getConnection().prepareStatement(
-								"UPDATE users SET uuid = ? WHERE name = ?");
-						ps2.setString(1, uuid);
-						ps2.setString(2, name);
-
-						ps2.executeUpdate();
-						System.out.println(name + " -> " + uuid);
+						try
+						{
+							String name = rs.getString("name");
+							String uuid = Utils.getUUID(name);
+	
+							PreparedStatement ps2 = getConnection().prepareStatement(
+									"UPDATE users SET uuid = ? WHERE name = ?");
+							ps2.setString(1, uuid);
+							ps2.setString(2, name);
+	
+							ps2.executeUpdate();
+							System.out.println(name + " -> " + uuid);
+						}
+						catch (HeavenException ex)
+						{
+							System.out.println(ex.getMessage());
+						}
 					}
 
 				}
