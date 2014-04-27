@@ -1,9 +1,11 @@
-package fr.heavencraft.heavenproxy.commands;
+package fr.heavencraft.heavenproxy.kick;
 
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import fr.heavencraft.heavenproxy.Utils;
+import fr.heavencraft.heavenproxy.chat.DisconnectReasonManager;
+import fr.heavencraft.heavenproxy.commands.HeavenCommand;
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
-import fr.heavencraft.heavenproxy.managers.KickManager;
 
 public class RagequitCommand extends HeavenCommand {
 	
@@ -23,7 +25,8 @@ public class RagequitCommand extends HeavenCommand {
 		
 		ProxiedPlayer player = (ProxiedPlayer) sender;
 		
-		KickManager.addReason(player.getName(), RAGEQUIT);
-		player.disconnect(RAGEQUIT_MESSAGE);
+		DisconnectReasonManager.addReason(player.getName(), RAGEQUIT);
+		
+		Utils.kickPlayer(player, RAGEQUIT_MESSAGE);
 	}
 }

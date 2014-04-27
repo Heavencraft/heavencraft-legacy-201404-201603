@@ -1,4 +1,4 @@
-package fr.heavencraft.heavenproxy.managers;
+package fr.heavencraft.heavenproxy.users;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,6 +8,9 @@ import java.util.Date;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import fr.heavencraft.heavenproxy.HeavenProxy;
+import fr.heavencraft.heavenproxy.Utils;
+import fr.heavencraft.heavenproxy.exceptions.HeavenException;
+import fr.heavencraft.heavenproxy.exceptions.SQLErrorException;
 import fr.heavencraft.heavenproxy.exceptions.UserNotFoundException;
 
 public class UsersManager
@@ -19,7 +22,7 @@ public class UsersManager
 			PreparedStatement ps = HeavenProxy.getConnection().prepareStatement(
 					"INSERT INTO users (uuid, name, last_ip, last_login) VALUES (?, ?, ?, ?)");
 			
-			ps.setString(1, player.getUUID());
+			ps.setString(1, Utils.getUUID(player));
 			ps.setString(2, player.getName());
 			ps.setString(3, player.getAddress().getAddress().toString());
 			ps.setTimestamp(4, new Timestamp(new Date().getTime()));
@@ -43,7 +46,7 @@ public class UsersManager
 			ps.setString(1, player.getName());
 			ps.setString(2, player.getAddress().getAddress().toString());
 			ps.setTimestamp(3, new Timestamp(new Date().getTime()));
-			ps.setString(4, player.getUUID());
+			ps.setString(4, Utils.getUUID(player));
 
 			ps.executeUpdate();
 			ps.close();
@@ -54,29 +57,7 @@ public class UsersManager
 		}
 	}
 
-	public static User getUserByName(String name) throws UserNotFoundException
-	{
-		try
-		{
-			PreparedStatement ps = HeavenProxy.getConnection().prepareStatement(
-					"SELECT * FROM users WHERE name = ? LIMIT 1");
-			ps.setString(1, name);
-
-			ResultSet rs = ps.executeQuery();
-
-			if (rs.next())
-				return new User(rs);
-			else
-				throw new UserNotFoundException(name);
-		}
-		catch (SQLException ex)
-		{
-			ex.printStackTrace();
-			throw new UserNotFoundException(name);
-		}
-	}
-
-	public static User getUserByUuid(String uuid) throws UserNotFoundException
+	public static User getUserByUuid(String uuid) throws HeavenException
 	{
 		try
 		{
@@ -94,50 +75,29 @@ public class UsersManager
 		catch (SQLException ex)
 		{
 			ex.printStackTrace();
-			throw new UserNotFoundException(uuid);
+			throw new SQLErrorException();
 		}
 	}
 
-	public static class User
+	public static User getUserByName(String name) throws HeavenException
 	{
-		private final String uuid;
-		private final String name;
-		private final String color;
-		private final String lastIp;
-		private final Date lastLogin;
+		try
+		{
+			PreparedStatement ps = HeavenProxy.getConnection().prepareStatement(
+					"SELECT * FROM users WHERE name = ? LIMIT 1");
+			ps.setString(1, name);
 
-		private User(ResultSet rs) throws SQLException
-		{
-			uuid = rs.getString("uuid");
-			name = rs.getString("name");
-			color = rs.getString("color");
-			lastIp = rs.getString("last_ip");
-			lastLogin = rs.getTimestamp("last_login");
-		}
-		
-		public String getUuid()
-		{
-			return uuid;
-		}
+			ResultSet rs = ps.executeQuery();
 
-		public String getName()
-		{
-			return name;
+			if (rs.next())
+				return new User(rs);
+			else
+				throw new UserNotFoundException(name);
 		}
-
-		public String getColor()
+		catch (SQLException ex)
 		{
-			return "§" + color;
-		}
-		
-		public String getLastIp()
-		{
-			return lastIp;
-		}
-		
-		public Date getLastLogin()
-		{
-			return lastLogin;
+			ex.printStackTrace();
+			throw new SQLErrorException();
 		}
 	}
 }

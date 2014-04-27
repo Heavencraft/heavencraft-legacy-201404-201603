@@ -1,6 +1,7 @@
 package fr.heavencraft.heavenproxy.exceptions;
 
-public class UserNotFoundException extends HeavenException {
+public class UserNotFoundException extends HeavenException
+{
 	private static final long serialVersionUID = 1L;
 
 	public UserNotFoundException(String name)

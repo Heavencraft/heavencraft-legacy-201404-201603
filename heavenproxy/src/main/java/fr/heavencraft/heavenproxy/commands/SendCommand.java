@@ -1,10 +1,10 @@
 package fr.heavencraft.heavenproxy.commands;
 
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import fr.heavencraft.heavenproxy.Utils;
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
-import fr.heavencraft.heavenproxy.mute.MuteManager;
 
 public class SendCommand extends HeavenCommand {
 	
@@ -13,7 +13,7 @@ public class SendCommand extends HeavenCommand {
 	
 	public SendCommand()
 	{
-		super("send", null, new String[]{});
+		super("envoyer", null, new String[]{});
 	}
 	
 	@Override
@@ -24,20 +24,16 @@ public class SendCommand extends HeavenCommand {
 			sendUsage(sender);
 			return;
 		}
-
-		// Si le joueur est mute
-		if (MuteManager.isMuted(sender.getName()))
-			return;
 		
 		ProxiedPlayer player = Utils.getPlayer(args[0]);
 		String toSend = Utils.ArrayToString(args, 1, " ");
 		
-		sender.sendMessage(String.format(TO, toSend, player.getName()));
-		player.sendMessage(String.format(FROM, toSend, sender.getName()));
+		sender.sendMessage(TextComponent.fromLegacyText(String.format(TO, toSend, player.getName())));
+		player.sendMessage(TextComponent.fromLegacyText(String.format(FROM, toSend, sender.getName())));
 	}
 	
 	private void sendUsage(CommandSender sender)
 	{
-		Utils.sendMessage(sender, "/{send} <joueur> <quelque chose>");
+		Utils.sendMessage(sender, "/{envoyer} <joueur> <quelque chose>");
 	}
 }

@@ -1,21 +1,22 @@
-package fr.heavencraft.heavenproxy.commands;
+package fr.heavencraft.heavenproxy.kick;
 
 import fr.heavencraft.heavenproxy.Utils;
+import fr.heavencraft.heavenproxy.chat.DisconnectReasonManager;
+import fr.heavencraft.heavenproxy.commands.HeavenCommand;
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
-import fr.heavencraft.heavenproxy.managers.KickManager;
-import fr.heavencraft.heavenproxy.managers.LogsManager;
+import fr.heavencraft.heavenproxy.listeners.LogListener;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class KickCommand extends HeavenCommand {
-	
+public class KickCommand extends HeavenCommand
+{
 	private final static String KICK_MESSAGE = "Vous avez été exclu du serveur par %1$s :\n\n%2$s";
 	private final static String KICK = "K|%1$s|%2$s";
-	
+
 	public KickCommand()
 	{
-		super("kick", "heavencraft.commands.kick", new String[] {"gkick"});
+		super("kick", "heavencraft.commands.kick", new String[] { "gkick" });
 	}
 
 	@Override
@@ -23,30 +24,30 @@ public class KickCommand extends HeavenCommand {
 	{
 		ProxiedPlayer player;
 		String reason;
-		
+
 		switch (args.length)
 		{
-		case 0:
-			sendUsage(sender);
-			return;
-		case 1:
-			player = Utils.getPlayer(args[0]);
-			reason = "";
-			break;
-		default:
-			player = Utils.getPlayer(args[0]);
-			reason = Utils.ArrayToString(args, 1, " ");
-			break;
+			case 0:
+				sendUsage(sender);
+				return;
+			case 1:
+				player = Utils.getPlayer(args[0]);
+				reason = "";
+				break;
+			default:
+				player = Utils.getPlayer(args[0]);
+				reason = Utils.ArrayToString(args, 1, " ");
+				break;
 		}
-		
+
 		kickPlayer(player, sender.getName(), reason);
 	}
-	
+
 	public static void kickPlayer(ProxiedPlayer player, String kickedBy, String reason)
 	{
-		KickManager.addReason(player.getName(), String.format(KICK, kickedBy, reason));
-		LogsManager.addKick(kickedBy, player.getName(), reason);
-		
+		DisconnectReasonManager.addReason(player.getName(), String.format(KICK, kickedBy, reason));
+		LogListener.addKick(player.getName(), kickedBy, reason);
+
 		player.disconnect(TextComponent.fromLegacyText(String.format(KICK_MESSAGE, kickedBy, reason)));
 	}
 

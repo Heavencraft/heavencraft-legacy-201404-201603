@@ -8,8 +8,8 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class AutoMessageTask implements Runnable
 {
-	private final static int PERIOD = 5;
-	private final static String PREFIX = "§b[Heavencraft]§r ";
+	private final static int PERIOD = 300;
+	private final static String PREFIX = "§b[Heavencaft]§r ";
 
 	private Random rand = new Random();
 
@@ -24,9 +24,7 @@ public class AutoMessageTask implements Runnable
 			"Des hits 24/24 et de l'animation le weekend sur notre radio ! Rendez-vous ici : heavencraft.fr/radio.php",
 			"Faites §b/nexus§r pour retourner au Nexus.",
 			"Envie de nous faire entendre votre petite voix ? Rejoignez-nous sur mumble : heavencraft.fr.",
-			"Utilisez §b/rejoindre [pseudo]§r pour vous téléporter à un joueur sur la map ressources ou sur le Créatif.",
-			"Vous avez un grand projet de construction mais pas assez de ressources ? Rendez-vous sur la map Créabiome !",
-			"Rendez-vous sur le serveur Factions pour vous battre avec d'autres joueurs !",
+			"Utilisez §b/rejoindre [pseudo]§r pour vous téléporter à un joueur sur la map ressources ou dans le Créatif.",
 
 			// Semi-RP
 			"(SRP) Trouvez du travail, ou des travailleurs au cube du travail, à Epsilon, Stonebridge et Centralia. Topic : bit.ly/1mJCwYC",
@@ -34,17 +32,21 @@ public class AutoMessageTask implements Runnable
 			"(SRP) Besoins d'une parcelle ? Demandez-en une à un maire. La liste des maires connectés est visible avec §b/maires§r.",
 			"(SRP) Vous pouvez ajouter d'autres joueurs dans votre protection via §b/region addmember§r.",
 
+			// Autres serveurs
+			"(Créa) Vous avez un grand projet de construction mais pas assez de ressources ? Rendez-vous sur la map Créabiome !",
+			"(Fac) Rendez-vous sur le serveur Factions pour vous battre avec d'autres joueurs !",
+
+			
 			// Messages d'informations
-			"En plus de deux ans et demi, plus de 25 000 joueurs se sont connectés à Heavencraft !",
 			"Heavencraft a été créé le 28 Mars 2011 !",
+			"En 3 ans, plus de 25000 joueurs se sont connectés à Heavencraft !",
 			"Le serveur est entièrement financé grâce aux joueurs. Envie de nous aider ? Rendez-vous sur le site pour acheter des HPs.",
 
 			// Messages fun
 			"Vous aimez les cookies ? Ça tombe bien ! Moi aussi !",
 			"Je mange des petits suisses (miam).",
 			"§cMaxou§r is watching you !",
-			"La Congolexicomatisation des lois du marché n'est qu'une légende.",
-			"Envie de rencontrer §9Pinepy§r ? Rendez-vous au McDo !" 
+			"Non §9Pinepy§r ! C'est un warp, pas un wrap !"
 			};
 	/*
     - ''
@@ -68,7 +70,7 @@ public class AutoMessageTask implements Runnable
 	public AutoMessageTask()
 	{
 		ProxyServer.getInstance().getScheduler()
-				.schedule(HeavenProxy.getInstance(), this, PERIOD, PERIOD, TimeUnit.MINUTES);
+				.schedule(HeavenProxy.getInstance(), this, PERIOD, PERIOD, TimeUnit.SECONDS);
 	}
 
 	@Override
