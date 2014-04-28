@@ -1,18 +1,16 @@
 package fr.heavencraft.heavenproxy.kick;
 
+import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import fr.heavencraft.heavenproxy.Utils;
 import fr.heavencraft.heavenproxy.chat.DisconnectReasonManager;
 import fr.heavencraft.heavenproxy.commands.HeavenCommand;
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
 import fr.heavencraft.heavenproxy.listeners.LogListener;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class KickCommand extends HeavenCommand
 {
 	private final static String KICK_MESSAGE = "Vous avez été exclu du serveur par %1$s :\n\n%2$s";
-	private final static String KICK = "K|%1$s|%2$s";
 
 	public KickCommand()
 	{
@@ -45,10 +43,10 @@ public class KickCommand extends HeavenCommand
 
 	public static void kickPlayer(ProxiedPlayer player, String kickedBy, String reason)
 	{
-		DisconnectReasonManager.addReason(player.getName(), String.format(KICK, kickedBy, reason));
 		LogListener.addKick(player.getName(), kickedBy, reason);
 
-		player.disconnect(TextComponent.fromLegacyText(String.format(KICK_MESSAGE, kickedBy, reason)));
+		DisconnectReasonManager.addKick(player.getName(), kickedBy, reason);
+		Utils.kickPlayer(player, String.format(KICK_MESSAGE, kickedBy, reason));
 	}
 
 	private static void sendUsage(CommandSender sender)

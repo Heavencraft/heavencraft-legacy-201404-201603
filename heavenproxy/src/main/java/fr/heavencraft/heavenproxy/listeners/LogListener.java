@@ -1,11 +1,13 @@
 package fr.heavencraft.heavenproxy.listeners;
 
+import java.net.InetAddress;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.logging.Logger;
 
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
@@ -40,11 +42,21 @@ public class LogListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
-	public void onPostLogin(PostLoginEvent event)
+	public void onPostLogin(final PostLoginEvent event)
 	{
 		log.info(TAG + event);
 		
-		log(event.getPlayer(), Action.LOGIN, event.getPlayer().getAddress().getAddress().toString());
+		ProxyServer.getInstance().getScheduler().runAsync(HeavenProxy.getInstance(), new Runnable()
+		{
+			
+			@Override
+			public void run()
+			{
+				InetAddress address = event.getPlayer().getAddress().getAddress();
+				
+				log(event.getPlayer(), Action.LOGIN, address.toString() + " " + Utils.getCity(address));
+			}
+		});
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
