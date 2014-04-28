@@ -1,0 +1,15 @@
+name: LaPoste
+version: 1.0
+main: fr.heavencraft.laposte.HeavenAventure
+depend: [WorldGuard]
+commands:
+  reloadPoste:
+    description: Recharge la poste.
+  listPoste:
+    description: Affiche les bureaux de postes.
+  colis:
+    description: Envoyer un colis.
+  addPoste:
+    description: Ajoute une poste.
+  removePoste:
+    description: Supprime une poste.
