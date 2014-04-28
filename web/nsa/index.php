@@ -56,6 +56,7 @@ error_reporting(E_ALL);
 				<option value="0">LOGIN</option>
 				<option value="1">CHAT</option>
 				<option value="2">COMMAND</option>
+				<option value="3">MOD_HISTORY</option>
 			</select>
 			
 			<div class="form-group">
@@ -116,6 +117,7 @@ error_reporting(E_ALL);
 			case 0: $action = "LOGIN"; break;
 			case 1: $action = "CHAT"; break;
 			case 2: $action = "COMMAND"; break;
+			case 3: $action = "MOD_HISTORY"; break;
 			default: $action = "???"; break;
 		}
 				
