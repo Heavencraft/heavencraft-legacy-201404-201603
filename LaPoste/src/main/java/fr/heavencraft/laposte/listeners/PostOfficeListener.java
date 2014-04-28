@@ -22,7 +22,7 @@ public class PostOfficeListener implements Listener{
 	@EventHandler
 	public void onRegionEnter(RegionEnterEvent e)
 	{
-		if(PostOfficeManager.isOffice(e.getRegion().getId()));
+		if(PostOfficeManager.isOffice(e.getRegion().getId().toLowerCase()));
 		{		
 			//TODO: jouer le son d'entrée a la poste. e.getPlayer().playSound(e.getPlayer().getLocation(), getSound(e.getRegion().getId()), 1, 1);
 			e.getPlayer().sendMessage(String.format(FORMAT_POSTE, "Bienvenue dans notre bureau de poste."));
@@ -64,7 +64,7 @@ public class PostOfficeListener implements Listener{
 	public void onRegionLeave(RegionLeaveEvent e)
 	{
 		//Enlever le joueur lorsqu'il sort d'un post office.
-		if(PostOfficeManager.isOffice(e.getRegion().getId()))
+		if(PostOfficeManager.isOffice(e.getRegion().getId().toLowerCase()))
 			PostOfficeManager.delPlayerInOffice(e.getPlayer());
 	}
 }
