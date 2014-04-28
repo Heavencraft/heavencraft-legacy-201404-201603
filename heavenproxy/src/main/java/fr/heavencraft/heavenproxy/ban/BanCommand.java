@@ -12,7 +12,6 @@ import fr.heavencraft.heavenproxy.listeners.LogListener;
 public class BanCommand extends HeavenCommand
 {
 	private final static String BAN_MESSAGE = "Vous avez été banni du serveur par %1$s :\n\n%2$s";
-	private final static String BAN = "B|%1$s|%2$s";
 
 	public BanCommand()
 	{
@@ -53,7 +52,7 @@ public class BanCommand extends HeavenCommand
 		{
 			ProxiedPlayer player = Utils.getPlayer(playerName);
 
-			DisconnectReasonManager.addReason(player.getName(), String.format(BAN, bannedBy, reason));
+			DisconnectReasonManager.addBan(player.getName(), bannedBy, reason);
 			Utils.kickPlayer(player, String.format(BAN_MESSAGE, bannedBy, reason));
 		}
 		catch (PlayerNotConnectedException ex)

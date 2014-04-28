@@ -33,7 +33,7 @@ public class ChatManager
 			@Override
 			public void run()
 			{
-				String location = Utils.getLocation(address);
+				String location = Utils.getCountry(address);
 
 				if (welcome)
 					Utils.broadcastMessage(WELCOME_MESSAGE, playerName, location);

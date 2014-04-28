@@ -13,6 +13,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Listener;
 
 import com.maxmind.geoip2.DatabaseReader;
+import com.maxmind.geoip2.model.CityResponse;
 import com.maxmind.geoip2.model.CountryResponse;
 import com.mojang.api.profiles.HttpProfileRepository;
 import com.mojang.api.profiles.Profile;
@@ -133,17 +134,17 @@ public class Utils {
 	}
 	
 	/*
-	 * Location
+	 * Géolocalisation
 	 */
 
 	private static DatabaseReader _databaseReader;
 	
-	public static String getLocation(final InetAddress address)
+	public static String getCountry(final InetAddress address)
 	{
 		try
 		{
 			if (_databaseReader == null)
-				_databaseReader = new DatabaseReader.Builder(new File("GeoLite2-Country.mmdb")).build();
+				_databaseReader = new DatabaseReader.Builder(new File("GeoLite2-City.mmdb")).build();
 			
 			CountryResponse response = _databaseReader.country(address);
 			return response.getCountry().getNames().get("fr");
@@ -152,6 +153,29 @@ public class Utils {
 		{
 			t.printStackTrace();
 			return "France";
+		}
+	}
+	
+	public static String getCity(final InetAddress address)
+	{
+		try
+		{
+			if (_databaseReader == null)
+				_databaseReader = new DatabaseReader.Builder(new File("GeoLite2-City.mmdb")).build();
+			
+			CityResponse response = _databaseReader.city(address);
+			
+			String name = response.getMostSpecificSubdivision().getNames().get("fr");
+			
+			if (name == null || name.equals("null"))
+				return response.getMostSpecificSubdivision().getName();
+			else
+				return name;
+		}
+		catch (Throwable t)
+		{
+			t.printStackTrace();
+			return "";
 		}
 	}
 	
