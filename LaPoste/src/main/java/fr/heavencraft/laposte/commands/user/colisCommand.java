@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 
 import fr.heavencraft.laposte.LaPoste;
 import fr.heavencraft.laposte.commands.LaPosteCommand;
+import fr.heavencraft.laposte.handlers.Colis;
 import fr.heavencraft.laposte.handlers.PostOfficeManager;
 
 public class colisCommand extends LaPosteCommand{
@@ -31,13 +32,14 @@ public class colisCommand extends LaPosteCommand{
 				Player destinataire = LaPoste.getInstance().getServer().getPlayer(args[0]);
 				if(destinataire != null)
 				{
-					//le joueur est connecté.
-					
-					
-					
-					//TODO: Ouvir l'inventaire "virtuel" pour que le joueur puisse y placer les items
-					//TODO: A la fermeture de l'inventaire, on envoie les items.
-					// --> par base de donnée, ajouter l'inventaire sérialisé.
+					//le joueur est connecté.	
+					if(destinataire != player)
+					{
+						Colis colis = new Colis(player, destinataire);
+						colis.envoyer();
+					}
+					else
+						player.sendMessage(String.format(FORMAT_POSTE, "Vous voulez vous envoyer un colis a vous même, monsieur..."));
 					
 				}
 				else
