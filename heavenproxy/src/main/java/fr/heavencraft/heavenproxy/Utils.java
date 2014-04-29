@@ -165,12 +165,12 @@ public class Utils {
 			
 			CityResponse response = _databaseReader.city(address);
 			
-			String name = response.getMostSpecificSubdivision().getNames().get("fr");
+			//String name = response.getMostSpecificSubdivision().getNames().get("fr");
 			
-			if (name == null || name.equals("null"))
+			//if (name == null || name.equals("null"))
 				return response.getMostSpecificSubdivision().getName();
-			else
-				return name;
+			//else
+			//	return name;
 		}
 		catch (Throwable t)
 		{
