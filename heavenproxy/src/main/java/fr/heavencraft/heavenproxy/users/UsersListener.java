@@ -61,7 +61,8 @@ public class UsersListener implements Listener
 			if (player.hasPermission("heavencraft.commands.modo"))
 			{
 				Utils.sendMessage(player, ChatColor.GREEN + "Vous êtes membre du staff, VOTEZ !");
-				Utils.sendMessage(player, ChatColor.GREEN +"http://mc-topserv.net/top/serveur.php?serv=46");
+				Utils.sendMessage(player, ChatColor.GREEN + "http://www.mcserv.org/Heavencraftfr_3002.html");
+				Utils.sendMessage(player, ChatColor.GREEN + "http://mc-topserv.net/top/serveur.php?serv=46");
 			}
 		}
 		catch (HeavenException ex)

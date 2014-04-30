@@ -15,6 +15,7 @@ import net.md_5.bungee.api.plugin.Listener;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.model.CityResponse;
 import com.maxmind.geoip2.model.CountryResponse;
+import com.maxmind.geoip2.record.Subdivision;
 import com.mojang.api.profiles.HttpProfileRepository;
 import com.mojang.api.profiles.Profile;
 import com.mojang.api.profiles.ProfileRepository;
@@ -156,7 +157,7 @@ public class Utils {
 		}
 	}
 	
-	public static String getCity(final InetAddress address)
+	public static String getExactLocation(final InetAddress address)
 	{
 		try
 		{
@@ -165,12 +166,23 @@ public class Utils {
 			
 			CityResponse response = _databaseReader.city(address);
 			
-			//String name = response.getMostSpecificSubdivision().getNames().get("fr");
+			String location = "";
+			String tmp;
 			
-			//if (name == null || name.equals("null"))
-				return response.getMostSpecificSubdivision().getName();
-			//else
-			//	return name;
+			// Ville
+			if ((tmp = response.getCity().getName()) != null)
+				location += tmp;
+			
+			// Département, région
+			for (Subdivision subdivision : response.getSubdivisions())
+				if ((tmp = subdivision.getName()) != null)
+					location += (location == "" ? "" : " ") + tmp;
+			
+			// Pays
+			if ((tmp = response.getCountry().getName()) != null)
+				location += (location == "" ? "" : " ") + tmp;
+			
+			return location;
 		}
 		catch (Throwable t)
 		{
