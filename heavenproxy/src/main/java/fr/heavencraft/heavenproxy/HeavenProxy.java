@@ -12,6 +12,7 @@ import fr.heavencraft.heavenproxy.ban.BanCommand;
 import fr.heavencraft.heavenproxy.ban.BanListener;
 import fr.heavencraft.heavenproxy.ban.UnbanCommand;
 import fr.heavencraft.heavenproxy.chat.ChatListener;
+import fr.heavencraft.heavenproxy.chat.FloodListener;
 import fr.heavencraft.heavenproxy.chat.TabCompleteListener;
 import fr.heavencraft.heavenproxy.commands.ActifCommand;
 import fr.heavencraft.heavenproxy.commands.ListCommand;
@@ -77,6 +78,7 @@ public class HeavenProxy extends Plugin
 			
 			// Chat
 			new ChatListener();
+			new FloodListener();
 			new TabCompleteListener();
 			
 			// Kick
