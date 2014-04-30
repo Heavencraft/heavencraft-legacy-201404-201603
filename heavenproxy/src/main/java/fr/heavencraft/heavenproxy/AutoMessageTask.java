@@ -8,14 +8,13 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class AutoMessageTask implements Runnable
 {
-	private final static int PERIOD = 300;
-	private final static String PREFIX = "§b[Heavencaft]§r ";
+	private static final int PERIOD = 300;
+	private static final String PREFIX = "§b[Heavencraft]§r ";
 
-	private Random rand = new Random();
+	private final Random rand = new Random();
 
-	private String[] messages = new String[]
-			{
-		  // Messages sérieux
+	private final String[] messages = new String[] {
+			// Messages sérieux
 			"Des mini-jeux sont installés au Nexus !",
 			"Les §9modérateurs§r ne sont pas là pour vous téléporter ou vous expliquer comment jouer !",
 			"Les joueurs qui écrivent avec le moins de fautes d'orthographe sont ceux que l'on prend le plus au sérieux.",
@@ -36,37 +35,15 @@ public class AutoMessageTask implements Runnable
 			"(Créa) Vous avez un grand projet de construction mais pas assez de ressources ? Rendez-vous sur la map Créabiome !",
 			"(Fac) Rendez-vous sur le serveur Factions pour vous battre avec d'autres joueurs !",
 
-			
 			// Messages d'informations
 			"Heavencraft a été créé le 28 Mars 2011 !",
 			"En 3 ans, plus de 25000 joueurs se sont connectés à Heavencraft !",
 			"Le serveur est entièrement financé grâce aux joueurs. Envie de nous aider ? Rendez-vous sur le site pour acheter des HPs.",
 
 			// Messages fun
-			"Vous aimez les cookies ? Ça tombe bien ! Moi aussi !",
-			"Je mange des petits suisses (miam).",
-			"§cMaxou§r is watching you !",
-			"Non §9Pinepy§r ! C'est un warp, pas un wrap !"
-			};
-	/*
-    - ''
-    - /modo
-    - ''
-    - 'Votez et notez le serveur sur MCServ : http://www.heavencraft.eu/vote.php'
-    - ''
-    - ''
-    - ''
-    - '99% des questions pos?es sur le tchat ont leur r?ponse sur le forum.'
-    - 'Heavencraft est d?sormais dot? d''une webradio : http://www.heavencraft.eu/radio.php'
-    - 'Event Spleef avec classement et dotation chaque vendredi, 21h.'
-    - 'Event PVP avec classement et dotation chaque Samedi, 21h.'
-    - ''
-    - ''
-    - ''
-    - 'Pour les commandes du d?butant : http://youtu.be/fw7mPNWEhNc'
-    - 'Les fonctionnalit?s du serveur : http://youtu.be/AoojmrSTGHk'
-    - 'Si vous laggez, pensez ? mettre votre jeu en anglais ;)'
-*/
+			"Vous aimez les cookies ? Ça tombe bien ! Moi aussi !", "Je mange des petits suisses (miam).",
+			"§cMaxou§r is watching you !", "Non §9Pinepy§r ! C'est un warp, pas un wrap !" };
+
 	public AutoMessageTask()
 	{
 		ProxyServer.getInstance().getScheduler()
