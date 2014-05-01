@@ -45,16 +45,15 @@ public class LogListener implements Listener
 	public void onPostLogin(final PostLoginEvent event)
 	{
 		log.info(TAG + event);
-		
+
 		ProxyServer.getInstance().getScheduler().runAsync(HeavenProxy.getInstance(), new Runnable()
 		{
-			
 			@Override
 			public void run()
 			{
 				InetAddress address = event.getPlayer().getAddress().getAddress();
-				
-				log(event.getPlayer(), Action.LOGIN, address.toString() + " " + Utils.getCity(address));
+
+				log(event.getPlayer(), Action.LOGIN, address.toString() + " " + Utils.getExactLocation(address));
 			}
 		});
 	}

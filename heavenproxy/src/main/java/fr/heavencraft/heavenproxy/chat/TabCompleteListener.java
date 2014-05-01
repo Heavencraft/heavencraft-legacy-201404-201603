@@ -32,9 +32,10 @@ public class TabCompleteListener implements Listener
 
 		String cursor = event.getCursor();
 		String playerName = cursor.substring(cursor.lastIndexOf(" ") + 1);
+		playerName = playerName.toLowerCase();
 
 		for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers())
-			if (player.getName().startsWith(playerName))
+			if (player.getName().toLowerCase().startsWith(playerName))
 				event.getSuggestions().add(player.getName());
 	}
 }
