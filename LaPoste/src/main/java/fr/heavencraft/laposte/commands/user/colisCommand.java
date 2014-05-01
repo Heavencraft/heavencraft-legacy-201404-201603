@@ -1,5 +1,8 @@
 package fr.heavencraft.laposte.commands.user;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -51,8 +54,16 @@ public class colisCommand extends LaPosteCommand{
 						
 						
 						//TODO: Ouvir l'inventaire "virtuel" pour que le joueur puisse y placer les items
+						Colis colis = new Colis(player, destinataire);
+						colis.openColisForCreation();
+						colis.envoyer();
+						
 						//TODO: A la fermeture de l'inventaire, on envoie les items.
 						// --> par base de donnée, ajouter l'inventaire sérialisé.
+						
+						
+						
+						
 					}
 					else
 						player.sendMessage(String.format(FORMAT_POSTE, "Ce joueur n'existe pas."));
