@@ -1,4 +1,4 @@
-package fr.heavencraft.heavenproxy.listeners;
+package fr.heavencraft.heavenproxy.chat;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,7 +53,7 @@ public class FloodListener implements Listener
 		if (event.isCancelled())
 			return;
 
-		log.info(TAG + event);
+		// log.info(TAG + event);
 
 		if (!(event.getSender() instanceof ProxiedPlayer))
 			return;

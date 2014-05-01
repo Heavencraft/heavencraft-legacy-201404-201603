@@ -32,7 +32,7 @@ public class ChatListener implements Listener
 		if (event.isCancelled())
 			return;
 
-		log.info(TAG + event);
+		// log.info(TAG + event);
 
 		if (event.isCommand())
 			return;
