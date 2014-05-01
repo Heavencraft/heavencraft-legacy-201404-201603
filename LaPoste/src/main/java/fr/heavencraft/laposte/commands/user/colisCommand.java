@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import fr.heavencraft.laposte.LaPoste;
 import fr.heavencraft.laposte.commands.LaPosteCommand;
 import fr.heavencraft.laposte.handlers.Colis;
+import fr.heavencraft.laposte.handlers.MenuColisRecus;
 import fr.heavencraft.laposte.handlers.PostOfficeManager;
 
 public class colisCommand extends LaPosteCommand{
@@ -27,6 +28,16 @@ public class colisCommand extends LaPosteCommand{
 
 		if (args.length != 1) {
 			player.sendMessage(String.format(FORMAT_POSTE, "/colis <destinataire>"));
+			player.sendMessage(String.format(FORMAT_POSTE, "/colis recu"));
+		}
+		else if(args[0].equalsIgnoreCase("recu"))
+		{
+			MenuColisRecus menu = new MenuColisRecus();
+			if(PostOfficeManager.isInOffice(player))
+				menu.Ouvrir(player);
+			else
+				player.sendMessage(String.format(FORMAT_POSTE, "Vous devez être dans un bureau de Poste."));
+			
 		}
 		else
 		{
