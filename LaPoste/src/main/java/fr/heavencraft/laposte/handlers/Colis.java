@@ -3,6 +3,7 @@ package fr.heavencraft.laposte.handlers;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
@@ -18,8 +19,14 @@ public class Colis {
 	{
 		expediteur = owner;
 		destinataire = dest;
+	}
+	
+	public void openColisForCreation()
+	{
+		Inventory ninv =  Bukkit.createInventory(null, 9, "Heaven Colis");
 		
-		owner.openInventory(contenu);
+		expediteur.openInventory(ninv);
+		contenu = ninv;
 	}
 	
 	public Inventory getContenu()
