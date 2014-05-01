@@ -21,10 +21,10 @@ public class setSoundCommand extends AventureCommand{
 		}
 		else
 		{
-			if(Files.getRegions().contains("Regions." + args[0] + ".Enable"))
+			if(Files.getRegions().contains("Regions." + args[0].toLowerCase() + ".Enable"))
 			{
-				Files.getRegions().set("Regions." + args[0] + ".Enable", true);
-				Files.getRegions().set("Regions." + args[0] + ".Sound", args[1]);
+				Files.getRegions().set("Regions." + args[0].toLowerCase() + ".Enable", true);
+				Files.getRegions().set("Regions." + args[0].toLowerCase() + ".Sound", args[1]);
 				Files.saveRegions();
 				player.sendMessage(String.format(FORMAT_NC, "Le son de la region a été mis a jour."));
 			}

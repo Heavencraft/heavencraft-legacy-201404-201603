@@ -37,13 +37,11 @@ public class listRegionsCommand extends AventureCommand{
 	@Override
 	protected void onConsoleCommand(CommandSender sender, String[] args)
 			throws Exception {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	protected void sendUsage(CommandSender sender) {
-		// TODO Auto-generated method stub
 
 	}
 }
