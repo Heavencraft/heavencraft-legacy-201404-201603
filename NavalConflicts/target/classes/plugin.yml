@@ -1,0 +1,21 @@
+name: NavalConflicts
+main: fr.heavencraft.NavalConflicts.NavalConflicts
+version: 1.0
+author: ManuelR
+commands:
+  join:
+    description: Rejoindre Naval Conflicts.
+    aliases: [Play, Jouer, Go]
+  leave:
+    description: Quitter Naval Conflicts.
+    aliases: [Quitter]
+  vote:
+    description: Vote pour une map.
+    aliases: [Quitter]
+  class:
+    description: Choisis ta classe.
+    aliases: [classe]
+  lobby:
+    description: Actions sur la lobby.
+  arena:
+    description: Actions sur les arenes.
