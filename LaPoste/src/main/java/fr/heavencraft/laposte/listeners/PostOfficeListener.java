@@ -10,6 +10,7 @@ import fr.heavencraft.laposte.LaPoste;
 import fr.heavencraft.laposte.WorldGuardRegions.RegionEnterEvent;
 import fr.heavencraft.laposte.WorldGuardRegions.RegionLeaveEvent;
 import fr.heavencraft.laposte.handlers.PostOfficeManager;
+import fr.heavencraft.laposte.handlers.EnAttente.ColisEnAttente;
 
 public class PostOfficeListener implements Listener{
 	public PostOfficeListener()
@@ -65,6 +66,11 @@ public class PostOfficeListener implements Listener{
 	{
 		//Enlever le joueur lorsqu'il sort d'un post office.
 		if(PostOfficeManager.isOffice(e.getRegion().getId().toLowerCase()))
+		{
 			PostOfficeManager.delPlayerInOffice(e.getPlayer());
+			//envoyer les colis de la personne
+			ColisEnAttente.sendColis(e.getPlayer());
+		}
+		
 	}
 }
