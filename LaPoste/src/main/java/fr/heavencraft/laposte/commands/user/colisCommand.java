@@ -11,6 +11,7 @@ import fr.heavencraft.laposte.commands.LaPosteCommand;
 import fr.heavencraft.laposte.handlers.Colis;
 import fr.heavencraft.laposte.handlers.MenuColisRecus;
 import fr.heavencraft.laposte.handlers.PostOfficeManager;
+import fr.heavencraft.laposte.handlers.EnAttente.ColisEnAttente;
 
 public class colisCommand extends LaPosteCommand{
 
@@ -22,6 +23,8 @@ public class colisCommand extends LaPosteCommand{
 		
 		
 	}
+	
+	//TODO: Le colis est stoqué, et seulement, lorsque le joueur quitte une poste, les colis sont envoyés a la bdd.
 
 	@Override
 	protected void onPlayerCommand(Player player, String[] args) throws Exception {
@@ -49,8 +52,11 @@ public class colisCommand extends LaPosteCommand{
 					//le joueur est connecté.	
 					if(destinataire != player)
 					{
+						//Ouvir l'inventaire "virtuel" pour que le joueur puisse y placer les items
 						Colis colis = new Colis(player, destinataire);
-						colis.envoyer();
+						colis.openColisForCreation();
+						//Placer le colis en attente d'envoi.
+						ColisEnAttente.addColis(player, colis);
 					}
 					else
 						player.sendMessage(String.format(FORMAT_POSTE, "Vous voulez vous envoyer un colis a vous même, monsieur..."));
@@ -61,20 +67,14 @@ public class colisCommand extends LaPosteCommand{
 					destinataire = LaPoste.getInstance().getServer().getOfflinePlayer(args[0]).getPlayer();
 					if(destinataire != null)
 					{
-						//le joueur existe mais est déconnecté.
+						//le destinataire existe mais est déconnecté.
 						
 						
-						//TODO: Ouvir l'inventaire "virtuel" pour que le joueur puisse y placer les items
+						//Ouvir l'inventaire "virtuel" pour que le joueur puisse y placer les items
 						Colis colis = new Colis(player, destinataire);
 						colis.openColisForCreation();
-						colis.envoyer();
-						
-						//TODO: A la fermeture de l'inventaire, on envoie les items.
-						// --> par base de donnée, ajouter l'inventaire sérialisé.
-						
-						
-						
-						
+						//Placer le colis en attente d'envoi.
+						ColisEnAttente.addColis(player, colis);
 					}
 					else
 						player.sendMessage(String.format(FORMAT_POSTE, "Ce joueur n'existe pas."));

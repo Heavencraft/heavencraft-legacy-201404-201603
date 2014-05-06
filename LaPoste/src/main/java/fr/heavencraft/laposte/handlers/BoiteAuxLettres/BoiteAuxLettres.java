@@ -1,4 +1,4 @@
-package fr.heavencraft.laposte.handlers;
+package fr.heavencraft.laposte.handlers.BoiteAuxLettres;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
