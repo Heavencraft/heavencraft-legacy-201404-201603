@@ -11,7 +11,7 @@ public class BanListener implements Listener
 {
 	private static final String TAG = "[BanListener] ";
 
-	private final Logger log = Utils.getLogger();
+	private static final Logger log = Utils.getLogger();
 
 	public BanListener()
 	{
@@ -26,8 +26,6 @@ public class BanListener implements Listener
 		if (event.isCancelled())
 			return;
 
-		log.info(TAG + event);
-
 		String uuid = Utils.getUUID(event.getConnection());
 		String reason = BanManager.getReason(uuid);
 
@@ -36,7 +34,7 @@ public class BanListener implements Listener
 			event.setCancelled(true);
 			event.setCancelReason("Vous êtes banni d'Heavencraft.\n\n" + reason);
 
-			log.info("[BanListener] Account " + uuid + " is banned : " + reason);
+			log.info(TAG + "[onLogin] Account " + uuid + " is banned : " + reason);
 		}
 	}
 }

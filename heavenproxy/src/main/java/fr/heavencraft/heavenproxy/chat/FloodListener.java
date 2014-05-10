@@ -53,8 +53,6 @@ public class FloodListener implements Listener
 		if (event.isCancelled())
 			return;
 
-		// log.info(TAG + event);
-
 		if (!(event.getSender() instanceof ProxiedPlayer))
 			return;
 

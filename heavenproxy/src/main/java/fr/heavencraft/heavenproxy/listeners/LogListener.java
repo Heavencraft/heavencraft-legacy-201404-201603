@@ -23,8 +23,7 @@ import fr.heavencraft.heavenproxy.Utils;
 public class LogListener implements Listener
 {
 	private static final String TAG = "[LogListener] ";
-
-	private final Logger log = Utils.getLogger();
+	private static final Logger log = Utils.getLogger();
 
 	private enum Action
 	{
@@ -44,8 +43,6 @@ public class LogListener implements Listener
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPostLogin(final PostLoginEvent event)
 	{
-		log.info(TAG + event);
-
 		ProxyServer.getInstance().getScheduler().runAsync(HeavenProxy.getInstance(), new Runnable()
 		{
 			@Override
@@ -63,8 +60,6 @@ public class LogListener implements Listener
 	{
 		if (event.isCancelled())
 			return;
-
-		log.info(TAG + event);
 
 		if (!(event.getSender() instanceof ProxiedPlayer))
 			return;
