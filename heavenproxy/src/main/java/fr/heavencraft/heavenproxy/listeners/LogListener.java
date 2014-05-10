@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
+import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -23,15 +24,15 @@ import fr.heavencraft.heavenproxy.Utils;
 public class LogListener implements Listener
 {
 	private static final String TAG = "[LogListener] ";
-
-	private final Logger log = Utils.getLogger();
+	private static final Logger log = Utils.getLogger();
 
 	private enum Action
 	{
 		LOGIN,
 		CHAT,
 		COMMAND,
-		MOD_HISTORY
+		MOD_HISTORY,
+		LOGOUT
 	}
 
 	public LogListener()
@@ -44,8 +45,6 @@ public class LogListener implements Listener
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPostLogin(final PostLoginEvent event)
 	{
-		log.info(TAG + event);
-
 		ProxyServer.getInstance().getScheduler().runAsync(HeavenProxy.getInstance(), new Runnable()
 		{
 			@Override
@@ -59,12 +58,16 @@ public class LogListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
+	public void onPlayerDisconnect(PlayerDisconnectEvent event)
+	{
+		log(event.getPlayer(), Action.LOGOUT, "");
+	}
+
+	@EventHandler(priority = EventPriority.LOW)
 	public void onChat(ChatEvent event)
 	{
 		if (event.isCancelled())
 			return;
-
-		log.info(TAG + event);
 
 		if (!(event.getSender() instanceof ProxiedPlayer))
 			return;

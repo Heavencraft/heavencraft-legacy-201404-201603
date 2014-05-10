@@ -24,7 +24,7 @@ public class MuteCommand extends HeavenCommand
 
 		String player = Utils.getRealName(args[0]);
 		int minutes = Utils.toUint(args[1]);
-		
+
 		if (minutes > 60)
 			minutes = 60;
 
@@ -34,7 +34,8 @@ public class MuteCommand extends HeavenCommand
 
 		try
 		{
-			Utils.sendMessage(Utils.getPlayer(player), "Vous avez été mute pour {%1$s} minutes.", minutes);
+			Utils.sendMessage(Utils.getPlayer(player), "Vous avez été mute pour {%1$s} minutes par {%2$s}.", minutes,
+					sender.getName());
 		}
 		catch (PlayerNotConnectedException ex)
 		{

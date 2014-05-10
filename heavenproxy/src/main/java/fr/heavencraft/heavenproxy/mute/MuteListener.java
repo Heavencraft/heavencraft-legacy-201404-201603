@@ -28,6 +28,7 @@ public class MuteListener implements Listener
 		bannedWords.add("salau"); // salaud
 		bannedWords.add("salop"); // salop, salope, salopard
 
+		bannedWords.add("merde");
 		bannedWords.add("putin");
 		bannedWords.add("putain");
 		bannedWords.add("bitch");
@@ -42,8 +43,6 @@ public class MuteListener implements Listener
 	{
 		if (event.isCancelled())
 			return;
-
-		// log.info(TAG + event);
 
 		if (!(event.getSender() instanceof ProxiedPlayer))
 			return;
@@ -71,7 +70,7 @@ public class MuteListener implements Listener
 			if (message.contains(bannedWord))
 			{
 				MuteManager.mutePlayer(playerName, 5);
-				Utils.sendMessage(player, "Vous avez été mute pour {5} minutes.");
+				Utils.sendMessage(player, "Vous avez été mute pour {5} minutes par {le Prof. Chen}.");
 
 				event.setCancelled(true);
 				return;
