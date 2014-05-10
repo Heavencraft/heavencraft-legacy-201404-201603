@@ -16,8 +16,7 @@ import fr.heavencraft.heavenproxy.Utils;
 public class ChatListener implements Listener
 {
 	private static final String TAG = "[ChatListener] ";
-
-	private final Logger log = Utils.getLogger();
+	private static final Logger log = Utils.getLogger();
 
 	public ChatListener() throws IOException
 	{
@@ -32,16 +31,18 @@ public class ChatListener implements Listener
 		if (event.isCancelled())
 			return;
 
-		// log.info(TAG + event);
-
-		if (event.isCommand())
-			return;
-
 		if (!(event.getSender() instanceof ProxiedPlayer))
 			return;
 
 		ProxiedPlayer player = (ProxiedPlayer) event.getSender();
 		String message = event.getMessage();
+
+		if (event.isCommand())
+		{
+			// BUGFIX : pour que la console puisse voir les commandes
+			log.info(TAG + "[onPlayerChat] " + player.getName() + " issued server command: " + message);
+			return;
+		}
 
 		// BUGFIX : pour que la banque du semi-rp fonctionne
 		if (player.getServer().getInfo().getName().equalsIgnoreCase("semirp") && Utils.isInteger(message))
@@ -60,8 +61,6 @@ public class ChatListener implements Listener
 	@EventHandler
 	public void onPlayerDisconnect(PlayerDisconnectEvent event)
 	{
-		log.info(TAG + event);
-
 		String playerName = event.getPlayer().getName();
 		String reason = DisconnectReasonManager.getReason(playerName);
 

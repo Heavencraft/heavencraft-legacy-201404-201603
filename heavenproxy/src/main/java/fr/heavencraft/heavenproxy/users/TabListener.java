@@ -12,7 +12,7 @@ import fr.heavencraft.heavenproxy.exceptions.HeavenException;
 public class TabListener implements Listener
 {
 	private static final String TAG = "[TabListener] ";
-	private final Logger log = Utils.getLogger();
+	private static final Logger log = Utils.getLogger();
 
 	public TabListener()
 	{
@@ -24,8 +24,6 @@ public class TabListener implements Listener
 	@EventHandler
 	public void onPostLogin(PostLoginEvent event) throws HeavenException
 	{
-		log.info(TAG + event);
-
 		ProxiedPlayer player = event.getPlayer();
 		String playerName = player.getName();
 
