@@ -28,16 +28,20 @@ public class WarnCommand extends HeavenCommand
 		if (warnType.equals("sms"))
 		{
 			Utils.sendMessage(player, " * {Attention !} Vous semblez écrire en SMS.");
-			Utils.sendMessage(player, "Ce style d'écriture est déconseillé sur Heavencraft, car il vous fait perdre toute crédibilité.");
-			Utils.sendMessage(player, "Faites un effort pour faciliter votre ouverture aux autres joueurs et éviter des sanctions.");
+			Utils.sendMessage(player,
+					"Ce style d'écriture est déconseillé sur Heavencraft, car il vous fait perdre toute crédibilité.");
+			Utils.sendMessage(player,
+					"Faites un effort pour faciliter votre ouverture aux autres joueurs et éviter des sanctions.");
 
 			Utils.sendMessage(sender, "Avertissement pour sms envoyé à {" + player.getName() + "}.");
 		}
 		else if (warnType.equals("maj"))
 		{
 			Utils.sendMessage(player, " * {Attention !} Vous écrivez trop en majuscule.");
-			Utils.sendMessage(player, "Ce style d'écriture est déconseillé sur Heavencraft, car il est l'équivalent de crier.");
-			Utils.sendMessage(player, "Faites un effort pour faciliter votre ouverture aux autres joueurs et éviter des sanctions.");
+			Utils.sendMessage(player,
+					"Ce style d'écriture est déconseillé sur Heavencraft, car il est l'équivalent de crier.");
+			Utils.sendMessage(player,
+					"Faites un effort pour faciliter votre ouverture aux autres joueurs et éviter des sanctions.");
 
 			Utils.sendMessage(sender, "Avertissement pour majuscules envoyé à {" + player.getName() + "}.");
 		}
@@ -61,21 +65,24 @@ public class WarnCommand extends HeavenCommand
 		else if (warnType.equals("avoir"))
 		{
 			Utils.sendMessage(player, " * {Attention !} Vous semblez avoir du mal avec le verbe avoir.");
-			Utils.sendMessage(player, "Sa conjugaison est : J'ai / Tu as (T'as) / Il a / Nous avons /  Vous avez / Ils ont");
+			Utils.sendMessage(player,
+					"Sa conjugaison est : J'ai / Tu as (T'as) / Il a / Nous avons /  Vous avez / Ils ont");
 
 			Utils.sendMessage(sender, "Avertissement pour le verbe avoir envoyé à {" + player.getName() + "}.");
 		}
 		else if (warnType.equals("etre"))
 		{
 			Utils.sendMessage(player, " * {Attention !} Vous semblez avoir du mal avec le verbe être.");
-			Utils.sendMessage(player, "Sa conjugaison est : Je suis / Tu es (T'es) / Il est Nous sommes / Vous ętes / Ils sont");
+			Utils.sendMessage(player,
+					"Sa conjugaison est : Je suis / Tu es (T'es) / Il est Nous sommes / Vous ętes / Ils sont");
 
 			Utils.sendMessage(sender, "Avertissement pour le verbe être envoyé à {" + player.getName() + "}.");
 		}
 		else if (warnType.equals("vouloir"))
 		{
 			Utils.sendMessage(player, " * {Attention !} Vous semblez avoir du mal avec le verbe vouloir.");
-			Utils.sendMessage(player, "Sa conjugaison est : Je veux / Tu veux / Il veut / Nous voulons / Vous voulez / Ils veulent");
+			Utils.sendMessage(player,
+					"Sa conjugaison est : Je veux / Tu veux / Il veut / Nous voulons / Vous voulez / Ils veulent");
 
 			Utils.sendMessage(sender, "Avertissement pour le verbe vouloir envoyé ŕ {" + player.getName() + "}.");
 		}

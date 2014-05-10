@@ -13,7 +13,7 @@ public class TabCompleteListener implements Listener
 {
 	private static final String TAG = "[TabCompleteListener] ";
 
-	private final Logger log = Utils.getLogger();
+	private static final Logger log = Utils.getLogger();
 
 	public TabCompleteListener()
 	{
@@ -27,8 +27,6 @@ public class TabCompleteListener implements Listener
 	{
 		if (event.isCancelled())
 			return;
-
-		log.info(TAG + event);
 
 		String cursor = event.getCursor();
 		String playerName = cursor.substring(cursor.lastIndexOf(" ") + 1);
