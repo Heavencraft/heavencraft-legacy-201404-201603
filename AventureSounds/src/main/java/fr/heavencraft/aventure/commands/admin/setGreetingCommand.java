@@ -20,30 +20,33 @@ public class setGreetingCommand extends AventureCommand{
 
 		if (args.length <= 1) {
 			player.sendMessage(String.format(FORMAT_NC, "/setgreeting <region> <string>"));
+			player.sendMessage(String.format(FORMAT_NC, "Pour enlever le message: ''  (apostphes)"));
 		}
 		else
 		{
 
 
-			if(Files.getRegions().contains("Regions." + args[0] + ".Enable"))
+			if(Files.getRegions().contains("Regions." + args[0].toLowerCase() + ".Enable"))
 			{
-
-				Files.getRegions().set("Regions." + args[0] + ".Enable", true);
-				
+				Files.getRegions().set("Regions." + args[0].toLowerCase() + ".Enable", true);			
 				StringBuilder sb = new StringBuilder();
 				for (int i = 1; i < args.length; i++){
 					sb.append(args[i]).append(" ");
 				}
 				String allArgs = sb.toString().trim();
 
-				Files.getRegions().set("Regions." + args[0] + ".Greeting", allArgs);
+				
+				if (allArgs.equalsIgnoreCase("''"))
+						Files.getRegions().set("Regions." + args[0].toLowerCase() + ".Greeting", ""); //message vide
+				else
+					Files.getRegions().set("Regions." + args[0].toLowerCase() + ".Greeting", allArgs);
 				Files.saveRegions();
 
 				player.sendMessage(String.format(FORMAT_NC, "Message de la région mis a jour."));
 			}
 			else
 			{
-				player.sendMessage(String.format(FORMAT_NC, "Region " + args[0] + " inconnue."));
+				player.sendMessage(String.format(FORMAT_NC, "Region " + args[0].toLowerCase() + " inconnue."));
 			}
 		}
 	}

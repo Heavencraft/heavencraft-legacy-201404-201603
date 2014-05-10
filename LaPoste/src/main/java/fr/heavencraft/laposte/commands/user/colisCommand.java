@@ -1,11 +1,15 @@
 package fr.heavencraft.laposte.commands.user;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.heavencraft.laposte.LaPoste;
 import fr.heavencraft.laposte.commands.LaPosteCommand;
 import fr.heavencraft.laposte.handlers.Colis;
+import fr.heavencraft.laposte.handlers.MenuColisRecus;
 import fr.heavencraft.laposte.handlers.PostOfficeManager;
 
 public class colisCommand extends LaPosteCommand{
@@ -24,6 +28,16 @@ public class colisCommand extends LaPosteCommand{
 
 		if (args.length != 1) {
 			player.sendMessage(String.format(FORMAT_POSTE, "/colis <destinataire>"));
+			player.sendMessage(String.format(FORMAT_POSTE, "/colis recu"));
+		}
+		else if(args[0].equalsIgnoreCase("recu"))
+		{
+			MenuColisRecus menu = new MenuColisRecus();
+			if(PostOfficeManager.isInOffice(player))
+				menu.Ouvrir(player);
+			else
+				player.sendMessage(String.format(FORMAT_POSTE, "Vous devez être dans un bureau de Poste."));
+			
 		}
 		else
 		{
@@ -51,8 +65,16 @@ public class colisCommand extends LaPosteCommand{
 						
 						
 						//TODO: Ouvir l'inventaire "virtuel" pour que le joueur puisse y placer les items
+						Colis colis = new Colis(player, destinataire);
+						colis.openColisForCreation();
+						colis.envoyer();
+						
 						//TODO: A la fermeture de l'inventaire, on envoie les items.
 						// --> par base de donnée, ajouter l'inventaire sérialisé.
+						
+						
+						
+						
 					}
 					else
 						player.sendMessage(String.format(FORMAT_POSTE, "Ce joueur n'existe pas."));

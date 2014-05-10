@@ -25,7 +25,10 @@ public class PlayerListener implements Listener{
 		{	
 
 			e.getPlayer().playSound(e.getPlayer().getLocation(), getSound(e.getRegion().getId()), 1, 1);
-			e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', getGreeting(e.getRegion().getId())));
+
+			String grt = ChatColor.translateAlternateColorCodes('&', getGreeting(e.getRegion().getId()));
+			if( grt.length() != 0)
+				e.getPlayer().sendMessage(grt);
 		}
 
 
@@ -37,9 +40,9 @@ public class PlayerListener implements Listener{
 
 	public boolean getRegionEnabled(String regionName)
 	{
-		if(Files.getRegions().contains("Regions." + regionName + ".Enable"))
+		if(Files.getRegions().contains("Regions." + regionName.toLowerCase() + ".Enable"))
 		{
-			if( Files.getRegions().getBoolean("Regions." + regionName + ".Enable") == true)
+			if( Files.getRegions().getBoolean("Regions." + regionName.toLowerCase() + ".Enable") == true)
 				return true;
 			else
 				return false;
@@ -47,12 +50,12 @@ public class PlayerListener implements Listener{
 		else
 		{
 			//creer la region automatiquement.
-			Files.getRegions().set("Regions." + regionName + ".Enable", false);
-			Files.getRegions().set("Regions." + regionName + ".Sound", "");
-			
+			Files.getRegions().set("Regions." + regionName.toLowerCase() + ".Enable", false);
+			Files.getRegions().set("Regions." + regionName.toLowerCase() + ".Sound", "");
+
 			String greeting = "&b~ " +  regionName + " ~";
 			greeting = greeting.replace('_', ' ');
-			Files.getRegions().set("Regions." + regionName + ".Greeting", greeting);
+			Files.getRegions().set("Regions." + regionName.toLowerCase() + ".Greeting", greeting);
 			Files.saveRegions();
 			return false;
 		}
@@ -60,22 +63,22 @@ public class PlayerListener implements Listener{
 
 	public String getSound(String regionName)
 	{
-		return Files.getRegions().getString("Regions." + regionName + ".Sound");
+		return Files.getRegions().getString("Regions." + regionName.toLowerCase() + ".Sound");
 	}
 
 	public String getGreeting(String regionName)
 	{
-		return Files.getRegions().getString("Regions." + regionName + ".Greeting");
+		return Files.getRegions().getString("Regions." + regionName.toLowerCase() + ".Greeting");
 	}
 
-		@EventHandler
-		public void onRegionLeave(RegionLeaveEvent e)
-		{
-			
-	//	  if (e.getRegion().getId().equals("jail") && e.isCancellable()) // you cannot cancel the event if the player left the region because he died
-	//	  {
-	//	    e.setCancelled(true);
-	//	    e.getPlayer().sendMessage("You cannot leave the jail!");
-	//	  }
-		}
+	@EventHandler
+	public void onRegionLeave(RegionLeaveEvent e)
+	{
+
+		//	  if (e.getRegion().getId().equals("jail") && e.isCancellable()) // you cannot cancel the event if the player left the region because he died
+		//	  {
+		//	    e.setCancelled(true);
+		//	    e.getPlayer().sendMessage("You cannot leave the jail!");
+		//	  }
+	}
 }
