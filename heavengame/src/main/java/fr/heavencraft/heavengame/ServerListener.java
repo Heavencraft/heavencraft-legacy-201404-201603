@@ -2,6 +2,7 @@ package fr.heavencraft.heavengame;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -24,10 +25,22 @@ public class ServerListener implements Listener
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
-		event.setJoinMessage("");
-		event.getPlayer().teleport(HeavenGame.getSpawn());
+		Player player = event.getPlayer();
 
-		event.getPlayer().sendMessage(String.format(WELCOME_FORMAT, HeavenGame.getServerName()));
+		event.setJoinMessage("");
+		player.teleport(HeavenGame.getSpawn());
+
+		player.sendMessage(String.format(WELCOME_FORMAT, HeavenGame.getServerType().getName()));
+
+		switch (HeavenGame.getServerType())
+		{
+			case HUNGER_GAMES:
+				player.performCommand("sg join");
+				break;
+
+			default:
+				break;
+		}
 	}
 
 	/*
