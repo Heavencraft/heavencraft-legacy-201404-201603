@@ -58,7 +58,7 @@ public class HeavenProxy extends Plugin
 			_instance = this;
 
 			new LogListener();
-			new OnlineLogListener(this);
+			new OnlineLogListener();
 			new SpyListener();
 
 			new ActifCommand();
@@ -75,28 +75,29 @@ public class HeavenProxy extends Plugin
 			new BanCommand();
 			new BanListener();
 			new UnbanCommand();
-			
+
 			// Chat
 			new ChatListener();
 			new FloodListener();
 			new TabCompleteListener();
-			
+
 			// Kick
 			new KickCommand();
 			new RagequitCommand();
-			
+
 			// Mute
 			new MuteCommand();
 			new MuteListener();
-			
+
 			// Users
 			new TabListener();
 			new UsersListener();
-			
+
 			// Warn
 			new WarnCommand();
 
 			new AutoMessageTask();
+			new MemoryWatcherTask();
 
 			_requestsManager = new RequestsManager();
 
@@ -177,11 +178,12 @@ public class HeavenProxy extends Plugin
 				{
 					String name = rs.getString("name");
 					String uuid = Utils.getUUID(name);
-	
-					PreparedStatement ps2 = getConnection().prepareStatement("UPDATE banlist SET uuid = ? WHERE name = ?");
+
+					PreparedStatement ps2 = getConnection().prepareStatement(
+							"UPDATE banlist SET uuid = ? WHERE name = ?");
 					ps2.setString(1, uuid);
 					ps2.setString(2, name);
-	
+
 					ps2.executeUpdate();
 					System.out.println(name + " -> " + uuid);
 				}
@@ -201,7 +203,8 @@ public class HeavenProxy extends Plugin
 
 	public static void convertUserList()
 	{
-		new Thread() {
+		new Thread()
+		{
 
 			@Override
 			public void run()
@@ -217,12 +220,12 @@ public class HeavenProxy extends Plugin
 						{
 							String name = rs.getString("name");
 							String uuid = Utils.getUUID(name);
-	
+
 							PreparedStatement ps2 = getConnection().prepareStatement(
 									"UPDATE users SET uuid = ? WHERE name = ?");
 							ps2.setString(1, uuid);
 							ps2.setString(2, name);
-	
+
 							ps2.executeUpdate();
 							System.out.println(name + " -> " + uuid);
 						}
