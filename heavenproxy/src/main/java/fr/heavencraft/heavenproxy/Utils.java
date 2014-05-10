@@ -24,32 +24,36 @@ import fr.heavencraft.heavenproxy.exceptions.HeavenException;
 import fr.heavencraft.heavenproxy.exceptions.PlayerNotConnectedException;
 import fr.heavencraft.heavenproxy.exceptions.UUIDNotFoundException;
 
-public class Utils {
-	
+public class Utils
+{
+
 	private final static String BEGIN = "{";
 	private final static String END = "}";
 	private final static String GOLD = ChatColor.GOLD.toString();
 	private final static String RED = ChatColor.RED.toString();
-	
+
 	public static ProxiedPlayer getPlayer(String name) throws PlayerNotConnectedException
 	{
 		for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers())
 			if (player.getName().toLowerCase().startsWith(name.toLowerCase()))
 				return player;
-		
+
 		throw new PlayerNotConnectedException(name);
 	}
-	
+
 	public static boolean IsConnected(String name)
 	{
-		try {
+		try
+		{
 			getPlayer(name);
 			return true;
-		} catch (PlayerNotConnectedException e) {
+		}
+		catch (PlayerNotConnectedException e)
+		{
 			return false;
 		}
 	}
-	
+
 	public static String getRealName(String name)
 	{
 		try
@@ -61,7 +65,7 @@ public class Utils {
 			return name;
 		}
 	}
-	
+
 	public static int toInt(String s) throws HeavenException
 	{
 		try
@@ -73,26 +77,26 @@ public class Utils {
 			throw new HeavenException("Le nombre {%1$s} est incorrect.", s);
 		}
 	}
-	
+
 	public static int toUint(String s) throws HeavenException
 	{
 		int i = toInt(s);
-		
+
 		if (i < 0)
 			throw new HeavenException("Le nombre {%1$s} est incorrect.", s);
-			
+
 		return i;
 	}
 
 	/*
 	 * Plugin
 	 */
-	
+
 	public static void registerListener(Listener listener)
 	{
 		ProxyServer.getInstance().getPluginManager().registerListener(HeavenProxy.getInstance(), listener);
 	}
-	
+
 	/*
 	 * UUID
 	 */
@@ -124,29 +128,29 @@ public class Utils {
 				throw new UUIDNotFoundException(playerName);
 		}
 	}
-	
+
 	/*
 	 * Logger
 	 */
-	
+
 	public static Logger getLogger()
 	{
 		return HeavenProxy.getInstance().getLogger();
 	}
-	
+
 	/*
 	 * Géolocalisation
 	 */
 
 	private static DatabaseReader _databaseReader;
-	
+
 	public static String getCountry(final InetAddress address)
 	{
 		try
 		{
 			if (_databaseReader == null)
 				_databaseReader = new DatabaseReader.Builder(new File("GeoLite2-City.mmdb")).build();
-			
+
 			CountryResponse response = _databaseReader.country(address);
 			return response.getCountry().getNames().get("fr");
 		}
@@ -156,32 +160,32 @@ public class Utils {
 			return "France";
 		}
 	}
-	
+
 	public static String getExactLocation(final InetAddress address)
 	{
 		try
 		{
 			if (_databaseReader == null)
 				_databaseReader = new DatabaseReader.Builder(new File("GeoLite2-City.mmdb")).build();
-			
+
 			CityResponse response = _databaseReader.city(address);
-			
+
 			String location = "";
 			String tmp;
-			
+
 			// Ville
 			if ((tmp = response.getCity().getName()) != null)
 				location += tmp;
-			
+
 			// Département, région
 			for (Subdivision subdivision : response.getSubdivisions())
 				if ((tmp = subdivision.getName()) != null)
 					location += (location == "" ? "" : " ") + tmp;
-			
+
 			// Pays
 			if ((tmp = response.getCountry().getName()) != null)
 				location += (location == "" ? "" : " ") + tmp;
-			
+
 			return location;
 		}
 		catch (Throwable t)
@@ -190,31 +194,31 @@ public class Utils {
 			return "";
 		}
 	}
-	
+
 	/*
 	 * Kick
 	 */
-	
+
 	public static void kickPlayer(ProxiedPlayer player, String reason)
 	{
 		player.disconnect(TextComponent.fromLegacyText(reason));
 	}
-	
+
 	/*
 	 * Send message to a player
 	 */
-	
+
 	public static void sendMessage(CommandSender sender, String message)
 	{
 		if (sender != null)
 		{
 			message = GOLD + message.replace(BEGIN, RED).replace(END, GOLD);
-			
+
 			for (String line : message.split("\n"))
 				sender.sendMessage(TextComponent.fromLegacyText(line));
 		}
 	}
-	
+
 	public static void sendMessage(CommandSender sender, String message, Object... args)
 	{
 		sendMessage(sender, String.format(message, args));
@@ -223,7 +227,7 @@ public class Utils {
 	/*
 	 * Send message to all players
 	 */
-	
+
 	public static void broadcastMessage(String message)
 	{
 		message = GOLD + message.replace(BEGIN, RED).replace(END, GOLD);
@@ -231,33 +235,33 @@ public class Utils {
 		for (String line : message.split("\n"))
 			ProxyServer.getInstance().broadcast(TextComponent.fromLegacyText(line));
 	}
-	
+
 	public static void broadcastMessage(String message, Object... args)
 	{
 		broadcastMessage(String.format(message, args));
 	}
-	
+
 	public static void broadcast(String message, String permission)
 	{
 		for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers())
 			if (player.hasPermission(permission))
 				sendMessage(player, message);
 	}
-	
+
 	public static String ArrayToString(String[] array, int start, String separator)
 	{
 		String result = "";
-		
+
 		for (int i = start; i != array.length; i++)
 			result += (result == "" ? "" : separator) + array[i];
-		
+
 		return result;
 	}
-	
+
 	public static String getPrefix(ProxiedPlayer player)
 	{
 		String serverName = player.getServer().getInfo().getName();
-		
+
 		if (serverName.equalsIgnoreCase("nexus"))
 			return "Nex";
 		else if (serverName.equalsIgnoreCase("semirp"))
@@ -278,10 +282,12 @@ public class Utils {
 			return "UH";
 		else if (serverName.equalsIgnoreCase("paintball"))
 			return "PB";
+		else if (serverName.equalsIgnoreCase("hungergames"))
+			return "HG";
 		else
 			return serverName.substring(0, 3);
 	}
-	
+
 	public static boolean isInteger(String s)
 	{
 		try
