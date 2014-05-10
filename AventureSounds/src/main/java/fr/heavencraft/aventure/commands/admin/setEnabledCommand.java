@@ -22,17 +22,17 @@ public class setEnabledCommand extends AventureCommand{
 		else
 		{
 
-			if(Files.getRegions().contains("Regions." + args[0] + ".Enable"))
+			if(Files.getRegions().contains("Regions." + args[0].toLowerCase() + ".Enable"))
 			{
 				if(args[1].equalsIgnoreCase("true"))
 				{
-					Files.getRegions().set("Regions." + args[0] + ".Enable", true);
+					Files.getRegions().set("Regions." + args[0].toLowerCase() + ".Enable", true);
 					Files.saveRegions();
 					player.sendMessage(String.format(FORMAT_NC, "Region activée."));
 				}
 				else if (args[1].equalsIgnoreCase("false"))
 				{
-					Files.getRegions().set("Regions." + args[0] + ".Enable", false);
+					Files.getRegions().set("Regions." + args[0].toLowerCase() + ".Enable", false);
 					Files.saveRegions();
 					player.sendMessage(String.format(FORMAT_NC, "Region désactivée."));
 				}
@@ -43,7 +43,7 @@ public class setEnabledCommand extends AventureCommand{
 			}
 			else
 			{
-				player.sendMessage(String.format(FORMAT_NC, "Region " + args[0] + " inconnue."));
+				player.sendMessage(String.format(FORMAT_NC, "Region " + args[0].toLowerCase() + " inconnue."));
 			}
 		}
 	}
