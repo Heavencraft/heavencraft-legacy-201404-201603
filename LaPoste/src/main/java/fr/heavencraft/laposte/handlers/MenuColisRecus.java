@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
 import fr.heavencraft.laposte.LaPoste;

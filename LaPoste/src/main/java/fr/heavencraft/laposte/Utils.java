@@ -312,13 +312,12 @@ public class Utils {
      * Retourne le nombre d'emplacements vides dans un inventaire
      */
     public static int getEmptySlots(Inventory inventory) {
-    	  int i = 0;
+    	  int slotsLibres = 0;
     	  for (ItemStack is : inventory.getContents()) {
     	   if (is == null)
-    	    continue;
-    	   i++;
+    		   slotsLibres ++;
     	  }
-    	  return i;
+    	  return slotsLibres;
     	 }
     
 }
