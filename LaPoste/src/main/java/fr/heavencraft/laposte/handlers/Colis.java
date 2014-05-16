@@ -3,6 +3,7 @@ package fr.heavencraft.laposte.handlers;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -30,9 +31,11 @@ public class Colis {
 			{
 				this.contenu = null;
 			}
+			UUID expID = UUID.fromString((rs.getString("expediteur")));
+			UUID destID = UUID.fromString((rs.getString("destinataire")));
 			
-			this.expediteur = Bukkit.getPlayer((rs.getString("expediteur")));
-			this.destinataire =  Bukkit.getPlayer(rs.getString("destinataire"));
+			this.expediteur = Bukkit.getServer().getPlayer(expID);
+			this.destinataire =  Bukkit.getServer().getPlayer(destID);
 			this.contenu = InventoryUtils.StringToInventory(rs.getString("contenu"));
 			
 		}
@@ -52,15 +55,15 @@ public class Colis {
 
 	public Inventory getContenu()
 	{
-		return contenu;
+		return this.contenu;
 	}
 	public Player getExpediteur()
 	{
-		return expediteur;
+		return this.expediteur;
 	}
 	public String getNom()
 	{
-		return "Colis pour " + destinataire.getName();
+		return "Colis pour " + this.destinataire.getName();
 	}
 
 	public void envoyer()
@@ -74,9 +77,9 @@ public class Colis {
 			
 			PreparedStatement ps = LaPoste.getMainConnection().prepareStatement(
 					"INSERT INTO poste_colis (expediteur, destinataire, dateEnvoi, contenu, isLOG) VALUES (?, ?, NOW(), ?, ?)");
-			ps.setString(1, expediteur.getUniqueId().toString());
-			ps.setString(2, destinataire.getUniqueId().toString());
-			ps.setString(3, InventoryUtils.InventoryToString(contenu));
+			ps.setString(1, this.expediteur.getUniqueId().toString());
+			ps.setString(2, this.destinataire.getUniqueId().toString());
+			ps.setString(3, InventoryUtils.InventoryToString(this.contenu));
 			ps.setBoolean(4, false);
 			ps.executeUpdate();
 			//inserer le log aussi
@@ -93,12 +96,12 @@ public class Colis {
 	
 	public int EmplacementsNecessaire()
 	{
-		return (36 - contenu.getContents().length);
+		return (36 - this.contenu.getContents().length);
 	}
 
 	public void openColis(Player p)
 	{	
-		for(ItemStack its : contenu.getContents())
+		for(ItemStack its : this.contenu.getContents())
 		{
 			p.getInventory().addItem(its);
 		}
