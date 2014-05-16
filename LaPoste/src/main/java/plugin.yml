@@ -1,6 +1,6 @@
 name: LaPoste
 version: 1.0
-main: fr.heavencraft.laposte.HeavenAventure
+main: fr.heavencraft.laposte.LaPoste
 depend: [WorldGuard]
 commands:
   reloadPoste:

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import fr.heavencraft.laposte.InventoryUtils;
 import fr.heavencraft.laposte.LaPoste;
@@ -50,7 +51,7 @@ public class Colis {
 
 	public void openColisForCreation()
 	{
-		//TODO ouvrir l'inventaire
+		//ouvrir l'inventaire
 		Inventory contenu =  Bukkit.createInventory(null, 9, "Heaven Colis");
 		expediteur.openInventory(contenu);
 		
@@ -91,12 +92,20 @@ public class Colis {
 			ex.printStackTrace();
 		}
 	}
-
-	public void openColis()
+	
+	
+	public int EmplacementsNecessaire()
 	{
-		//TODO Ouvrir le colis chez le destinateire
+		return (36 - contenu.getContents().length);
+	}
 
-		//TODO a la fermeture de l'inventaire, si pas vide, mettre a jour le contenu de celui-ci
+	public void openColis(Player p)
+	{	
+		for(ItemStack its : contenu.getContents())
+		{
+			p.getInventory().addItem(its);
+		}
+		//TODO supprimer de la bdd.
 	}
 
 

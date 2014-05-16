@@ -1,5 +1,7 @@
 package fr.heavencraft.laposte.commands;
 
+import java.util.logging.Level;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -37,7 +39,7 @@ public abstract class LaPosteCommand implements CommandExecutor {
 		}
 		catch (Exception ex)
 		{
-			Utils.sendMessage(sender, ex.getMessage());
+			ex.printStackTrace();
 		}
 		
 		return true;
