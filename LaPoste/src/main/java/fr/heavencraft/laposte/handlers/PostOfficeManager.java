@@ -27,15 +27,15 @@ public class PostOfficeManager {
 	private static ArrayList<String> PostOffices = new ArrayList<String>();
 	
 	public static boolean isOffice(String p) {
-		return PostOffices.contains(p);
+		return PostOffices.contains(p.toLowerCase());
 	}
 
 	public static void addOffice(String p) {
-		PostOffices.add(p);
+		PostOffices.add(p.toLowerCase());
 	}
 
 	public static void delOffice(String p) {
-		PostOffices.remove(p);
+		PostOffices.remove(p.toLowerCase());
 	}
 	
 	public static ArrayList<String> getPostOffices() {

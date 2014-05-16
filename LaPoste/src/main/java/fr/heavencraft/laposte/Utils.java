@@ -1,7 +1,9 @@
 package fr.heavencraft.laposte;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -13,6 +15,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import fr.heavencraft.laposte.exceptions.HeavenException;
 import fr.heavencraft.laposte.exceptions.PlayerNotConnectedException;
@@ -271,4 +275,50 @@ public class Utils {
 
                 return new Location(world, x + 0.5D, y, z + 0.5D, loc.getYaw(), loc.getPitch());
     }
+    
+    
+    public static List<String> wrapWords(String text, int lineLength) {
+        String[] intendedLines = text.split("\\n");
+        ArrayList<String> lines = new ArrayList<>();
+        for (String intendedLine : intendedLines) {
+            String[] words = intendedLine.split(" ");
+            StringBuilder buffer = new StringBuilder();
+
+            for (String word : words) {
+                if (word.length() >= lineLength) {
+                    if (buffer.length() != 0) {
+                        lines.add(buffer.toString());
+                    }
+                    lines.add(word);
+                    buffer = new StringBuilder();
+                    continue;
+                }
+                if (buffer.length() + word.length() >= lineLength) {
+                    lines.add(buffer.toString());
+                    buffer = new StringBuilder();
+                }
+                if (buffer.length() != 0) {
+                    buffer.append(' ');
+                }
+                buffer.append(word);
+            }
+            lines.add(buffer.toString());
+        }
+
+        return lines;
+    }
+    
+    /*
+     * Retourne le nombre d'emplacements vides dans un inventaire
+     */
+    public static int getEmptySlots(Inventory inventory) {
+    	  int i = 0;
+    	  for (ItemStack is : inventory.getContents()) {
+    	   if (is == null)
+    	    continue;
+    	   i++;
+    	  }
+    	  return i;
+    	 }
+    
 }

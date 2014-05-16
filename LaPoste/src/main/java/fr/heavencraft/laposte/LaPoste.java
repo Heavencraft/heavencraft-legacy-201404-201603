@@ -24,6 +24,7 @@ import fr.heavencraft.laposte.WorldGuardRegions.WGRegionEventsListener;
 import fr.heavencraft.laposte.commands.CommandManager;
 import fr.heavencraft.laposte.handlers.PostOfficeManager;
 import fr.heavencraft.laposte.listeners.PostOfficeListener;
+import fr.heavencraft.laposte.listeners.SignListener;
 
 public class LaPoste extends JavaPlugin
 {
@@ -42,6 +43,7 @@ public class LaPoste extends JavaPlugin
 		new CommandManager();	
 		new PostOfficeListener();
 		new WGRegionEventsListener();
+		new SignListener();
 		
 		PostOfficeManager.LoadOffices();
 		
@@ -56,7 +58,7 @@ public class LaPoste extends JavaPlugin
 		try {
 			if ((_mainConnection == null) || (_mainConnection.isClosed())) {
 				_mainConnection = DriverManager
-						.getConnection("jdbc:mysql://localhost:3306/mc-db?user=mc-sql&password=MfGJQMBzmAS5xYhH&zeroDateTimeBehavior=convertToNull&?autoReconnect=true");
+						.getConnection("jdbc:mysql://localhost:3306/minecraft-semirp?user=mc-sql&password=MfGJQMBzmAS5xYhH&zeroDateTimeBehavior=convertToNull&?autoReconnect=true");
 			}
 		} catch (SQLException ex) {
 			ex.printStackTrace();

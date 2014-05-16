@@ -3,6 +3,8 @@ package fr.heavencraft.laposte.commands.user;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -54,30 +56,17 @@ public class colisCommand extends LaPosteCommand{
 					{
 						//Ouvir l'inventaire "virtuel" pour que le joueur puisse y placer les items
 						Colis colis = new Colis(player, destinataire);
-						colis.openColisForCreation();
 						//Placer le colis en attente d'envoi.
 						ColisEnAttente.addColis(player, colis);
+						
+						colis.openColisForCreation();
 					}
 					else
-						player.sendMessage(String.format(FORMAT_POSTE, "Vous voulez vous envoyer un colis a vous même, monsieur..."));
-					
+						player.sendMessage(String.format(FORMAT_POSTE, "Vous voulez vous envoyer un colis a vous même, monsieur..."));		
 				}
 				else
 				{
-					destinataire = LaPoste.getInstance().getServer().getOfflinePlayer(args[0]).getPlayer();
-					if(destinataire != null)
-					{
-						//le destinataire existe mais est déconnecté.
-						
-						
-						//Ouvir l'inventaire "virtuel" pour que le joueur puisse y placer les items
-						Colis colis = new Colis(player, destinataire);
-						colis.openColisForCreation();
-						//Placer le colis en attente d'envoi.
-						ColisEnAttente.addColis(player, colis);
-					}
-					else
-						player.sendMessage(String.format(FORMAT_POSTE, "Ce joueur n'existe pas."));
+					player.sendMessage(String.format(FORMAT_POSTE, "Ce joueur n'existe pas ou n'est pas connecté."));
 				}				
 			}
 			else
