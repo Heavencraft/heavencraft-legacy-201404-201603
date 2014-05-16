@@ -11,17 +11,11 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.heavencraft.laposte.InventoryUtils;
 import fr.heavencraft.laposte.LaPoste;
-import fr.heavencraft.laposte.Utils;
 
 public class Colis {
 	private Inventory contenu;
 	private Player expediteur;
 	private Player destinataire;	
-	public Colis(Player owner, Player dest)
-	{
-		expediteur = owner;
-		destinataire = dest;
-	}
 
 	public Colis(int ID)
 	{
@@ -34,27 +28,26 @@ public class Colis {
 
 			if (!rs.next())
 			{
-				contenu = null;
+				this.contenu = null;
 			}
 			
-			expediteur = Bukkit.getPlayer((rs.getString("expediteur")));
-			destinataire =  Bukkit.getPlayer(rs.getString("destinataire"));
-			contenu = InventoryUtils.StringToInventory(rs.getString("contenu"));
+			this.expediteur = Bukkit.getPlayer((rs.getString("expediteur")));
+			this.destinataire =  Bukkit.getPlayer(rs.getString("destinataire"));
+			this.contenu = InventoryUtils.StringToInventory(rs.getString("contenu"));
 			
 		}
 		catch (SQLException e)
 		{
-			contenu = null;
+			this.contenu = null;
 		}
 
 	}
 
-	public void openColisForCreation()
+	public Colis(Player expedit, Player dest, Inventory inv)
 	{
-		//ouvrir l'inventaire
-		Inventory contenu =  Bukkit.createInventory(null, 9, "Heaven Colis");
-		expediteur.openInventory(contenu);
-		
+		this.expediteur = expedit;
+		this.destinataire = dest;
+		this.contenu = inv;
 	}
 
 	public Inventory getContenu()
@@ -75,6 +68,10 @@ public class Colis {
 		//TODO: Pour economiser de la place, mettre le string inventaire en Base 64
 		try
 		{
+			
+			if(contenu == null)
+				Bukkit.broadcastMessage("Contenu null");
+			
 			PreparedStatement ps = LaPoste.getMainConnection().prepareStatement(
 					"INSERT INTO poste_colis (expediteur, destinataire, dateEnvoi, contenu, isLOG) VALUES (?, ?, NOW(), ?, ?)");
 			ps.setString(1, expediteur.getUniqueId().toString());
