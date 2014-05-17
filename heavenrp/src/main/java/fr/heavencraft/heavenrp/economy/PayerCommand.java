@@ -9,8 +9,8 @@ import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccount;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccountType;
-import fr.heavencraft.heavenrp.general.users.UsersManager;
-import fr.heavencraft.heavenrp.general.users.UsersManager.User;
+import fr.heavencraft.heavenrp.general.users.User;
+import fr.heavencraft.heavenrp.general.users.UserProvider;
 
 public class PayerCommand extends HeavenCommand
 {
@@ -18,7 +18,7 @@ public class PayerCommand extends HeavenCommand
 	private final static String MONEY_BANK_NOW = "Vous avez maintenant {%1$d} pièces d'or sur votre livret.";
 	private final static String MONEY_GIVE = "Vous avez envoyé {%1$d} pièces d'or à {%2$s}.";
 	private final static String MONEY_RECEIVE = "Vous avez reçu {%1$d} pièces d'or de {%2$s}.";
-	
+
 	public PayerCommand()
 	{
 		super("payer");
@@ -32,35 +32,34 @@ public class PayerCommand extends HeavenCommand
 			sendUsage(player);
 			return;
 		}
-		
+
 		BankAccount dest;
-		
+
 		if (args[0].equalsIgnoreCase("joueur"))
 			dest = BankAccountsManager.getBankAccount(Utils.getPlayer(args[1]).getName(), BankAccountType.USER);
-		
+
 		else if (args[0].equalsIgnoreCase("ville"))
 			dest = BankAccountsManager.getBankAccount(args[1], BankAccountType.TOWN);
-		
+
 		else if (args[0].equalsIgnoreCase("entreprise"))
 			dest = BankAccountsManager.getBankAccount(args[1], BankAccountType.ENTERPRISE);
-		
+
 		else
 		{
 			sendUsage(player);
 			return;
 		}
-		
+
 		if (dest.getOwnersNames().contains(player.getName()))
 			throw new HeavenException("Vous devez utiliser le guichet afin de faire des opérations sur votre compte");
-		
+
 		int delta = Utils.toUint(args[2]);
-		
-		User sender = UsersManager.getByName(player.getName());
-		
+
+		User sender = UserProvider.getUserByName(player.getName());
+
 		sender.updateBalance(-delta);
 		dest.updateBalance(delta);
-		
-		
+
 		Utils.sendMessage(player, MONEY_GIVE, delta, dest.getName());
 		Utils.sendMessage(player, MONEY_NOW, sender.getBalance());
 

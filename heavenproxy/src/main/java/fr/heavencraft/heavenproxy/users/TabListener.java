@@ -27,7 +27,7 @@ public class TabListener implements Listener
 		ProxiedPlayer player = event.getPlayer();
 		String playerName = player.getName();
 
-		User user = UsersManager.getUserByName(playerName);
+		User user = UserProvider.getUserByName(playerName);
 
 		if (!user.getColor().equals("§f"))
 		{

@@ -1,5 +1,13 @@
 package fr.lorgan17.heavenrp.managers;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.World;
+
 import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.bukkit.selections.Selection;
@@ -13,16 +21,8 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion.CircularInheritan
 import fr.heavencraft.Utils;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.HeavenRP;
-import fr.heavencraft.heavenrp.general.users.UsersManager.User;
+import fr.heavencraft.heavenrp.general.users.User;
 import fr.heavencraft.heavenrp.worlds.WorldsManager;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.World;
 
 public class TownsManager
 {
@@ -134,24 +134,24 @@ public class TownsManager
 		rm.addRegion(region);
 		region.getOwners().addPlayer(owner.getName());
 
-			try
-			{
-				region.setParent(town);
-			}
-			catch (CircularInheritanceException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try
-			{
-				rm.save();
-			}
-			catch (ProtectionDatabaseException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		try
+		{
+			region.setParent(town);
+		}
+		catch (CircularInheritanceException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try
+		{
+			rm.save();
+		}
+		catch (ProtectionDatabaseException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public static void removeSubRegion(String townName, String regionName) throws HeavenException

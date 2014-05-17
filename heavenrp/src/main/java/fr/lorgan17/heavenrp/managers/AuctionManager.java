@@ -13,15 +13,15 @@ import fr.heavencraft.Utils;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccountType;
-import fr.heavencraft.heavenrp.general.users.UsersManager;
-import fr.heavencraft.heavenrp.general.users.UsersManager.User;
+import fr.heavencraft.heavenrp.general.users.User;
+import fr.heavencraft.heavenrp.general.users.UserProvider;
 
 public class AuctionManager
 {
 	public static final String PERMISSION = "heavenrp.encheres.create";
 	private boolean isStarted = false;
 	private Location roomLocation;
-	private Map<String, Location> previousLocations = new HashMap<String, Location>();
+	private final Map<String, Location> previousLocations = new HashMap<String, Location>();
 
 	private String name = "";
 	private int currentPrice;
@@ -42,8 +42,7 @@ public class AuctionManager
 		previousLocations.put(modo.getName(), modo.getLocation());
 
 		Utils.broadcastMessage("Les enchères pour {%1$s} viennent de commencer !", new Object[] { objectName });
-		Utils.broadcastMessage(
-				"La mise à prix est de {%1$d} po ! Faites /encheres entrer pour rejoindre l'enchère.",
+		Utils.broadcastMessage("La mise à prix est de {%1$d} po ! Faites /enchere entrer pour rejoindre l'enchère.",
 				new Object[] { Integer.valueOf(startPrice) });
 	}
 
@@ -51,23 +50,24 @@ public class AuctionManager
 	{
 		if (!isStarted)
 			throw new HeavenException("Aucune enchère n'est en cours !");
-		
+
 		if (!previousLocations.containsKey(playerName))
 			throw new HeavenException("Vous n'êtes pas dans la salle d'enchères !");
-		
+
 		if (newPrice <= currentPrice)
-			throw new HeavenException("Vous devez miser plus d'argent ! L'enchère est pour le moment à {%1$s} po.", currentPrice);
-		
+			throw new HeavenException("Vous devez miser plus d'argent ! L'enchère est pour le moment à {%1$s} po.",
+					currentPrice);
+
 		if (playerName == buyerName)
 			throw new HeavenException("Vous êtes déjà en tête des enchères !");
-		
-		User user = UsersManager.getByName(playerName);
+
+		User user = UserProvider.getUserByName(playerName);
 
 		if (user == null)
 		{
 			return;
 		}
-		
+
 		int money = user.getBalance();
 		int account = BankAccountsManager.getBankAccount(playerName, BankAccountType.USER).getBalance();
 
@@ -75,7 +75,7 @@ public class AuctionManager
 		{
 			throw new HeavenException("Vous n'avez pas assez d'argent !");
 		}
-		
+
 		buyerName = playerName;
 		currentPrice = newPrice;
 
@@ -100,8 +100,8 @@ public class AuctionManager
 		previousLocations.clear();
 		isStarted = false;
 
-		broadcast("L'enchère vient de se terminer, {" + buyerName + "} a acheté {" + name + "} pour {"
-				+ currentPrice + "} po ! Faites /encheres sortir pour sortir de la salle d'enchères.");
+		broadcast("L'enchère vient de se terminer, {" + buyerName + "} a acheté {" + name + "} pour {" + currentPrice
+				+ "} po ! Faites /enchere sortir pour sortir de la salle d'enchères.");
 	}
 
 	public void enterRoom(Player player) throws HeavenException
@@ -123,7 +123,7 @@ public class AuctionManager
 
 	public void exitRoom(Player player) throws HeavenException
 	{
-		Location location = (Location) previousLocations.remove(player.getName());
+		Location location = previousLocations.remove(player.getName());
 
 		if (location == null)
 		{
@@ -140,17 +140,13 @@ public class AuctionManager
 			Player p = Bukkit.getPlayer(playerName);
 
 			if (p != null)
-				p.sendMessage(ChatColor.AQUA
-						+ "[Enchères] "
-						+ ChatColor.WHITE
-						+ message.replace("{", ChatColor.AQUA.toString()).replace("}",
-								ChatColor.WHITE.toString()));
+				p.sendMessage(ChatColor.AQUA + "[Enchères] " + ChatColor.WHITE
+						+ message.replace("{", ChatColor.AQUA.toString()).replace("}", ChatColor.WHITE.toString()));
 		}
 	}
 }
 
 /*
- * Location: /Users/nao/workspace/heavenrp/target/heavenrp-0.0.1-SNAPSHOT.jar
- * Qualified Name: fr.lorgan17.heavenrp.managers.AuctionManager JD-Core Version:
- * 0.6.2
+ * Location: /Users/nao/workspace/heavenrp/target/heavenrp-0.0.1-SNAPSHOT.jar Qualified Name:
+ * fr.lorgan17.heavenrp.managers.AuctionManager JD-Core Version: 0.6.2
  */

@@ -16,8 +16,8 @@ import fr.heavencraft.heavenrp.HeavenRP;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccount;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccountType;
-import fr.heavencraft.heavenrp.general.users.UsersManager;
-import fr.heavencraft.heavenrp.general.users.UsersManager.User;
+import fr.heavencraft.heavenrp.general.users.User;
+import fr.heavencraft.heavenrp.general.users.UserProvider;
 
 public class EconomyListener implements Listener
 {
@@ -31,28 +31,28 @@ public class EconomyListener implements Listener
 	{
 		Player player = event.getPlayer();
 		String playerName = player.getName();
-		
-		User user = UsersManager.getByName(playerName);
+
+		User user = UserProvider.getUserByName(playerName);
 		BankAccount account = BankAccountsManager.getBankAccount(playerName, BankAccountType.USER);
 
 		if (!Utils.isToday(user.getLastLogin()))
 		{
 			user.updateBalance(25);
 			Utils.sendMessage(player, ChatColor.AQUA + "Vous venez d'obtenir 25 pièces d'or en vous connectant !");
-			
-			int benefit = (int)(account.getBalance() * 0.001D);
-			
+
+			int benefit = (int) (account.getBalance() * 0.001D);
+
 			if (benefit > 25)
 				benefit = 25;
-			
+
 			if (benefit > 0)
 			{
 				account.updateBalance(benefit);
 				Utils.sendMessage(player, ChatColor.AQUA + "Votre livret vous a rapporté %1$s pièces d'or.", benefit);
 			}
 		}
-		
-		user.setLastLogin(new Date());
+
+		user.updateLastLogin(new Date());
 	}
 
 	@EventHandler
@@ -60,7 +60,7 @@ public class EconomyListener implements Listener
 	{
 		Player player = event.getEntity();
 
-		User user = UsersManager.getByName(player.getName());
+		User user = UserProvider.getUserByName(player.getName());
 
 		int newBalance = (int) (user.getBalance() * 0.8D);
 		int delta = user.getBalance() - newBalance;

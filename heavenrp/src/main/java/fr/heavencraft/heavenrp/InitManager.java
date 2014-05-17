@@ -13,6 +13,7 @@ import fr.heavencraft.heavenrp.general.ChatListener;
 import fr.heavencraft.heavenrp.general.RecipeManager;
 import fr.heavencraft.heavenrp.general.ServerListener;
 import fr.heavencraft.heavenrp.general.WatchListener;
+import fr.heavencraft.heavenrp.general.users.UserListener;
 import fr.heavencraft.heavenrp.homes.BuyhomeCommand;
 import fr.heavencraft.heavenrp.homes.HomeCommand;
 import fr.heavencraft.heavenrp.homes.SethomeCommand;
@@ -60,7 +61,7 @@ public class InitManager
 		// Anti-lag
 		new AntiCheatListener();
 		new AntiLagListener();
-		
+
 		// Economy
 		new BourseCommand();
 		new EconomyListener();
@@ -68,61 +69,63 @@ public class InitManager
 		new LivretProSignListener();
 		new LivretSignListener();
 		new PayerCommand();
-		
+
 		// Economy.Enterprise
 		new EntrepriseCommand();
-		
+
 		// General
 		new ChatListener();
 		new RecipeManager();
 		new ServerListener();
 		new WatchListener();
-		
+
+		// Users
+		new UserListener();
+
 		// Homes
 		new BuyhomeCommand();
 		new HomeCommand();
 		new SethomeCommand();
 		new TphomeCommand();
-		
+
 		// Horses
 		new ChevalCommand();
 		new HorsesListener();
-		
+
 		// HPs
 		new HeadCommand();
 		new HpsCommand();
-		
+
 		// Provinces
 		new ProvinceListener();
 		new ProvinceSignListener();
-		
+
 		// Stores
-		
+
 		// Teleport
 		new SpawnCommand();
 		new TutoCommand();
-		
+
 		// Warps
 		new WarpCommand();
 		new WarpSignListener();
-		
+
 		/*
 		 * 
 		 */
-		
+
 		// Tpa
 		new RejoindreCommand();
 		new AccepterCommand();
-		
+
 		// Commandes joueurs
 		new EncheresCommand();
 		new LicenceCommand();
-		
+
 		new MaireCommand();
 		new MairesCommand();
 		new ParcelleCommand();
-		
-		
+
 		// Commandes modérateurs
 		new EndercheatCommand();
 		new EventCommand();
@@ -134,7 +137,7 @@ public class InitManager
 		new TpCommand();
 		new TphereCommand();
 		new TpposCommand();
-		
+
 		// Commandes administrateurs
 		new CreacheatCommand();
 		new PoofCommand();
@@ -142,11 +145,11 @@ public class InitManager
 		new SpawnmobCommand();
 		new TravauxCommand();
 		new WorldCommand();
-		
+
 		/*
 		 * 
 		 */
-		
+
 		// Worlds
 		WorldsManager.init();
 		new WorldsListener();

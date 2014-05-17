@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import fr.heavencraft.HeavenCommand;
 import fr.heavencraft.Utils;
 import fr.heavencraft.exceptions.HeavenException;
-import fr.heavencraft.heavenrp.general.users.UsersManager;
+import fr.heavencraft.heavenrp.general.users.UserProvider;
 
 public class HomeCommand extends HeavenCommand
 {
@@ -29,8 +29,8 @@ public class HomeCommand extends HeavenCommand
 			sendUsage(player);
 			return;
 		}
-		
-		Utils.teleportPlayer(player, UsersManager.getByName(player.getName()).getHome(nb));
+
+		Utils.teleportPlayer(player, UserProvider.getUserByName(player.getName()).getHome(nb));
 	}
 
 	@Override
