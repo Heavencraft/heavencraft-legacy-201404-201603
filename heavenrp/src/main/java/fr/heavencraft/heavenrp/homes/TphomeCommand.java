@@ -7,8 +7,8 @@ import fr.heavencraft.HeavenCommand;
 import fr.heavencraft.Permissions;
 import fr.heavencraft.Utils;
 import fr.heavencraft.exceptions.HeavenException;
-import fr.heavencraft.heavenrp.general.users.UsersManager;
-import fr.heavencraft.heavenrp.general.users.UsersManager.User;
+import fr.heavencraft.heavenrp.general.users.User;
+import fr.heavencraft.heavenrp.general.users.UserProvider;
 
 public class TphomeCommand extends HeavenCommand
 {
@@ -28,7 +28,7 @@ public class TphomeCommand extends HeavenCommand
 			case 2:
 				nb = Utils.toUint(args[1]);
 			case 1:
-				user = UsersManager.getByName(args[0]);
+				user = UserProvider.getUserByName(args[0]);
 				break;
 			default:
 				sendUsage(player);

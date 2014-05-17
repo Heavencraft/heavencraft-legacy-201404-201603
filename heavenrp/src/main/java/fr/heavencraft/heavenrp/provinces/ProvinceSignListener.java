@@ -9,8 +9,8 @@ import fr.heavencraft.Permissions;
 import fr.heavencraft.SignListener;
 import fr.heavencraft.Utils;
 import fr.heavencraft.exceptions.HeavenException;
-import fr.heavencraft.heavenrp.general.users.UsersManager;
-import fr.heavencraft.heavenrp.general.users.UsersManager.User;
+import fr.heavencraft.heavenrp.general.users.User;
+import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.heavencraft.heavenrp.provinces.ProvincesManager.Province;
 
 public class ProvinceSignListener extends SignListener
@@ -57,7 +57,7 @@ public class ProvinceSignListener extends SignListener
 
 	private void onJoinSignClick(Player player, String provinceName) throws HeavenException
 	{
-		User user = UsersManager.getByName(player.getName());
+		User user = UserProvider.getUserByName(player.getName());
 
 		if (user.getProvince() != null)
 			throw new HeavenException("Vous êtes déjà habitant d'une province");
@@ -70,7 +70,7 @@ public class ProvinceSignListener extends SignListener
 
 	private void onLeaveSignClick(Player player) throws HeavenException
 	{
-		User user = UsersManager.getByName(player.getName());
+		User user = UserProvider.getUserByName(player.getName());
 
 		if (user.getProvince() == null)
 			throw new HeavenException("Vous n'êtes habitant d'aucune province.");

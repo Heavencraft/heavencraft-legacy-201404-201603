@@ -8,7 +8,7 @@ import org.kitteh.tag.AsyncPlayerReceiveNameTagEvent;
 
 import fr.heavencraft.Utils;
 import fr.heavencraft.exceptions.HeavenException;
-import fr.heavencraft.heavenrp.general.users.UsersManager;
+import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.heavencraft.heavenrp.provinces.ProvincesManager.Province;
 
 public class ProvinceListener implements Listener
@@ -23,7 +23,7 @@ public class ProvinceListener implements Listener
 	{
 		Player player = event.getPlayer();
 
-		Province province = UsersManager.getByName(player.getName()).getProvince();
+		Province province = UserProvider.getUserByName(player.getName()).getProvince();
 
 		if (province == null)
 			Utils.sendMessage(player, "Vous n'avez pas encore choisi de province.");
@@ -39,7 +39,7 @@ public class ProvinceListener implements Listener
 			return;
 		}
 
-		Province province = UsersManager.getByName(playerName).getProvince();
+		Province province = UserProvider.getUserByName(playerName).getProvince();
 
 		if (province == null)
 		{

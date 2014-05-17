@@ -1,5 +1,7 @@
 package fr.heavencraft.heavenproxy.users;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.logging.Logger;
 
 import net.md_5.bungee.api.ChatColor;
@@ -44,12 +46,15 @@ public class UsersListener implements Listener
 	public void onPostLogin(PostLoginEvent event)
 	{
 		ProxiedPlayer player = event.getPlayer();
+
+		String uuid = Utils.getUUID(player);
 		String name = player.getName();
 
 		try
 		{
-			UsersManager.getUserByName(name);
-			UsersManager.updateUser(player);
+			User user = UserProvider.getUserByUuid(uuid);
+			user.setName(name);
+			user.setLastLogin(new Timestamp(new Date().getTime()));
 
 			ChatManager.sendJoinMessage(name, player.getAddress().getAddress(), false);
 
@@ -62,7 +67,7 @@ public class UsersListener implements Listener
 		}
 		catch (HeavenException ex)
 		{
-			UsersManager.createUser(player);
+			UserProvider.createUser(uuid, name);
 
 			ChatManager.sendJoinMessage(name, player.getAddress().getAddress(), true);
 		}

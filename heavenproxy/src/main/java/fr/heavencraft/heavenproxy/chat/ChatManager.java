@@ -10,7 +10,7 @@ import fr.heavencraft.heavenproxy.HeavenProxy;
 import fr.heavencraft.heavenproxy.Utils;
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
 import fr.heavencraft.heavenproxy.users.User;
-import fr.heavencraft.heavenproxy.users.UsersManager;
+import fr.heavencraft.heavenproxy.users.UserProvider;
 
 public class ChatManager
 {
@@ -73,7 +73,7 @@ public class ChatManager
 	{
 		try
 		{
-			User user = UsersManager.getUserByName(player.getName());
+			User user = UserProvider.getUserByName(player.getName());
 	
 			String color = user.getColor();
 			String prefix = Utils.getPrefix(player);

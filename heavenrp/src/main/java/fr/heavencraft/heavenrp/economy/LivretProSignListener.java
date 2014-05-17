@@ -19,8 +19,8 @@ import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccount;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccountType;
-import fr.heavencraft.heavenrp.general.users.UsersManager;
-import fr.heavencraft.heavenrp.general.users.UsersManager.User;
+import fr.heavencraft.heavenrp.general.users.User;
+import fr.heavencraft.heavenrp.general.users.UserProvider;
 
 public class LivretProSignListener extends SignListener implements Listener
 {
@@ -30,11 +30,11 @@ public class LivretProSignListener extends SignListener implements Listener
 
 	private final Map<String, Integer> deposants = new HashMap<String, Integer>();
 	private final Map<String, Integer> retirants = new HashMap<String, Integer>();
-	
+
 	public LivretProSignListener()
 	{
 		super("LivretPro", Permissions.LIVRETPRO_SIGN);
-		
+
 		Utils.registerListener(this);
 	}
 
@@ -46,19 +46,19 @@ public class LivretProSignListener extends SignListener implements Listener
 			event.setLine(1, ChatColor.BLUE + CONSULTER);
 			return true;
 		}
-		
+
 		else if (event.getLine(1).equalsIgnoreCase(DEPOSER))
 		{
 			event.setLine(1, ChatColor.BLUE + DEPOSER);
 			return true;
 		}
-		
+
 		else if (event.getLine(1).equalsIgnoreCase(RETIRER))
 		{
 			event.setLine(1, ChatColor.BLUE + RETIRER);
 			return true;
 		}
-		
+
 		else
 			return false;
 	}
@@ -83,7 +83,7 @@ public class LivretProSignListener extends SignListener implements Listener
 				deposants.put(playerName, -1);
 			}
 		}
-		
+
 		else if (sign.getLine(1).equals(ChatColor.BLUE + RETIRER))
 		{
 			if (!retirants.containsKey(playerName))
@@ -94,28 +94,29 @@ public class LivretProSignListener extends SignListener implements Listener
 			}
 		}
 	}
-	
+
 	public void displayAccounts(Player player) throws HeavenException
 	{
 		String playerName = player.getName();
-		
+
 		List<BankAccount> accounts = BankAccountsManager.getAccountByOwner(playerName);
-		
+
 		if (accounts.size() == 0)
 			throw new HeavenException("{Trésorier} : Vous n'avez accès à aucun livret...");
-		
+
 		Utils.sendMessage(player, "{Trésorier} : Voici la liste de vos livrets :");
-		
+
 		for (BankAccount account : accounts)
-			Utils.sendMessage(player, "{%1$s} (%2$s) : %3$s pièces d'or", account.getId(), account.getName(), account.getBalance());
+			Utils.sendMessage(player, "{%1$s} (%2$s) : %3$s pièces d'or", account.getId(), account.getName(),
+					account.getBalance());
 	}
-	
+
 	@EventHandler(ignoreCancelled = true)
 	public void onAsyncPlayerChat(AsyncPlayerChatEvent event)
 	{
 		Player player = event.getPlayer();
 		String playerName = player.getName();
-		
+
 		int accountId;
 		boolean isDepot = false;
 
@@ -133,20 +134,20 @@ public class LivretProSignListener extends SignListener implements Listener
 		{
 			return;
 		}
-		
+
 		event.setCancelled(true);
-		
+
 		try
 		{
 			int delta = Utils.toUint(event.getMessage());
-			
+
 			if (accountId == -1)
 			{
 				selectAccount(player, delta, isDepot ? deposants : retirants);
 				return;
 			}
 
-			User user = UsersManager.getByName(playerName);
+			User user = UserProvider.getUserByName(playerName);
 			BankAccount bank = BankAccountsManager.getBankAccountById(accountId);
 
 			if (isDepot)
@@ -171,16 +172,16 @@ public class LivretProSignListener extends SignListener implements Listener
 			Utils.sendMessage(player, ex.getMessage());
 		}
 	}
-	
+
 	private void selectAccount(Player player, int id, Map<String, Integer> list) throws HeavenException
 	{
 		BankAccount account = BankAccountsManager.getBankAccountById(id);
-		
+
 		if (!account.getOwners().contains(player))
 			throw new HeavenException("{Trésorier} : Vous n'êtes pas propriétaire de ce compte.");
-		
+
 		list.put(player.getName(), id);
-		
+
 		if (list.equals(deposants))
 			Utils.sendMessage(player, "{Trésorier} : Combien de pièces d'or souhaitez-vous déposer ?");
 		else

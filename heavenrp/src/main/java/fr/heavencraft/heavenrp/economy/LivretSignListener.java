@@ -18,8 +18,8 @@ import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccount;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccountType;
-import fr.heavencraft.heavenrp.general.users.UsersManager;
-import fr.heavencraft.heavenrp.general.users.UsersManager.User;
+import fr.heavencraft.heavenrp.general.users.User;
+import fr.heavencraft.heavenrp.general.users.UserProvider;
 
 public class LivretSignListener extends SignListener implements Listener
 {
@@ -118,7 +118,7 @@ public class LivretSignListener extends SignListener implements Listener
 		{
 			int delta = Utils.toUint(event.getMessage());
 
-			User user = UsersManager.getByName(playerName);
+			User user = UserProvider.getUserByName(playerName);
 			BankAccount bank = BankAccountsManager.getBankAccount(playerName, BankAccountType.USER);
 
 			if (isDepot)

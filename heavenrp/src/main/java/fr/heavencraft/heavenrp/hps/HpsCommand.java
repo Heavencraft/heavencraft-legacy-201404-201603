@@ -9,7 +9,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import fr.heavencraft.HeavenCommand;
 import fr.heavencraft.Utils;
 import fr.heavencraft.exceptions.HeavenException;
-import fr.heavencraft.heavenrp.general.users.UsersManager;
+import fr.heavencraft.heavenrp.general.users.UserProvider;
 
 public class HpsCommand extends HeavenCommand
 {
@@ -50,7 +50,7 @@ public class HpsCommand extends HeavenCommand
 			int hps = Utils.toUint(args[0]);
 
 			HpsManager.removeBalance(player.getName(), hps);
-			UsersManager.getByName(player.getName()).updateBalance(hps * 20);
+			UserProvider.getUserByName(player.getName()).updateBalance(hps * 20);
 
 			Utils.sendMessage(player, "{%1$d} HPs ont été retirés de votre compte", hps);
 			Utils.sendMessage(player, "Vous avez reçu {%1$d} pièces d'or.", hps * 20);

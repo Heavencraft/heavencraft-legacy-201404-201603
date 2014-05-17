@@ -6,9 +6,10 @@ import org.bukkit.entity.Player;
 import fr.heavencraft.HeavenCommand;
 import fr.heavencraft.Utils;
 import fr.heavencraft.exceptions.HeavenException;
-import fr.heavencraft.heavenrp.general.users.UsersManager;
+import fr.heavencraft.heavenrp.general.users.UserProvider;
 
-public class SethomeCommand extends HeavenCommand {
+public class SethomeCommand extends HeavenCommand
+{
 
 	public SethomeCommand()
 	{
@@ -19,22 +20,22 @@ public class SethomeCommand extends HeavenCommand {
 	protected void onPlayerCommand(Player player, String[] args) throws HeavenException
 	{
 		int nb;
-		
+
 		if (args.length == 0)
 			nb = 1;
-		
+
 		else if (args.length == 1)
 			nb = Utils.toUint(args[0]);
-		
+
 		else
 		{
 			sendUsage(player);
 			return;
 		}
-		
-		UsersManager.getByName(player.getName()).setHome(nb, player.getLocation());
 
-        Utils.sendMessage(player, "Votre {home %1$d} a bien été configuré.", nb);
+		UserProvider.getUserByName(player.getName()).setHome(nb, player.getLocation());
+
+		Utils.sendMessage(player, "Votre {home %1$d} a bien été configuré.", nb);
 	}
 
 	@Override

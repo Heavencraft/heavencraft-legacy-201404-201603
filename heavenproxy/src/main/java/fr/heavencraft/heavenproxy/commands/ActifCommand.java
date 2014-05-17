@@ -5,7 +5,7 @@ import java.util.Calendar;
 import net.md_5.bungee.api.CommandSender;
 import fr.heavencraft.heavenproxy.Utils;
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
-import fr.heavencraft.heavenproxy.users.UsersManager;
+import fr.heavencraft.heavenproxy.users.UserProvider;
 import fr.heavencraft.heavenproxy.users.User;
 
 public class ActifCommand extends HeavenCommand
@@ -26,7 +26,7 @@ public class ActifCommand extends HeavenCommand
 		}
 		
 		String name = Utils.getRealName(args[0]);
-		User user = UsersManager.getUserByName(name);
+		User user = UserProvider.getUserByName(name);
 		
 		Calendar limit = Calendar.getInstance();
 		limit.add(Calendar.DATE, -21);
