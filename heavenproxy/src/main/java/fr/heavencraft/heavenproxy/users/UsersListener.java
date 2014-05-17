@@ -31,12 +31,12 @@ public class UsersListener implements Listener
 		if (event.isCancelled())
 			return;
 
-		if (event.getConnection().getVersion() != ProtocolConstants.MINECRAFT_1_7_2)
+		if (event.getConnection().getVersion() != ProtocolConstants.MINECRAFT_1_7_6)
 		{
 			event.setCancelled(true);
-			event.setCancelReason("§fHeaven§bcraft§r est en 1.7.5.\n\nMerci de vous connecter avec cette version.");
+			event.setCancelReason("§fHeaven§bcraft§r est en 1.7.9.\n\nMerci de vous connecter avec cette version.");
 
-			log.info(TAG + "[onLogin] " + event.getConnection().getName() + " is not in 1.7.5.");
+			log.info(TAG + "[onLogin] " + event.getConnection().getName() + " is not in 1.7.9.");
 		}
 	}
 
