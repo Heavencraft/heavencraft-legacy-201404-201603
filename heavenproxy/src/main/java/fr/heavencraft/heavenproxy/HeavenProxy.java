@@ -41,9 +41,11 @@ public class HeavenProxy extends Plugin
 {
 	private final static String DB_URL = "jdbc:mysql://localhost:3306/proxy?user=mc-sql&password=MfGJQMBzmAS5xYhH&zeroDateTimeBehavior=convertToNull";
 	private final static String MAIN_DB_URL = "jdbc:mysql://localhost:3306/mc-db?user=mc-sql&password=MfGJQMBzmAS5xYhH&zeroDateTimeBehavior=convertToNull";
+	private final static String SRP_DB_URL = "jdbc:mysql://localhost:3306/minecraft-semirp?user=mc-sql&password=MfGJQMBzmAS5xYhH&zeroDateTimeBehavior=convertToNull";
 
 	private static Connection _connection;
 	private static Connection _mainConnection;
+	private static Connection _srpConnection;
 
 	private static HeavenProxy _instance;
 
@@ -107,6 +109,7 @@ public class HeavenProxy extends Plugin
 
 			convertBanList();
 			convertUserList();
+			convertUserSemirp();
 		}
 		catch (Throwable t)
 		{
@@ -162,6 +165,24 @@ public class HeavenProxy extends Plugin
 		}
 
 		return _mainConnection;
+	}
+
+	public static Connection getSrpConnection()
+	{
+		try
+		{
+			if (_srpConnection == null || _srpConnection.isClosed())
+			{
+				_srpConnection = DriverManager.getConnection(SRP_DB_URL);
+			}
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			ProxyServer.getInstance().stop();
+		}
+
+		return _srpConnection;
 	}
 
 	public static HeavenProxy getInstance()
@@ -226,6 +247,52 @@ public class HeavenProxy extends Plugin
 							String uuid = Utils.getUUID(name);
 
 							PreparedStatement ps2 = getConnection().prepareStatement(
+									"UPDATE users SET uuid = ? WHERE name = ?");
+							ps2.setString(1, uuid);
+							ps2.setString(2, name);
+
+							ps2.executeUpdate();
+							System.out.println(name + " -> " + uuid);
+						}
+						catch (HeavenException ex)
+						{
+							System.out.println(ex.getMessage());
+						}
+					}
+
+				}
+				catch (SQLException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		}.start();
+	}
+
+	public static void convertUserSemirp()
+	{
+		new Thread()
+		{
+
+			@Override
+			public void run()
+			{
+				try
+				{
+					PreparedStatement ps = getSrpConnection()
+							.prepareStatement("SELECT name FROM users WHERE uuid = ''");
+					ResultSet rs = ps.executeQuery();
+
+					while (rs.next())
+					{
+						try
+						{
+							String name = rs.getString("name");
+							String uuid = Utils.getUUID(name);
+
+							PreparedStatement ps2 = getSrpConnection().prepareStatement(
 									"UPDATE users SET uuid = ? WHERE name = ?");
 							ps2.setString(1, uuid);
 							ps2.setString(2, name);
