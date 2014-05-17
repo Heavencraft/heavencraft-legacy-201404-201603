@@ -74,7 +74,7 @@ public class WarnCommand extends HeavenCommand
 		{
 			Utils.sendMessage(player, " * {Attention !} Vous semblez avoir du mal avec le verbe être.");
 			Utils.sendMessage(player,
-					"Sa conjugaison est : Je suis / Tu es (T'es) / Il est Nous sommes / Vous ętes / Ils sont");
+					"Sa conjugaison est : Je suis / Tu es (T'es) / Il est / Nous sommes / Vous êtes / Ils sont");
 
 			Utils.sendMessage(sender, "Avertissement pour le verbe être envoyé à {" + player.getName() + "}.");
 		}
@@ -84,7 +84,7 @@ public class WarnCommand extends HeavenCommand
 			Utils.sendMessage(player,
 					"Sa conjugaison est : Je veux / Tu veux / Il veut / Nous voulons / Vous voulez / Ils veulent");
 
-			Utils.sendMessage(sender, "Avertissement pour le verbe vouloir envoyé ŕ {" + player.getName() + "}.");
+			Utils.sendMessage(sender, "Avertissement pour le verbe vouloir envoyé à {" + player.getName() + "}.");
 		}
 		else
 			sendUsage(sender);

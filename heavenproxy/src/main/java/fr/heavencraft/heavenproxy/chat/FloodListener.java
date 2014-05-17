@@ -20,7 +20,7 @@ public class FloodListener implements Listener
 {
 	private static final String TAG = "[FloodListener] ";
 
-	private final static String WARNING = "§d[de Prof. Chen]§r Arrêtes d'écrire le même message.";
+	private final static String WARNING = "§d[de Prof. Chen]§r Arrête d'écrire le même message.";
 
 	private final Logger log = Utils.getLogger();
 
