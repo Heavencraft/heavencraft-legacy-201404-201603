@@ -1,0 +1,28 @@
+name: CreativePlugin
+main: fr.tenkei.creaplugin.MyPlugin
+author: Thenkei
+version: 1.2.0
+commands:
+  build:
+    aliases: [bp, s, tpbuild]
+  rejoindre:
+    aliases: [join]
+  accepter:
+    aliases: [yes]
+  spawn:
+  home:
+    aliases: [h, maison]
+  sethome:
+  hps:
+    aliases: [argent]
+  jeton:
+    aliases: [money, monaie]
+  head:
+    aliases: [tete]
+  tppos:
+  tp:
+  tphere:
+  tpbiome:
+  tpold:
+  protection:
+  setspawn:
