@@ -16,9 +16,7 @@ public class colisCommand extends LaPosteCommand{
 	private final static String FORMAT_POSTE = "§4[§6La Poste§4] §6%1$s";
 	
 	public colisCommand() {
-		super("colis");
-		
-		
+		super("colis");	
 	}
 
 	@Override
