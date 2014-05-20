@@ -74,9 +74,6 @@ public class Colis {
 		try
 		{
 			
-			if(contenu == null)
-				Bukkit.broadcastMessage("Contenu null");
-			
 			PreparedStatement ps = LaPoste.getMainConnection().prepareStatement(
 					"INSERT INTO poste_colis (expediteur, destinataire, dateEnvoi, contenu, isLOG) VALUES (?, ?, NOW(), ?, ?)");
 			ps.setString(1, this.expediteur.getUniqueId().toString());
@@ -100,7 +97,7 @@ public class Colis {
 	
 	public int EmplacementsNecessaire()
 	{
-		return (36 - this.contenu.getContents().length);
+		return this.contenu.getContents().length;
 	}
 
 	public void openColis(Player p)
