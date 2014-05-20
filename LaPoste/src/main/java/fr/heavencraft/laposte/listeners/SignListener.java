@@ -17,11 +17,9 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.material.MaterialData;
 
-import fr.heavencraft.laposte.InventoryUtils;
 import fr.heavencraft.laposte.LaPoste;
 import fr.heavencraft.laposte.Utils;
 import fr.heavencraft.laposte.handlers.Colis;
-import fr.heavencraft.laposte.handlers.MenuColisRecus;
 import fr.heavencraft.laposte.handlers.popupMenu.MenuItem;
 import fr.heavencraft.laposte.handlers.popupMenu.PopupMenu;
 import fr.heavencraft.laposte.handlers.popupMenu.PopupMenuAPI;
@@ -30,6 +28,7 @@ import fr.heavencraft.laposte.handlers.popupMenu.PopupMenuAPI;
 public class SignListener implements Listener{
 	private String _permission;
 	private String _tag;
+	private final static String FORMAT_POSTE = "§4[§6La Poste§4] §6%1$s";
 
 	public SignListener() 
 	{
@@ -65,11 +64,6 @@ public class SignListener implements Listener{
 
 		if (!sign.getLine(0).equals(ChatColor.GREEN + _tag))
 			return;
-
-		//TODO Ouvrir l'inventaire
-		e.getPlayer().sendMessage("Overture de l'inventaire recu");
-//		MenuColisRecus menu = new MenuColisRecus();
-//		menu.Ouvrir(e.getPlayer());
 		
 		ArrayList<Colis> mesColis = new ArrayList<Colis>();
 		
@@ -80,29 +74,35 @@ public class SignListener implements Listener{
 		}
 		
 		
-		PopupMenu menuMesColis = PopupMenuAPI.createMenu("Mes Colis Recus", 18);
+		PopupMenu menuMesColis = PopupMenuAPI.createMenu("Mes Colis Recus", 2);
 		int index = 0;
 		for(final Colis colis : mesColis)
 		{
 			
-			
-			
-			MenuItem bouton = new MenuItem("Colis de" + colis.getExpediteur().getName(), new MaterialData(Material.CHEST))
+			MenuItem bouton = new MenuItem("Colis de " + colis.getExpediteur().getName(), new MaterialData(Material.CHEST))
 			{
 				@Override
 				public void onClick(Player player) {
-					//Que ce passe t'il lorsque l'on clique sur le bouton?
-					Bukkit.broadcastMessage("ON A CLIQUé SUR: " + colis.getNom());
-					
+					// Le joueur a t'il suffisament de place dans l'inventaire?
+					if(Utils.getEmptySlots(player.getInventory()) < colis.EmplacementsNecessaire())
+					{
+						colis.openColis(player);
+						getMenu().closeMenu(player);
+					}
+					else
+					{
+						player.sendMessage(String.format(FORMAT_POSTE, "Vous n'avez pas assez de place dans votre inventaire."));
+					}
 				}
 			};
 			
-			bouton.setDescriptions(Utils.wrapWords("Colis de:" + colis.getExpediteur().getName(), 40));
+			bouton.setDescriptions(Utils.wrapWords("Colis de: " + colis.getExpediteur().getName(), 40));
 			menuMesColis.addMenuItem(bouton, index);
 			index ++;
 		}
 		
-		menuMesColis.openMenu(e.getPlayer());
+		menuMesColis.setExitOnClickOutside(true);
+		menuMesColis.switchMenu(e.getPlayer(), menuMesColis);
 	}
 
 	

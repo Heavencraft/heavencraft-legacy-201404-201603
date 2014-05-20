@@ -17,7 +17,9 @@ public class Colis {
 	private Inventory contenu;
 	private Player expediteur;
 	private Player destinataire;	
-
+	private int _ID = 0;
+	private final static String FORMAT_POSTE = "§4[§6La Poste§4] §6%1$s";
+	
 	public Colis(int ID)
 	{
 		try
@@ -37,7 +39,7 @@ public class Colis {
 			this.expediteur = Bukkit.getServer().getPlayer(expID);
 			this.destinataire =  Bukkit.getServer().getPlayer(destID);
 			this.contenu = InventoryUtils.StringToInventory(rs.getString("contenu"));
-			
+			this._ID = ID;
 		}
 		catch (SQLException e)
 		{
@@ -85,6 +87,8 @@ public class Colis {
 			//inserer le log aussi
 			ps.setBoolean(4, true);
 			ps.executeUpdate();
+			
+			expediteur.sendMessage(String.format(FORMAT_POSTE, "Votre colis a été bien envoyé."));
 		}
 
 		catch (SQLException ex)
@@ -103,9 +107,21 @@ public class Colis {
 	{	
 		for(ItemStack its : this.contenu.getContents())
 		{
-			p.getInventory().addItem(its);
+			if(its != null)
+				p.getInventory().addItem(its);
 		}
-		//TODO supprimer de la bdd.
+		
+		try
+		{
+			PreparedStatement ps = LaPoste.getMainConnection().prepareStatement("DELETE FROM poste_colis WHERE `IDcolis` = ? AND `isLOG` = 0");
+			ps.setInt(1, this._ID);
+			ps.executeUpdate();
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+		}
+		
 	}
 
 

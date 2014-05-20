@@ -8,7 +8,6 @@ import org.bukkit.inventory.Inventory;
 import fr.heavencraft.laposte.LaPoste;
 import fr.heavencraft.laposte.commands.LaPosteCommand;
 import fr.heavencraft.laposte.handlers.JoueursEnEditionDeColis;
-import fr.heavencraft.laposte.handlers.MenuColisRecus;
 import fr.heavencraft.laposte.handlers.PostOfficeManager;
 
 public class colisCommand extends LaPosteCommand{
@@ -21,24 +20,12 @@ public class colisCommand extends LaPosteCommand{
 		
 		
 	}
-	
-	//TODO: Le colis est stoqué, et seulement, lorsque le joueur quitte une poste, les colis sont envoyés a la bdd.
 
 	@Override
 	protected void onPlayerCommand(Player player, String[] args) throws Exception {
 
 		if (args.length != 1) {
-			player.sendMessage(String.format(FORMAT_POSTE, "/colis <destinataire>"));
-			player.sendMessage(String.format(FORMAT_POSTE, "/colis recu"));
-		}
-		else if(args[0].equalsIgnoreCase("recu"))
-		{
-			MenuColisRecus menu = new MenuColisRecus();
-			if(PostOfficeManager.isInOffice(player))
-				menu.Ouvrir(player);
-			else
-				player.sendMessage(String.format(FORMAT_POSTE, "Vous devez être dans un bureau de Poste."));
-			
+			player.sendMessage(String.format(FORMAT_POSTE, "/colis <destinataire> Pour envoyer un colis."));
 		}
 		else
 		{

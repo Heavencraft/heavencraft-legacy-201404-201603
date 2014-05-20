@@ -1,5 +1,6 @@
 package fr.heavencraft.laposte.handlers.popupMenu;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,22 +10,22 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import fr.heavencraft.laposte.LaPoste;
 
 /**
  * PopupMenuAPI
+ * Source: https://github.com/XHawk87/PopupMenuAPI/tree/master/src/main/java/me/xhawk87/PopupMenuAPI
+ * Exemple: https://github.com/XHawk87/PopupMenuAPIExample/blob/master/src/main/java/com/xhawk87/PopupMenuAPIExample/menus/PopupMenuSystem.java
  *
  * @author XHawk87
  */
-public class PopupMenuAPI extends JavaPlugin implements Listener {
+public class PopupMenuAPI implements Listener {
     
-    private static PopupMenuAPI instance;
-    
-    @Override
-    public void onEnable() {
-        instance = this;
-        getServer().getPluginManager().registerEvents(this, this);
+    public PopupMenuAPI()
+    {
+        Bukkit.getPluginManager().registerEvents(this, LaPoste.getInstance());
     }
 
     /**
@@ -84,7 +85,7 @@ public class PopupMenuAPI extends JavaPlugin implements Listener {
             public void run() {
                 toMenu.openMenu(player);
             }
-        }.runTask(instance);
+        }.runTask(LaPoste.getInstance());
     }
     
     @EventHandler(priority = EventPriority.LOWEST)

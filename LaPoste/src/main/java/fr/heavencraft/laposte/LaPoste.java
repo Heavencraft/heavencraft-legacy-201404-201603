@@ -23,6 +23,7 @@ import org.bukkit.plugin.Plugin;
 import fr.heavencraft.laposte.WorldGuardRegions.WGRegionEventsListener;
 import fr.heavencraft.laposte.commands.CommandManager;
 import fr.heavencraft.laposte.handlers.PostOfficeManager;
+import fr.heavencraft.laposte.handlers.popupMenu.PopupMenuAPI;
 import fr.heavencraft.laposte.listeners.InventoryListener;
 import fr.heavencraft.laposte.listeners.PostOfficeListener;
 import fr.heavencraft.laposte.listeners.SignListener;
@@ -46,6 +47,7 @@ public class LaPoste extends JavaPlugin
 		new WGRegionEventsListener();
 		new SignListener();
 		new InventoryListener();
+		new PopupMenuAPI();
 		
 		PostOfficeManager.LoadOffices();
 		
