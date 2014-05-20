@@ -1,0 +1,20 @@
+name: HeavenAventure
+version: 1.0
+main: fr.heavencraft.aventure.HeavenAventure
+depend: [WorldGuard]
+commands:
+  relrg:
+    description: Recharge les arenes.
+    aliases: [rgReload]
+  setSound:
+    description: modifie le son joue a lentree.
+    aliases: [rgsound, rgsnd]
+  setgreeting:
+    description: modifie le message joue a lentree.
+    aliases: [setmsg, rgmsg, rgsetmsg]
+  setEnabled:
+    description: Active desactive une region.
+    aliases: [rgenable, rgon]
+  listRegions:
+    description: Active desactive une region.
+    aliases: [rglist, rglst]
