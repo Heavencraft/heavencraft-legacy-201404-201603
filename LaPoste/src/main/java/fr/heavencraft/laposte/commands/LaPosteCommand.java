@@ -1,7 +1,5 @@
 package fr.heavencraft.laposte.commands;
 
-import java.util.logging.Level;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -9,7 +7,6 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 
 import fr.heavencraft.laposte.LaPoste;
-import fr.heavencraft.laposte.Utils;
 
 public abstract class LaPosteCommand implements CommandExecutor {
 	public LaPosteCommand(String name)
