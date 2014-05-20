@@ -69,7 +69,6 @@ public class SignListener implements Listener{
 		
 		for(String id : getColisRecus(e.getPlayer().getUniqueId().toString()))
 		{
-			Bukkit.broadcastMessage(id);
 			mesColis.add(new Colis(Integer.parseInt(id)));
 		}
 		
@@ -82,9 +81,9 @@ public class SignListener implements Listener{
 			MenuItem bouton = new MenuItem("Colis de " + colis.getExpediteur().getName(), new MaterialData(Material.CHEST))
 			{
 				@Override
-				public void onClick(Player player) {
+				public void onClick(Player player) {			
 					// Le joueur a t'il suffisament de place dans l'inventaire?
-					if(Utils.getEmptySlots(player.getInventory()) < colis.EmplacementsNecessaire())
+					if(Utils.getEmptySlots(player.getInventory()) >= colis.EmplacementsNecessaire())
 					{
 						colis.openColis(player);
 						getMenu().closeMenu(player);
