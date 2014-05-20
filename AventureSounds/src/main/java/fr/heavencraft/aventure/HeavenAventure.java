@@ -1,8 +1,10 @@
 package fr.heavencraft.aventure;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -22,7 +24,10 @@ import org.bukkit.plugin.Plugin;
 
 import fr.heavencraft.aventure.WorldGuardRegions.WGRegionEventsListener;
 import fr.heavencraft.aventure.commands.CommandManager;
+import fr.heavencraft.aventure.listeners.ChatListener;
 import fr.heavencraft.aventure.listeners.PlayerListener;
+import fr.heavencraft.webserver.WebServer;
+import fr.heavencraft.webserver.WebsocketServer;
 
 public class HeavenAventure extends JavaPlugin
 {
@@ -34,15 +39,28 @@ public class HeavenAventure extends JavaPlugin
 	public void onEnable()
 	{
 		_instance = this;
-
-//		getConfig().options().copyDefaults(true);
+		this.getLogger().log(Level.INFO, "###################################################################");
+		this.getLogger().log(Level.INFO, "############################# Loading nexus #######################");
 		Files.getRegions().options().copyDefaults(true);
 		Files.saveRegions();
-//		Files.saveConfig();
 
+		new ChatListener();
 		new CommandManager();	
 		new PlayerListener();
 		new WGRegionEventsListener();
+		
+		
+		//demarrer le webserver
+		WebServer.runServer();
+		try {
+			WebsocketServer.runServer();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public static HeavenAventure getInstance()
