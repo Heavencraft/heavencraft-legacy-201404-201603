@@ -24,6 +24,7 @@ import fr.heavencraft.heavenproxy.commands.SayCommand;
 import fr.heavencraft.heavenproxy.commands.SendCommand;
 import fr.heavencraft.heavenproxy.commands.SpyCommand;
 import fr.heavencraft.heavenproxy.commands.TellCommand;
+import fr.heavencraft.heavenproxy.commands.VoterCommand;
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
 import fr.heavencraft.heavenproxy.kick.KickCommand;
 import fr.heavencraft.heavenproxy.kick.RagequitCommand;
@@ -75,6 +76,7 @@ public class HeavenProxy extends Plugin
 			new SendCommand();
 			new SpyCommand();
 			new TellCommand();
+			new VoterCommand();
 
 			// Ban
 			new BanCommand();
