@@ -1,0 +1,21 @@
+[
+   {
+      "path":"/home/minecraft/serveurs/semirp",
+      "server":"craftbukkit.jar",
+      "plugins":[
+         "WorldEdit.jar",
+         "WorldGuard.jar",
+         "PermissionsBukkit.jar"
+      ]
+   },
+   {
+      "path":"/home/minecraft/serveurs/test",
+      "server":"spigot.jar",
+      "plugins":[
+         "WorldEdit.jar",
+         "WorldGuard.jar",
+         "PermissionsBukkit.jar",
+         "Citizens.jar"
+      ]
+   }
+]
