@@ -20,7 +20,7 @@ public class HorsesManager
 		else if (isWild(horse))
 			return true;
 		else
-			return horse.getOwner().getName() == player.getName();
+			return horse.getOwner().getUniqueId().equals(player.getUniqueId());
 	}
 
 	public static void sendWarning(Horse horse, Player player)
