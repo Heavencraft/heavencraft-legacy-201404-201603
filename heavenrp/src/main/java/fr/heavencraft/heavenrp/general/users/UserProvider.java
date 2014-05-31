@@ -82,7 +82,7 @@ public class UserProvider
 		try
 		{
 			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"UPDATE TABLE users SET name = ? WHERE uuid = ? LIMIT 1");
+					"UPDATE users SET name = ? WHERE uuid = ? LIMIT 1");
 			ps.setString(1, name);
 			ps.setString(2, uuid);
 
