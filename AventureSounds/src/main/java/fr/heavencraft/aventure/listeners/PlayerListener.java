@@ -1,15 +1,20 @@
 package fr.heavencraft.aventure.listeners;
 
+import java.util.Random;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 import fr.heavencraft.aventure.Files;
 import fr.heavencraft.aventure.HeavenAventure;
 import fr.heavencraft.aventure.WorldGuardRegions.RegionEnterEvent;
 import fr.heavencraft.aventure.WorldGuardRegions.RegionLeaveEvent;
+import fr.heavencraft.webserver.SoundEffectsManager;
 
 public class PlayerListener implements Listener{
 	public PlayerListener()
@@ -24,7 +29,8 @@ public class PlayerListener implements Listener{
 		if(getRegionEnabled(e.getRegion().getId())== true)
 		{	
 
-			e.getPlayer().playSound(e.getPlayer().getLocation(), getSound(e.getRegion().getId()), 1, 1);
+//			e.getPlayer().playSound(e.getPlayer().getLocation(), getSound(e.getRegion().getId()), 1, 1);
+			SoundEffectsManager.playToPlayer(e.getPlayer(), getSound(e.getRegion().getId()));
 
 			String grt = ChatColor.translateAlternateColorCodes('&', getGreeting(e.getRegion().getId()));
 			if( grt.length() != 0)
@@ -81,4 +87,5 @@ public class PlayerListener implements Listener{
 		//	    e.getPlayer().sendMessage("You cannot leave the jail!");
 		//	  }
 	}
+
 }
