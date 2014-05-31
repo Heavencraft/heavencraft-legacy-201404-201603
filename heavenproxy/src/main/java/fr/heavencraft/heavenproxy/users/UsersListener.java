@@ -7,9 +7,11 @@ import java.util.logging.Logger;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.LoginEvent;
+import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
+import net.md_5.bungee.event.EventPriority;
 import net.md_5.bungee.protocol.ProtocolConstants;
 import fr.heavencraft.heavenproxy.Utils;
 import fr.heavencraft.heavenproxy.chat.ChatManager;
@@ -42,7 +44,7 @@ public class UsersListener implements Listener
 		}
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPostLogin(PostLoginEvent event)
 	{
 		ProxiedPlayer player = event.getPlayer();
@@ -70,6 +72,19 @@ public class UsersListener implements Listener
 			UserProvider.createUser(uuid, name);
 
 			ChatManager.sendJoinMessage(name, player.getAddress().getAddress(), true);
+		}
+	}
+
+	@EventHandler
+	public void onPlayerDisconnect(PlayerDisconnectEvent event)
+	{
+		try
+		{
+			UserProvider.removeFromCache(UserProvider.getUserByName(event.getPlayer().getName()));
+		}
+		catch (HeavenException ex)
+		{
+			ex.printStackTrace();
 		}
 	}
 }

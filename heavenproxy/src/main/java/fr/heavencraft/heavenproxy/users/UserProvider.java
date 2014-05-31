@@ -84,7 +84,7 @@ public class UserProvider
 		}
 	}
 
-	static void createUser(String uuid, String name) throws HeavenException
+	static void createUser(String uuid, String name)
 	{
 		try (PreparedStatement ps = HeavenProxy.getConnection().prepareStatement(
 				"INSERT INTO users (uuid, name, last_login) VALUES (?, ?, ?)"))
@@ -98,7 +98,6 @@ public class UserProvider
 		catch (SQLException ex)
 		{
 			ex.printStackTrace();
-			throw new SQLErrorException();
 		}
 	}
 }
