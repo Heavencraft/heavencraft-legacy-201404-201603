@@ -22,7 +22,7 @@ public class SaveManager {
 				
 				Bukkit.savePlayers();
 				
-				LorganServer.sendConsoleMessage("Sauvegarde termine !");
+				LorganServer.sendConsoleMessage("Sauvegarde terminÃ©e !");
 			}
 		}.runTaskTimer(LorganServer.getInstance(), 6000, 6000);
 	}

@@ -39,7 +39,7 @@ public class SelectionManager implements Listener {
 		Pair<Location, Location> result = _selections.get(playerName);
 		
 		if (result == null || result.first == null || result.second == null)
-			throw new LorganException("Vous devez sélectionner votre zone avec un bâton.");
+			throw new LorganException("Vous devez s√©lectionner votre zone avec un b√¢ton.");
 		
 		return result;
 	}
@@ -63,7 +63,7 @@ public class SelectionManager implements Listener {
 		int price = getPrice(player.getName());
 
 		if (price != -1)
-			LorganServer.sendMessage(player, "La protection vous coûtera {" + price + "} pépites d'or.");
+			LorganServer.sendMessage(player, "La protection vous co√ªtera {" + price + "} p√©pites d'or.");
 	}
 
 	@EventHandler
@@ -88,7 +88,7 @@ public class SelectionManager implements Listener {
 			case LEFT_CLICK_BLOCK:
 				_selections.get(playerName).first = location;
 				event.setCancelled(true);
-				LorganServer.sendMessage(player, "Premier point placé en x = {" + location.getBlockX() + "}, z = {"
+				LorganServer.sendMessage(player, "Premier point plac√© en x = {" + location.getBlockX() + "}, z = {"
 						+ location.getBlockZ() + "}.");
 
 				displayPrice(player);
@@ -96,7 +96,7 @@ public class SelectionManager implements Listener {
 			case RIGHT_CLICK_BLOCK:
 				_selections.get(playerName).second = location;
 				event.setCancelled(true);
-				LorganServer.sendMessage(player, "Second point placé en x = {" + location.getBlockX() + "}, z = {"
+				LorganServer.sendMessage(player, "Second point plac√© en x = {" + location.getBlockX() + "}, z = {"
 						+ location.getBlockZ() + "}.");
 				
 				displayPrice(player);

@@ -17,7 +17,7 @@ import fr.lorgan17.lorganserver.managers.WorldsManager;
 
 public class ChatListener implements Listener {
 	
-	private final static String LEAVE_MESSAGE = ChatColor.GOLD + " * %1$s a ŽtŽ exclu du serveur : %2$s.";
+	private final static String LEAVE_MESSAGE = ChatColor.GOLD + " * %1$s a Ã©tÃ© exclu du serveur : %2$s.";
 	
 	public ChatListener(LorganServer plugin)
 	{
@@ -53,6 +53,6 @@ public class ChatListener implements Listener {
 	private void onPlayerChat(AsyncPlayerChatEvent event) throws LorganException
 	{
 		User user = User.getUserByName(event.getPlayer().getName());
-		event.setFormat(user.getColor() + "[%1$s]¤r %2$s");
+		event.setFormat(user.getColor() + "[%1$s]Â§r %2$s");
 	}
 }

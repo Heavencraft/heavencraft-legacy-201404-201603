@@ -42,14 +42,14 @@ public class ProtectionCommand extends LorganCommand {
 		{
 			_plugin.getSelectionManager().enable(player.getName());
 			LorganServer.sendMessage(player, "Bienvenue dans l'assistant de protection.");
-			LorganServer.sendMessage(player, "Utilisez le clic gauche et le clic droit avec un bâton pour délimiter votre protection");
+			LorganServer.sendMessage(player, "Utilisez le clic gauche et le clic droit avec un b√¢ton pour d√©limiter votre protection");
 			LorganServer.sendMessage(player, "Puis faites /protection valider ou /protection annuler");
 		}
 		
 		else if (args[0].equalsIgnoreCase("annuler"))
 		{
 			_plugin.getSelectionManager().disable(player.getName());
-			LorganServer.sendMessage(player, "Création de la protection annulée.");
+			LorganServer.sendMessage(player, "Cr√©ation de la protection annul√©e.");
 		}
 		
 		else if (args[0].equalsIgnoreCase("valider"))
@@ -65,8 +65,8 @@ public class ProtectionCommand extends LorganCommand {
 			MoneyManager.pay(player, amount);
 
 			_plugin.getSelectionManager().disable(playerName);
-			LorganServer.sendMessage(player, "Votre protection a été créée.");
-			LorganServer.sendMessage(player, "Vous pouvez utiliser /protection ajouter pour ajouter des membres à votre protection.");
+			LorganServer.sendMessage(player, "Votre protection a √©t√© cr√©√©e.");
+			LorganServer.sendMessage(player, "Vous pouvez utiliser /protection ajouter pour ajouter des membres √† votre protection.");
 		}
 		
 		else if (args[0].equalsIgnoreCase("supprimer") && args.length == 2)
@@ -80,7 +80,7 @@ public class ProtectionCommand extends LorganCommand {
 			
 			region.delete();
 			
-			LorganServer.sendMessage(player, "La protection {" + regionId + "} a été supprimée.");
+			LorganServer.sendMessage(player, "La protection {" + regionId + "} a √©t√© supprim√©e.");
 		}
 
 		else if (args[0].equalsIgnoreCase("ajouter") && args.length == 3)
@@ -95,7 +95,7 @@ public class ProtectionCommand extends LorganCommand {
 			
 			region.addMember(user, false);
 			
-			LorganServer.sendMessage(player, "Le joueur {" + user + "} est désormais membre de la protection {" + regionId + "}.");
+			LorganServer.sendMessage(player, "Le joueur {" + user + "} est d√©sormais membre de la protection {" + regionId + "}.");
 		}
 		
 		else if (args[0].equalsIgnoreCase("enlever") && args.length == 3)
@@ -127,10 +127,10 @@ public class ProtectionCommand extends LorganCommand {
 	protected void sendUsage(CommandSender sender)
 	{
 		LorganServer.sendMessage(sender, "/{protection} creer : lance l'assistant de protection.");
-		LorganServer.sendMessage(sender, "/{protection} valider : valider la création d'une protection.");
-		LorganServer.sendMessage(sender, "/{protection} annuler : annule la création d'une protection");
-		LorganServer.sendMessage(sender, "/{protection} ajouter <protection> <joueur> : ajoute un joueur à la protection.");
-		LorganServer.sendMessage(sender, "/{protection} enlever <protection> <joueur> : enlève un joueur de la protection.");
+		LorganServer.sendMessage(sender, "/{protection} valider : valider la cr√©ation d'une protection.");
+		LorganServer.sendMessage(sender, "/{protection} annuler : annule la cr√©ation d'une protection");
+		LorganServer.sendMessage(sender, "/{protection} ajouter <protection> <joueur> : ajoute un joueur √† la protection.");
+		LorganServer.sendMessage(sender, "/{protection} enlever <protection> <joueur> : enl√®ve un joueur de la protection.");
 		LorganServer.sendMessage(sender, "/{protection} supprimer <protection> : supprime la protection.");
 	}
 }

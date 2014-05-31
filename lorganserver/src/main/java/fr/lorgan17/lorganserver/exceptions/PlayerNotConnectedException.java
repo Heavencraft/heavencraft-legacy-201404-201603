@@ -6,6 +6,6 @@ public class PlayerNotConnectedException extends LorganException {
 
 	public PlayerNotConnectedException(String name)
 	{
-		super("Le joueur {" + name + "} n'est pas connecté.");
+		super("Le joueur {" + name + "} n'est pas connect√©.");
 	}
 }

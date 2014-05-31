@@ -6,6 +6,6 @@ public class NotOwnerException extends LorganException {
 
 	public NotOwnerException(int id)
 	{
-		super("Vous n'êtes pas le propriétaire de la protection {" + id + "}.");
+		super("Vous n'√™tes pas le propri√©taire de la protection {" + id + "}.");
 	}
 }

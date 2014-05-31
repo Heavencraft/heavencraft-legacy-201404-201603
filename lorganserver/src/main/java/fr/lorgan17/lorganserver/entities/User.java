@@ -32,7 +32,7 @@ public class User {
 	
 	public String getColor()
 	{
-		return "ค" + _color;
+		return "ยง" + _color;
 	}
 	
 	public boolean isBanned()

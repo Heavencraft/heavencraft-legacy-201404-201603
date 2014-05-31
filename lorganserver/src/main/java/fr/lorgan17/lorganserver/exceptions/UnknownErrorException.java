@@ -6,6 +6,6 @@ public class UnknownErrorException extends LorganException {
 
 	public UnknownErrorException(String error)
 	{
-		super("Cette erreur n'est pas censée se produire : {" + error + "}.");
+		super("Cette erreur n'est pas cens√©e se produire : {" + error + "}.");
 	}
 }

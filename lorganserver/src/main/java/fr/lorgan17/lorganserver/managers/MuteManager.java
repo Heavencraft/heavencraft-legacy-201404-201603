@@ -45,7 +45,7 @@ public class MuteManager implements Listener {
 		
 		if (isMuted(player.getName()))
 		{
-			LorganServer.sendMessage(player, "Vous avez t rendu {muet} par un modrateur.");
+			LorganServer.sendMessage(player, "Vous avez Ã©tÃ© rendu {muet} par un modÃ©rateur.");
 			event.setCancelled(true);
 		}
 	}

@@ -38,7 +38,7 @@ public class ServerListener implements Listener {
 			if (user.isBanned())
 			{
 				event.setLoginResult(Result.KICK_BANNED);
-				event.setKickMessage("Vous tes banni du serveur.\n" + user.getBannedReason());
+				event.setKickMessage("Vous Ãªtes banni du serveur.\n" + user.getBannedReason());
 			}
 		}
 		catch (LorganException ex)
@@ -57,7 +57,7 @@ public class ServerListener implements Listener {
 			if (user.isBanned())
 			{
 				event.setResult(PlayerLoginEvent.Result.KICK_BANNED);
-				event.setKickMessage("Vous tes banni du serveur.\n" + user.getBannedReason());
+				event.setKickMessage("Vous Ãªtes banni du serveur.\n" + user.getBannedReason());
 			}
 		}
 		catch (LorganException ex)
@@ -67,7 +67,7 @@ public class ServerListener implements Listener {
 	}
 	
 	/*
-	 * Mise ˆ jour de la table onlinelog
+	 * Mise Ã  jour de la table onlinelog
 	 */
 	
 	@EventHandler
@@ -83,7 +83,7 @@ public class ServerListener implements Listener {
 		
 		String color = User.getUserByName(player.getName()).getColor();
 		
-		if (color.equalsIgnoreCase("¤f"))
+		if (color.equalsIgnoreCase("Â§f"))
 			return;
 		
 		player.setPlayerListName(color + playerName);

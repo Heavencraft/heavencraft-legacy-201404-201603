@@ -32,7 +32,7 @@ public class UnbanCommand extends LorganCommand {
 		
 		User.getUserByName(args[0]).unban();
 		
-		LorganServer.sendMessage(sender, "Le joueur {" + args[0] + "} a été débanni.");
+		LorganServer.sendMessage(sender, "Le joueur {" + args[0] + "} a √©t√© d√©banni.");
 	}
 
 	@Override

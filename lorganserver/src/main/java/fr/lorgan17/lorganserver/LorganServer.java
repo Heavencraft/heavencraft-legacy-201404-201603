@@ -26,41 +26,41 @@ import fr.lorgan17.lorganserver.managers.SaveManager;
 import fr.lorgan17.lorganserver.managers.SelectionManager;
 import fr.lorgan17.lorganserver.managers.WorldsManager;
 
-public class LorganServer extends JavaPlugin {
+public class LorganServer extends JavaPlugin
+{
 
 	private final static String BEGIN = "{";
 	private final static String END = "}";
 	private final static String ERROR_COLOR = ChatColor.RED.toString();
 	private final static String NORMAL_COLOR = ChatColor.GOLD.toString();
-	
+
 	private final static String SURVIVAL_DB_URL = "jdbc:mysql://localhost:3306/minecraft-survie?user=mc-sql&password=MfGJQMBzmAS5xYhH";
 	private final static String MAIN_DB_URL = "jdbc:mysql://localhost:3306/mc-db?user=mc-sql&password=MfGJQMBzmAS5xYhH";
-	
+
 	private static LorganServer _instance;
 
-	// Base de donnŽes survie
+	// Base de donnÃ©es survie
 	private static Connection _connection;
-	
-	// Base de donnŽes principale
+
+	// Base de donnÃ©es principale
 	private static Connection _mainConnection;
-	
+
 	private SelectionManager _selectionManager;
 	private MuteManager _muteManager;
-	
+
 	@Override
 	public void onEnable()
 	{
 		super.onEnable();
-		
+
 		_instance = this;
-		
+
 		new CommandsManager();
 		new SaveManager();
-		
+
 		_muteManager = new MuteManager(this);
 		_selectionManager = new SelectionManager(this);
-		
-		
+
 		new ServerListener(this);
 		new ChatListener(this);
 		new ProtectionPlayerListener(this);
@@ -74,7 +74,7 @@ public class LorganServer extends JavaPlugin {
 	{
 		return _selectionManager;
 	}
-	
+
 	public MuteManager getMuteManager()
 	{
 		return _muteManager;
@@ -84,7 +84,7 @@ public class LorganServer extends JavaPlugin {
 	{
 		return _instance;
 	}
-	
+
 	public static Connection getConnection()
 	{
 		try
@@ -99,10 +99,10 @@ public class LorganServer extends JavaPlugin {
 			ex.printStackTrace();
 			Bukkit.shutdown();
 		}
-		
+
 		return _connection;
 	}
-	
+
 	public static Connection getMainConnection()
 	{
 		try
@@ -117,47 +117,49 @@ public class LorganServer extends JavaPlugin {
 			ex.printStackTrace();
 			Bukkit.shutdown();
 		}
-		
+
 		return _mainConnection;
 	}
-	
+
 	public static void sendMessage(CommandSender sender, String message)
 	{
 		if (sender != null)
 			sender.sendMessage(NORMAL_COLOR + message.replace(BEGIN, ERROR_COLOR).replace(END, NORMAL_COLOR));
 	}
-	
+
 	public static void broadcastMessage(String message)
 	{
-		Bukkit.broadcastMessage("¤b[Heavencraft]¤r " + message);
+		Bukkit.broadcastMessage("Â§b[Heavencraft]Â§r " + message);
 	}
-	
+
 	public static void sendConsoleMessage(String message)
 	{
-		Bukkit.getConsoleSender().sendMessage("¤b[LorganServer]¤r " + message);
+		Bukkit.getConsoleSender().sendMessage("Â§b[LorganServer]Â§r " + message);
 	}
-	
+
 	public static Player getPlayer(String name) throws PlayerNotConnectedException
 	{
 		Player player = Bukkit.getPlayer(name);
-		
+
 		if (player == null)
 			throw new PlayerNotConnectedException(name);
-		
+
 		return player;
 	}
-	
+
 	public static boolean canBeDestroyed(Player player, Block block)
 	{
 		if (!block.getWorld().equals(WorldsManager.getWorld()))
 			return true;
-		
+
 		Region region = Region.getRegionByLocation(block.getX(), block.getZ());
-		
+
 		if (region == null)
 			return true;
 		else if (player == null)
 			return false;
+		else if (player.isOp())
+			return true;
 		else
 			return region.isMember(player.getName(), false);
 	}
