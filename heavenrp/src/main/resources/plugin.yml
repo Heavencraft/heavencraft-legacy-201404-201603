@@ -49,6 +49,7 @@ commands:
   cheval:
   travaux:
   world:
+  web:
 permissions:
   heavenrp.moderator.*:
     children:
