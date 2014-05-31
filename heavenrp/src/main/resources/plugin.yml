@@ -24,6 +24,7 @@ commands:
   pvp:
   tp:
   tphere:
+    aliases: s
   licence:
   modpack:
   roucoups:
