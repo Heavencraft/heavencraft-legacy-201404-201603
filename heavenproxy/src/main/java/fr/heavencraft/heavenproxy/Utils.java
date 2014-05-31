@@ -274,6 +274,8 @@ public class Utils
 			return "Fac";
 		else if (serverName.equalsIgnoreCase("infected"))
 			return "Inf";
+		else if (serverName.equalsIgnoreCase("musee"))
+			return "Mus";
 		else if (serverName.equalsIgnoreCase("mariokart"))
 			return "MK";
 		else if (serverName.equalsIgnoreCase("tntrun"))
