@@ -10,6 +10,7 @@ import fr.heavencraft.heavenrp.economy.LivretproCommand;
 import fr.heavencraft.heavenrp.economy.PayerCommand;
 import fr.heavencraft.heavenrp.economy.enterprise.EntrepriseCommand;
 import fr.heavencraft.heavenrp.general.ChatListener;
+import fr.heavencraft.heavenrp.general.PumpkinLampListener;
 import fr.heavencraft.heavenrp.general.RecipeManager;
 import fr.heavencraft.heavenrp.general.ServerListener;
 import fr.heavencraft.heavenrp.general.WatchListener;
@@ -75,6 +76,7 @@ public class InitManager
 
 		// General
 		new ChatListener();
+		new PumpkinLampListener();
 		new RecipeManager();
 		new ServerListener();
 		new WatchListener();
