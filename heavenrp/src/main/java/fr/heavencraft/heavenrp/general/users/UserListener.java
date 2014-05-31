@@ -20,12 +20,12 @@ public class UserListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	private void onPlayerLogin(PlayerLoginEvent event)
+	private void onPlayerLogin(PlayerLoginEvent event) throws HeavenException
 	{
 		Player player = event.getPlayer();
 
-		String uuid = Utils.getUUID(player);
 		String name = player.getName();
+		String uuid = Utils.getUUID(name);
 
 		Utils.logInfo("UsersListener.onPlayerLogin : %1$s = %2$s", uuid, name);
 

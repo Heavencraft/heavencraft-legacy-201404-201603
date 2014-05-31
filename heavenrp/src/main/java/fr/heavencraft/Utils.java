@@ -16,6 +16,9 @@ import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
+import com.mojang.api.profiles.HttpProfileRepository;
+import com.mojang.api.profiles.Profile;
+import com.mojang.api.profiles.ProfileRepository;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.bukkit.selections.Selection;
 import com.sk89q.worldguard.bukkit.WGBukkit;
@@ -23,6 +26,7 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.exceptions.PlayerNotConnectedException;
+import fr.heavencraft.exceptions.UUIDNotFoundException;
 import fr.heavencraft.heavenrp.HeavenRP;
 
 public class Utils
@@ -64,6 +68,24 @@ public class Utils
 	public static String getUUID(Player player)
 	{
 		return player.getUniqueId().toString().replaceAll("-", "");
+	}
+
+	public static String getUUID(String playerName) throws HeavenException
+	{
+		try
+		{
+			return getUUID(getPlayer(playerName));
+		}
+		catch (PlayerNotConnectedException e)
+		{
+			ProfileRepository repository = new HttpProfileRepository("minecraft");
+			Profile[] profiles = repository.findProfilesByNames(playerName);
+
+			if (profiles.length == 1)
+				return profiles[0].getId();
+			else
+				throw new UUIDNotFoundException(playerName);
+		}
 	}
 
 	public static Player getPlayer(String name) throws PlayerNotConnectedException
