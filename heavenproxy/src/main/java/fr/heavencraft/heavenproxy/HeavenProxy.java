@@ -19,6 +19,7 @@ import fr.heavencraft.heavenproxy.commands.ListCommand;
 import fr.heavencraft.heavenproxy.commands.MeCommand;
 import fr.heavencraft.heavenproxy.commands.ModoCommand;
 import fr.heavencraft.heavenproxy.commands.NexusCommand;
+import fr.heavencraft.heavenproxy.commands.ReplyCommand;
 import fr.heavencraft.heavenproxy.commands.SayCommand;
 import fr.heavencraft.heavenproxy.commands.SendCommand;
 import fr.heavencraft.heavenproxy.commands.SpyCommand;
@@ -69,6 +70,7 @@ public class HeavenProxy extends Plugin
 			new MeCommand();
 			new ModoCommand();
 			new NexusCommand();
+			new ReplyCommand();
 			new SayCommand();
 			new SendCommand();
 			new SpyCommand();
