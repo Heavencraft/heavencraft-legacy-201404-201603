@@ -35,7 +35,7 @@ public class ProtectionPlayerListener implements Listener {
 		
 		if (!LorganServer.canBeDestroyed(player, block))
 		{
-			LorganServer.sendMessage(player, "Tu vas pas dormir dans le lit d'un autre !? Naméoh !");
+			LorganServer.sendMessage(player, "Tu vas pas dormir dans le lit d'un autre !? Nam√©oh !");
 			event.setCancelled(true);
 		}
 	}
@@ -48,7 +48,7 @@ public class ProtectionPlayerListener implements Listener {
 		
 		if (!LorganServer.canBeDestroyed(player, block))
 		{
-			LorganServer.sendMessage(player, "Cet endroit est protégé.");
+			LorganServer.sendMessage(player, "Cet endroit est prot√©g√©.");
 			event.setCancelled(true);
 		}
 	}
@@ -61,7 +61,7 @@ public class ProtectionPlayerListener implements Listener {
 		
 		if (!LorganServer.canBeDestroyed(player, block))
 		{
-			LorganServer.sendMessage(player, "Cet endroit est protégé.");
+			LorganServer.sendMessage(player, "Cet endroit est prot√©g√©.");
 			event.setCancelled(true);
 		}
 	}
@@ -74,7 +74,7 @@ public class ProtectionPlayerListener implements Listener {
 
 		if (!LorganServer.canBeDestroyed(player, block))
 		{
-			LorganServer.sendMessage(player, "Cet endroit est protégé.");
+			LorganServer.sendMessage(player, "Cet endroit est prot√©g√©.");
 			event.setCancelled(true);
 		}
 	}
@@ -119,7 +119,7 @@ public class ProtectionPlayerListener implements Listener {
 		{
 			if (!LorganServer.canBeDestroyed(player, block))
 			{
-				LorganServer.sendMessage(player, "Cet endroit est protégé.");
+				LorganServer.sendMessage(player, "Cet endroit est prot√©g√©.");
 				event.setUseItemInHand(Result.DENY);
 				event.setCancelled(true);
 			}
@@ -143,7 +143,7 @@ public class ProtectionPlayerListener implements Listener {
 				case TRAPPED_CHEST:
 					if (!LorganServer.canBeDestroyed(player, block))
 					{
-						LorganServer.sendMessage(player, "Cet endroit est protégé.");
+						LorganServer.sendMessage(player, "Cet endroit est prot√©g√©.");
 						event.setUseInteractedBlock(Result.DENY);
 						event.setCancelled(true);
 					}
@@ -167,7 +167,7 @@ public class ProtectionPlayerListener implements Listener {
 	        case MELON_STEM:
 				if (!LorganServer.canBeDestroyed(player, block))
 				{
-					LorganServer.sendMessage(player, "Cette plantation est protégée.");
+					LorganServer.sendMessage(player, "Cette plantation est prot√©g√©e.");
 					event.setUseInteractedBlock(Result.DENY);
 	                event.setCancelled(true);
 	            }

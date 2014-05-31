@@ -37,7 +37,7 @@ public class ProtectionBlockListener implements Listener {
 		
 		else if (!LorganServer.canBeDestroyed(player, block))
 		{
-			LorganServer.sendMessage(player, "Cet endroit est protégé.");
+			LorganServer.sendMessage(player, "Cet endroit est prot√©g√©.");
 			event.setCancelled(true);
 		}
 	}
@@ -59,7 +59,7 @@ public class ProtectionBlockListener implements Listener {
 		
 		if (!LorganServer.canBeDestroyed(player, block))
 		{
-			LorganServer.sendMessage(player, "Cet endroit est protégé.");
+			LorganServer.sendMessage(player, "Cet endroit est prot√©g√©.");
 			event.setCancelled(true);
 		}
 	}
@@ -72,7 +72,7 @@ public class ProtectionBlockListener implements Listener {
 
 		if (!LorganServer.canBeDestroyed(player, block))
 		{
-			LorganServer.sendMessage(player, "Cet endroit est protégé.");
+			LorganServer.sendMessage(player, "Cet endroit est prot√©g√©.");
 			event.setCancelled(true);
 		}
 	}
@@ -85,7 +85,7 @@ public class ProtectionBlockListener implements Listener {
 
 		if (!LorganServer.canBeDestroyed(player, block))
 		{
-			LorganServer.sendMessage(player, "Cet endroit est protégé.");
+			LorganServer.sendMessage(player, "Cet endroit est prot√©g√©.");
 			event.setCancelled(true);
 		}
 	}
@@ -98,7 +98,7 @@ public class ProtectionBlockListener implements Listener {
 
 		if (!LorganServer.canBeDestroyed(player, block))
 		{
-			LorganServer.sendMessage(player, "Cet endroit est protégé.");
+			LorganServer.sendMessage(player, "Cet endroit est prot√©g√©.");
 			event.setCancelled(true);
 		}
 	}

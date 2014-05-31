@@ -6,6 +6,6 @@ public class NotEnoughNuggetsException extends LorganException {
 
 	public NotEnoughNuggetsException(int amount)
 	{
-		super("Vous n'avez pas assez de pépites d'or sur vous. Il vous en faut {" + amount + "}.");
+		super("Vous n'avez pas assez de p√©pites d'or sur vous. Il vous en faut {" + amount + "}.");
 	}
 }

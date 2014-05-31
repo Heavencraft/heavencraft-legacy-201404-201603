@@ -21,7 +21,7 @@ public class LitCommand extends LorganCommand {
 		Location bedLocation = player.getBedSpawnLocation();
 		
 		if (bedLocation == null)
-			LorganServer.sendMessage(player, "Votre lit a été détruit.");
+			LorganServer.sendMessage(player, "Votre lit a √©t√© d√©truit.");
 		else
 			player.teleport(bedLocation);
 	}

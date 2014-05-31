@@ -19,7 +19,7 @@ public class SetspawnCommand extends LorganCommand {
 	protected void onPlayerCommand(Player player, String[] args) throws LorganException
 	{
 		WorldsManager.setSpawn(player.getLocation());
-		LorganServer.sendMessage(player, "L'emplacement du spawn a bien été changé.");
+		LorganServer.sendMessage(player, "L'emplacement du spawn a bien √©t√© chang√©.");
 	}
 
 	@Override

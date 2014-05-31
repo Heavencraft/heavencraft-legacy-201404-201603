@@ -26,7 +26,7 @@ public class TpCommand extends LorganCommand {
 		Player otherPlayer = LorganServer.getPlayer(args[0]);
 		player.teleport(otherPlayer);
 		
-		LorganServer.sendMessage(player, "Vous avez été téléporté à {" + otherPlayer.getName() +"}.");
+		LorganServer.sendMessage(player, "Vous avez √©t√© t√©l√©port√© √† {" + otherPlayer.getName() +"}.");
 	}
 
 	@Override

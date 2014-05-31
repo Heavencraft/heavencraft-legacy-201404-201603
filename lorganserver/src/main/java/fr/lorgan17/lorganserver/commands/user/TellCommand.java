@@ -9,8 +9,8 @@ import fr.lorgan17.lorganserver.exceptions.LorganException;
 
 public class TellCommand extends LorganCommand {
 
-	private final static String FROM = "¤d[de %1$s]¤r %2$s";
-	private final static String TO = "¤d[ˆ %1$s]¤r %2$s";
+	private final static String FROM = "Â§d[de %1$s]Â§r %2$s";
+	private final static String TO = "Â§d[Ã  %1$s]Â§r %2$s";
 	
 	public TellCommand()
 	{

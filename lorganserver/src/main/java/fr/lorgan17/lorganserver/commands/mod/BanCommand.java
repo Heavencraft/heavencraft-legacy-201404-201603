@@ -47,7 +47,7 @@ public class BanCommand extends LorganCommand {
 		if (player != null)
 			player.kickPlayer(reason);
 		
-		LorganServer.sendMessage(sender, "Le joueur {" + name + "} a été banni.");
+		LorganServer.sendMessage(sender, "Le joueur {" + name + "} a √©t√© banni.");
 	}
 
 	@Override

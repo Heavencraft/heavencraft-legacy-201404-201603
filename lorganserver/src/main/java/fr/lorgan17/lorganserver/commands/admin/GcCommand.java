@@ -25,7 +25,7 @@ public class GcCommand extends LorganCommand {
 	{
 		System.gc();
 		
-		LorganServer.sendMessage(sender, "Le {Garbage Collector} a été appelé.");
+		LorganServer.sendMessage(sender, "Le {Garbage Collector} a √©t√© appel√©.");
 	}
 
 	@Override

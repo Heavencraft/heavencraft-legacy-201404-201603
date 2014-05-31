@@ -94,7 +94,7 @@ public class ProtectionEntityListener implements Listener {
 		case MINECART_TNT:
 			if (!LorganServer.canBeDestroyed(player, block))
 			{
-				LorganServer.sendMessage(player, "Cet endroit est protégé.");
+				LorganServer.sendMessage(player, "Cet endroit est prot√©g√©.");
 				event.setCancelled(true);
 			}
 			break;
