@@ -22,14 +22,14 @@ public class ChatListener implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
-		// Géré par le proxy
+		// G√©r√© par le proxy
 		event.setJoinMessage("");
 	}
 
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event)
 	{
-		// Géré par le proxy
+		// G√©r√© par le proxy
 		event.setQuitMessage("");
 	}
 

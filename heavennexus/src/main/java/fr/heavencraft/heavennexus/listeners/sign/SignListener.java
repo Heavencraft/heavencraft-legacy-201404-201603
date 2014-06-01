@@ -46,7 +46,7 @@ public abstract class SignListener {
 			if (onSignPlace(player, event))
 			{
 				event.setLine(0, ChatColor.GREEN + _tag);
-				Utils.sendMessage(player, "Le panneau {%1$s} a été posé correctement.", _tag);
+				Utils.sendMessage(player, "Le panneau {%1$s} a √©t√© pos√© correctement.", _tag);
 			}
 			else
 			{

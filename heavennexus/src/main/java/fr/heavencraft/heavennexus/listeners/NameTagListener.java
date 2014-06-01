@@ -4,7 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class NameTagListener implements Listener {
+public class NameTagListener implements Listener
+{
 
 	public NameTagListener(JavaPlugin plugin)
 	{
