@@ -4,7 +4,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.kitteh.tag.AsyncPlayerReceiveNameTagEvent;
 
 import fr.heavencraft.Utils;
 import fr.heavencraft.exceptions.HeavenException;
@@ -29,23 +28,23 @@ public class ProvinceListener implements Listener
 			Utils.sendMessage(player, "Vous n'avez pas encore choisi de province.");
 	}
 
-	@EventHandler
-	private void onNameTag(AsyncPlayerReceiveNameTagEvent event) throws HeavenException
-	{
-		String playerName = event.getNamedPlayer().getName();
-
-		if (playerName.length() > 14)
-		{
-			return;
-		}
-
-		Province province = UserProvider.getUserByName(playerName).getProvince();
-
-		if (province == null)
-		{
-			return;
-		}
-
-		event.setTag(province.getColor() + playerName);
-	}
+	// @EventHandler
+	// private void onNameTag(AsyncPlayerReceiveNameTagEvent event) throws HeavenException
+	// {
+	// String playerName = event.getNamedPlayer().getName();
+	//
+	// if (playerName.length() > 14)
+	// {
+	// return;
+	// }
+	//
+	// Province province = UserProvider.getUserByName(playerName).getProvince();
+	//
+	// if (province == null)
+	// {
+	// return;
+	// }
+	//
+	// event.setTag(province.getColor() + playerName);
+	// }
 }
