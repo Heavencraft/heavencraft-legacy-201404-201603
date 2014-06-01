@@ -24,7 +24,7 @@ public class ColorSignListener implements Listener {
             Pattern pattern = Pattern.compile("\\&([0-9A-Fa-f])");
 
             for (int i = 0; i != 4; i++)
-            	event.setLine(i, pattern.matcher(event.getLine(i)).replaceAll("ค$1"));
+            	event.setLine(i, pattern.matcher(event.getLine(i)).replaceAll("ยง$1"));
 		}
     }
 }
