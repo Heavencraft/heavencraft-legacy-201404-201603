@@ -38,7 +38,7 @@ public class SaveManager {
 		if(diffS >= 800){
 			_lastHours = now;
 			
-			WorldsManager.getTheTravaux().setTime(6000L);  	// Remise à zero
+			WorldsManager.getTheTravaux().setTime(6000L);  	// Remise Ã  zero
 			WorldsManager.getTheCreative().setTime(6000L); 	// du temps (jours)
 			
 			try {

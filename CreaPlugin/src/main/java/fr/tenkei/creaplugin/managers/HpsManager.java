@@ -27,7 +27,7 @@ public class HpsManager {
 		catch (SQLException ex)
 		{
 			ex.printStackTrace();
-			throw new MyException("Erreur SQL. Nous sommes désolé.");
+			throw new MyException("Erreur SQL. Nous sommes dÃ©solÃ©.");
 		}
 	}
 

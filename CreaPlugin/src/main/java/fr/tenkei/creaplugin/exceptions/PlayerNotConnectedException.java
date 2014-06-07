@@ -7,6 +7,6 @@ public class PlayerNotConnectedException extends MyException {
 
 	public PlayerNotConnectedException(String name)
 	{
-		super("Le joueur {" + name + "} n'est pas connecté.");
+		super("Le joueur {" + name + "} n'est pas connectÃ©.");
 	}
 }

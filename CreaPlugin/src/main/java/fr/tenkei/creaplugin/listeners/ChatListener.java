@@ -48,9 +48,9 @@ public class ChatListener implements Listener {
 			if (message.contains("&"))
 			{
 				Matcher matcher = Pattern.compile("\\&([0-9A-Ja-j])").matcher(message);
-				message = matcher.replaceAll("ง$1");
+				message = matcher.replaceAll("ยง$1");
 			}
 		event.setMessage(message);
-		//event.setFormat(_plugin.getUsersManager().getUser(event.getPlayer().getName()).getColor() + "[%1$s]งr %2$s");
+		//event.setFormat(_plugin.getUsersManager().getUser(event.getPlayer().getName()).getColor() + "[%1$s]ยงr %2$s");
 	}*/
 }

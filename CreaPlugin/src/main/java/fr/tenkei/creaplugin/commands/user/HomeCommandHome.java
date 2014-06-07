@@ -31,13 +31,13 @@ public class HomeCommandHome extends Command{
 			 if (u.hasHome(number)) {
 				 Location destination = u.getHome(number);
 				 if (player.getWorld() != destination.getWorld()) {
-					 Message.sendMessage(player, "Vous devez être dans le même monde que l'emplacement du {[/home " + number + "]} !");
+					 Message.sendMessage(player, "Vous devez Ãªtre dans le mÃªme monde que l'emplacement du {[/home " + number + "]} !");
 					 return;
 				 }
 				 player.teleport(destination);
 			 }
 			 else
-				 Message.sendMessage(player, "Vous n'avez pas configuré ce {[/sethome " + number + "]}.");
+				 Message.sendMessage(player, "Vous n'avez pas configurÃ© ce {[/sethome " + number + "]}.");
 		 }
 		 else
 			 Message.sendMessage(player, "Ce {[/home " + number + "]} n'existe pas.");

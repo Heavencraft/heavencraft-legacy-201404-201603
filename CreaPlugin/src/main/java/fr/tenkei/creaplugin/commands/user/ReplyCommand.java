@@ -5,8 +5,8 @@ public class ReplyCommand {
 
 }
 
-	/*private final static String FROM = "§d[de %1$s]§r %2$s";
-	private final static String TO = "§d[à %1$s]§r %2$s";
+	/*private final static String FROM = "Â§d[de %1$s]Â§r %2$s";
+	private final static String TO = "Â§d[Ã  %1$s]Â§r %2$s";
 	
 	public ReplyCommand(FavPlugin plugin) {
 		super("reply", plugin);
@@ -27,7 +27,7 @@ public class ReplyCommand {
 		
 		if(exSender == null || nameExSender == null)
 		{
-			FavPlugin.sendMessage(player, "{La personne à laquelle vous voulez parler est déconnectée.");
+			FavPlugin.sendMessage(player, "{La personne Ã  laquelle vous voulez parler est dÃ©connectÃ©e.");
 			return;
 		}
 		
@@ -50,7 +50,7 @@ public class ReplyCommand {
 
 	@Override
 	protected void sendUsage(CommandSender sender) {
-		FavPlugin.sendMessage(sender, "/{r} <message> : Pour repondre à la dernière personne qui vous a parlé.");
+		FavPlugin.sendMessage(sender, "/{r} <message> : Pour repondre Ã  la derniÃ¨re personne qui vous a parlÃ©.");
 	}
 
 	@Override

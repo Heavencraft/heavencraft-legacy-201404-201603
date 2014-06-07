@@ -24,10 +24,10 @@ public class ManagersManager {
         if (worldEdit != null && worldEdit instanceof WorldEditPlugin)
                 _worldEdit = (WorldEditPlugin) worldEdit;
         
-        // Sans donnée membre
+        // Sans donnÃ©e membre
         new WorldsManager();
         
-        // Avec donnée membre
+        // Avec donnÃ©e membre
         _userManager = new UserManager(plugin);
         _avManager = new AVManager(this);
         _saveManager = new SaveManager(plugin, this);

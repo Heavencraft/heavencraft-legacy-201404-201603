@@ -41,7 +41,7 @@ public class JumpListener implements Listener {
 		if (!e.getEntityType().equals(EntityType.PLAYER) || !e.getCause().equals(DamageCause.FALL))
 			return;
 		
-		// Dépends du lag du joueur :(
+		// DÃ©pends du lag du joueur :(
 		if (!e.getEntity().getLocation().getBlock().getRelative(0, -1, 0).getType().equals(Material.SPONGE)
 				&& !e.getEntity().getLocation().getBlock().getRelative(0, -2, 0).getType().equals(Material.SPONGE)
 				&& !e.getEntity().getLocation().getBlock().getRelative(0, -3, 0).getType().equals(Material.SPONGE)

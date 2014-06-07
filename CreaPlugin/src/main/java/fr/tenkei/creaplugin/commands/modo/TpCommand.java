@@ -30,7 +30,7 @@ public class TpCommand extends Command {
 		Player otherPlayer = getPlayer(args[0]);
 		player.teleport(otherPlayer);
 		
-		Message.sendMessage(player, "Vous avez été téléporté à {" + otherPlayer.getName() +"}.");
+		Message.sendMessage(player, "Vous avez Ã©tÃ© tÃ©lÃ©portÃ© Ã  {" + otherPlayer.getName() +"}.");
 	}
 
 	@Override

@@ -54,7 +54,7 @@ public class WarpsManager {
 	@SuppressWarnings("deprecation")
 	/***
 	 * @author Morgan
-	 * <h1>Classe de gestion de téléportation.</h1>
+	 * <h1>Classe de gestion de tÃ©lÃ©portation.</h1>
 	 * 
 	 * 
 	 * **/

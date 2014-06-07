@@ -24,7 +24,7 @@ public class AccepterCommand extends Command{
 		String teleportRequestName = user.getTeleportRequestName();
 		
 		if (teleportRequestName.isEmpty()) {
-			Message.sendMessage(player, "Vous n'avez aucune demande de téléportation en attente.");
+			Message.sendMessage(player, "Vous n'avez aucune demande de tÃ©lÃ©portation en attente.");
 			return;
 		}
 
@@ -33,19 +33,19 @@ public class AccepterCommand extends Command{
 		Player otherPlayer = getPlayer(teleportRequestName);
 
 		if (otherPlayer == null) {
-			Message.sendMessage(player, "Vous n'avez aucune demande de téléportation en attente.");
+			Message.sendMessage(player, "Vous n'avez aucune demande de tÃ©lÃ©portation en attente.");
 			return;
 		}
 
 		if (otherPlayer.getWorld() != player.getWorld()) {
-			Message.sendMessage(player, "Le joueur {" + otherPlayer.getDisplayName() + "} n'est pas dans le même monde que vous.");
+			Message.sendMessage(player, "Le joueur {" + otherPlayer.getDisplayName() + "} n'est pas dans le mÃªme monde que vous.");
 			return;
 		}
 
 		otherPlayer.teleport(player);
 
-		Message.sendMessage(otherPlayer, "Vous êtes téléporté vers {" + player.getDisplayName() + "}.");
-		Message.sendMessage(player,"Vous venez de téléporter {" + otherPlayer.getDisplayName() + "} vers vous.");
+		Message.sendMessage(otherPlayer, "Vous Ãªtes tÃ©lÃ©portÃ© vers {" + player.getDisplayName() + "}.");
+		Message.sendMessage(player,"Vous venez de tÃ©lÃ©porter {" + otherPlayer.getDisplayName() + "} vers vous.");
 	}
 
 

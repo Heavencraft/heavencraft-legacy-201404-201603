@@ -38,7 +38,7 @@ public class ProtectionCommand extends Command {
 			
 			region.delete();
 			
-			Message.sendMessage(player, "La protection {" + regionId + "} a été supprimée.");
+			Message.sendMessage(player, "La protection {" + regionId + "} a Ã©tÃ© supprimÃ©e.");
 		}
 		else if (args[0].equalsIgnoreCase("ajouter") && args.length == 3)
 		{
@@ -52,7 +52,7 @@ public class ProtectionCommand extends Command {
 			
 			region.addMember(_plugin.getManagers().getUserManager().getUser(user), false);
 			
-			Message.sendMessage(player, "Le joueur {" + user + "} est désormais membre de la protection {" + regionId + "}.");
+			Message.sendMessage(player, "Le joueur {" + user + "} est dÃ©sormais membre de la protection {" + regionId + "}.");
 		}
 		else if (args[0].equalsIgnoreCase("enlever") && args.length == 3)
 		{
@@ -81,7 +81,7 @@ public class ProtectionCommand extends Command {
 	@Override
 	protected void sendUsage(CommandSender sender)
 	{
-		Message.sendMessage(sender, "/{protection} ajouter <protection> <joueur> : ajoute un joueur à la protection.");
-		Message.sendMessage(sender, "/{protection} enlever <protection> <joueur> : enlève un joueur de la protection.");
+		Message.sendMessage(sender, "/{protection} ajouter <protection> <joueur> : ajoute un joueur Ã  la protection.");
+		Message.sendMessage(sender, "/{protection} enlever <protection> <joueur> : enlÃ¨ve un joueur de la protection.");
 	}
 }

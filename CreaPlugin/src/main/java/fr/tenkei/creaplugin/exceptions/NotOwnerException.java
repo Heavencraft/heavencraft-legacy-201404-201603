@@ -6,6 +6,6 @@ public class NotOwnerException extends MyException {
 
 	public NotOwnerException()
 	{
-		super("Vous n'êtes pas le propriétaire de la protection.");
+		super("Vous n'Ãªtes pas le propriÃ©taire de la protection.");
 	}
 }

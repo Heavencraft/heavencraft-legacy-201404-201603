@@ -28,7 +28,7 @@ public class TphereCommand extends Command{
                 if (otherPlayer != null)
                 {
                         otherPlayer.teleport(player.getLocation());
-                        Message.sendMessage(player, "Téléportation de {" + otherPlayer.getDisplayName() + "}.");
+                        Message.sendMessage(player, "TÃ©lÃ©portation de {" + otherPlayer.getDisplayName() + "}.");
                 }
                 else
                 	Message.sendMessage(player, "Le joueur {" + args[0] + "} n'existe pas.");
