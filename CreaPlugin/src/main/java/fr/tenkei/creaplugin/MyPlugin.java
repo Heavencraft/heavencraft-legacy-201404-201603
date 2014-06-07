@@ -30,6 +30,7 @@ public class MyPlugin extends JavaPlugin
 
 		// Connexion DB
 		ConnectionManager.enableConnection();
+		// UpdateHomes.updateAllPlayers();
 
 		// Gestionnaire de Manager
 		_myManagers = new ManagersManager(this);
