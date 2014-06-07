@@ -30,7 +30,7 @@ public class ProtectionHangingListener implements Listener {
 
 		if (!Stuff.canBeDestroyed(player, block))
 		{
-			Message.sendMessage(player, "Cet endroit est protégé.");
+			Message.sendMessage(player, "Cet endroit est protÃ©gÃ©.");
 			event.setCancelled(true);
 		}
 	}
@@ -43,7 +43,7 @@ public class ProtectionHangingListener implements Listener {
 
 		if (!Stuff.canBeDestroyed(player, block))
 		{
-			Message.sendMessage(player, "Cet endroit est protégé.");
+			Message.sendMessage(player, "Cet endroit est protÃ©gÃ©.");
 			event.setCancelled(true);
 		}
 	}

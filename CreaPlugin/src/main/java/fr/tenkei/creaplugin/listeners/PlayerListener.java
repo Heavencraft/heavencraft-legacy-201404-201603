@@ -202,7 +202,7 @@ public class PlayerListener implements Listener
 		}
 	}
 
-	// creer un manager quand j'aurai le temps (Gestion des panneaux dans une class d�di�)
+	// creer un manager quand j'aurai le temps (Gestion des panneaux dans une class dï¿½diï¿½)
 	private void sellHead(Player player, Sign sign) throws MyException
 	{
 		User user = _plugin.getManagers().getUserManager().getUser(player.getName());
@@ -213,7 +213,7 @@ public class PlayerListener implements Listener
 		{
 			user.setInteractBlock(sign.getBlock());
 			Message.sendMessage(Bukkit.getPlayer(player.getName()),
-					"Cliquez une seconde fois pour confirmer l'achat de la t�te " + sign.getLine(2) + " pour {" + prix
+					"Cliquez une seconde fois pour confirmer l'achat de la tï¿½te " + sign.getLine(2) + " pour {" + prix
 							+ "} Jetons.");
 			return;
 		}
@@ -230,12 +230,12 @@ public class PlayerListener implements Listener
 		head.setItemMeta(meta);
 		player.getInventory().addItem(head);
 
-		Message.sendMessage(player, "Vous �tes maintenant l'heureux propri�taire de la t�te de " + sign.getLine(2)
-				+ ", cela vous a cout� {" + prix + "} Jetons !");
+		Message.sendMessage(player, "Vous ï¿½tes maintenant l'heureux propriï¿½taire de la tï¿½te de " + sign.getLine(2)
+				+ ", cela vous a coutï¿½ {" + prix + "} Jetons !");
 		user.stateBalance();
 	}
 
-	// creer un manager quand j'aurai le temps (Gestion des panneaux dans une class d�di�)
+	// creer un manager quand j'aurai le temps (Gestion des panneaux dans une class dï¿½diï¿½)
 	private void sellBloc(Player player, Sign sign) throws MyException
 	{
 		User user = _plugin.getManagers().getUserManager().getUser(player.getName());
@@ -268,7 +268,7 @@ public class PlayerListener implements Listener
 
 		if (mat == Material.AIR)
 		{
-			Message.sendError(Bukkit.getPlayer(player.getName()), "Probl�me de panneau. ( " + mat.name() + " )");
+			Message.sendError(Bukkit.getPlayer(player.getName()), "Problï¿½me de panneau. ( " + mat.name() + " )");
 			return;
 		}
 
@@ -276,8 +276,8 @@ public class PlayerListener implements Listener
 
 		player.getInventory().addItem(new ItemStack(mat)); // Faire selon orientation panneau
 
-		Message.sendMessage(player, "Vous �tes maintenant l'heureux propri�taire d'un bloc de {" + mat.name()
-				+ "}, cela vous a cout� {" + prix + "} Jetons !");
+		Message.sendMessage(player, "Vous ï¿½tes maintenant l'heureux propriï¿½taire d'un bloc de {" + mat.name()
+				+ "}, cela vous a coutï¿½ {" + prix + "} Jetons !");
 		user.stateBalance();
 
 	}
@@ -314,7 +314,7 @@ public class PlayerListener implements Listener
 		if ((user.getInteractBlock() == null) || !Stuff.blocksEquals(user.getInteractBlock(), sign.getBlock()))
 		{
 			user.setInteractBlock(sign.getBlock());
-			Message.sendMessage(Bukkit.getPlayer(player.getName()), "Tu veux ta bi�re jeune Panda ? Tapes moi, all�..");
+			Message.sendMessage(Bukkit.getPlayer(player.getName()), "Tu veux ta biï¿½re jeune Panda ? Tapes moi, allï¿½..");
 			return;
 		}
 
@@ -322,17 +322,17 @@ public class PlayerListener implements Listener
 
 		user.updateBalance(-10);
 
-		ItemStack is = new ItemStack(Material.POTION, 1); // La potion sera l'item � donner, et � modifier.
-		PotionMeta meta = (PotionMeta) is.getItemMeta(); // On r�cup�re la m�ta actuelle de l'item afin de la modifier.
+		ItemStack is = new ItemStack(Material.POTION, 1); // La potion sera l'item ï¿½ donner, et ï¿½ modifier.
+		PotionMeta meta = (PotionMeta) is.getItemMeta(); // On rï¿½cupï¿½re la mï¿½ta actuelle de l'item afin de la modifier.
 		meta.addCustomEffect((new PotionEffect(PotionEffectType.CONFUSION, 200, 2)), true); // On ajoute un effet de
-																							// confusion � la potion.
+																							// confusion ï¿½ la potion.
 		meta.setMainEffect(PotionEffectType.FIRE_RESISTANCE); // L'aspect de la potion, ici fire_resistance donc un
-																// aspect plut�t orang�.
+																// aspect plutï¿½t orangï¿½.
 		is.setItemMeta(meta); // On applique les modifications sur l'item.
 		player.getInventory().addItem(is); // On donne l'item au joueur.
-		player.updateInventory(); // On met � jour son inventaire.
+		player.updateInventory(); // On met ï¿½ jour son inventaire.
 
-		Message.broadcastEventMessage(player.getName() + "} se m'est raide � la taverne !");
+		Message.broadcastEventMessage(player.getName() + "} se m'est raide ï¿½ la taverne !");
 		user.stateBalance();
 	}
 }

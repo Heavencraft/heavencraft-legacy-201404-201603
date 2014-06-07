@@ -33,7 +33,7 @@ public class HomeCommandSetHome extends Command{
         	}
         	
         	if (u.setHome(number, player.getLocation()))
-        		Message.sendMessage(player, "Ce {[/home " + number + "]} a bien été configuré.");
+        		Message.sendMessage(player, "Ce {[/home " + number + "]} a bien Ã©tÃ© configurÃ©.");
         	else
         		Message.sendMessage(player, "Impossible de configurer ce {[/home " + number + "]}.");
         }

@@ -55,7 +55,7 @@ public class TpPosCommand extends Command{
 	@Override
 	protected void sendUsage(CommandSender sender)
 	{
-		Message.sendMessage(sender, "{/tppos} <x> <y> <z> : vous téléporte à la position indiquée.");
+		Message.sendMessage(sender, "{/tppos} <x> <y> <z> : vous tÃ©lÃ©porte Ã  la position indiquÃ©e.");
 	}
 	
 }

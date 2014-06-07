@@ -76,7 +76,7 @@ public class ProtectionBlockListener implements Listener
 
 		if (!Stuff.canBeDestroyed(player, block))
 		{
-			Message.sendMessage(player, "Cet endroit est prot�g�.");
+			Message.sendMessage(player, "Cet endroit est protï¿½gï¿½.");
 			event.setCancelled(true);
 		}
 	}
@@ -97,7 +97,7 @@ public class ProtectionBlockListener implements Listener
 
 		if (!Stuff.canBeDestroyed(player, block))
 		{
-			Message.sendMessage(player, "Cet endroit est prot�g�.");
+			Message.sendMessage(player, "Cet endroit est protï¿½gï¿½.");
 			event.setCancelled(true);
 		}
 
@@ -143,7 +143,7 @@ public class ProtectionBlockListener implements Listener
 
 		if (!Stuff.canBeDestroyed(player, block))
 		{
-			Message.sendMessage(player, "Cet endroit est prot�g�.");
+			Message.sendMessage(player, "Cet endroit est protï¿½gï¿½.");
 			event.setCancelled(true);
 		}
 	}

@@ -53,7 +53,7 @@ private final static byte PLAYER = 3;
 		head.setItemMeta(meta);
 		player.getInventory().addItem(head);
 		
-		Message.sendMessage(player, "Vous venez de recevoir la tête de {" + args[0] + "}");
+		Message.sendMessage(player, "Vous venez de recevoir la tÃªte de {" + args[0] + "}");
 	}
 
 	

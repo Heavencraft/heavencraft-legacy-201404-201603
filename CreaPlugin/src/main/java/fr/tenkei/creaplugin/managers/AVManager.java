@@ -32,7 +32,7 @@ public class AVManager {
 		Region region = Region.getRegionByLocation(event.getBlock().getX(), event.getBlock().getY(), event.getBlock().getZ(), event.getBlock().getWorld()) ;
 		
 		if(region == null) {
-			Message.sendMessage(event.getPlayer(), "{Aucune région ne peut être vendu ici..");
+			Message.sendMessage(event.getPlayer(), "{Aucune rÃ©gion ne peut Ãªtre vendu ici..");
 			return;
 		}
 
@@ -44,14 +44,14 @@ public class AVManager {
 	public void achat(Sign sign, Player p) throws MyException
 	{
 		if(sign.getBlock().getWorld() != WorldsManager.getTheCreative()) {
-			 Message.sendMessage(p, "{Vous avez a faire à un fraudeur !");
+			 Message.sendMessage(p, "{Vous avez a faire Ã  un fraudeur !");
 			return;
 		}
 		
 		Region region = Region.getRegionByLocation(sign.getBlock().getX(), sign.getBlock().getY(), sign.getBlock().getZ(), sign.getBlock().getWorld()) ;
 		
 		if(region == null) {
-			Message.sendMessage(p, "{Aucune région ne peut être vendu.");
+			Message.sendMessage(p, "{Aucune rÃ©gion ne peut Ãªtre vendu.");
 			return;
 		}else if(region.isRealMember(p.getName())) {
 			Message.sendMessage(p, "{Tu essayes d'acheter ta propre parcelle ?");
@@ -74,7 +74,7 @@ public class AVManager {
 
 		user.updateBalance(-prix);
 		
-		// Achat comfirmé
+		// Achat comfirmÃ©
 		
 		region.addMember(user, true);
 		
@@ -82,7 +82,7 @@ public class AVManager {
 
 		region.carre();
 		
-		Message.sendMessage(p, "Vous êtes maintenant l'heureux propriétaire de cette parcelle, cela vous a couté {" + prix + "} Jetons !");
+		Message.sendMessage(p, "Vous Ãªtes maintenant l'heureux propriÃ©taire de cette parcelle, cela vous a coutÃ© {" + prix + "} Jetons !");
 		user.stateBalance();
 	}
 }

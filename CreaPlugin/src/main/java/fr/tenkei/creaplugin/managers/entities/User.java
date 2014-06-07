@@ -215,7 +215,7 @@ public class User {
 		return _nbHome;
 	}
 	
-	/*** How to buy home ? C'est ici. Prix donné par : prix = (2^nbHomeToBuy * 500)/4
+	/*** How to buy home ? C'est ici. Prix donnÃ© par : prix = (2^nbHomeToBuy * 500)/4
 	 * @throws MyException */
 	public void addHommeNumbre(Block block) throws MyException
 	{
@@ -234,7 +234,7 @@ public class User {
 		
 		_nbHome++;
 		
-		Message.sendMessage(Bukkit.getPlayer(_name), "Vous êtes maintenant l'heureux propriétaire de "+ _nbHome +" homes , cela vous a couté {" + prix + "} Jetons !");
+		Message.sendMessage(Bukkit.getPlayer(_name), "Vous Ãªtes maintenant l'heureux propriÃ©taire de "+ _nbHome +" homes , cela vous a coutÃ© {" + prix + "} Jetons !");
 		stateBalance();
 	}
 }

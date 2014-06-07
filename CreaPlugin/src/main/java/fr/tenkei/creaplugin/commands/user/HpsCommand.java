@@ -33,8 +33,8 @@ public class HpsCommand extends Command {
 		HpsManager.removeBalance(player.getName(), hps);
 		getUser().updateBalance(hps * HpsManager.TAUX_JETON);
 
-		Message.sendMessage(player, hps + " HPs ont été retirés de votre compte");
-		Message.sendMessage(player, "Vous avez reçu {" + hps * HpsManager.TAUX_JETON + "} Jetons.");
+		Message.sendMessage(player, hps + " HPs ont Ã©tÃ© retirÃ©s de votre compte");
+		Message.sendMessage(player, "Vous avez reÃ§u {" + hps * HpsManager.TAUX_JETON + "} Jetons.");
 	}
 
 

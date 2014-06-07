@@ -33,15 +33,15 @@ public class RejoindreCommand extends Command{
 		}
 
 		if (otherPlayer.getWorld() != player.getWorld()){
-			Message.sendMessage(player, "Le joueur {" + otherPlayer.getDisplayName() + "} n'est pas dans le même monde que vous.");
+			Message.sendMessage(player, "Le joueur {" + otherPlayer.getDisplayName() + "} n'est pas dans le mÃªme monde que vous.");
 			return;
 		}
 
 		User otherUser = getUser(otherPlayer.getName());
 		otherUser.setTeleportRequestName(player.getName());
 
-		Message.sendMessage(otherPlayer, "Le joueur {" + player.getDisplayName() + "} souhaite se téléporter vers vous. Tapez {/accepter} pour accepter.");
-		Message.sendMessage(player, "Une invitation de téléportation a été envoyée vers {" + otherPlayer.getDisplayName() + "}.");
+		Message.sendMessage(otherPlayer, "Le joueur {" + player.getDisplayName() + "} souhaite se tÃ©lÃ©porter vers vous. Tapez {/accepter} pour accepter.");
+		Message.sendMessage(player, "Une invitation de tÃ©lÃ©portation a Ã©tÃ© envoyÃ©e vers {" + otherPlayer.getDisplayName() + "}.");
 	}
 
 	@Override

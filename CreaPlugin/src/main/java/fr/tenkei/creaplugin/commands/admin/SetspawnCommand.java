@@ -23,7 +23,7 @@ public class SetspawnCommand extends Command {
 	{
 		Location newLoc = player.getLocation();
 		WorldsManager.setSpawn(newLoc, player.getWorld());
-		Message.sendMessage(player, "L'emplacement du spawn du monde " + player.getWorld().getName() + " a bien été changé.");
+		Message.sendMessage(player, "L'emplacement du spawn du monde " + player.getWorld().getName() + " a bien Ã©tÃ© changÃ©.");
 	}
 
 	@Override

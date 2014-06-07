@@ -34,7 +34,7 @@ public class ProtectionPlayerListener implements Listener {
 		Block block = event.getBed();
 		
 		if (!Stuff.canBeDestroyed(player, block)) {
-			Message.sendMessage(player, "Tu vas pas dormir dans le lit d'un autre !? Naméoh !");
+			Message.sendMessage(player, "Tu vas pas dormir dans le lit d'un autre !? NamÃ©oh !");
 			event.setCancelled(true);
 		}
 	}
@@ -45,7 +45,7 @@ public class ProtectionPlayerListener implements Listener {
 		Block block = event.getBlockClicked().getRelative(event.getBlockFace());
 		
 		if (!Stuff.canBeDestroyed(player, block)) {
-			Message.sendMessage(player, "Cet endroit est protégé.");
+			Message.sendMessage(player, "Cet endroit est protÃ©gÃ©.");
 			event.setCancelled(true);
 		}
 	}
@@ -56,7 +56,7 @@ public class ProtectionPlayerListener implements Listener {
 		Block block = event.getBlockClicked().getRelative(event.getBlockFace());
 		
 		if (!Stuff.canBeDestroyed(player, block)) {
-			Message.sendMessage(player, "Cet endroit est protégé.");
+			Message.sendMessage(player, "Cet endroit est protÃ©gÃ©.");
 			event.setCancelled(true);
 		}
 	}
@@ -89,7 +89,7 @@ public class ProtectionPlayerListener implements Listener {
 			}
 			else if (item != null && (item.getType() == Material.MINECART || item.getType() == Material.BOAT)) {
 				if (!Stuff.canBeDestroyed(player, block)) {
-					Message.sendMessage(player, "Cet endroit est protégé.");
+					Message.sendMessage(player, "Cet endroit est protÃ©gÃ©.");
 					event.setUseItemInHand(Result.DENY);
 					event.setCancelled(true);
 				}
@@ -110,7 +110,7 @@ public class ProtectionPlayerListener implements Listener {
 					case NOTE_BLOCK:
 					case TRAPPED_CHEST:
 						if (!Stuff.canBeDestroyed(player, block)) {
-							Message.sendMessage(player, "Cet endroit est protégé.");
+							Message.sendMessage(player, "Cet endroit est protÃ©gÃ©.");
 							event.setUseInteractedBlock(Result.DENY);
 							event.setCancelled(true);
 						}

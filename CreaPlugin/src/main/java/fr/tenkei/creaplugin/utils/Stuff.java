@@ -15,37 +15,39 @@ import fr.tenkei.creaplugin.exceptions.MyException;
 import fr.tenkei.creaplugin.exceptions.PlayerNotConnectedException;
 import fr.tenkei.creaplugin.managers.entities.Region;
 
-public class Stuff {
+public class Stuff
+{
 
 	public static Player getPlayer(String name) throws PlayerNotConnectedException
 	{
 		Player player = Bukkit.getPlayer(name);
-		
+
 		if (player == null)
 			throw new PlayerNotConnectedException(name);
-		
+
 		return player;
 	}
 
 	public static boolean canBeDestroyed(Player player, Block block)
 	{
-		if(player == null)
+		if (player == null)
 			return false;
 
-		if(player.hasPermission(MyPlugin.administrator))
-			return true;	
-		
-		if(player.getWorld().getName().equalsIgnoreCase("world_biome") || player.getWorld().getName().equalsIgnoreCase("Build"))
-			return true;	
+		if (player.hasPermission(MyPlugin.administrator))
+			return true;
+
+		if (player.getWorld().getName().equalsIgnoreCase("world_biome")
+				|| player.getWorld().getName().equalsIgnoreCase("Build"))
+			return true;
 
 		Region region = Region.getRegionByLocation(block.getX(), block.getY(), block.getZ(), block.getWorld());
-		
+
 		if (region == null)
 			return false;
 		else
 			return region.isMember(player.getName(), false);
 	}
-	
+
 	public static boolean blocksEquals(Block blockA, Block blockB)
 	{
 		if (blockA.getX() != blockB.getX())
@@ -57,32 +59,36 @@ public class Stuff {
 
 		if (blockA.getWorld() != blockB.getWorld())
 			return false;
-		
+
 		return true;
 	}
-	
+
 	public static String locationToString(Location location)
-    {
-            return location.getWorld().getName() + ":" + Double.valueOf(arrondi(location.getX())).toString() + ":" + Double.valueOf(arrondi(location.getY())).toString() + ":"
-             + Double.valueOf(arrondi(location.getZ())).toString() + ":" + Float.valueOf(location.getYaw()).toString() + ":" + Float.valueOf(location.getPitch()).toString();
-    }
+	{
+		return location.getWorld().getName() + ":" + Double.valueOf(arrondi(location.getX())).toString() + ":"
+				+ Double.valueOf(arrondi(location.getY())).toString() + ":"
+				+ Double.valueOf(arrondi(location.getZ())).toString() + ":"
+				+ Float.valueOf(location.getYaw()).toString() + ":" + Float.valueOf(location.getPitch()).toString();
+	}
 
 	public static Location stringToLocation(String str)
 	{
-	            String[] locData = str.split(":");
-	            if (locData.length != 6) return null;
-	            
-	            World locWorld = Bukkit.getWorld(locData[0]);
-	            if (locWorld == null) return null;
-	            
-	            return new Location(locWorld, Double.valueOf(locData[1]), Double.valueOf(locData[2]), Double.valueOf(locData[3]),
-	                            Float.valueOf(locData[4]), Float.valueOf(locData[5]));
+		String[] locData = str.split(":");
+		if (locData.length != 6)
+			return null;
+
+		World locWorld = Bukkit.getWorld(locData[0]);
+		// if (locWorld == null) return null;
+
+		return new Location(locWorld, Double.valueOf(locData[1]), Double.valueOf(locData[2]),
+				Double.valueOf(locData[3]), Float.valueOf(locData[4]), Float.valueOf(locData[5]));
 	}
-	
-	public static double arrondi(double A) {
-	     return (double) ( (int) (A * 100 + .5)) / 100;
+
+	public static double arrondi(double A)
+	{
+		return (double) ((int) (A * 100 + .5)) / 100;
 	}
-	
+
 	public static String getDateTime()
 	{
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -101,7 +107,7 @@ public class Stuff {
 			throw new MyException("Le nombre {" + s + "} est incorrect.");
 		}
 	}
-	
+
 	public static int toUint(String s) throws MyException
 	{
 		int i = toInt(s);

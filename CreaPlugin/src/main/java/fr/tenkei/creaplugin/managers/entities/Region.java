@@ -78,7 +78,7 @@ public class Region {
 			ps.setInt(1, _id);
 			
 			if (ps.executeUpdate() == 0)
-				throw new MyException("Oups, la suppression a ÈchouÈe");
+				throw new MyException("Oups, la suppression a √©chou√©e");
 			
 		}
 		
@@ -104,7 +104,7 @@ public class Region {
 		catch (SQLException ex)
 		{
 			ex.printStackTrace();
-			throw new MyException("Le joueur {" + user.getName() + "} est dÈj‡ membre de la protection {" + _id + "}.");
+			throw new MyException("Le joueur {" + user.getName() + "} est d√©j√† membre de la protection {" + _id + "}.");
 		}
 	}
 	
@@ -117,7 +117,7 @@ public class Region {
 				new Location(WorldsManager.getTheCreative(), i, 51, _z2).getBlock().setTypeId(152);
 			}
 		}else{
-			Message.broadcastMessage("Protection inversÈe");
+			Message.broadcastMessage("Protection invers√©e");
 		}
 		
 		if(_z1 - _z2 < 0)
@@ -127,7 +127,7 @@ public class Region {
 				new Location(WorldsManager.getTheCreative(), _x2, 51, j).getBlock().setTypeId(152);
 			}
 		}else{
-			Message.broadcastMessage("Protection inversÈe");
+			Message.broadcastMessage("Protection invers√©e");
 		}
 	}
 	
@@ -240,7 +240,7 @@ public class Region {
 			ResultSet rs = ps.executeQuery();
 			
 			if (rs.next())
-				throw new MyException("Une protection existe dÈj‡ ici.");
+				throw new MyException("Une protection existe d√©j√† ici.");
 			
 			ps = ConnectionManager.getConnection().prepareStatement("INSERT INTO regions (x1, y1, z1, x2, y2, z2, world) VALUES (?, ?, ?, ?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
 			ps.setInt(1, x1);
@@ -262,7 +262,7 @@ public class Region {
 		catch (SQLException ex)
 		{
 			ex.printStackTrace();
-			throw new MyException("La crÈation de la protection a ÈchouÈ.");
+			throw new MyException("La cr√©ation de la protection a √©chou√©.");
 		}
 	}
 	
@@ -350,7 +350,7 @@ public class Region {
 		}
 	}
 
-	/*** Le bool permet d'avoir les deux positions de la rÈgion
+	/*** Le bool permet d'avoir les deux positions de la r√©gion
 	 * a : TRUE retourne la position 1
 	 * a : FALSE retourne la position 2 ***/
 	public Location getLocation(boolean a) {
