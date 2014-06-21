@@ -60,13 +60,6 @@ public class HeavenRP extends HeavenPlugin
 		Files.getRegions().options().copyDefaults(true);
 		Files.saveRegions();
 		
-		new PostOfficeListener();
-		new WGRegionEventsListener();
-		new SignListener();
-		new InventoryListener();
-		new PopupMenuAPI();
-		PostOfficeManager.LoadOffices();
-		
 	}
 
 	public static Connection getConnection()
