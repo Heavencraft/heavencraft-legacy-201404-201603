@@ -49,3 +49,8 @@ commands:
   maires:
   parcelle:
   web:
+  reloadPoste:
+  listPoste:
+  colis:
+  addPoste:
+  removePoste:

@@ -14,6 +14,13 @@ import fr.heavencraft.HeavenPlugin;
 import fr.heavencraft.heavenrp.stores.StoresListener;
 import fr.heavencraft.heavenrp.stores.StoresManager;
 import fr.lorgan17.heavenrp.managers.AuctionManager;
+import fr.manu67100.heavenrp.laposte.Files;
+import fr.manu67100.heavenrp.laposte.WGHandler.WGRegionEventsListener;
+import fr.manu67100.heavenrp.laposte.handlers.PopupMenuAPI;
+import fr.manu67100.heavenrp.laposte.handlers.PostOfficeManager;
+import fr.manu67100.heavenrp.laposte.listeners.InventoryListener;
+import fr.manu67100.heavenrp.laposte.listeners.PostOfficeListener;
+import fr.manu67100.heavenrp.laposte.listeners.SignListener;
 
 public class HeavenRP extends HeavenPlugin
 {
@@ -47,6 +54,19 @@ public class HeavenRP extends HeavenPlugin
 		new StoresListener(this);
 		_storesManager = new StoresManager(this);
 		_storesManager.init();
+		
+		
+		// La Poste
+		Files.getRegions().options().copyDefaults(true);
+		Files.saveRegions();
+		
+		new PostOfficeListener();
+		new WGRegionEventsListener();
+		new SignListener();
+		new InventoryListener();
+		new PopupMenuAPI();
+		PostOfficeManager.LoadOffices();
+		
 	}
 
 	public static Connection getConnection()
