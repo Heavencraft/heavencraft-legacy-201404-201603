@@ -8,7 +8,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
 import fr.heavencraft.Utils;
+import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.HeavenRP;
+import fr.heavencraft.heavenrp.general.users.User;
+import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.manu67100.heavenrp.laposte.handlers.Colis;
 import fr.manu67100.heavenrp.laposte.handlers.JoueursEnEditionDeColis;
 
@@ -39,8 +42,16 @@ public class InventoryListener implements Listener{
 			
 			// Creer le colis
 			
-			Colis colis = new Colis(p, JoueursEnEditionDeColis.getDestinataire(p),e.getInventory());
-			colis.envoyer();
+			try {
+				User user = UserProvider.getUserByName(p.getName());
+				
+				user.updateBalance(-45);
+				Colis colis = new Colis(p, JoueursEnEditionDeColis.getDestinataire(p),e.getInventory());
+				colis.envoyer();
+			} catch (HeavenException e1) {
+			}
+			
+			
 			
 			//enever le joueur de la liste des editeurs
 			JoueursEnEditionDeColis.removePlayer(p);
