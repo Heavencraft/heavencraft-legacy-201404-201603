@@ -28,7 +28,8 @@ public class PlayerListener implements Listener{
 
 		if(getRegionEnabled(e.getRegion().getId())== true)
 		{	
-
+			
+			Bukkit.broadcastMessage("Evt onRgEnter: " + e.getPlayer().getName() +  " Rg : " + e.getRegion().getId());
 //			e.getPlayer().playSound(e.getPlayer().getLocation(), getSound(e.getRegion().getId()), 1, 1);
 			SoundEffectsManager.playToPlayer(e.getPlayer(), getSound(e.getRegion().getId()));
 
