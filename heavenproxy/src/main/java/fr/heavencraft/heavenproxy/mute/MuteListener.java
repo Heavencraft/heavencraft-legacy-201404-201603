@@ -24,19 +24,17 @@ public class MuteListener implements Listener
 		// Insultes
 		bannedWords.add("batard");
 		bannedWords.add("biatch");
+		bannedWords.add("betch");
+		bannedWords.add("betsch");
+		bannedWords.add("betsh");
 		bannedWords.add("bitch");
+		bannedWords.add("bite");
 		bannedWords.add("bounioul");
-		bannedWords.add("calice");
-		bannedWords.add("câlice");
-		bannedWords.add("caliss");
-		bannedWords.add("calisse");
 		bannedWords.add("catin");
 		bannedWords.add("ciboire");
 		bannedWords.add("conasse");
 		bannedWords.add("connard");
 		bannedWords.add("connasse");
-		bannedWords.add("cris");
-		bannedWords.add("crisse");
 		bannedWords.add("dumbass");
 		bannedWords.add("encule");
 		bannedWords.add("enculé");
@@ -53,7 +51,6 @@ public class MuteListener implements Listener
 		bannedWords.add("merdeux");
 		bannedWords.add("motherfucker");
 		bannedWords.add("niquer");
-		bannedWords.add("osti");
 		bannedWords.add("pd");
 		bannedWords.add("pédé");
 		bannedWords.add("putain");
@@ -64,10 +61,6 @@ public class MuteListener implements Listener
 		bannedWords.add("salopard");
 		bannedWords.add("salope");
 		bannedWords.add("stfu");
-		bannedWords.add("tabarnac");
-		bannedWords.add("tabarnak");
-		bannedWords.add("tabarnaque");
-		bannedWords.add("tbk");
 		bannedWords.add("tg");
 		bannedWords.add("tageule");
 		bannedWords.add("tayeul");
@@ -115,7 +108,8 @@ public class MuteListener implements Listener
 				if (word.equalsIgnoreCase(bannedWord))
 				{
 					MuteManager.mutePlayer(playerName, 5);
-					Utils.sendMessage(player, "Vous avez été mute pour {5} minutes par {le Prof. Chen}.");
+					Utils.sendMessage(player,
+							"Vous avez été mute pour {5} minutes par {le Prof. Chen} pour avoir dit {%1$s}.", word);
 
 					event.setCancelled(true);
 					return;

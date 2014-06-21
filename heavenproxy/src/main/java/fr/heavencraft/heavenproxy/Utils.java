@@ -268,7 +268,7 @@ public class Utils
 			return "SRP";
 		else if (serverName.equalsIgnoreCase("origines"))
 			return "Ori ";
-		else if (serverName.equalsIgnoreCase("creative"))
+		else if (serverName.equalsIgnoreCase("creative") || serverName.equalsIgnoreCase("build"))
 			return "Créa";
 		else if (serverName.equalsIgnoreCase("factions"))
 			return "Fac";
