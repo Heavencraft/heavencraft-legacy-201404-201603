@@ -1,6 +1,7 @@
 package fr.lorgan17.lorganserver.listeners.protection;
 
-import org.bukkit.Bukkit;
+import static fr.heavencraft.utils.DevUtil.registerListener;
+
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -8,15 +9,16 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 
+import fr.heavencraft.utils.ChatUtil;
 import fr.lorgan17.lorganserver.LorganServer;
 
-public class ProtectionVehicleListener implements Listener {
-
-	public ProtectionVehicleListener(LorganServer plugin)
+public class ProtectionVehicleListener implements Listener
+{
+	public ProtectionVehicleListener()
 	{
-		Bukkit.getPluginManager().registerEvents(this, plugin);
+		registerListener(this);
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOWEST)
 	private void onVehicleDestroy(VehicleDestroyEvent event)
 	{
@@ -25,8 +27,8 @@ public class ProtectionVehicleListener implements Listener {
 
 		if (!LorganServer.canBeDestroyed(player, block))
 		{
-			LorganServer.sendMessage(player, "Cet endroit est protégé.");
+			ChatUtil.sendMessage(player, "Cet endroit est protégé.");
 			event.setCancelled(true);
-		}	
+		}
 	}
 }

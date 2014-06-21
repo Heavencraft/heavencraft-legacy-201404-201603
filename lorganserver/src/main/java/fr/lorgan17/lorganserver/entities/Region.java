@@ -9,14 +9,13 @@ import org.bukkit.OfflinePlayer;
 
 import com.mysql.jdbc.Statement;
 
+import fr.heavencraft.exceptions.HeavenException;
 import fr.lorgan17.lorganserver.LorganServer;
-import fr.lorgan17.lorganserver.exceptions.LorganException;
 import fr.lorgan17.lorganserver.exceptions.MemberNotFoundException;
 import fr.lorgan17.lorganserver.exceptions.RegionNotFoundException;
 
 public class Region
 {
-
 	private final int _id;
 	private final int _x1;
 	private final int _z1;
@@ -37,7 +36,7 @@ public class Region
 		return _id;
 	}
 
-	public void delete() throws LorganException
+	public void delete() throws HeavenException
 	{
 		try
 		{
@@ -45,7 +44,7 @@ public class Region
 			ps.setInt(1, _id);
 
 			if (ps.executeUpdate() == 0)
-				throw new LorganException("Oups, la suppression a échouée");
+				throw new HeavenException("Oups, la suppression a échouée");
 
 		}
 
@@ -55,7 +54,7 @@ public class Region
 		}
 	}
 
-	public void addMember(String name, boolean owner) throws LorganException
+	public void addMember(String name, boolean owner) throws HeavenException
 	{
 		User user = User.getUserByName(name);
 
@@ -73,7 +72,7 @@ public class Region
 		catch (SQLException ex)
 		{
 			ex.printStackTrace();
-			throw new LorganException("Le joueur {" + name + "} est déjà membre de la protection {" + _id + "}.");
+			throw new HeavenException("Le joueur {" + name + "} est déjà membre de la protection {" + _id + "}.");
 		}
 	}
 
@@ -107,7 +106,7 @@ public class Region
 		}
 	}
 
-	public void removeMember(String name) throws LorganException
+	public void removeMember(String name) throws HeavenException
 	{
 		try
 		{
@@ -127,12 +126,12 @@ public class Region
 		}
 	}
 
-	public boolean canBuild(String name) throws LorganException
+	public boolean canBuild(String name) throws HeavenException
 	{
 		return isMember(name, false);
 	}
 
-	public static void createRegion(String owner, int x1, int z1, int x2, int z2) throws LorganException
+	public static void createRegion(String owner, int x1, int z1, int x2, int z2) throws HeavenException
 	{
 		int tmp;
 
@@ -173,7 +172,7 @@ public class Region
 			ResultSet rs = ps.executeQuery();
 
 			if (rs.next())
-				throw new LorganException("Une protection existe déjà ici.");
+				throw new HeavenException("Une protection existe déjà ici.");
 
 			ps = LorganServer.getConnection().prepareStatement(
 					"INSERT INTO regions (x1, z1, x2, z2) VALUES (?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
@@ -193,11 +192,11 @@ public class Region
 		catch (SQLException ex)
 		{
 			ex.printStackTrace();
-			throw new LorganException("La création de la protection a échoué.");
+			throw new HeavenException("La création de la protection a échoué.");
 		}
 	}
 
-	public static Region getRegionById(int id) throws LorganException
+	public static Region getRegionById(int id) throws HeavenException
 	{
 		try
 		{
@@ -244,7 +243,7 @@ public class Region
 		}
 	}
 
-	public static boolean canBuildAt(String name, int x, int z) throws LorganException
+	public static boolean canBuildAt(String name, int x, int z) throws HeavenException
 	{
 		Region region = getRegionByLocation(x, z);
 

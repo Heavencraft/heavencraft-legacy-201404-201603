@@ -1,7 +1,9 @@
 package fr.lorgan17.lorganserver.exceptions;
 
-public class MemberNotFoundException extends LorganException {
+import fr.heavencraft.exceptions.HeavenException;
 
+public class MemberNotFoundException extends HeavenException
+{
 	private static final long serialVersionUID = 1L;
 
 	public MemberNotFoundException(int id, String name)

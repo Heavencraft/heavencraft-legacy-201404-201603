@@ -2,23 +2,17 @@ main: fr.lorgan17.lorganserver.LorganServer
 name: LorganServer
 version: 0.1
 commands:
+
+  endercheat:
+  gc:
+  inventory:
+  roucoups:
+  tp:
+  tphere:
+  tppos:
+
+  setspawn:
+
   lit:
   protection:
   spawn:
-  tell:
-    aliases: [msg, m, t, w]
-  ban:
-    permission: lorganserver.moderator
-  unban:
-    permission: lorganserver.moderator
-  mute:
-    permission: lorganserver.moderator
-  kick:
-    permission: lorganserver.moderator
-  gc:
-    permission: lorganserver.administrator
-  setspawn:
-    permission: lorganserver.administrator
-  tp:
-    permission: lorganserver.administrator
-  

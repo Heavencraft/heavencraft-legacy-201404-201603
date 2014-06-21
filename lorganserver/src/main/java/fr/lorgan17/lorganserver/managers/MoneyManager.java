@@ -4,36 +4,36 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import fr.lorgan17.lorganserver.exceptions.LorganException;
+import fr.heavencraft.exceptions.HeavenException;
 import fr.lorgan17.lorganserver.exceptions.NotEnoughNuggetsException;
 
-public class MoneyManager {
-
+public class MoneyManager
+{
 	private static Material _money = Material.GOLD_NUGGET;
-	
+
 	public static boolean hasEnough(Player player, int amount)
 	{
 		return player.getInventory().contains(_money, amount);
 	}
-	
-	public static void pay(Player player, int amount) throws LorganException
+
+	public static void pay(Player player, int amount) throws HeavenException
 	{
 		if (!hasEnough(player, amount))
 			throw new NotEnoughNuggetsException(amount);
-		
-		int account  = 0;
-		
+
+		int account = 0;
+
 		for (ItemStack item : player.getInventory().all(_money).values())
 		{
 			account += item.getAmount();
 		}
-		
+
 		if (account < amount)
 			throw new NotEnoughNuggetsException(amount);
-		
+
 		player.getInventory().remove(_money);
 		account = account - amount;
-		
+
 		while (account > 0)
 		{
 			if (account > 64)
@@ -47,7 +47,7 @@ public class MoneyManager {
 				account = 0;
 			}
 		}
-		
+
 		player.updateInventory();
 	}
 }
