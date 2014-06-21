@@ -1,88 +1,112 @@
 package fr.heavencraft.heavenrp;
 
-import fr.heavencraft.heavenrp.antilag.AntiCheatListener;
-import fr.heavencraft.heavenrp.antilag.AntiLagListener;
-import fr.heavencraft.heavenrp.economy.BourseCommand;
+import fr.heavencraft.commands.AccepterCommand;
+import fr.heavencraft.commands.CreacheatCommand;
+import fr.heavencraft.commands.EndercheatCommand;
+import fr.heavencraft.commands.FillCommand;
+import fr.heavencraft.commands.GcCommand;
+import fr.heavencraft.commands.HeadCommand;
+import fr.heavencraft.commands.InventoryCommand;
+import fr.heavencraft.commands.PoofCommand;
+import fr.heavencraft.commands.RejoindreCommand;
+import fr.heavencraft.commands.RoucoupsCommand;
+import fr.heavencraft.commands.SpawnmobCommand;
+import fr.heavencraft.commands.TpCommand;
+import fr.heavencraft.commands.TphereCommand;
+import fr.heavencraft.commands.TpposCommand;
+import fr.heavencraft.commands.TpworldCommand;
+import fr.heavencraft.heavenrp.commands.economy.BourseCommand;
+import fr.heavencraft.heavenrp.commands.economy.EntrepriseCommand;
+import fr.heavencraft.heavenrp.commands.economy.LivretproCommand;
+import fr.heavencraft.heavenrp.commands.economy.PayerCommand;
+import fr.heavencraft.heavenrp.commands.homes.BuyhomeCommand;
+import fr.heavencraft.heavenrp.commands.homes.HomeCommand;
+import fr.heavencraft.heavenrp.commands.homes.SethomeCommand;
+import fr.heavencraft.heavenrp.commands.homes.TphomeCommand;
+import fr.heavencraft.heavenrp.commands.horses.ChevalCommand;
+import fr.heavencraft.heavenrp.commands.hps.HpsCommand;
+import fr.heavencraft.heavenrp.commands.key.KeyCommand;
+import fr.heavencraft.heavenrp.commands.teleport.SpawnCommand;
+import fr.heavencraft.heavenrp.commands.teleport.TutoCommand;
+import fr.heavencraft.heavenrp.commands.warps.WarpCommand;
 import fr.heavencraft.heavenrp.economy.EconomyListener;
 import fr.heavencraft.heavenrp.economy.LivretProSignListener;
 import fr.heavencraft.heavenrp.economy.LivretSignListener;
-import fr.heavencraft.heavenrp.economy.LivretproCommand;
-import fr.heavencraft.heavenrp.economy.PayerCommand;
-import fr.heavencraft.heavenrp.economy.enterprise.EntrepriseCommand;
-import fr.heavencraft.heavenrp.general.ChatListener;
 import fr.heavencraft.heavenrp.general.PumpkinLampListener;
 import fr.heavencraft.heavenrp.general.RecipeManager;
 import fr.heavencraft.heavenrp.general.ServerListener;
 import fr.heavencraft.heavenrp.general.WatchListener;
 import fr.heavencraft.heavenrp.general.users.UserListener;
-import fr.heavencraft.heavenrp.homes.BuyhomeCommand;
-import fr.heavencraft.heavenrp.homes.HomeCommand;
-import fr.heavencraft.heavenrp.homes.SethomeCommand;
-import fr.heavencraft.heavenrp.homes.TphomeCommand;
-import fr.heavencraft.heavenrp.horses.ChevalCommand;
 import fr.heavencraft.heavenrp.horses.HorsesListener;
-import fr.heavencraft.heavenrp.hps.HeadCommand;
-import fr.heavencraft.heavenrp.hps.HpsCommand;
+import fr.heavencraft.heavenrp.key.DonjonSignListener;
 import fr.heavencraft.heavenrp.provinces.ProvinceListener;
 import fr.heavencraft.heavenrp.provinces.ProvinceSignListener;
-import fr.heavencraft.heavenrp.teleport.SpawnCommand;
-import fr.heavencraft.heavenrp.teleport.TutoCommand;
-import fr.heavencraft.heavenrp.warps.WarpCommand;
 import fr.heavencraft.heavenrp.warps.WarpSignListener;
 import fr.heavencraft.heavenrp.worlds.WorldsListener;
 import fr.heavencraft.heavenrp.worlds.WorldsManager;
-import fr.lorgan17.heavenrp.commands.admin.CreacheatCommand;
-import fr.lorgan17.heavenrp.commands.admin.PoofCommand;
-import fr.lorgan17.heavenrp.commands.admin.SoundCommand;
-import fr.lorgan17.heavenrp.commands.admin.SpawnmobCommand;
-import fr.lorgan17.heavenrp.commands.admin.TravauxCommand;
-import fr.lorgan17.heavenrp.commands.admin.WorldCommand;
-import fr.lorgan17.heavenrp.commands.mod.EndercheatCommand;
+import fr.heavencraft.listeners.AntiCheatListener;
+import fr.heavencraft.listeners.AntiLagListener;
+import fr.heavencraft.listeners.ColoredSignsListener;
+import fr.heavencraft.listeners.NoChatListener;
+import fr.heavencraft.listeners.RedstoneLampListener;
+import fr.heavencraft.tasks.SaveTask;
 import fr.lorgan17.heavenrp.commands.mod.EventCommand;
-import fr.lorgan17.heavenrp.commands.mod.InventoryCommand;
 import fr.lorgan17.heavenrp.commands.mod.ModpackCommand;
 import fr.lorgan17.heavenrp.commands.mod.Pvp4Command;
 import fr.lorgan17.heavenrp.commands.mod.PvpCommand;
-import fr.lorgan17.heavenrp.commands.mod.RoucoupsCommand;
-import fr.lorgan17.heavenrp.commands.mod.TpCommand;
-import fr.lorgan17.heavenrp.commands.mod.TphereCommand;
-import fr.lorgan17.heavenrp.commands.mod.TpposCommand;
 import fr.lorgan17.heavenrp.commands.user.EncheresCommand;
 import fr.lorgan17.heavenrp.commands.user.LicenceCommand;
 import fr.lorgan17.heavenrp.commands.user.MaireCommand;
 import fr.lorgan17.heavenrp.commands.user.MairesCommand;
 import fr.lorgan17.heavenrp.commands.user.ParcelleCommand;
-import fr.lorgan17.heavenrp.commands.user.tpa.AccepterCommand;
-import fr.lorgan17.heavenrp.commands.user.tpa.RejoindreCommand;
+import fr.lorgan17.heavenrp.listeners.JumpListener;
+import fr.lorgan17.heavenrp.listeners.LampadaireListener;
+import fr.lorgan17.heavenrp.listeners.LinkListener;
+import fr.lorgan17.heavenrp.listeners.PVP4Manager;
+import fr.lorgan17.heavenrp.listeners.PVPManager;
+import fr.lorgan17.heavenrp.listeners.SnowballListener;
 
 public class InitManager
 {
 	public static void init()
 	{
-		// Anti-lag
-		new AntiCheatListener();
-		new AntiLagListener();
+		initCommands();
+		initListeners();
+
+		new SaveTask();
+	}
+
+	private static void initCommands()
+	{
+		/*
+		 * from HeavenCore
+		 */
+
+		new AccepterCommand();
+		new CreacheatCommand();
+		new EndercheatCommand();
+		new FillCommand();
+		new GcCommand();
+		new HeadCommand();
+		new InventoryCommand();
+		new PoofCommand();
+		new RejoindreCommand();
+		new RoucoupsCommand();
+		new SpawnmobCommand();
+		new TpCommand();
+		new TphereCommand();
+		new TpposCommand();
+		new TpworldCommand();
+
+		/*
+		 * from HeavenRP
+		 */
 
 		// Economy
 		new BourseCommand();
-		new EconomyListener();
-		new LivretproCommand();
-		new LivretProSignListener();
-		new LivretSignListener();
-		new PayerCommand();
-
-		// Economy.Enterprise
 		new EntrepriseCommand();
-
-		// General
-		new ChatListener();
-		new PumpkinLampListener();
-		new RecipeManager();
-		new ServerListener();
-		new WatchListener();
-
-		// Users
-		new UserListener();
+		new LivretproCommand();
+		new PayerCommand();
 
 		// Homes
 		new BuyhomeCommand();
@@ -92,68 +116,97 @@ public class InitManager
 
 		// Horses
 		new ChevalCommand();
-		new HorsesListener();
 
 		// HPs
-		new HeadCommand();
 		new HpsCommand();
 
-		// Provinces
-		new ProvinceListener();
-		new ProvinceSignListener();
-
-		// Stores
+		// Key
+		new KeyCommand();
 
 		// Teleport
 		new SpawnCommand();
 		new TutoCommand();
 
-		// Warps
+		// Warp
 		new WarpCommand();
-		new WarpSignListener();
 
 		/*
-		 * 
+		 * A trier
 		 */
 
-		// Tpa
-		new RejoindreCommand();
-		new AccepterCommand();
+		// Commandes modérateurs
+		new EventCommand();
+		new ModpackCommand();
+		new Pvp4Command();
+		new PvpCommand();
 
 		// Commandes joueurs
 		new EncheresCommand();
 		new LicenceCommand();
-
 		new MaireCommand();
 		new MairesCommand();
 		new ParcelleCommand();
+	}
 
-		// Commandes modérateurs
-		new EndercheatCommand();
-		new EventCommand();
-		new InventoryCommand();
-		new ModpackCommand();
-		new Pvp4Command();
-		new PvpCommand();
-		new RoucoupsCommand();
-		new TpCommand();
-		new TphereCommand();
-		new TpposCommand();
+	private static void initListeners()
+	{
+		/*
+		 * from HeavenCore
+		 */
 
-		// Commandes administrateurs
-		new CreacheatCommand();
-		new PoofCommand();
-		new SoundCommand();
-		new SpawnmobCommand();
-		new TravauxCommand();
-		new WorldCommand();
+		new AntiCheatListener();
+		new AntiLagListener();
+		new ColoredSignsListener();
+		new NoChatListener();
+		new RedstoneLampListener();
 
 		/*
-		 * 
+		 * HeavenRP
 		 */
+
+		// Economy
+		new EconomyListener();
+		new LivretProSignListener();
+		new LivretSignListener();
+
+		// General
+		new PumpkinLampListener();
+		new RecipeManager();
+		new ServerListener();
+		new WatchListener();
+
+		// Users
+		new UserListener();
+
+		// Horses
+		new HorsesListener();
+
+		// Key
+		new DonjonSignListener();
+
+		// Provinces
+		new ProvinceListener();
+		new ProvinceSignListener();
+
+		// Warps
+		new WarpSignListener();
 
 		// Worlds
 		WorldsManager.init();
 		new WorldsListener();
+
+		/*
+		 * A trier
+		 */
+
+		// Listeners
+		new JumpListener();
+		new LampadaireListener();
+		new LinkListener();
+		new PVP4Manager();
+		new PVPManager();
+		new SnowballListener();
+
+		// new AdminShop();
 	}
 }

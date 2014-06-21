@@ -3,24 +3,25 @@ package fr.heavencraft.heavenrp.web;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import fr.heavencraft.HeavenCommand;
-import fr.heavencraft.Permissions;
-import fr.heavencraft.Utils;
+import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.heavenrp.RPPermissions;
 import fr.heavencraft.heavenrp.general.users.User;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
+import fr.heavencraft.utils.ChatUtil;
+import fr.heavencraft.utils.DevUtil;
 
 public class WebCommand extends HeavenCommand
 {
 	public WebCommand(String name, String permission)
 	{
-		super("web", Permissions.WEB_COMMAND);
+		super("web", RPPermissions.WEB_COMMAND);
 	}
 
 	@Override
 	protected void onPlayerCommand(Player player, String[] args) throws HeavenException
 	{
-		Utils.sendMessage(player, "Cette commande n'est utilisable que depuis la {console}.");
+		ChatUtil.sendMessage(player, "Cette commande n'est utilisable que depuis la {console}.");
 	}
 
 	@Override
@@ -37,10 +38,10 @@ public class WebCommand extends HeavenCommand
 					return;
 
 				User user = UserProvider.getUserByName(args[1]);
-				int delta = Utils.toUint(args[2]);
+				int delta = DevUtil.toUint(args[2]);
 
 				user.updateBalance(delta);
-				Utils.sendMessage(user.getName(), "Vous venez d'acheter {%1$s} pièces d'or sur la boutique.");
+				ChatUtil.sendMessage(user.getName(), "Vous venez d'acheter {%1$s} pièces d'or sur la boutique.");
 			}
 		}
 	}

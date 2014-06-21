@@ -8,8 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import fr.heavencraft.exceptions.HeavenException;
-import fr.heavencraft.exceptions.ProvinceNotFoundException;
 import fr.heavencraft.heavenrp.HeavenRP;
+import fr.heavencraft.heavenrp.exceptions.ProvinceNotFoundException;
 
 public class ProvincesManager
 {

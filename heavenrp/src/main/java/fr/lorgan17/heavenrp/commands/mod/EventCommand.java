@@ -6,17 +6,16 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import fr.heavencraft.HeavenCommand;
-import fr.heavencraft.Utils;
+import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.heavenrp.RPPermissions;
+import fr.heavencraft.utils.ChatUtil;
 
-public class EventCommand extends HeavenCommand {
-	
-	private final static String PERMISSION = "heavenrp.moderator.event";
-	
+public class EventCommand extends HeavenCommand
+{
 	private Location _spawn = null;
 	private boolean _started = false;
-	
+
 	public EventCommand()
 	{
 		super("event");
@@ -30,34 +29,35 @@ public class EventCommand extends HeavenCommand {
 			sendUsage(player);
 			return;
 		}
-		
+
 		if (args[0].equalsIgnoreCase("go"))
 		{
 			if (_started)
 			{
 				player.teleport(_spawn);
-				Utils.sendMessage(player, "Vous avez été téléporté à l'event.");
+				ChatUtil.sendMessage(player, "Vous avez été téléporté à l'event.");
 			}
 			else
-				Utils.sendMessage(player, "Aucun event n'est en cours.");
+				ChatUtil.sendMessage(player, "Aucun event n'est en cours.");
 		}
-		else if (player.hasPermission(PERMISSION))
+		else if (player.hasPermission(RPPermissions.EVENT))
 		{
 			if (args[0].equalsIgnoreCase("setspawn"))
 			{
 				_spawn = player.getLocation();
-				Utils.sendMessage(player, "La position du spawn a bien été changée.");
+				ChatUtil.sendMessage(player, "La position du spawn a bien été changée.");
 			}
 			else if (args[0].equalsIgnoreCase("start"))
 			{
 				if (_spawn == null)
 				{
-					Utils.sendMessage(player, "Tu veux lancer un event sans spawn");
+					ChatUtil.sendMessage(player, "Tu veux lancer un event sans spawn");
 				}
 				else if (!_started)
 				{
 					_started = true;
-					Bukkit.broadcastMessage(ChatColor.AQUA + "[EVENT]" + ChatColor.RESET + "Un event vient de commencer, tapez /event go pour y participer !");
+					Bukkit.broadcastMessage(ChatColor.AQUA + "[EVENT]" + ChatColor.RESET
+							+ "Un event vient de commencer, tapez /event go pour y participer !");
 				}
 			}
 			else if (args[0].equalsIgnoreCase("stop"))
@@ -65,15 +65,16 @@ public class EventCommand extends HeavenCommand {
 				if (_started)
 				{
 					_started = false;
-					Bukkit.broadcastMessage(ChatColor.AQUA + "[EVENT]" + ChatColor.RESET + "L'event vient de se terminer !");
+					Bukkit.broadcastMessage(ChatColor.AQUA + "[EVENT]" + ChatColor.RESET
+							+ "L'event vient de se terminer !");
 				}
 			}
 		}
 	}
 
 	@Override
-	protected void onConsoleCommand(CommandSender sender, String[] args)
-			throws HeavenException {
+	protected void onConsoleCommand(CommandSender sender, String[] args) throws HeavenException
+	{
 		// TODO Auto-generated method stub
 
 	}
@@ -81,9 +82,9 @@ public class EventCommand extends HeavenCommand {
 	@Override
 	protected void sendUsage(CommandSender sender)
 	{
-		Utils.sendMessage(sender, "/{event} setspawn");
-		Utils.sendMessage(sender, "/{event} start");
-		Utils.sendMessage(sender, "/{event} stop");
-		Utils.sendMessage(sender, "/{event} go");
+		ChatUtil.sendMessage(sender, "/{event} setspawn");
+		ChatUtil.sendMessage(sender, "/{event} start");
+		ChatUtil.sendMessage(sender, "/{event} stop");
+		ChatUtil.sendMessage(sender, "/{event} go");
 	}
 }

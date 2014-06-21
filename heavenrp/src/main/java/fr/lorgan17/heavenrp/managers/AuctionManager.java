@@ -9,16 +9,15 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import fr.heavencraft.Utils;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccountType;
 import fr.heavencraft.heavenrp.general.users.User;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
+import fr.heavencraft.utils.ChatUtil;
 
 public class AuctionManager
 {
-	public static final String PERMISSION = "heavenrp.encheres.create";
 	private boolean isStarted = false;
 	private Location roomLocation;
 	private final Map<String, Location> previousLocations = new HashMap<String, Location>();
@@ -41,8 +40,8 @@ public class AuctionManager
 		previousLocations.clear();
 		previousLocations.put(modo.getName(), modo.getLocation());
 
-		Utils.broadcastMessage("Les enchères pour {%1$s} viennent de commencer !", new Object[] { objectName });
-		Utils.broadcastMessage("La mise à prix est de {%1$d} po ! Faites /enchere entrer pour rejoindre l'enchère.",
+		ChatUtil.broadcastMessage("Les enchères pour {%1$s} viennent de commencer !", new Object[] { objectName });
+		ChatUtil.broadcastMessage("La mise à prix est de {%1$d} po ! Faites /enchere entrer pour rejoindre l'enchère.",
 				new Object[] { Integer.valueOf(startPrice) });
 	}
 
@@ -130,7 +129,7 @@ public class AuctionManager
 			throw new HeavenException("Vous n'êtes pas dans la salle d'enchère.");
 		}
 		player.teleport(location);
-		Utils.sendMessage(player, "{[Enchères]} Vous venez de sortie de la salle d'enchères.");
+		ChatUtil.sendMessage(player, "{[Enchères]} Vous venez de sortie de la salle d'enchères.");
 	}
 
 	public void broadcast(String message)

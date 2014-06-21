@@ -12,13 +12,13 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.inventory.HorseInventory;
 
-import fr.heavencraft.Utils;
+import fr.heavencraft.utils.DevUtil;
 
 public class HorsesListener implements Listener
 {
 	public HorsesListener()
 	{
-		Utils.registerListener(this);
+		DevUtil.registerListener(this);
 	}
 
 	@EventHandler(ignoreCancelled = true)
@@ -28,7 +28,6 @@ public class HorsesListener implements Listener
 			return;
 
 		Horse horse = (Horse) event.getVehicle();
-
 		Player player = (Player) event.getEntered();
 
 		if (!HorsesManager.canUse(horse, player))
@@ -73,7 +72,7 @@ public class HorsesListener implements Listener
 
 		if (!HorsesManager.canUse(horse, player))
 		{
-			Utils.logInfo("%1$s tried to damage %2$s's horse", player.getName(), horse.getOwner().getName());
+			DevUtil.logInfo("%1$s tried to damage %2$s's horse", player.getName(), horse.getOwner().getName());
 
 			event.setCancelled(true);
 		}

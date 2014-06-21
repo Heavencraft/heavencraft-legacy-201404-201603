@@ -11,8 +11,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import fr.heavencraft.exceptions.HeavenException;
-import fr.heavencraft.exceptions.UnknownErrorException;
 import fr.heavencraft.heavenrp.HeavenRP;
+import fr.heavencraft.heavenrp.exceptions.UnknownErrorException;
 import fr.heavencraft.heavenrp.provinces.ProvincesManager;
 import fr.heavencraft.heavenrp.provinces.ProvincesManager.Province;
 

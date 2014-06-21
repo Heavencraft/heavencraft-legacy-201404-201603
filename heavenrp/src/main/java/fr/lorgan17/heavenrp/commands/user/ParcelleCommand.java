@@ -3,11 +3,13 @@ package fr.lorgan17.heavenrp.commands.user;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import fr.heavencraft.HeavenCommand;
-import fr.heavencraft.Utils;
+import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.general.users.User;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
+import fr.heavencraft.utils.ChatUtil;
+import fr.heavencraft.utils.DevUtil;
+import fr.heavencraft.utils.PlayerUtil;
 import fr.lorgan17.heavenrp.managers.TownsManager;
 
 public class ParcelleCommand extends HeavenCommand
@@ -38,28 +40,28 @@ public class ParcelleCommand extends HeavenCommand
 			case 3:
 				if (args[1].equals("+")) // /parcelle <ville> + <joueur>
 				{
-					TownsManager.createSubRegion(args[0], UserProvider.getUserByName(Utils.getExactName(args[2])),
-							Utils.getWESelection(player), 20, 10);
+					TownsManager.createSubRegion(args[0], UserProvider.getUserByName(PlayerUtil.getExactName(args[2])),
+							DevUtil.getWESelection(player), 20, 10);
 
-					Utils.sendMessage(player, "La parcelle a été créée avec succès.");
+					ChatUtil.sendMessage(player, "La parcelle a été créée avec succès.");
 				}
 				else if (args[1].equals("-"))
 				{
 					TownsManager.removeSubRegion(args[0], args[2]);
 
-					Utils.sendMessage(player, "La parcelle a été supprimée avec succès.");
+					ChatUtil.sendMessage(player, "La parcelle a été supprimée avec succès.");
 				}
 				break;
 			case 5:
 				if (args[1].equals("+")) // /parcelle <ville> + <joueur> <up> <down>
 				{
-					int up = Utils.toUint(args[3]);
-					int down = Utils.toUint(args[4]);
+					int up = DevUtil.toUint(args[3]);
+					int down = DevUtil.toUint(args[4]);
 
-					TownsManager.createSubRegion(args[0], UserProvider.getUserByName(Utils.getExactName(args[2])),
-							Utils.getWESelection(player), up, down);
+					TownsManager.createSubRegion(args[0], UserProvider.getUserByName(PlayerUtil.getExactName(args[2])),
+							DevUtil.getWESelection(player), up, down);
 
-					Utils.sendMessage(player, "La parcelle a été créée avec succès.");
+					ChatUtil.sendMessage(player, "La parcelle a été créée avec succès.");
 				}
 				break;
 			default:
@@ -71,16 +73,16 @@ public class ParcelleCommand extends HeavenCommand
 	@Override
 	protected void onConsoleCommand(CommandSender sender, String[] args) throws HeavenException
 	{
-		Utils.sendMessage(sender, "Cette commande n'est pas utilisable depuis la console.");
+		ChatUtil.sendMessage(sender, "Cette commande n'est pas utilisable depuis la console.");
 	}
 
 	@Override
 	protected void sendUsage(CommandSender sender)
 	{
-		Utils.sendMessage(sender,
+		ChatUtil.sendMessage(sender,
 				"{/parcelle} <ville> + <joueur> : créé une parcelle à partir de la zone sélectionnée, et l'attribue à un joueur");
-		Utils.sendMessage(sender,
+		ChatUtil.sendMessage(sender,
 				"{/parcelle} <ville> + <joueur> <up> <down> : même punition, mais avec la hauteur paramétrable");
-		Utils.sendMessage(sender, "{/parcelle} <ville> - <parcelle> : supprime la parcelle <parcelle>");
+		ChatUtil.sendMessage(sender, "{/parcelle} <ville> - <parcelle> : supprime la parcelle <parcelle>");
 	}
 }

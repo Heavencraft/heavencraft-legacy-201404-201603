@@ -8,15 +8,16 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import fr.heavencraft.Utils;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.exceptions.UserNotFoundException;
+import fr.heavencraft.utils.DevUtil;
+import fr.heavencraft.utils.PlayerUtil;
 
 public class UserListener implements Listener
 {
 	public UserListener()
 	{
-		Utils.registerListener(this);
+		DevUtil.registerListener(this);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -25,9 +26,9 @@ public class UserListener implements Listener
 		Player player = event.getPlayer();
 
 		String name = player.getName();
-		String uuid = Utils.getUUID(name);
+		String uuid = PlayerUtil.getUUID(name);
 
-		Utils.logInfo("UsersListener.onPlayerLogin : %1$s = %2$s", uuid, name);
+		DevUtil.logInfo("UsersListener.onPlayerLogin : %1$s = %2$s", uuid, name);
 
 		try
 		{

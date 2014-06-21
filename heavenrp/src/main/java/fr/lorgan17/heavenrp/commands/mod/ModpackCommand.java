@@ -5,15 +5,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import fr.heavencraft.HeavenCommand;
-import fr.heavencraft.Utils;
+import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.heavenrp.RPPermissions;
+import fr.heavencraft.utils.ChatUtil;
 
-public class ModpackCommand extends HeavenCommand {
+public class ModpackCommand extends HeavenCommand
+{
 
 	public ModpackCommand()
 	{
-		super("modpack", "heavenrp.moderator.modpack");
+		super("modpack", RPPermissions.MODPACK);
 	}
 
 	@Override
@@ -23,20 +25,21 @@ public class ModpackCommand extends HeavenCommand {
 		player.getInventory().addItem(new ItemStack(Material.STICK, 1));
 		player.getInventory().addItem(new ItemStack(Material.COMPASS, 1));
 		player.getInventory().addItem(new ItemStack(Material.WATCH, 1));
-		
-		Utils.sendMessage(player, "Vous venez de percevoir votre paquetage réglementaire.");
+
+		ChatUtil.sendMessage(player, "Vous venez de percevoir votre paquetage réglementaire.");
 
 	}
 
 	@Override
-	protected void onConsoleCommand(CommandSender sender, String[] args)
-			throws HeavenException {
+	protected void onConsoleCommand(CommandSender sender, String[] args) throws HeavenException
+	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	protected void sendUsage(CommandSender sender) {
+	protected void sendUsage(CommandSender sender)
+	{
 		// TODO Auto-generated method stub
 
 	}

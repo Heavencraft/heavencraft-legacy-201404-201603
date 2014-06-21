@@ -5,11 +5,11 @@ import java.text.SimpleDateFormat;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import fr.heavencraft.HeavenCommand;
-import fr.heavencraft.Utils;
+import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.general.users.User;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
+import fr.heavencraft.utils.ChatUtil;
 
 public class LicenceCommand extends HeavenCommand
 {
@@ -33,23 +33,23 @@ public class LicenceCommand extends HeavenCommand
 				{
 					if (user.hasDealerLicense())
 					{
-						Utils.sendMessage(player, "Vous possédez déjà la licence de marchand.");
-						Utils.sendMessage(player, "Elle expirera le %1$s.",
+						ChatUtil.sendMessage(player, "Vous possédez déjà la licence de marchand.");
+						ChatUtil.sendMessage(player, "Elle expirera le %1$s.",
 								dateFormat.format(user.getLicenseExpireDate()));
-						Utils.sendMessage(player,
+						ChatUtil.sendMessage(player,
 								"Faites {/licence marchand valider} pour acheter 1 mois supplémentaire. Il vous en coûtera 1000 pièces d'or.");
 					}
 					else if (user.alreadyHasDealerLicense())
-						Utils.sendMessage(player,
+						ChatUtil.sendMessage(player,
 								"La licence de marchand vous coûtera 1000 pièces d'or. Faites {/licence marchand valider} pour valider");
 					else
-						Utils.sendMessage(player,
+						ChatUtil.sendMessage(player,
 								"La licence de marchand vous coûtera 500 pièces d'or. Faites {/licence marchand valider} pour valider");
 				}
 				/*
 				 * else if (args[0].equalsIgnoreCase("ressources")) { if (user.hasSurvivalLicense())
-				 * Utils.sendMessage(player, "Vous possédez déjà la licence d'accès au monde ressources."); else
-				 * Utils.sendMessage(player,
+				 * ChatUtil.sendMessage(player, "Vous possédez déjà la licence d'accès au monde ressources."); else
+				 * ChatUtil.sendMessage(player,
 				 * "La licence d'accès au monde ressources vous coûtera 500 pièces d'or. Faites {/licence ressources valider} pour valier"
 				 * ); }
 				 */
@@ -64,19 +64,19 @@ public class LicenceCommand extends HeavenCommand
 						{
 							user.updateBalance(-1000);
 							user.buyDealerLicense();
-							Utils.sendMessage(player, "Vous venez d'acquérir la licence de marchand pour 1 mois.");
+							ChatUtil.sendMessage(player, "Vous venez d'acquérir la licence de marchand pour 1 mois.");
 						}
 						else
 						{
 							user.updateBalance(-500);
 							user.buyDealerLicense();
-							Utils.sendMessage(player, "Vous venez d'acquérir la licence de marchand pour 1 mois.");
+							ChatUtil.sendMessage(player, "Vous venez d'acquérir la licence de marchand pour 1 mois.");
 						}
 					}
 					/*
 					 * else if (args[0].equalsIgnoreCase("ressources")) { if (user.hasSurvivalLicense())
-					 * Utils.sendMessage(player, "Vous possédez déjà la licence d'accès au monde ressources."); else {
-					 * user.updateBalance(-500); user.buySurvivalLicense(); Utils.sendMessage(player,
+					 * ChatUtil.sendMessage(player, "Vous possédez déjà la licence d'accès au monde ressources."); else
+					 * { user.updateBalance(-500); user.buySurvivalLicense(); ChatUtil.sendMessage(player,
 					 * "Vous venez d'acquérir la licence d'accès au monde ressources."); } }
 					 */
 				}
@@ -93,13 +93,13 @@ public class LicenceCommand extends HeavenCommand
 	@Override
 	protected void onConsoleCommand(CommandSender sender, String[] args) throws HeavenException
 	{
-		Utils.sendMessage(sender, "Cette commande n'est pas utilisable depuis la console.");
+		ChatUtil.sendMessage(sender, "Cette commande n'est pas utilisable depuis la console.");
 	}
 
 	@Override
 	protected void sendUsage(CommandSender sender)
 	{
-		Utils.sendMessage(sender, "/{licence} marchand : pour acheter la licence de marchand");
-		// Utils.sendMessage(sender, "/{licence} ressources : pour acheter la licence d'accès au monde ressources");
+		ChatUtil.sendMessage(sender, "/{licence} marchand : pour acheter la licence de marchand");
+		// ChatUtil.sendMessage(sender, "/{licence} ressources : pour acheter la licence d'accès au monde ressources");
 	}
 }

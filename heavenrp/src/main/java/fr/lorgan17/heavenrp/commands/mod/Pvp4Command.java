@@ -9,18 +9,21 @@ import org.bukkit.entity.Player;
 
 import com.sk89q.worldedit.bukkit.selections.Selection;
 
-import fr.heavencraft.HeavenCommand;
-import fr.heavencraft.Utils;
+import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.heavenrp.RPPermissions;
+import fr.heavencraft.utils.ChatUtil;
+import fr.heavencraft.utils.DevUtil;
+import fr.heavencraft.utils.PlayerUtil;
 import fr.lorgan17.heavenrp.listeners.PVP4Manager;
 
 public class Pvp4Command extends HeavenCommand
 {
 	public Pvp4Command()
 	{
-		super("pvp4", "heavenrp.moderator.pvp4");
+		super("pvp4", RPPermissions.PVP4);
 	}
-	
+
 	@Override
 	protected void onPlayerCommand(Player player, String[] args) throws HeavenException
 	{
@@ -29,21 +32,21 @@ public class Pvp4Command extends HeavenCommand
 			sendUsage(player);
 			return;
 		}
-		
+
 		if (args[0].equalsIgnoreCase("start"))
 		{
 			List<Player> players = new ArrayList<Player>();
-			
+
 			for (int i = 1; i != args.length; i++)
-				players.add(Utils.getPlayer(args[i]));
-			
+				players.add(PlayerUtil.getPlayer(args[i]));
+
 			PVP4Manager.startBattle(players);
 		}
 		else if (args[0].equalsIgnoreCase("startwe"))
 		{
-			Selection selection = Utils.getWESelection(player);
+			Selection selection = DevUtil.getWESelection(player);
 			List<Player> players = new ArrayList<Player>();
-			
+
 			for (Player player2 : Bukkit.getOnlinePlayers())
 				if (selection.contains(player2.getLocation()))
 					players.add(player2);
@@ -57,28 +60,28 @@ public class Pvp4Command extends HeavenCommand
 		else if (args[0].equalsIgnoreCase("addspawn"))
 		{
 			PVP4Manager.addSpawn(player.getLocation());
-			Utils.sendMessage(player, "Le point de spawn a été ajouté.");
+			ChatUtil.sendMessage(player, "Le point de spawn a été ajouté.");
 		}
 		else if (args[0].equalsIgnoreCase("resetspawn"))
 		{
 			PVP4Manager.resetSpawns();
-			Utils.sendMessage(player, "Les points de spawn ont été supprimés.");
+			ChatUtil.sendMessage(player, "Les points de spawn ont été supprimés.");
 		}
 	}
-	
+
 	@Override
 	protected void onConsoleCommand(CommandSender sender, String[] args) throws HeavenException
 	{
-		Utils.sendMessage(sender, "Cette commande n'est pas utilisable depuis la console.");
+		ChatUtil.sendMessage(sender, "Cette commande n'est pas utilisable depuis la console.");
 	}
 
 	@Override
 	protected void sendUsage(CommandSender sender)
 	{
-		Utils.sendMessage(sender, "{/pvp4} start <joueur1> <joueur2> etc. : démarre le combat");
-		Utils.sendMessage(sender, "{/pvp4} startwe : démarre le combat avec les joueurs présent dans la sélection");
-		Utils.sendMessage(sender, "{/pvp4} addspawn : ajoute un point de spawn");
-		Utils.sendMessage(sender, "{/pvp4} resetspawn : retire tous les points de spawn");
-		Utils.sendMessage(sender, "{/pvp4} stop");
+		ChatUtil.sendMessage(sender, "{/pvp4} start <joueur1> <joueur2> etc. : démarre le combat");
+		ChatUtil.sendMessage(sender, "{/pvp4} startwe : démarre le combat avec les joueurs présent dans la sélection");
+		ChatUtil.sendMessage(sender, "{/pvp4} addspawn : ajoute un point de spawn");
+		ChatUtil.sendMessage(sender, "{/pvp4} resetspawn : retire tous les points de spawn");
+		ChatUtil.sendMessage(sender, "{/pvp4} stop");
 	}
 }

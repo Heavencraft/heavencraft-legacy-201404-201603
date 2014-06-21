@@ -5,16 +5,17 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import fr.heavencraft.Utils;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.heavencraft.heavenrp.provinces.ProvincesManager.Province;
+import fr.heavencraft.utils.ChatUtil;
+import fr.heavencraft.utils.DevUtil;
 
 public class ProvinceListener implements Listener
 {
 	public ProvinceListener()
 	{
-		Utils.registerListener(this);
+		DevUtil.registerListener(this);
 	}
 
 	@EventHandler(ignoreCancelled = true)
@@ -25,7 +26,7 @@ public class ProvinceListener implements Listener
 		Province province = UserProvider.getUserByName(player.getName()).getProvince();
 
 		if (province == null)
-			Utils.sendMessage(player, "Vous n'avez pas encore choisi de province.");
+			ChatUtil.sendMessage(player, "Vous n'avez pas encore choisi de province.");
 	}
 
 	// @EventHandler
