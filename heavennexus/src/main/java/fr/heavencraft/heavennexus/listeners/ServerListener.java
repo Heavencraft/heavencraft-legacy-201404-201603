@@ -1,6 +1,5 @@
 package fr.heavencraft.heavennexus.listeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -9,14 +8,15 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import fr.heavencraft.heavennexus.HeavenNexus;
+import fr.heavencraft.utils.DevUtil;
 
-public class ServerListener implements Listener {
-	
-	public ServerListener(HeavenNexus plugin)
+public class ServerListener implements Listener
+{
+	public ServerListener()
 	{
-		Bukkit.getPluginManager().registerEvents(this, plugin);
+		DevUtil.registerListener(this);
 	}
-	
+
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
@@ -28,7 +28,7 @@ public class ServerListener implements Listener {
 	{
 		event.setRespawnLocation(HeavenNexus.getSpawn());
 	}
-	
+
 	@EventHandler(ignoreCancelled = true)
 	public void onBlockPhysics(BlockPhysicsEvent event)
 	{
