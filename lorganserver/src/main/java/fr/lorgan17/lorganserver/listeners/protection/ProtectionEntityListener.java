@@ -72,7 +72,9 @@ public class ProtectionEntityListener implements Listener
 		else
 			return;
 
-		Block block = event.getEntity().getLocation().getBlock();
+		Entity defender = event.getEntity();
+
+		Block block = defender.getLocation().getBlock();
 
 		switch (event.getEntityType())
 		{
@@ -93,6 +95,7 @@ public class ProtectionEntityListener implements Listener
 			case MINECART_HOPPER:
 			case MINECART_MOB_SPAWNER:
 			case MINECART_TNT:
+			case ITEM_FRAME:
 				if (!LorganServer.canBeDestroyed(player, block))
 				{
 					ChatUtil.sendMessage(player, "Cet endroit est protégé.");
