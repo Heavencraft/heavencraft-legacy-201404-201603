@@ -29,7 +29,7 @@ import fr.manu67100.heavenrp.laposte.handlers.PopupMenuAPI;
 public class SignListener implements Listener{
 	private String _permission;
 	private String _tag;
-	private final static String FORMAT_POSTE = "&4[&6La Poste&4] &6%1$s";
+	private final static String FORMAT_POSTE = "§4[§6La Poste§4] §6%1$s";
 
 	public SignListener() 
 	{
@@ -112,7 +112,7 @@ public class SignListener implements Listener{
 		
 		try
 		{
-			PreparedStatement ps = HeavenRP.getMainConnection().prepareStatement(
+			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
 					"SELECT `IDcolis` FROM `poste_colis`  WHERE `destinataire` = ? AND `isLOG` = '0'");
 			ps.setString(1, UUID);
 			ResultSet rs = ps.executeQuery();

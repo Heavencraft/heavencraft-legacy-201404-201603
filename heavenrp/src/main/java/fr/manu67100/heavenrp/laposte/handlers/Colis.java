@@ -17,13 +17,13 @@ public class Colis {
 	private Player expediteur;
 	private Player destinataire;	
 	private int _ID = 0;
-	private final static String FORMAT_POSTE = "�4[�6La Poste�4] �6%1$s";
+	private final static String FORMAT_POSTE = "§4[§6La Poste§4] §6%1$s";
 	
 	public Colis(int ID)
 	{
 		try
 		{
-			PreparedStatement ps = HeavenRP.getMainConnection().prepareStatement(
+			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
 					"SELECT * FROM `poste_colis`  WHERE `IDcolis` = ? AND `isLOG` = 0");
 			ps.setInt(1, ID);
 			ResultSet rs = ps.executeQuery();
@@ -73,7 +73,7 @@ public class Colis {
 		try
 		{
 			
-			PreparedStatement ps = HeavenRP.getMainConnection().prepareStatement(
+			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
 					"INSERT INTO poste_colis (expediteur, destinataire, dateEnvoi, contenu, isLOG) VALUES (?, ?, NOW(), ?, ?)");
 			ps.setString(1, this.expediteur.getUniqueId().toString());
 			ps.setString(2, this.destinataire.getUniqueId().toString());
@@ -109,7 +109,7 @@ public class Colis {
 		
 		try
 		{
-			PreparedStatement ps = HeavenRP.getMainConnection().prepareStatement("DELETE FROM poste_colis WHERE `IDcolis` = ? AND `isLOG` = 0");
+			PreparedStatement ps = HeavenRP.getConnection().prepareStatement("DELETE FROM poste_colis WHERE `IDcolis` = ? AND `isLOG` = 0");
 			ps.setInt(1, this._ID);
 			ps.executeUpdate();
 		}
