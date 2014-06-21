@@ -6,6 +6,9 @@ import java.sql.SQLException;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import fr.heavencraft.HeavenPlugin;
 import fr.heavencraft.heavenrp.stores.StoresListener;
@@ -18,7 +21,7 @@ public class HeavenRP extends HeavenPlugin
 	private final static String MAIN_DB_URL = "jdbc:mysql://localhost:3306/mc-db?user=mc-sql&password=MfGJQMBzmAS5xYhH&zeroDateTimeBehavior=convertToNull&?autoReconnect=true";
 	// private final static String RP_DB_URL = "jdbc:mysql://localhost:3306/minecraft-rp?user=root&password=root";
 	// private final static String MAIN_DB_URL = "jdbc:mysql://localhost:3306/mc-db?user=root&password=root";
-
+	private static WorldGuardPlugin _WGP;
 	private static HeavenRP _instance;
 
 	private static Connection _connection;
@@ -95,5 +98,21 @@ public class HeavenRP extends HeavenPlugin
 	public static AuctionManager getAuctionManager()
 	{
 		return _auctionManager;
+	}
+	
+	public static WorldGuardPlugin getWorldGuard() {
+
+		if (_WGP == null)
+		{
+			Plugin plugin = getInstance().getServer().getPluginManager().getPlugin("WorldGuard");
+			if (plugin == null || !(plugin instanceof WorldGuardPlugin)) {
+				_WGP = null;
+			}
+			else
+			{
+				_WGP = (WorldGuardPlugin) plugin;
+			}			
+		}
+		return _WGP;
 	}
 }
