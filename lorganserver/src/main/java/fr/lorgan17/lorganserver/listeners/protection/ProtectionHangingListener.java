@@ -1,8 +1,8 @@
 package fr.lorgan17.lorganserver.listeners.protection;
 
-import org.bukkit.Bukkit;
+import static fr.heavencraft.utils.DevUtil.registerListener;
+
 import org.bukkit.block.Block;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -10,13 +10,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 
+import fr.heavencraft.utils.ChatUtil;
 import fr.lorgan17.lorganserver.LorganServer;
 
-public class ProtectionHangingListener implements Listener {
-
-	public ProtectionHangingListener(LorganServer plugin)
+public class ProtectionHangingListener implements Listener
+{
+	public ProtectionHangingListener()
 	{
-		Bukkit.getPluginManager().registerEvents(this, plugin);
+		registerListener(this);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -25,15 +26,14 @@ public class ProtectionHangingListener implements Listener {
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
 
-		/*if (event.getEntity().getType() == EntityType.ITEM_FRAME)
+		/*
+		 * if (event.getEntity().getType() == EntityType.ITEM_FRAME) { LorganServer.sendMessage(player,
+		 * "Les {item frame} c'est le mal !"); event.setCancelled(true); }
+		 * 
+		 * else
+		 */if (!LorganServer.canBeDestroyed(player, block))
 		{
-			LorganServer.sendMessage(player, "Les {item frame} c'est le mal !");
-			event.setCancelled(true);
-		}
-		
-		else*/ if (!LorganServer.canBeDestroyed(player, block))
-		{
-			LorganServer.sendMessage(player, "Cet endroit est protégé.");
+			ChatUtil.sendMessage(player, "Cet endroit est protégé.");
 			event.setCancelled(true);
 		}
 	}
@@ -46,7 +46,7 @@ public class ProtectionHangingListener implements Listener {
 
 		if (!LorganServer.canBeDestroyed(player, block))
 		{
-			LorganServer.sendMessage(player, "Cet endroit est protégé.");
+			ChatUtil.sendMessage(player, "Cet endroit est protégé.");
 			event.setCancelled(true);
 		}
 	}

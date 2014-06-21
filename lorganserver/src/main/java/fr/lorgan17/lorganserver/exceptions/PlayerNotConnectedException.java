@@ -1,7 +1,9 @@
 package fr.lorgan17.lorganserver.exceptions;
 
-public class PlayerNotConnectedException extends LorganException {
+import fr.heavencraft.exceptions.HeavenException;
 
+public class PlayerNotConnectedException extends HeavenException
+{
 	private static final long serialVersionUID = 1L;
 
 	public PlayerNotConnectedException(String name)

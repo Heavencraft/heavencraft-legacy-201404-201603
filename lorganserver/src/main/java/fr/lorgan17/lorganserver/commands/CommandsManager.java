@@ -1,33 +1,33 @@
 package fr.lorgan17.lorganserver.commands;
 
-import fr.lorgan17.lorganserver.commands.admin.GcCommand;
+import fr.heavencraft.commands.EndercheatCommand;
+import fr.heavencraft.commands.GcCommand;
+import fr.heavencraft.commands.InventoryCommand;
+import fr.heavencraft.commands.RoucoupsCommand;
+import fr.heavencraft.commands.TpCommand;
+import fr.heavencraft.commands.TphereCommand;
+import fr.heavencraft.commands.TpposCommand;
 import fr.lorgan17.lorganserver.commands.admin.SetspawnCommand;
-import fr.lorgan17.lorganserver.commands.admin.TpCommand;
-import fr.lorgan17.lorganserver.commands.mod.BanCommand;
-import fr.lorgan17.lorganserver.commands.mod.KickCommand;
-import fr.lorgan17.lorganserver.commands.mod.MuteCommand;
-import fr.lorgan17.lorganserver.commands.mod.UnbanCommand;
 import fr.lorgan17.lorganserver.commands.user.LitCommand;
 import fr.lorgan17.lorganserver.commands.user.ProtectionCommand;
 import fr.lorgan17.lorganserver.commands.user.SpawnCommand;
-import fr.lorgan17.lorganserver.commands.user.TellCommand;
 
-public class CommandsManager {
-
+public class CommandsManager
+{
 	public CommandsManager()
 	{
+		new EndercheatCommand();
 		new GcCommand();
-		new SetspawnCommand();
+		new InventoryCommand();
+		new RoucoupsCommand();
 		new TpCommand();
-		
-		new BanCommand();
-		new KickCommand();
-		new MuteCommand();
-		new UnbanCommand();
-		
+		new TphereCommand();
+		new TpposCommand();
+
+		new SetspawnCommand();
+
 		new LitCommand();
 		new ProtectionCommand();
 		new SpawnCommand();
-		new TellCommand();
 	}
 }
