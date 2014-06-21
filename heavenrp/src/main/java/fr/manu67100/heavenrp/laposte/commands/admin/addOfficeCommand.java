@@ -14,7 +14,7 @@ public class addOfficeCommand extends HeavenCommand{
 		super("addPoste");
 	}
 
-	private final static String FORMAT_POSTE = "�4[�6La Poste�4] �6%1$s";
+	private final static String FORMAT_POSTE = "§4[§6La Poste§4] §6%1$s";
 
 	@Override
 	protected void onPlayerCommand(Player player, String[] args) throws HeavenException {
@@ -29,7 +29,7 @@ public class addOfficeCommand extends HeavenCommand{
 				PostOfficeManager.LoadOffices();		
 			}
 			else
-				player.sendMessage(String.format(FORMAT_POSTE, "La r�gion existe d�j�."));
+				player.sendMessage(String.format(FORMAT_POSTE, "La région existe déjà."));
 		}
 		else
 			player.sendMessage(String.format(FORMAT_POSTE, "Vous n'avez pas les permissions."));

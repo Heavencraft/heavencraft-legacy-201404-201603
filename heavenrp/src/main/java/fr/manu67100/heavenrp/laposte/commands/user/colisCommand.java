@@ -14,7 +14,7 @@ import fr.manu67100.heavenrp.laposte.handlers.PostOfficeManager;
 public class colisCommand extends HeavenCommand{
 
 	
-	private final static String FORMAT_POSTE = "&4[&6La Poste&4] &6%1$s";
+	private final static String FORMAT_POSTE = "§4[§6La Poste§4] §6%1$s";
 	
 	public colisCommand() {
 		super("colis");	

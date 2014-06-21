@@ -20,11 +20,11 @@ public class Files {
 			
 			public static void reloadRegions() {
 				if (regionsFile == null)
-					regionsFile = new File(Bukkit.getPluginManager().getPlugin("LaPoste").getDataFolder(),"regions.yml");
+					regionsFile = new File(Bukkit.getPluginManager().getPlugin("HeavenRP").getDataFolder(),"regions.yml");
 				
 				regions = YamlConfiguration.loadConfiguration(regionsFile);
 				// Look for defaults in the jar
-				InputStream defConfigStream = Bukkit.getPluginManager().getPlugin("LaPoste").getResource("regions.yml");
+				InputStream defConfigStream = Bukkit.getPluginManager().getPlugin("HeavenRP").getResource("regions.yml");
 				if (defConfigStream != null)
 				{
 					YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);

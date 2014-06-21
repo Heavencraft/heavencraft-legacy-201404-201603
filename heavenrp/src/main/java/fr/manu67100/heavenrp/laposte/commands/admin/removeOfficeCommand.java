@@ -14,7 +14,7 @@ public class removeOfficeCommand extends HeavenCommand{
 		super("removePoste");
 	}
 
-	private final static String FORMAT_POSTE = "&4[&6La Poste&4] &6%1$s";
+	private final static String FORMAT_POSTE = "§4[§6La Poste§4] §6%1$s";
 	
 	@Override
 	protected void onPlayerCommand(Player player, String[] args) throws HeavenException {
