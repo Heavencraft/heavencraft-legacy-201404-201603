@@ -25,8 +25,8 @@ error_reporting(E_ALL);
 	
 		<form class="form-inline" role="form" action="index.php" method="post">
 			<div class="form-group">
-				<label class="sr-only" for="player">Joueur</label>
-				<input type="text" class="form-control" id="player" name="player" placeholder="Joueur">
+				<label class="sr-only" for="player">Joueur(s)</label>
+				<input type="text" class="form-control" id="players" name="players" placeholder="Joueur">
 			</div>
 			
 			<select class="form-control" name="server">
@@ -39,13 +39,14 @@ error_reporting(E_ALL);
 					<option value="creafun">creafun</option>
 					<option value="factions">factions</option>
 					<option value="ultrahard">ultrahard</option>
+					<option value="musee">musee</option>
 				</optgroup>
 				
 				<optgroup label="Jeux">
 					<option value="infected">infected</option>
 					<option value="mariokart">mariokart</option>
 					<option value="tntrun">tntrun</option>
-					<option value="backbone">backbone</option>
+					<option value="hungergames">hungergames</option>
 					<option value="paintball">paintball</option>
 				</optgroup>
 			</select>
@@ -57,10 +58,11 @@ error_reporting(E_ALL);
 				<option value="1">CHAT</option>
 				<option value="2">COMMAND</option>
 				<option value="3">MOD_HISTORY</option>
+				<option value="4">LOGOUT</option>
 			</select>
 			
 			<div class="form-group">
-				<label class="sr-only" for="data">Joueur</label>
+				<label class="sr-only" for="data">Données</label>
 				<input type="text" class="form-control" id="data" name="data" placeholder="Données">
 			</div>
 		
@@ -85,28 +87,31 @@ error_reporting(E_ALL);
 
 	$query = "SELECT * FROM logs l WHERE 1 = 1 ";
 	
-	if (isset($_POST['player']) && $_POST['player'] != "")
-	{
-		$query = $query . "AND l.player LIKE '%" . $mysqli->real_escape_string($_POST['player']) . "%' ";
+	if (isset($_POST['players']) && $_POST['players'] != "")
+	{	
+		foreach (explode(',', $_POST['players']) as $player)
+			$playersCondition .= (isset($playersCondition) ? "OR " : "") . "l.player LIKE '%" . $mysqli->real_escape_string($player) . "%' ";
+			
+		$query .= "AND (" . $playersCondition . ") ";
 	}
 	
 	if (isset($_POST['action']) && $_POST['action'] != "")
 	{
-		$query = $query . "AND l.action = '" . $mysqli->real_escape_string($_POST['action']) . "' ";
+		$query .= "AND l.action = '" . $mysqli->real_escape_string($_POST['action']) . "' ";
 	}
 	
 	if (isset($_POST['server']) && $_POST['server'] != "")
 	{
-		$query = $query . "AND l.server = '" . $mysqli->real_escape_string($_POST['server']) . "' ";
+		$query .= "AND l.server = '" . $mysqli->real_escape_string($_POST['server']) . "' ";
 	}
 	
 	if (isset($_POST['data']) && $_POST['data'] != "")
 	{
-		$query = $query . "AND l.data LIKE '%" . $mysqli->real_escape_string($_POST['data']) . "%' ";
+		$query .= "AND l.data LIKE '%" . $mysqli->real_escape_string($_POST['data']) . "%' ";
 	}
 	
-	$query = $query . "ORDER BY l.id DESC LIMIT 2000";
-	
+	$query .= "ORDER BY l.id DESC LIMIT 2000";
+
 
 	$res = $mysqli->query($query);
 
