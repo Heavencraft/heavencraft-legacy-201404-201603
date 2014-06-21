@@ -6,7 +6,9 @@ import org.bukkit.entity.Player;
 public class SoundEffectsManager {
     public static void playToPlayer(Player p, String data) {
         if (WebsocketSessionManager.getSessionManager().getSessionByName(p.getName()) != null) {
-            WebsocketServer.s.sendData(WebsocketSessionManager.getSessionManager().getSessionByName(p.getName()), data);
+        	
+        	String raw = "amb" + ":" + "1.0" + ":"+ data;
+            WebsocketServer.s.sendData(WebsocketSessionManager.getSessionManager().getSessionByName(p.getName()), raw);
         }
     }
  
@@ -15,6 +17,13 @@ public class SoundEffectsManager {
             if (WebsocketSessionManager.getSessionManager().getSessionByName(p.getName()) != null) {
                 WebsocketServer.s.sendData(WebsocketSessionManager.getSessionManager().getSessionByName(p.getName()), data);
             }
+        }
+    }
+    
+    
+    public static void stopAmbToPlayer(Player p) {
+        if (WebsocketSessionManager.getSessionManager().getSessionByName(p.getName()) != null) {      	
+            WebsocketServer.s.sendData(WebsocketSessionManager.getSessionManager().getSessionByName(p.getName()), "stopamb");
         }
     }
 }
