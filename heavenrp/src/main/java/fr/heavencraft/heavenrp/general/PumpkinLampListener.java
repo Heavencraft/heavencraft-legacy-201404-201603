@@ -8,13 +8,13 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
 
-import fr.heavencraft.Utils;
+import fr.heavencraft.utils.DevUtil;
 
 public class PumpkinLampListener implements Listener
 {
 	public PumpkinLampListener()
 	{
-		Utils.registerListener(this);
+		DevUtil.registerListener(this);
 	}
 
 	@EventHandler(ignoreCancelled = true)

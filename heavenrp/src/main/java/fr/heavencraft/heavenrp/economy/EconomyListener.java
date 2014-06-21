@@ -18,6 +18,7 @@ import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccou
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccountType;
 import fr.heavencraft.heavenrp.general.users.User;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
+import fr.heavencraft.utils.ChatUtil;
 
 public class EconomyListener implements Listener
 {
@@ -38,7 +39,7 @@ public class EconomyListener implements Listener
 		if (!Utils.isToday(user.getLastLogin()))
 		{
 			user.updateBalance(25);
-			Utils.sendMessage(player, ChatColor.AQUA + "Vous venez d'obtenir 25 pièces d'or en vous connectant !");
+			ChatUtil.sendMessage(player, ChatColor.AQUA + "Vous venez d'obtenir 25 pièces d'or en vous connectant !");
 
 			int benefit = (int) (account.getBalance() * 0.001D);
 
@@ -48,7 +49,7 @@ public class EconomyListener implements Listener
 			if (benefit > 0)
 			{
 				account.updateBalance(benefit);
-				Utils.sendMessage(player, ChatColor.AQUA + "Votre livret vous a rapporté %1$s pièces d'or.", benefit);
+				ChatUtil.sendMessage(player, ChatColor.AQUA + "Votre livret vous a rapporté %1$s pièces d'or.", benefit);
 			}
 		}
 
@@ -68,9 +69,9 @@ public class EconomyListener implements Listener
 		if (delta != 0)
 		{
 			user.updateBalance(-delta);
-			Utils.sendMessage(player, "Vous avez perdu {%1$s} pièces d'or que vous aviez dans votre bourse.",
+			ChatUtil.sendMessage(player, "Vous avez perdu {%1$s} pièces d'or que vous aviez dans votre bourse.",
 					new Object[] { Integer.valueOf(delta) });
-			Utils.sendMessage(player, "Pensez à déposer vôtre argent à la banque la prochaine fois.");
+			ChatUtil.sendMessage(player, "Pensez à déposer vôtre argent à la banque la prochaine fois.");
 		}
 	}
 }

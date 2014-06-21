@@ -20,7 +20,7 @@
         <configuration>
           <artifactSet>
             <includes>
-              <include>com.google.code.gson:gson</include>
+              <include>fr.heavencraft:heavencore</include>
             </includes>
           </artifactSet>
         </configuration>
@@ -29,37 +29,11 @@
   </build>
   <repositories>
     <repository>
-      <id>bukkit-repo</id>
-      <url>http://repo.bukkit.org/content/groups/public/</url>
-    </repository>
-    <repository>
-      <id>sk89q-repo</id>
-      <url>http://maven.sk89q.com/repo/</url>
-    </repository>
-    <repository>
       <id>kitteh-repo</id>
       <url>http://repo.kitteh.org/content/repositories/public/</url>
     </repository>
   </repositories>
   <dependencies>
-    <dependency>
-      <groupId>org.bukkit</groupId>
-      <artifactId>bukkit</artifactId>
-      <version>1.7.9-R0.1</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.sk89q</groupId>
-      <artifactId>worldedit</artifactId>
-      <version>5.6.2</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.sk89q</groupId>
-      <artifactId>worldguard</artifactId>
-      <version>5.9</version>
-      <scope>compile</scope>
-    </dependency>
     <dependency>
       <groupId>org.kitteh</groupId>
       <artifactId>tagapi</artifactId>
@@ -70,6 +44,12 @@
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
       <version>5.1.30</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.2.4</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>

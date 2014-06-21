@@ -9,6 +9,7 @@ import org.bukkit.WorldCreator;
 import org.bukkit.block.Biome;
 
 import fr.heavencraft.Utils;
+import fr.heavencraft.generators.EmptyChunkGenerator;
 
 public class WorldsManager
 {
@@ -35,13 +36,6 @@ public class WorldsManager
 			WorldCreator creator = new WorldCreator("world_resources");
 			creator.environment(World.Environment.NORMAL);
 			// creator.seed(9139863690993604117l);
-			creator.createWorld();
-		}
-
-		if (!isLoaded("world_travaux"))
-		{
-			WorldCreator creator = new WorldCreator("world_travaux");
-			creator.environment(World.Environment.NORMAL);
 			creator.createWorld();
 		}
 
@@ -119,11 +113,6 @@ public class WorldsManager
 	public static World getResources()
 	{
 		return Bukkit.getWorld("world_resources");
-	}
-
-	public static World getTravaux()
-	{
-		return Bukkit.getWorld("world_travaux");
 	}
 
 	private static boolean isLoaded(String name)

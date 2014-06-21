@@ -18,19 +18,17 @@ import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion.CircularInheritanceException;
 
-import fr.heavencraft.Utils;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.HeavenRP;
 import fr.heavencraft.heavenrp.general.users.User;
 import fr.heavencraft.heavenrp.worlds.WorldsManager;
+import fr.heavencraft.utils.WorldGuardUtil;
 
 public class TownsManager
 {
-	public static final String ADD_REMOVE_MAYOR_PERMISSION = "heavenrp.moderator";
-
 	public static boolean regionExists(String name)
 	{
-		return Utils.getWorldGuard().getRegionManager(WorldsManager.getWorld()).getRegion(name) != null;
+		return WorldGuardUtil.getWorldGuard().getRegionManager(WorldsManager.getWorld()).getRegion(name) != null;
 	}
 
 	public static List<String> getMayors(String name)
@@ -115,7 +113,7 @@ public class TownsManager
 		BlockVector pt1 = BukkitUtil.toVector(selection.getMinimumPoint()).toBlockVector();
 		BlockVector pt2 = BukkitUtil.toVector(selection.getMaximumPoint()).toBlockVector();
 
-		RegionManager rm = Utils.getWorldGuard().getRegionManager(world);
+		RegionManager rm = WorldGuardUtil.getWorldGuard().getRegionManager(world);
 
 		ProtectedRegion town = rm.getRegionExact(townName);
 
@@ -156,7 +154,7 @@ public class TownsManager
 
 	public static void removeSubRegion(String townName, String regionName) throws HeavenException
 	{
-		RegionManager rm = Utils.getWorldGuard().getRegionManager(WorldsManager.getWorld());
+		RegionManager rm = WorldGuardUtil.getWorldGuard().getRegionManager(WorldsManager.getWorld());
 
 		ProtectedRegion region = rm.getRegionExact(regionName);
 
@@ -179,7 +177,8 @@ public class TownsManager
 		{
 			name = townName + "_" + userName + "_" + i;
 			i++;
-		} while (rm.getRegionExact(name) != null);
+		}
+		while (rm.getRegionExact(name) != null);
 
 		return name;
 	}

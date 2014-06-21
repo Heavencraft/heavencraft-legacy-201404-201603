@@ -12,15 +12,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import fr.heavencraft.Permissions;
-import fr.heavencraft.SignListener;
-import fr.heavencraft.Utils;
 import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.heavenrp.RPPermissions;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccount;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccountType;
 import fr.heavencraft.heavenrp.general.users.User;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
+import fr.heavencraft.listeners.SignListener;
+import fr.heavencraft.utils.ChatUtil;
+import fr.heavencraft.utils.DevUtil;
 
 public class LivretProSignListener extends SignListener implements Listener
 {
@@ -33,9 +34,9 @@ public class LivretProSignListener extends SignListener implements Listener
 
 	public LivretProSignListener()
 	{
-		super("LivretPro", Permissions.LIVRETPRO_SIGN);
+		super("LivretPro", RPPermissions.LIVRETPRO_SIGN);
 
-		Utils.registerListener(this);
+		DevUtil.registerListener(this);
 	}
 
 	@Override
@@ -70,7 +71,7 @@ public class LivretProSignListener extends SignListener implements Listener
 
 		if (sign.getLine(1).equals(ChatColor.BLUE + CONSULTER))
 		{
-			Utils.sendMessage(player, "{Trésorier} : Vous avez {%1$d} pièces d'or sur votre livret.",
+			ChatUtil.sendMessage(player, "{Trésorier} : Vous avez {%1$d} pièces d'or sur votre livret.",
 					BankAccountsManager.getBankAccount(playerName, BankAccountType.USER).getBalance());
 		}
 
@@ -79,7 +80,7 @@ public class LivretProSignListener extends SignListener implements Listener
 			if (!deposants.containsKey(playerName))
 			{
 				displayAccounts(player);
-				Utils.sendMessage(player, "{Trésorier} : Sur quel livret voulez-vous déposer ?");
+				ChatUtil.sendMessage(player, "{Trésorier} : Sur quel livret voulez-vous déposer ?");
 				deposants.put(playerName, -1);
 			}
 		}
@@ -89,7 +90,7 @@ public class LivretProSignListener extends SignListener implements Listener
 			if (!retirants.containsKey(playerName))
 			{
 				displayAccounts(player);
-				Utils.sendMessage(player, "{Trésorier} : Sur quel livret voulez-vous retirer ?");
+				ChatUtil.sendMessage(player, "{Trésorier} : Sur quel livret voulez-vous retirer ?");
 				retirants.put(playerName, -1);
 			}
 		}
@@ -104,10 +105,10 @@ public class LivretProSignListener extends SignListener implements Listener
 		if (accounts.size() == 0)
 			throw new HeavenException("{Trésorier} : Vous n'avez accès à aucun livret...");
 
-		Utils.sendMessage(player, "{Trésorier} : Voici la liste de vos livrets :");
+		ChatUtil.sendMessage(player, "{Trésorier} : Voici la liste de vos livrets :");
 
 		for (BankAccount account : accounts)
-			Utils.sendMessage(player, "{%1$s} (%2$s) : %3$s pièces d'or", account.getId(), account.getName(),
+			ChatUtil.sendMessage(player, "{%1$s} (%2$s) : %3$s pièces d'or", account.getId(), account.getName(),
 					account.getBalance());
 	}
 
@@ -139,7 +140,7 @@ public class LivretProSignListener extends SignListener implements Listener
 
 		try
 		{
-			int delta = Utils.toUint(event.getMessage());
+			int delta = DevUtil.toUint(event.getMessage());
 
 			if (accountId == -1)
 			{
@@ -163,13 +164,13 @@ public class LivretProSignListener extends SignListener implements Listener
 				retirants.remove(playerName);
 			}
 
-			Utils.sendMessage(player, "{Trésorier} : L'opération a été effectuée avec succès.");
+			ChatUtil.sendMessage(player, "{Trésorier} : L'opération a été effectuée avec succès.");
 		}
 		catch (HeavenException ex)
 		{
 			deposants.remove(playerName);
 			retirants.remove(playerName);
-			Utils.sendMessage(player, ex.getMessage());
+			ChatUtil.sendMessage(player, ex.getMessage());
 		}
 	}
 
@@ -183,8 +184,8 @@ public class LivretProSignListener extends SignListener implements Listener
 		list.put(player.getName(), id);
 
 		if (list.equals(deposants))
-			Utils.sendMessage(player, "{Trésorier} : Combien de pièces d'or souhaitez-vous déposer ?");
+			ChatUtil.sendMessage(player, "{Trésorier} : Combien de pièces d'or souhaitez-vous déposer ?");
 		else
-			Utils.sendMessage(player, "{Trésorier} : Combien de pièces d'or souhaitez-vous retirer ?");
+			ChatUtil.sendMessage(player, "{Trésorier} : Combien de pièces d'or souhaitez-vous retirer ?");
 	}
 }

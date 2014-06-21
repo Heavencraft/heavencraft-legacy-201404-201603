@@ -5,13 +5,13 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
 
-import fr.heavencraft.Permissions;
-import fr.heavencraft.SignListener;
-import fr.heavencraft.Utils;
 import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.heavenrp.RPPermissions;
 import fr.heavencraft.heavenrp.general.users.User;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.heavencraft.heavenrp.provinces.ProvincesManager.Province;
+import fr.heavencraft.listeners.SignListener;
+import fr.heavencraft.utils.ChatUtil;
 
 public class ProvinceSignListener extends SignListener
 {
@@ -20,7 +20,7 @@ public class ProvinceSignListener extends SignListener
 
 	public ProvinceSignListener()
 	{
-		super("Province", Permissions.PROVINCE_SIGN);
+		super("Province", RPPermissions.PROVINCE_SIGN);
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class ProvinceSignListener extends SignListener
 		Province province = ProvincesManager.getProvinceByName(provinceName);
 		user.setProvince(province.getId());
 
-		Utils.sendMessage(player, "Vous venez de rejoindre la province de {%1$s}.", province.getName());
+		ChatUtil.sendMessage(player, "Vous venez de rejoindre la province de {%1$s}.", province.getName());
 	}
 
 	private void onLeaveSignClick(Player player) throws HeavenException
@@ -78,7 +78,7 @@ public class ProvinceSignListener extends SignListener
 		user.updateBalance(-50);
 		user.removeProvince();
 
-		Utils.sendMessage(player, "Vous ne faîtes plus partie d'aucune province.");
-		Utils.sendMessage(player, "Les frais de dossier vous ont coûté {50} pièces d'or.");
+		ChatUtil.sendMessage(player, "Vous ne faîtes plus partie d'aucune province.");
+		ChatUtil.sendMessage(player, "Les frais de dossier vous ont coûté {50} pièces d'or.");
 	}
 }

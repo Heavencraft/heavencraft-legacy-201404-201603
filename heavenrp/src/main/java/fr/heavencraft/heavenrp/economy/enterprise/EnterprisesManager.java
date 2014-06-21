@@ -11,6 +11,7 @@ import fr.heavencraft.exceptions.SQLErrorException;
 import fr.heavencraft.heavenrp.HeavenRP;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccountType;
+import fr.heavencraft.heavenrp.exceptions.EnterpriseNotFoundException;
 import fr.heavencraft.heavenrp.general.users.User;
 
 public class EnterprisesManager

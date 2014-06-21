@@ -11,15 +11,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import fr.heavencraft.Permissions;
-import fr.heavencraft.SignListener;
-import fr.heavencraft.Utils;
 import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.heavenrp.RPPermissions;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccount;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccountType;
 import fr.heavencraft.heavenrp.general.users.User;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
+import fr.heavencraft.listeners.SignListener;
+import fr.heavencraft.utils.ChatUtil;
+import fr.heavencraft.utils.DevUtil;
 
 public class LivretSignListener extends SignListener implements Listener
 {
@@ -32,9 +33,9 @@ public class LivretSignListener extends SignListener implements Listener
 
 	public LivretSignListener()
 	{
-		super("Livret", Permissions.LIVRET_SIGN);
+		super("Livret", RPPermissions.LIVRET_SIGN);
 
-		Utils.registerListener(this);
+		DevUtil.registerListener(this);
 	}
 
 	@Override
@@ -69,13 +70,13 @@ public class LivretSignListener extends SignListener implements Listener
 
 		if (sign.getLine(1).equals(ChatColor.BLUE + CONSULTER))
 		{
-			Utils.sendMessage(player, "{Trésorier} : Vous avez {%1$d} pièces d'or sur votre livret.",
+			ChatUtil.sendMessage(player, "{Trésorier} : Vous avez {%1$d} pièces d'or sur votre livret.",
 					BankAccountsManager.getBankAccount(playerName, BankAccountType.USER).getBalance());
 		}
 
 		else if (sign.getLine(1).equals(ChatColor.BLUE + DEPOSER))
 		{
-			Utils.sendMessage(player, "{Trésorier} : Combien de pièces d'or souhaitez-vous déposer ?");
+			ChatUtil.sendMessage(player, "{Trésorier} : Combien de pièces d'or souhaitez-vous déposer ?");
 
 			if (!deposants.contains(playerName))
 				deposants.add(playerName);
@@ -83,7 +84,7 @@ public class LivretSignListener extends SignListener implements Listener
 
 		else if (sign.getLine(1).equals(ChatColor.BLUE + RETIRER))
 		{
-			Utils.sendMessage(player, "{Trésorier} : Combien de pièces d'or souhaitez-vous retirer ?");
+			ChatUtil.sendMessage(player, "{Trésorier} : Combien de pièces d'or souhaitez-vous retirer ?");
 
 			if (!retirants.contains(playerName))
 				retirants.add(playerName);
@@ -116,7 +117,7 @@ public class LivretSignListener extends SignListener implements Listener
 
 		try
 		{
-			int delta = Utils.toUint(event.getMessage());
+			int delta = DevUtil.toUint(event.getMessage());
 
 			User user = UserProvider.getUserByName(playerName);
 			BankAccount bank = BankAccountsManager.getBankAccount(playerName, BankAccountType.USER);
@@ -132,11 +133,11 @@ public class LivretSignListener extends SignListener implements Listener
 				user.updateBalance(delta);
 			}
 
-			Utils.sendMessage(player, "{Trésorier} : L'opération a bien été effectuée.");
+			ChatUtil.sendMessage(player, "{Trésorier} : L'opération a bien été effectuée.");
 		}
 		catch (HeavenException ex)
 		{
-			Utils.sendMessage(player, ex.getMessage());
+			ChatUtil.sendMessage(player, ex.getMessage());
 		}
 	}
 }

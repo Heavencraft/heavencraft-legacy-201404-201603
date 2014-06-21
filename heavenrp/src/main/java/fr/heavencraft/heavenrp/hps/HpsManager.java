@@ -1,8 +1,8 @@
 package fr.heavencraft.heavenrp.hps;
 
 import fr.heavencraft.exceptions.HeavenException;
-import fr.heavencraft.exceptions.UnknownErrorException;
 import fr.heavencraft.heavenrp.HeavenRP;
+import fr.heavencraft.heavenrp.exceptions.UnknownErrorException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

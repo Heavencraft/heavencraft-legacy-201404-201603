@@ -1,6 +1,5 @@
 package fr.heavencraft.heavenrp.worlds;
 
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -10,15 +9,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPortalEnterEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 
-import fr.heavencraft.Utils;
+import fr.heavencraft.utils.ChatUtil;
+import fr.heavencraft.utils.DevUtil;
 
 public class WorldsListener implements Listener
 {
 	public WorldsListener()
 	{
-		Utils.registerListener(this);
+		DevUtil.registerListener(this);
 	}
 
 	// Limites des mondes
@@ -33,8 +32,8 @@ public class WorldsListener implements Listener
 			if (Math.pow(l.getX(), 2) + Math.pow(l.getZ(), 2) > 25000000)
 			{
 				event.setTo(WorldsManager.getSpawn());
-				Utils.sendMessage(event.getPlayer(), "Vous avez atteint la limite du monde semi-RP.");
-				//event.setCancelled(true);
+				ChatUtil.sendMessage(event.getPlayer(), "Vous avez atteint la limite du monde semi-RP.");
+				// event.setCancelled(true);
 			}
 		}
 
@@ -46,11 +45,11 @@ public class WorldsListener implements Listener
 			if (Math.abs(l.getX()) > limit || Math.abs(l.getZ()) > limit)
 			{
 				event.setTo(WorldsManager.getSpawn());
-				Utils.sendMessage(event.getPlayer(), "Vous avez atteint la limite du monde ressources.");
-				//event.setCancelled(true);
+				ChatUtil.sendMessage(event.getPlayer(), "Vous avez atteint la limite du monde ressources.");
+				// event.setCancelled(true);
 			}
 		}
-		
+
 		else if (l.getWorld().getName().equals("world_old") || l.getWorld().getName().equals("world_origine"))
 		{
 			if (!event.getPlayer().hasPermission("heavenrp.administrator.world"))
@@ -64,15 +63,15 @@ public class WorldsListener implements Listener
 	{
 		if (event.getEntityType() != EntityType.PLAYER)
 			return;
-		
+
 		Block block = event.getLocation().getBlock();
-		
+
 		if (block.getType() != Material.PORTAL)
 			return;
-		
+
 		if (block.getWorld() != WorldsManager.getWorld())
 			return;
-		
+
 		switch (block.getRelative(BlockFace.DOWN).getType())
 		{
 			case NETHERRACK:
@@ -86,29 +85,6 @@ public class WorldsListener implements Listener
 				break;
 			default:
 				break;
-		}
-	}
-	
-	@EventHandler(ignoreCancelled = true)
-	public void onPlayerTeleport(PlayerTeleportEvent event)
-	{
-		// ... -> travaux
-		if (!event.getFrom().getWorld().equals(WorldsManager.getTravaux())
-				&& event.getTo().getWorld().equals(WorldsManager.getTravaux()))
-		{
-			if (!event.getPlayer().hasPermission("heavenrp.administrator.travaux"))
-			{
-				event.setCancelled(true);
-				return;
-			}
-
-			event.getPlayer().setGameMode(GameMode.CREATIVE);
-		}
-		// travaux -> ...
-		else if (event.getFrom().getWorld().equals(WorldsManager.getTravaux())
-				&& !event.getTo().getWorld().equals(WorldsManager.getTravaux()))
-		{
-			event.getPlayer().setGameMode(GameMode.SURVIVAL);
 		}
 	}
 }

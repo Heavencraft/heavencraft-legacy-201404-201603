@@ -11,9 +11,9 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 import fr.heavencraft.exceptions.HeavenException;
-import fr.heavencraft.exceptions.UnknownErrorException;
-import fr.heavencraft.exceptions.WarpNotFoundException;
 import fr.heavencraft.heavenrp.HeavenRP;
+import fr.heavencraft.heavenrp.exceptions.UnknownErrorException;
+import fr.heavencraft.heavenrp.exceptions.WarpNotFoundException;
 
 public class WarpsManager
 {
