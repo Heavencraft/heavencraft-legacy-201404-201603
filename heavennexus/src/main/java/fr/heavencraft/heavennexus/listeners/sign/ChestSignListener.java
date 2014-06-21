@@ -7,22 +7,22 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import fr.heavencraft.heavennexus.exceptions.HeavenException;
+import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.listeners.SignListener;
 
-public class ChestSignListener extends SignListener {
-
-	public ChestSignListener(JavaPlugin plugin)
+public class ChestSignListener extends SignListener
+{
+	public ChestSignListener()
 	{
-		super("Coffre", "", plugin);
+		super("Coffre", "");
 	}
 
 	@Override
 	protected boolean onSignPlace(Player player, SignChangeEvent event)
 	{
 		Material material = Material.matchMaterial(event.getLine(1));
-		
+
 		if (material == null)
 			return false;
 		else
@@ -36,10 +36,10 @@ public class ChestSignListener extends SignListener {
 	protected void onSignClick(Player player, Sign sign) throws HeavenException
 	{
 		Material material = Material.getMaterial(sign.getLine(1));
-		
+
 		Inventory inventory = Bukkit.createInventory(player, 54, "Heavencraft <3");
 		inventory.addItem(new ItemStack(material, 3456));
-		
+
 		player.openInventory(inventory);
 	}
 }
