@@ -8,6 +8,7 @@ import org.bukkit.inventory.Inventory;
 import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.HeavenRP;
+import fr.heavencraft.utils.ChatUtil;
 import fr.manu67100.heavenrp.laposte.handlers.JoueursEnEditionDeColis;
 import fr.manu67100.heavenrp.laposte.handlers.PostOfficeManager;
 
@@ -51,9 +52,6 @@ public class colisCommand extends HeavenCommand{
 			}
 			else
 				player.sendMessage(String.format(FORMAT_POSTE, "Vous devez ètre dans un bureau de Poste."));
-			
-			
-			
 		}
 		
 	}
@@ -61,12 +59,12 @@ public class colisCommand extends HeavenCommand{
 	@Override
 	protected void onConsoleCommand(CommandSender sender, String[] args)
 			throws HeavenException {
-		
+		ChatUtil.sendMessage(sender, "Cette commande ne peut pas être utilisée depuis la {console}.");
 	}
 
 	@Override
 	protected void sendUsage(CommandSender sender) {
-		
+		ChatUtil.sendMessage(sender, "/colis <destinataire> Pour envoyer un colis.");
 	}
 
 }

@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 
 import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.utils.ChatUtil;
 import fr.manu67100.heavenrp.laposte.Files;
 
 
@@ -13,7 +14,7 @@ public class listPosteCommand extends HeavenCommand{
 		super("listPoste");
 	}
 
-	private final static String FORMAT_NC = "�2[HA] �6%1$s";
+	private final static String FORMAT_NC = "§4[§6La Poste§4] §6%1$s";
 
 	@Override
 	protected void onPlayerCommand(Player player, String[] args)
@@ -37,11 +38,11 @@ public class listPosteCommand extends HeavenCommand{
 	@Override
 	protected void onConsoleCommand(CommandSender sender, String[] args)
 			throws HeavenException {
-
+		ChatUtil.sendMessage(sender, "Cette commande ne peut pas être utilisée depuis la {console}.");
 	}
 
 	@Override
 	protected void sendUsage(CommandSender sender) {
-
+		ChatUtil.sendMessage(sender, "/listposte Pour voir les bureaux de poste.");
 	}
 }
