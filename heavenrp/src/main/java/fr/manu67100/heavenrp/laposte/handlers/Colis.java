@@ -84,7 +84,7 @@ public class Colis {
 			ps.setBoolean(4, true);
 			ps.executeUpdate();
 			
-			expediteur.sendMessage(String.format(FORMAT_POSTE, "Votre colis a �t� bien envoy�."));
+			expediteur.sendMessage(String.format(FORMAT_POSTE, "Votre colis a été bien envoyé."));
 		}
 
 		catch (SQLException ex)

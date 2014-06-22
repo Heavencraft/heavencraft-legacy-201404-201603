@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 
 import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.utils.ChatUtil;
 import fr.manu67100.heavenrp.laposte.Files;
 import fr.manu67100.heavenrp.laposte.handlers.PostOfficeManager;
 
@@ -48,7 +49,7 @@ public class removeOfficeCommand extends HeavenCommand{
 
 	@Override
 	protected void sendUsage(CommandSender sender) {
-		
+		ChatUtil.sendMessage(sender, "/removeposte <region> Pour enlever la poste.");
 	}
 
 }
