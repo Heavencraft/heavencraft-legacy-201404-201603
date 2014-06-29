@@ -25,13 +25,13 @@ import fr.manu67100.heavenrp.laposte.handlers.MenuItem;
 import fr.manu67100.heavenrp.laposte.handlers.PopupMenu;
 import fr.manu67100.heavenrp.laposte.handlers.PopupMenuAPI;
 
-
-public class SignListener implements Listener{
-	private String _permission;
-	private String _tag;
+public class SignListener implements Listener
+{
+	private final String _permission;
+	private final String _tag;
 	private final static String FORMAT_POSTE = "§4[§6La Poste§4] §6%1$s";
 
-	public SignListener() 
+	public SignListener()
 	{
 		_permission = "LaPoste.admin";
 		_tag = "[" + "Poste" + "]";
@@ -43,7 +43,8 @@ public class SignListener implements Listener{
 	{
 		Player player = event.getPlayer();
 
-		if (player == null ||(!player.hasPermission(_permission) && player.isOp() == false) || !event.getLine(0).equalsIgnoreCase(_tag))
+		if (player == null || (!player.hasPermission(_permission) && player.isOp() == false)
+				|| !event.getLine(0).equalsIgnoreCase(_tag))
 			return;
 
 		event.setLine(0, ChatColor.GREEN + _tag);
@@ -53,75 +54,79 @@ public class SignListener implements Listener{
 	}
 
 	@EventHandler(ignoreCancelled = false)
-	public void PostSignClick(PlayerInteractEvent e){
+	public void PostSignClick(PlayerInteractEvent e)
+	{
 
-		if(e.getAction() != Action.RIGHT_CLICK_BLOCK && e.getAction() != Action.RIGHT_CLICK_AIR)
+		if (e.getAction() != Action.RIGHT_CLICK_BLOCK)
 			return;
 
-		if (e.getClickedBlock().getType() != Material.SIGN_POST && e.getClickedBlock().getType() != Material.WALL_SIGN && e.getClickedBlock().getType() != Material.SIGN)
+		if (!Material.SIGN_POST.equals(e.getClickedBlock().getType())
+				&& !Material.WALL_SIGN.equals(e.getClickedBlock().getType())
+				&& !Material.SIGN.equals(e.getClickedBlock().getType()))
 			return;
 
 		Sign sign = (Sign) e.getClickedBlock().getState();
 
 		if (!sign.getLine(0).equals(ChatColor.GREEN + _tag))
 			return;
-		
+
 		ArrayList<Colis> mesColis = new ArrayList<Colis>();
-		
-		for(String id : getColisRecus(e.getPlayer().getUniqueId().toString()))
+
+		for (String id : getColisRecus(e.getPlayer().getUniqueId().toString()))
 		{
 			mesColis.add(new Colis(Integer.parseInt(id)));
 		}
-		
-		
+
 		PopupMenu menuMesColis = PopupMenuAPI.createMenu("Mes Colis Recus", 2);
 		int index = 0;
-		for(final Colis colis : mesColis)
+		for (final Colis colis : mesColis)
 		{
-			
-			MenuItem bouton = new MenuItem("Colis de " + colis.getExpediteur().getName(), new MaterialData(Material.CHEST))
+
+			MenuItem bouton = new MenuItem("Colis de " + colis.getExpediteur().getName(), new MaterialData(
+					Material.CHEST))
 			{
 				@Override
-				public void onClick(Player player) {			
+				public void onClick(Player player)
+				{
 					// Le joueur a t'il suffisament de place dans l'inventaire?
-					if(Utils.getEmptySlots(player.getInventory()) >= colis.EmplacementsNecessaire())
+					if (Utils.getEmptySlots(player.getInventory()) >= colis.EmplacementsNecessaire())
 					{
 						colis.openColis(player);
 						getMenu().closeMenu(player);
 					}
 					else
 					{
-						player.sendMessage(String.format(FORMAT_POSTE, "Vous n'avez pas assez de place dans votre inventaire."));
+						player.sendMessage(String.format(FORMAT_POSTE,
+								"Vous n'avez pas assez de place dans votre inventaire."));
 					}
 				}
 			};
-			
+
 			bouton.setDescriptions(Utils.wrapWords("Colis de: " + colis.getExpediteur().getName(), 40));
 			menuMesColis.addMenuItem(bouton, index);
-			index ++;
+			index++;
 		}
-		
+
 		menuMesColis.setExitOnClickOutside(true);
 		menuMesColis.switchMenu(e.getPlayer(), menuMesColis);
 	}
 
-	
 	private ArrayList<String> getColisRecus(String UUID)
 	{
 		ArrayList<String> liste = new ArrayList<String>();
-		
+
 		try
 		{
 			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
 					"SELECT `IDcolis` FROM `poste_colis`  WHERE `destinataire` = ? AND `isLOG` = '0'");
 			ps.setString(1, UUID);
 			ResultSet rs = ps.executeQuery();
-			
-			while(rs.next())
-			{	
+
+			while (rs.next())
+			{
 				liste.add(rs.getString("IDcolis"));
-			}		
-			
+			}
+
 			return liste;
 		}
 		catch (SQLException ex)
@@ -130,7 +135,5 @@ public class SignListener implements Listener{
 			return null;
 		}
 	}
-	
+
 }
-
-
