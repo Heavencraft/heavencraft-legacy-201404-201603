@@ -67,6 +67,17 @@ import fr.lorgan17.heavenrp.listeners.LampadaireListener;
 import fr.lorgan17.heavenrp.listeners.PVP4Manager;
 import fr.lorgan17.heavenrp.listeners.PVPManager;
 import fr.lorgan17.heavenrp.listeners.SnowballListener;
+import fr.manu67100.heavenrp.laposte.WGHandler.WGRegionEventsListener;
+import fr.manu67100.heavenrp.laposte.commands.admin.addOfficeCommand;
+import fr.manu67100.heavenrp.laposte.commands.admin.listPosteCommand;
+import fr.manu67100.heavenrp.laposte.commands.admin.reloadRegion;
+import fr.manu67100.heavenrp.laposte.commands.admin.removeOfficeCommand;
+import fr.manu67100.heavenrp.laposte.commands.user.colisCommand;
+import fr.manu67100.heavenrp.laposte.handlers.PopupMenuAPI;
+import fr.manu67100.heavenrp.laposte.handlers.PostOfficeManager;
+import fr.manu67100.heavenrp.laposte.listeners.InventoryListener;
+import fr.manu67100.heavenrp.laposte.listeners.PostOfficeListener;
+import fr.manu67100.heavenrp.laposte.listeners.SignListener;
 
 public class InitManager
 {
@@ -148,6 +159,13 @@ public class InitManager
 		new MaireCommand();
 		new MairesCommand();
 		new ParcelleCommand();
+		
+		// Commandes Poste
+		new colisCommand();
+		new reloadRegion();
+		new addOfficeCommand();
+		new removeOfficeCommand();
+		new listPosteCommand();
 	}
 
 	private static void initListeners()
@@ -212,5 +230,14 @@ public class InitManager
 		new SnowballListener();
 
 		// new AdminShop();
+		
+		// La Poste
+		
+		new PostOfficeListener();
+		new WGRegionEventsListener();
+		new SignListener();
+		new InventoryListener();
+		new PopupMenuAPI();
+		PostOfficeManager.LoadOffices();
 	}
 }
