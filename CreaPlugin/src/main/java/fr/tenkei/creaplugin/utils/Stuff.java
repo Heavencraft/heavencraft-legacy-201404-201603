@@ -10,8 +10,8 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import fr.heavencraft.exceptions.HeavenException;
 import fr.tenkei.creaplugin.MyPlugin;
-import fr.tenkei.creaplugin.exceptions.MyException;
 import fr.tenkei.creaplugin.exceptions.PlayerNotConnectedException;
 import fr.tenkei.creaplugin.managers.entities.Region;
 
@@ -96,7 +96,7 @@ public class Stuff
 		return dateFormat.format(date);
 	}
 
-	public static int toInt(String s) throws MyException
+	public static int toInt(String s) throws HeavenException
 	{
 		try
 		{
@@ -104,16 +104,16 @@ public class Stuff
 		}
 		catch (NumberFormatException ex)
 		{
-			throw new MyException("Le nombre {" + s + "} est incorrect.");
+			throw new HeavenException("Le nombre {" + s + "} est incorrect.");
 		}
 	}
 
-	public static int toUint(String s) throws MyException
+	public static int toUint(String s) throws HeavenException
 	{
 		int i = toInt(s);
 
 		if (i < 0)
-			throw new MyException("Le nombre {" + s + "} est incorrect.");
+			throw new HeavenException("Le nombre {" + s + "} est incorrect.");
 
 		return i;
 	}

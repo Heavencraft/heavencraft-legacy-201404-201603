@@ -1,59 +1,63 @@
 package fr.tenkei.creaplugin.commands;
 
-import org.bukkit.command.defaults.ListCommand;
-
+import fr.heavencraft.commands.AccepterCommand;
+import fr.heavencraft.commands.HeadCommand;
+import fr.heavencraft.commands.RejoindreCommand;
+import fr.heavencraft.commands.TpCommand;
+import fr.heavencraft.commands.TphereCommand;
+import fr.heavencraft.commands.TpposCommand;
 import fr.tenkei.creaplugin.MyPlugin;
 import fr.tenkei.creaplugin.commands.admin.BiomeCommand;
 import fr.tenkei.creaplugin.commands.admin.OldCommand;
 import fr.tenkei.creaplugin.commands.admin.SetspawnCommand;
-import fr.tenkei.creaplugin.commands.admin.TphereCommand;
 import fr.tenkei.creaplugin.commands.builder.BuildCommand;
-import fr.tenkei.creaplugin.commands.builder.HeadCommand;
-import fr.tenkei.creaplugin.commands.builder.TpPosCommand;
-import fr.tenkei.creaplugin.commands.modo.TpCommand;
 import fr.tenkei.creaplugin.commands.user.HomeCommandHome;
 import fr.tenkei.creaplugin.commands.user.HomeCommandSetHome;
 import fr.tenkei.creaplugin.commands.user.HpsCommand;
-import fr.tenkei.creaplugin.commands.user.JetonCommand;
+import fr.tenkei.creaplugin.commands.user.JetonsCommand;
 import fr.tenkei.creaplugin.commands.user.ProtectionCommand;
-import fr.tenkei.creaplugin.commands.user.teleport.AccepterCommand;
-import fr.tenkei.creaplugin.commands.user.teleport.RejoindreCommand;
 import fr.tenkei.creaplugin.commands.user.teleport.SpawnCommand;
 
-public class CommandsManager {
+public class CommandsManager
+{
 
-	public CommandsManager(MyPlugin plugin){
-		new ListCommand();
-		
+	public CommandsManager(MyPlugin plugin)
+	{
+		/*
+		 * HeavenCore
+		 */
+
+		new AccepterCommand();
+		new HeadCommand();
+		new RejoindreCommand();
+		new TpCommand();
+		new TphereCommand();
+		new TpposCommand();
+
+		/*
+		 * CréaPlugin
+		 */
+
 		// User
-		new RejoindreCommand(plugin);
-		new AccepterCommand(plugin);
-		new SpawnCommand(plugin);
-		
-		new HomeCommandHome(plugin);
-		new HomeCommandSetHome(plugin);
-		
-		new HpsCommand(plugin);
-		new JetonCommand(plugin);
-		
-		new ProtectionCommand(plugin);
+		new SpawnCommand();
 
-		
+		new HomeCommandHome();
+		new HomeCommandSetHome();
+
+		new HpsCommand();
+		new JetonsCommand();
+
+		new ProtectionCommand();
+
 		// Builder
-		new BuildCommand(plugin);
-		new HeadCommand(plugin);
-		new TpPosCommand(plugin);
-		
-		
+		new BuildCommand();
+
 		// Modo
-		new TpCommand(plugin);
-		
-		
+
 		// Admin
-		new TphereCommand(plugin);
-		new BiomeCommand(plugin);
-		new OldCommand(plugin);
-		new SetspawnCommand(plugin);
-		
+		new BiomeCommand();
+		new OldCommand();
+		new SetspawnCommand();
+
 	}
 }

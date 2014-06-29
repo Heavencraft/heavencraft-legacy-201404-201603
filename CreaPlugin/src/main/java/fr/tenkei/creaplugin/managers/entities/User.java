@@ -10,38 +10,40 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
+import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.utils.ChatUtil;
 import fr.tenkei.creaplugin.MyPlugin;
-import fr.tenkei.creaplugin.exceptions.MyException;
 import fr.tenkei.creaplugin.exceptions.PlayerNoJetonRequired;
 import fr.tenkei.creaplugin.exceptions.PlayerNotHaveHomeNumber;
 import fr.tenkei.creaplugin.utils.ConnectionManager;
-import fr.tenkei.creaplugin.utils.Message;
 import fr.tenkei.creaplugin.utils.Stuff;
 
-public class User {
-	
-	private int _id;
-	private String _name;
-	
+public class User
+{
+
+	private final int _id;
+	private final String _name;
+
 	private int _jeton;
-	
-	private int  _nbHome;
+
+	private int _nbHome;
 	private String _savedDate;
-	
+
 	private String _requestName;
 	private Block _lastInteractBlock;
-	
-	private HashMap<String, String> _stringVariables;
-	
-	public User(int id, String name, int jetons, int nbHome, String savedDate, String varStr) {
+
+	private final HashMap<String, String> _stringVariables;
+
+	public User(int id, String name, int jetons, int nbHome, String savedDate, String varStr)
+	{
 		_id = id;
 		_name = name;
 		_jeton = jetons;
 		_nbHome = nbHome;
 		_savedDate = savedDate;
-		
+
 		_stringVariables = new HashMap<String, String>();
-		
+
 		loadVarStr(varStr);
 	}
 
@@ -51,7 +53,7 @@ public class User {
 		MyPlugin.log(currentDate + " vs " + _savedDate);
 		return !currentDate.equalsIgnoreCase(_savedDate);
 	}
-	
+
 	public void setStringVariable(String variable, String value)
 	{
 		if (_stringVariables.containsKey(variable))
@@ -70,12 +72,12 @@ public class User {
 	{
 		_lastInteractBlock = block;
 	}
-	
+
 	public Block getInteractBlock()
 	{
 		return _lastInteractBlock;
 	}
-	
+
 	public int getId()
 	{
 		return _id;
@@ -85,29 +87,30 @@ public class User {
 	{
 		return _name;
 	}
-	
+
 	public int getJeton()
 	{
 		return _jeton;
 	}
 
 	public void saveUser()
-	{	
+	{
 		String varString = "";
 		for (Entry<String, String> element : _stringVariables.entrySet())
 		{
 			varString += element.getKey() + "=" + element.getValue() + "\n";
 		}
-		
+
 		try
 		{
-			PreparedStatement ps = ConnectionManager.getConnection().prepareStatement("UPDATE users SET jetons = ?, nbHome = ?, savedDate = ?, varString = ? WHERE id = ?");
+			PreparedStatement ps = ConnectionManager.getConnection().prepareStatement(
+					"UPDATE users SET jetons = ?, nbHome = ?, savedDate = ?, varString = ? WHERE id = ?");
 			ps.setInt(1, _jeton);
 
 			ps.setInt(2, _nbHome);
 			ps.setString(3, _savedDate);
 			ps.setString(4, varString);
-			
+
 			ps.setInt(5, _id);
 
 			ps.executeUpdate();
@@ -118,12 +121,12 @@ public class User {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public void loadVarStr(String varString)
 	{
 		String[] listString = varString.split("\n");
-		
-		for(int i = 0 ; i<listString.length ; i++)
+
+		for (int i = 0; i < listString.length; i++)
 		{
 			String[] lineData = listString[i].split("=");
 			if (lineData.length == 2)
@@ -132,31 +135,32 @@ public class User {
 				String value = lineData[1].trim();
 				_stringVariables.put(variable, value);
 			}
-		}	
+		}
 	}
-	
-	public int updateBalance(int delta) throws MyException
+
+	public int updateBalance(int delta) throws HeavenException
 	{
 		if (_jeton < 0)
 			throw new PlayerNoJetonRequired(-delta);
 		if (_jeton + delta < 0)
 			throw new PlayerNoJetonRequired(-delta);
-		
+
 		_jeton += delta;
 		setBalance(_jeton);
 		return _jeton;
 	}
-	
+
 	public void stateBalance()
 	{
-		Message.sendMessage(Bukkit.getPlayer(_name), "Vous avez maintenant {" + _jeton + "} Jetons.");
+		ChatUtil.sendMessage(Bukkit.getPlayer(_name), "Vous avez maintenant {" + _jeton + "} Jetons.");
 	}
-	
+
 	public boolean setBalance(int value)
 	{
 		try
 		{
-			PreparedStatement ps = ConnectionManager.getConnection().prepareStatement("UPDATE users SET jetons = ? WHERE id = ?");
+			PreparedStatement ps = ConnectionManager.getConnection().prepareStatement(
+					"UPDATE users SET jetons = ? WHERE id = ?");
 			ps.setInt(1, value);
 			ps.setInt(2, _id);
 			ps.executeUpdate();
@@ -165,76 +169,84 @@ public class User {
 		}
 		catch (SQLException e)
 		{
-			
+
 		}
 		return false;
 	}
-	
-	public void onLogin() throws MyException
+
+	public void onLogin() throws HeavenException
 	{
 		String currentDate = Stuff.getDateTime();
 
 		if (shouldBeNewDay())
 		{
-			Message.sendMessage(Bukkit.getPlayer(this._name), ChatColor.AQUA + "Vous venez d'obtenir {100 Jetons" 
+			ChatUtil.sendMessage(Bukkit.getPlayer(_name), ChatColor.AQUA + "Vous venez d'obtenir {100 Jetons"
 					+ ChatColor.AQUA + " en vous connectant !");
-			this.updateBalance(100);
+			updateBalance(100);
 			_savedDate = currentDate;
 		}
 	}
 
-	public void setTeleportRequestName(String name) {
-		this._requestName = name;
+	public void setTeleportRequestName(String name)
+	{
+		_requestName = name;
 	}
 
-	public String getTeleportRequestName() {
-		return this._requestName;
+	public String getTeleportRequestName()
+	{
+		return _requestName;
 	}
 
 	public boolean setHome(int number, Location loc)
 	{
-		this.setStringVariable("home_" + number, Stuff.locationToString(loc));
+		setStringVariable("home_" + number, Stuff.locationToString(loc));
 		return true;
 	}
 
 	public boolean hasHome(int number)
 	{
-		return !this.getStringVariable("home_" + number).isEmpty();
+		return !getStringVariable("home_" + number).isEmpty();
 	}
 
 	public Location getHome(int number) throws PlayerNotHaveHomeNumber
 	{
-		if(number > _nbHome)
+		if (number > _nbHome)
 			throw new PlayerNotHaveHomeNumber(number);
 
-		return Stuff.stringToLocation(this.getStringVariable("home_" + number));
+		return Stuff.stringToLocation(getStringVariable("home_" + number));
 	}
-	
+
 	public int getHomeNumbre()
 	{
 		return _nbHome;
 	}
-	
-	/*** How to buy home ? C'est ici. Prix donné par : prix = (2^nbHomeToBuy * 500)/4
-	 * @throws MyException */
-	public void addHommeNumbre(Block block) throws MyException
-	{
-		int prix = (int) (Math.pow(2.0, _nbHome+1) * 500)/4;
-		
-	    if ((_lastInteractBlock == null) || !Stuff.blocksEquals(_lastInteractBlock, block)) {
-	      setInteractBlock(block);
-	      int homeNombre = _nbHome + 1;
-	      Message.sendMessage(Bukkit.getPlayer(_name), "Cliquez une seconde fois pour confirmer l'achat du home "+ homeNombre +" pour {" + prix +"} Jetons.");
-	      return;
-	    }
 
-	    setInteractBlock(null);
+	/***
+	 * How to buy home ? C'est ici. Prix donné par : prix = (2^nbHomeToBuy * 500)/4
+	 * 
+	 * @throws HeavenException
+	 */
+	public void addHommeNumbre(Block block) throws HeavenException
+	{
+		int prix = (int) (Math.pow(2.0, _nbHome + 1) * 500) / 4;
+
+		if ((_lastInteractBlock == null) || !Stuff.blocksEquals(_lastInteractBlock, block))
+		{
+			setInteractBlock(block);
+			int homeNombre = _nbHome + 1;
+			ChatUtil.sendMessage(Bukkit.getPlayer(_name), "Cliquez une seconde fois pour confirmer l'achat du home "
+					+ homeNombre + " pour {" + prix + "} Jetons.");
+			return;
+		}
+
+		setInteractBlock(null);
 
 		updateBalance(-prix);
-		
+
 		_nbHome++;
-		
-		Message.sendMessage(Bukkit.getPlayer(_name), "Vous êtes maintenant l'heureux propriétaire de "+ _nbHome +" homes , cela vous a couté {" + prix + "} Jetons !");
+
+		ChatUtil.sendMessage(Bukkit.getPlayer(_name), "Vous êtes maintenant l'heureux propriétaire de " + _nbHome
+				+ " homes , cela vous a couté {" + prix + "} Jetons !");
 		stateBalance();
 	}
 }

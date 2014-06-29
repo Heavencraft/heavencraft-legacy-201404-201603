@@ -4,35 +4,35 @@ import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import fr.tenkei.creaplugin.MyPlugin;
-import fr.tenkei.creaplugin.commands.Command;
-import fr.tenkei.creaplugin.exceptions.MyException;
+import fr.heavencraft.commands.HeavenCommand;
+import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.utils.ChatUtil;
+import fr.tenkei.creaplugin.CreaPermissions;
 import fr.tenkei.creaplugin.managers.WorldsManager;
-import fr.tenkei.creaplugin.utils.Message;
 
-public class BuildCommand extends Command{
-
-	public BuildCommand(MyPlugin plugin) {
-		super("build", plugin);
+public class BuildCommand extends HeavenCommand
+{
+	public BuildCommand()
+	{
+		super("build", CreaPermissions.BUILD);
 	}
 
-	protected void onPlayerCommand(Player player, String[] args)
-			throws MyException {
-		if(!player.hasPermission(MyPlugin.builder))
-			return;
-		
+	@Override
+	protected void onPlayerCommand(Player player, String[] args) throws HeavenException
+	{
 		player.teleport(WorldsManager.getTheTravaux().getSpawnLocation());
 		player.setGameMode(GameMode.CREATIVE);
 	}
 
 	@Override
-	protected void onConsoleCommand(CommandSender sender, String[] args)
-			throws MyException {
-		Message.sendMessage(sender, "Cette commande n'est pas utilisable depuis la console.");
+	protected void onConsoleCommand(CommandSender sender, String[] args) throws HeavenException
+	{
+		ChatUtil.sendMessage(sender, "Cette commande n'est pas utilisable depuis la console.");
 	}
 
 	@Override
-	protected void sendUsage(CommandSender sender) {
-		
+	protected void sendUsage(CommandSender sender)
+	{
+
 	}
 }

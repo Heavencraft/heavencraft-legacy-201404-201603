@@ -3,16 +3,15 @@ package fr.tenkei.creaplugin;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
 
+import fr.heavencraft.HeavenPlugin;
 import fr.tenkei.creaplugin.commands.CommandsManager;
 import fr.tenkei.creaplugin.listeners.ListenersManager;
 import fr.tenkei.creaplugin.managers.ManagersManager;
-import fr.tenkei.creaplugin.utils.ConnectionManager;
+import fr.tenkei.creaplugin.managers.UserManager;
 
-public class MyPlugin extends JavaPlugin
+public class MyPlugin extends HeavenPlugin
 {
-
 	public final static String pluginTag = "[Plugin-Creative] ";
 	public final static String builder = "server.builder";
 	public final static String archiModo = "server.archimodo";
@@ -29,8 +28,6 @@ public class MyPlugin extends JavaPlugin
 		super.onEnable();
 
 		// Connexion DB
-		ConnectionManager.enableConnection();
-		// UpdateHomes.updateAllPlayers();
 
 		// Gestionnaire de Manager
 		_myManagers = new ManagersManager(this);
@@ -50,7 +47,7 @@ public class MyPlugin extends JavaPlugin
 
 		try
 		{
-			_myManagers.getUserManager().saveAllUsers();
+			UserManager.saveAllUsers();
 			Bukkit.getScheduler().cancelTasks(this);
 		}
 		catch (Exception ex)
