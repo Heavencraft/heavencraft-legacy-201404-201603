@@ -9,7 +9,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import fr.heavencraft.exceptions.HeavenException;
-import fr.heavencraft.listeners.SignListener;
+import fr.heavencraft.listeners.sign.SignListener;
 
 public class ChestSignListener extends SignListener
 {
