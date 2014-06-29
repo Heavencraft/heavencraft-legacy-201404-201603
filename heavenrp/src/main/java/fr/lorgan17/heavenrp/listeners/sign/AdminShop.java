@@ -9,7 +9,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.HeavenRP;
-import fr.heavencraft.listeners.SignListener;
+import fr.heavencraft.listeners.sign.SignListener;
 
 public class AdminShop extends SignListener
 {

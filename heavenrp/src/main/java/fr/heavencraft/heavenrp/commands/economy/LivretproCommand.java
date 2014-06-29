@@ -32,7 +32,7 @@ public class LivretproCommand extends HeavenCommand
 				if (args[0].equalsIgnoreCase("+ville"))
 				{
 					BankAccountsManager.createBankAccount(args[1], BankAccountType.TOWN);
-					ChatUtil.sendMessage(sender, "Le livret pro de la ville {%1$s} a bien été créé");
+					ChatUtil.sendMessage(sender, "Le livret pro de la ville {%1$s} a bien été créé", args[1]);
 				}
 				break;
 

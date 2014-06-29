@@ -7,7 +7,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import fr.heavencraft.Utils;
@@ -56,22 +55,4 @@ public class EconomyListener implements Listener
 		user.updateLastLogin(new Date());
 	}
 
-	@EventHandler
-	public void onPlayerDeath(PlayerDeathEvent event) throws HeavenException
-	{
-		Player player = event.getEntity();
-
-		User user = UserProvider.getUserByName(player.getName());
-
-		int newBalance = (int) (user.getBalance() * 0.8D);
-		int delta = user.getBalance() - newBalance;
-
-		if (delta != 0)
-		{
-			user.updateBalance(-delta);
-			ChatUtil.sendMessage(player, "Vous avez perdu {%1$s} pièces d'or que vous aviez dans votre bourse.",
-					new Object[] { Integer.valueOf(delta) });
-			ChatUtil.sendMessage(player, "Pensez à déposer vôtre argent à la banque la prochaine fois.");
-		}
-	}
 }

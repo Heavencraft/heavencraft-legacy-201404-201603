@@ -22,7 +22,6 @@ public class RPPermissions
 	 */
 
 	public static final String DONJON_SIGN = "heavencraft.signs.donjon";
-	public static final String LINK_SIGN = "heavencraft.signs.link";
 	public static final String LIVRET_SIGN = "heavencraft.signs.livret";
 	public static final String LIVRETPRO_SIGN = "heavencraft.signs.livretpro";
 	public static final String PROVINCE_SIGN = "heavencraft.signs.province";
