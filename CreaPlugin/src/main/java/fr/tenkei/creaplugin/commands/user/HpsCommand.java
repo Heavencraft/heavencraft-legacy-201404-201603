@@ -3,54 +3,61 @@ package fr.tenkei.creaplugin.commands.user;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import fr.tenkei.creaplugin.MyPlugin;
-import fr.tenkei.creaplugin.commands.Command;
-import fr.tenkei.creaplugin.exceptions.MyException;
+import fr.heavencraft.commands.HeavenCommand;
+import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.utils.ChatUtil;
 import fr.tenkei.creaplugin.managers.HpsManager;
-import fr.tenkei.creaplugin.utils.Message;
+import fr.tenkei.creaplugin.managers.UserManager;
 import fr.tenkei.creaplugin.utils.Stuff;
 
-public class HpsCommand extends Command {
+public class HpsCommand extends HeavenCommand
+{
 
-	public HpsCommand(MyPlugin plugin) {
-		super("hps", plugin);
+	public HpsCommand()
+	{
+		super("hps");
 	}
 
 	@Override
-	protected void onPlayerCommand(Player player, String[] args) throws MyException
+	protected void onPlayerCommand(Player player, String[] args) throws HeavenException
 	{
-		if (args.length != 1){
+		if (args.length != 1)
+		{
 			sendUsage(player);
 			return;
 		}
 
 		int hps = Stuff.toUint(args[0]);
-		
-		if (hps < 0)
-			throw new MyException("Le nombre est incorrect.");
-		
-		
-		HpsManager.removeBalance(player.getName(), hps);
-		getUser().updateBalance(hps * HpsManager.TAUX_JETON);
 
-		Message.sendMessage(player, hps + " HPs ont Ã©tÃ© retirÃ©s de votre compte");
-		Message.sendMessage(player, "Vous avez reÃ§u {" + hps * HpsManager.TAUX_JETON + "} Jetons.");
+		if (hps < 0)
+			throw new HeavenException("Le nombre est incorrect.");
+
+		HpsManager.removeBalance(player.getName(), hps);
+		UserManager.getUser(player.getName()).updateBalance(hps * HpsManager.TAUX_JETON);
+
+		ChatUtil.sendMessage(player, "%1$s HPs ont été retirés de votre compte", hps);
+		ChatUtil.sendMessage(player, "Vous avez reçu {%1$s} Jetons.", hps * HpsManager.TAUX_JETON);
 	}
 
-
 	@Override
-	protected void onConsoleCommand(CommandSender sender, String[] args)
-			throws MyException {
+	protected void onConsoleCommand(CommandSender sender, String[] args) throws HeavenException
+	{
 		// TODO Auto-generated method stub
 	}
 
 	@Override
 	protected void sendUsage(CommandSender sender)
 	{
-		Message.sendMessage(sender, "/{hps} <nombre de HPs a convertir>");
-		Message.sendMessage(sender, "Le taux est de {" + HpsManager.TAUX_JETON + "} Jetons par HP.");
-		try {
-			Message.sendMessage(sender, "Vous avez {" + HpsManager.getBalance(sender.getName()) + "} HPs sur votre compte.");
-		} catch (MyException e) { e.printStackTrace(); }
+		ChatUtil.sendMessage(sender, "/{hps} <nombre de HPs a convertir>");
+		ChatUtil.sendMessage(sender, "Le taux est de {" + HpsManager.TAUX_JETON + "} Jetons par HP.");
+		try
+		{
+			ChatUtil.sendMessage(sender, "Vous avez {" + HpsManager.getBalance(sender.getName())
+					+ "} HPs sur votre compte.");
+		}
+		catch (HeavenException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }

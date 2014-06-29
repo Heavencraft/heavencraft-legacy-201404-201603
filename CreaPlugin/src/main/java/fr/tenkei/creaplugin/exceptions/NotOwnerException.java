@@ -1,7 +1,9 @@
 package fr.tenkei.creaplugin.exceptions;
 
-public class NotOwnerException extends MyException {
+import fr.heavencraft.exceptions.HeavenException;
 
+public class NotOwnerException extends HeavenException
+{
 	private static final long serialVersionUID = 1L;
 
 	public NotOwnerException()

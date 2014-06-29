@@ -6,21 +6,14 @@ import java.sql.SQLException;
 
 import org.bukkit.Bukkit;
 
-public class ConnectionManager {
-		
-	private final static String FUN_DB_URL = "jdbc:mysql://localhost:3306/minecraft-creative?user=mc-sql&password=MfGJQMBzmAS5xYhH";
-	private final static String MAIN_DB_URL = "jdbc:mysql://localhost:3306/mc-db?user=mc-sql&password=MfGJQMBzmAS5xYhH";
+public class ConnectionManager
+{
+	private static final String FUN_DB_URL = "jdbc:mysql://localhost:3306/minecraft-creative?user=mc-sql&password=MfGJQMBzmAS5xYhH";
+	private static final String MAIN_DB_URL = "jdbc:mysql://localhost:3306/mc-db?user=mc-sql&password=MfGJQMBzmAS5xYhH";
 
 	private static Connection _connection;
 	private static Connection _mainConnection;
 
-	public static void enableConnection(){
-		try {
-			_connection = DriverManager.getConnection(FUN_DB_URL);
-			_mainConnection = DriverManager.getConnection(MAIN_DB_URL);
-		} catch (SQLException ex) {	ex.printStackTrace(); }
-	}
-	
 	public static Connection getConnection()
 	{
 		try
@@ -35,10 +28,10 @@ public class ConnectionManager {
 			ex.printStackTrace();
 			Bukkit.shutdown();
 		}
-		
+
 		return _connection;
 	}
-	
+
 	public static Connection getMainConnection()
 	{
 		try
@@ -55,5 +48,4 @@ public class ConnectionManager {
 		}
 		return _mainConnection;
 	}
-	
 }

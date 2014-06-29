@@ -5,34 +5,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import fr.tenkei.creaplugin.MyPlugin;
-import fr.tenkei.creaplugin.exceptions.MyException;
+import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.utils.ChatUtil;
 import fr.tenkei.creaplugin.exceptions.UserNotFoundException;
 import fr.tenkei.creaplugin.managers.entities.User;
 import fr.tenkei.creaplugin.utils.ConnectionManager;
-import fr.tenkei.creaplugin.utils.Message;
 
 public class UserManager
 {
+	private static final HashMap<String, User> _usersList = new HashMap<String, User>();
 
-	private final HashMap<String, User> _usersList;
-	private JavaPlugin _bukkitPerms;
-	MyPlugin _plugin;
-
-	public UserManager(MyPlugin plugin)
-	{
-		_plugin = plugin;
-		_usersList = new HashMap<String, User>();
-		Plugin bukkitPerms = plugin.getServer().getPluginManager().getPlugin("PermissionsBukkit");
-		if (bukkitPerms != null)
-			_bukkitPerms = ((JavaPlugin) bukkitPerms);
-	}
-
-	public User getUser(String playerName) throws MyException
+	public static User getUser(String playerName) throws HeavenException
 	{
 		if (isLoaded(playerName))
 			return _usersList.get(playerName);
@@ -48,7 +34,7 @@ public class UserManager
 		}
 	}
 
-	public void saveUser(String getUser) throws MyException
+	public static void saveUser(String getUser) throws HeavenException
 	{
 		User user = getUser(getUser);
 
@@ -59,7 +45,7 @@ public class UserManager
 		_usersList.remove(getUser);
 	}
 
-	public void initUserByName(String name) throws MyException
+	public static void initUserByName(String name) throws HeavenException
 	{
 		try
 		{
@@ -92,7 +78,7 @@ public class UserManager
 		}
 	}
 
-	public void createUser(String name)
+	public static void createUser(String name)
 	{
 		try
 		{
@@ -114,24 +100,24 @@ public class UserManager
 		}
 	}
 
-	private boolean isLoaded(String playerName)
+	private static boolean isLoaded(String playerName)
 	{
 		return _usersList.containsKey(playerName);
 	}
 
-	public void jetonByConnected() throws MyException
+	public static void jetonByConnected() throws HeavenException
 	{
 		int jeton = _usersList.size() > 5 ? _usersList.size() : 5;
 
-		Message.broadcastMessage("Vous venez de recevoir {" + jeton + "} Jetons.");
+		ChatUtil.broadcastMessage("Vous venez de recevoir {" + jeton + "} Jetons.");
 
 		for (User u : _usersList.values())
 			u.updateBalance(jeton);
 	}
 
-	public void saveAllUsers() throws MyException
+	public static void saveAllUsers() throws HeavenException
 	{
-		Player[] plist = _plugin.getServer().getOnlinePlayers();
+		Player[] plist = Bukkit.getServer().getOnlinePlayers();
 		for (int i = 0; i < plist.length; i++)
 		{
 			User user = getUser(plist[i].getName());
