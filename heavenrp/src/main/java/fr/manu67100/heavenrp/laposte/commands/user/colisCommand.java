@@ -8,6 +8,8 @@ import org.bukkit.inventory.Inventory;
 import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.HeavenRP;
+import fr.heavencraft.heavenrp.general.users.User;
+import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.heavencraft.utils.ChatUtil;
 import fr.manu67100.heavenrp.laposte.handlers.JoueursEnEditionDeColis;
 import fr.manu67100.heavenrp.laposte.handlers.PostOfficeManager;
@@ -37,10 +39,21 @@ public class colisCommand extends HeavenCommand{
 					//le joueur est connect�.	
 					if(destinataire != player)
 					{		
-						//On ajoute le joueur a la liste des joueurs en edition.
-						JoueursEnEditionDeColis.addPlayer(player, destinataire);					
-						Inventory contenu =  Bukkit.createInventory(null, 9, "Heaven Colis");
-						player.openInventory(contenu);
+						User user = UserProvider.getUserByName(player.getName());
+						if (user.getBalance() -45 > 0)
+						{
+							//On ajoute le joueur a la liste des joueurs en edition.
+							JoueursEnEditionDeColis.addPlayer(player, destinataire);					
+							Inventory contenu =  Bukkit.createInventory(null, 9, "Heaven Colis");
+							player.openInventory(contenu);
+							return;
+						}
+						else
+						{
+							player.sendMessage(String.format(FORMAT_POSTE, "Vous n'avez pas assez d'argent."));
+							return;
+						}
+	
 						
 									
 					}

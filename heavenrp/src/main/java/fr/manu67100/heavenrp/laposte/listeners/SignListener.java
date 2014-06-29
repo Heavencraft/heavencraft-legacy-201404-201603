@@ -55,7 +55,7 @@ public class SignListener implements Listener{
 	@EventHandler(ignoreCancelled = false)
 	public void PostSignClick(PlayerInteractEvent e){
 
-		if(e.getAction() != Action.RIGHT_CLICK_BLOCK)
+		if(e.getAction() != Action.RIGHT_CLICK_BLOCK && e.getAction() != Action.RIGHT_CLICK_AIR)
 			return;
 
 		if (e.getClickedBlock().getType() != Material.SIGN_POST && e.getClickedBlock().getType() != Material.WALL_SIGN && e.getClickedBlock().getType() != Material.SIGN)
@@ -119,7 +119,6 @@ public class SignListener implements Listener{
 			
 			while(rs.next())
 			{	
-//				liste.add(new Colis(rs.getInt("IDcolis")));
 				liste.add(rs.getString("IDcolis"));
 			}		
 			
