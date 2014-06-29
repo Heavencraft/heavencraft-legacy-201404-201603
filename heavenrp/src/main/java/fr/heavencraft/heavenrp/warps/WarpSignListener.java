@@ -6,7 +6,7 @@ import org.bukkit.event.block.SignChangeEvent;
 
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.RPPermissions;
-import fr.heavencraft.listeners.SignListener;
+import fr.heavencraft.listeners.sign.SignListener;
 import fr.heavencraft.utils.ChatUtil;
 import fr.heavencraft.utils.PlayerUtil;
 

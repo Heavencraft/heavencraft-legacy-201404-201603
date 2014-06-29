@@ -30,6 +30,7 @@ import fr.heavencraft.heavenrp.commands.teleport.SpawnCommand;
 import fr.heavencraft.heavenrp.commands.teleport.TutoCommand;
 import fr.heavencraft.heavenrp.commands.warps.WarpCommand;
 import fr.heavencraft.heavenrp.economy.EconomyListener;
+import fr.heavencraft.heavenrp.economy.GoldListener;
 import fr.heavencraft.heavenrp.economy.LivretProSignListener;
 import fr.heavencraft.heavenrp.economy.LivretSignListener;
 import fr.heavencraft.heavenrp.general.PumpkinLampListener;
@@ -49,6 +50,8 @@ import fr.heavencraft.listeners.AntiLagListener;
 import fr.heavencraft.listeners.ColoredSignsListener;
 import fr.heavencraft.listeners.NoChatListener;
 import fr.heavencraft.listeners.RedstoneLampListener;
+import fr.heavencraft.listeners.sign.CookieSignListener;
+import fr.heavencraft.listeners.sign.LinkListener;
 import fr.heavencraft.tasks.SaveTask;
 import fr.lorgan17.heavenrp.commands.mod.EventCommand;
 import fr.lorgan17.heavenrp.commands.mod.ModpackCommand;
@@ -61,7 +64,6 @@ import fr.lorgan17.heavenrp.commands.user.MairesCommand;
 import fr.lorgan17.heavenrp.commands.user.ParcelleCommand;
 import fr.lorgan17.heavenrp.listeners.JumpListener;
 import fr.lorgan17.heavenrp.listeners.LampadaireListener;
-import fr.lorgan17.heavenrp.listeners.LinkListener;
 import fr.lorgan17.heavenrp.listeners.PVP4Manager;
 import fr.lorgan17.heavenrp.listeners.PVPManager;
 import fr.lorgan17.heavenrp.listeners.SnowballListener;
@@ -157,6 +159,7 @@ public class InitManager
 		new AntiCheatListener();
 		new AntiLagListener();
 		new ColoredSignsListener();
+		new CookieSignListener();
 		new NoChatListener();
 		new RedstoneLampListener();
 
@@ -166,6 +169,7 @@ public class InitManager
 
 		// Economy
 		new EconomyListener();
+		new GoldListener();
 		new LivretProSignListener();
 		new LivretSignListener();
 

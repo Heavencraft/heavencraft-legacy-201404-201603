@@ -57,7 +57,7 @@ public class WorldsManager
 
 		_spawn = new Location(getWorld(), 145.5D, 67D, 130.5D, 270F, 0F);
 		_spawnNether = new Location(getNether(), 106D, 54D, 150D, 235F, 0F);
-		_spawnTheEnd = new Location(getTheEnd(), 4.5D, 67D, 23.5D, 0F, 0F);
+		_spawnTheEnd = new Location(getTheEnd(), 4.5D, 61D, 23.5D, 0F, 0F);
 		_tuto = new Location(getWorld(), -818D, 35D, -728D, 0F, 0F);
 	}
 

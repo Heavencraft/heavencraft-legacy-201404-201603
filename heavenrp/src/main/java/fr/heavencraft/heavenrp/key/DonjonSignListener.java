@@ -16,7 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.RPPermissions;
-import fr.heavencraft.listeners.SignListener;
+import fr.heavencraft.listeners.sign.SignListener;
 
 public class DonjonSignListener extends SignListener
 {

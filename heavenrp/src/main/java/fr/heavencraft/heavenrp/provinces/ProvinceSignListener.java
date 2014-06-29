@@ -10,7 +10,7 @@ import fr.heavencraft.heavenrp.RPPermissions;
 import fr.heavencraft.heavenrp.general.users.User;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.heavencraft.heavenrp.provinces.ProvincesManager.Province;
-import fr.heavencraft.listeners.SignListener;
+import fr.heavencraft.listeners.sign.SignListener;
 import fr.heavencraft.utils.ChatUtil;
 
 public class ProvinceSignListener extends SignListener

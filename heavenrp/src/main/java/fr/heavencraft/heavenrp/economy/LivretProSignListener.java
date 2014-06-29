@@ -16,10 +16,9 @@ import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.RPPermissions;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccount;
-import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccountType;
 import fr.heavencraft.heavenrp.general.users.User;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
-import fr.heavencraft.listeners.SignListener;
+import fr.heavencraft.listeners.sign.SignListener;
 import fr.heavencraft.utils.ChatUtil;
 import fr.heavencraft.utils.DevUtil;
 
@@ -71,8 +70,7 @@ public class LivretProSignListener extends SignListener implements Listener
 
 		if (sign.getLine(1).equals(ChatColor.BLUE + CONSULTER))
 		{
-			ChatUtil.sendMessage(player, "{Trésorier} : Vous avez {%1$d} pièces d'or sur votre livret.",
-					BankAccountsManager.getBankAccount(playerName, BankAccountType.USER).getBalance());
+			displayAccounts(player);
 		}
 
 		else if (sign.getLine(1).equals(ChatColor.BLUE + DEPOSER))

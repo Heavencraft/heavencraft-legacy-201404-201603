@@ -18,7 +18,7 @@ import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccou
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccountType;
 import fr.heavencraft.heavenrp.general.users.User;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
-import fr.heavencraft.listeners.SignListener;
+import fr.heavencraft.listeners.sign.SignListener;
 import fr.heavencraft.utils.ChatUtil;
 import fr.heavencraft.utils.DevUtil;
 
