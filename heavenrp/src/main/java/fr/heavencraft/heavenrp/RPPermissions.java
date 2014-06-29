@@ -36,4 +36,9 @@ public class RPPermissions
 
 	public static final String WEB_COMMAND = "heavencraft.commands.web";
 	public static final String KEY = "heavencraft.commands.key";
+	
+	/*
+	 * La Poste
+	 */
+	public static final String POSTE_ADMIN = "heavencraft.commands.poste.admin";
 }

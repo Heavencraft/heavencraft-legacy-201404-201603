@@ -37,6 +37,7 @@ public class InventoryListener implements Listener{
 			if(e.getInventory().getSize() == Utils.getEmptySlots(e.getInventory()))
 			{
 				p.sendMessage(String.format(FORMAT_POSTE, "Votre colis est vide, envoi annulé."));
+				JoueursEnEditionDeColis.removePlayer(p);
 				return;
 			}
 
@@ -53,11 +54,13 @@ public class InventoryListener implements Listener{
 					user.updateBalance(-45);
 					Colis colis = new Colis(p, JoueursEnEditionDeColis.getDestinataire(p),e.getInventory());
 					colis.envoyer();
+					JoueursEnEditionDeColis.removePlayer(p);
 					return;
 				}
 				else
 				{
 					p.sendMessage(String.format(FORMAT_POSTE, "Vous n'avez pas assez d'argent."));
+					JoueursEnEditionDeColis.removePlayer(p);
 					return;
 				}
 

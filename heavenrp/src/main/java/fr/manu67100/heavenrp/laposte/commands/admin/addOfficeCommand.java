@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 
 import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.heavenrp.RPPermissions;
 import fr.heavencraft.utils.ChatUtil;
 import fr.manu67100.heavenrp.laposte.Files;
 import fr.manu67100.heavenrp.laposte.handlers.PostOfficeManager;
@@ -19,7 +20,7 @@ public class addOfficeCommand extends HeavenCommand{
 
 	@Override
 	protected void onPlayerCommand(Player player, String[] args) throws HeavenException {
-		if(player.hasPermission("LaPoste.admin") || player.isOp())
+		if(player.hasPermission(RPPermissions.POSTE_ADMIN))
 		{
 			if (args.length != 1) 
 			{
