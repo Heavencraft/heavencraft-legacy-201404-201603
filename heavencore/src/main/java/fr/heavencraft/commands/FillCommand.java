@@ -27,7 +27,13 @@ public class FillCommand extends HeavenCommand
 	@Override
 	protected void onConsoleCommand(CommandSender sender, String[] args) throws HeavenException
 	{
-		if (args.length != 8)
+		boolean isReplace;
+
+		if (args.length == 8)
+			isReplace = false;
+		else if (args.length == 10)
+			isReplace = true;
+		else
 		{
 			sendUsage(sender);
 			return;
@@ -73,15 +79,38 @@ public class FillCommand extends HeavenCommand
 			z2 = tmp;
 		}
 
+		if (!isReplace)
+			set(world, x1, y1, z1, x2, y2, z2, tile);
+		else
+		{
+			Material newTile = Material.matchMaterial(args[9]);
+
+			replace(world, x1, y1, z1, x2, y2, z2, tile, newTile);
+		}
+	}
+
+	private void set(World world, int x1, int y1, int z1, int x2, int y2, int z2, Material tile)
+	{
 		for (int x = x1; x <= x2; x++)
 			for (int y = y1; y <= y2; y++)
 				for (int z = z1; z <= z2; z++)
 					world.getBlockAt(x, y, z).setType(tile);
 	}
 
+	private void replace(World world, int x1, int y1, int z1, int x2, int y2, int z2, Material tile, Material newTile)
+	{
+		for (int x = x1; x <= x2; x++)
+			for (int y = y1; y <= y2; y++)
+				for (int z = z1; z <= z2; z++)
+					if (world.getBlockAt(x, y, z).getType() == tile)
+						world.getBlockAt(x, y, z).setType(newTile);
+	}
+
 	@Override
 	protected void sendUsage(CommandSender sender)
 	{
-		ChatUtil.sendMessage(sender, "/{fill} <x1> <y1> <z1> <x2> <y2> <z2> <TileName> replace");
+		ChatUtil.sendMessage(sender, "/{fill} <x1> <y1> <z1> <x2> <y2> <z2> <TileName> replace : //set");
+		ChatUtil.sendMessage(sender,
+				"/{fill} <x1> <y1> <z1> <x2> <y2> <z2> <TileName> 0 replace [replaceTileName] : //replace");
 	}
 }
