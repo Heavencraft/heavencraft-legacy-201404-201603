@@ -22,6 +22,9 @@ import fr.heavencraft.NavalConflicts.listeners.PlayerListener;
 import fr.heavencraft.NavalConflicts.listeners.RegisterUnregisterListener;
 import fr.heavencraft.NavalConflicts.listeners.ScoreBoardToggleListener;
 
+/*
+ * 
+ */
 public class NavalConflicts extends JavaPlugin {
 	private static NavalConflicts _instance;
 	private static Connection _mainConnection;
