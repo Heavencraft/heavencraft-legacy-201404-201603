@@ -8,8 +8,8 @@ import org.bukkit.Bukkit;
 
 public class ConnectionManager
 {
-	private static final String FUN_DB_URL = "jdbc:mysql://localhost:3306/minecraft-creative?user=mc-sql&password=MfGJQMBzmAS5xYhH";
-	private static final String MAIN_DB_URL = "jdbc:mysql://localhost:3306/mc-db?user=mc-sql&password=MfGJQMBzmAS5xYhH";
+	private static final String FUN_DB_URL = "jdbc:mysql://localhost:3306/minecraft-creative?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca";
+	private static final String MAIN_DB_URL = "jdbc:mysql://localhost:3306/mc-db?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca";
 
 	private static Connection _connection;
 	private static Connection _mainConnection;
