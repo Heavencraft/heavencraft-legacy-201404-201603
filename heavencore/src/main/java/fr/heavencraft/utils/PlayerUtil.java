@@ -67,16 +67,33 @@ public class PlayerUtil
 	}
 
 	/*
-	 * Teleport with horse
+	 * Teleport
 	 */
 
-	public static void teleportPlayer(Player player, Entity entity)
+	public static void teleportPlayer(final Player player, final Entity entity)
 	{
 		teleportPlayer(player, entity.getLocation());
 	}
 
-	public static void teleportPlayer(final Player player, Location location)
+	public static void teleportPlayer(final Player player, final Location location)
 	{
+		// Bugfix for foodlevel changing after teleport on a different world
+		if (!player.getWorld().equals(location.getWorld()))
+		{
+			final int foodLevel = player.getFoodLevel();
+			final float saturation = player.getSaturation();
+
+			Bukkit.getScheduler().runTaskLater(DevUtil.getPlugin(), new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					player.setFoodLevel(foodLevel);
+					player.setSaturation(saturation);
+				}
+			}, 20);
+		}
+
 		if (player.isInsideVehicle() && player.getVehicle() instanceof Horse)
 		{
 			final Horse horse = (Horse) player.getVehicle();

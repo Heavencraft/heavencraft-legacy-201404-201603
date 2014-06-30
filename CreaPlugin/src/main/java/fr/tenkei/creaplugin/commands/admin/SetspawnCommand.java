@@ -4,37 +4,37 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import fr.tenkei.creaplugin.MyPlugin;
-import fr.tenkei.creaplugin.commands.Command;
-import fr.tenkei.creaplugin.exceptions.MyException;
+import fr.heavencraft.commands.HeavenCommand;
+import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.utils.ChatUtil;
+import fr.tenkei.creaplugin.CreaPermissions;
 import fr.tenkei.creaplugin.managers.WorldsManager;
-import fr.tenkei.creaplugin.utils.Message;
 
-
-public class SetspawnCommand extends Command {
-
-	public SetspawnCommand(MyPlugin plugin)
+public class SetspawnCommand extends HeavenCommand
+{
+	public SetspawnCommand()
 	{
-		super("setspawn", plugin);
+		super("setspawn", CreaPermissions.SETSPAWN);
 	}
 
 	@Override
-	protected void onPlayerCommand(Player player, String[] args) throws MyException
+	protected void onPlayerCommand(Player player, String[] args) throws HeavenException
 	{
 		Location newLoc = player.getLocation();
 		WorldsManager.setSpawn(newLoc, player.getWorld());
-		Message.sendMessage(player, "L'emplacement du spawn du monde " + player.getWorld().getName() + " a bien été changé.");
+		ChatUtil.sendMessage(player, "L'emplacement du spawn du monde {%1$s} a bien été changé.", player.getWorld()
+				.getName());
 	}
 
 	@Override
-	protected void onConsoleCommand(CommandSender sender, String[] args) throws MyException
+	protected void onConsoleCommand(CommandSender sender, String[] args) throws HeavenException
 	{
-		
+
 	}
 
 	@Override
 	protected void sendUsage(CommandSender sender)
 	{
-		
+
 	}
 }

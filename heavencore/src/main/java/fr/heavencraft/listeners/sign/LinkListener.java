@@ -1,19 +1,18 @@
-package fr.lorgan17.heavenrp.listeners;
+package fr.heavencraft.listeners.sign;
 
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
 
+import fr.heavencraft.Permissions;
 import fr.heavencraft.exceptions.HeavenException;
-import fr.heavencraft.heavenrp.RPPermissions;
-import fr.heavencraft.listeners.SignListener;
 import fr.heavencraft.utils.ChatUtil;
 
 public class LinkListener extends SignListener
 {
 	public LinkListener()
 	{
-		super("Lien", RPPermissions.LINK_SIGN);
+		super("Lien", Permissions.LINK_SIGN);
 	}
 
 	@Override

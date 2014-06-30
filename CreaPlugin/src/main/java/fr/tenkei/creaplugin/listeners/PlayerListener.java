@@ -27,11 +27,12 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.utils.ChatUtil;
 import fr.tenkei.creaplugin.MyPlugin;
-import fr.tenkei.creaplugin.exceptions.MyException;
+import fr.tenkei.creaplugin.managers.UserManager;
 import fr.tenkei.creaplugin.managers.WorldsManager;
 import fr.tenkei.creaplugin.managers.entities.User;
-import fr.tenkei.creaplugin.utils.Message;
 import fr.tenkei.creaplugin.utils.Stuff;
 
 public class PlayerListener implements Listener
@@ -89,8 +90,7 @@ public class PlayerListener implements Listener
 					}
 					else if (sign.getLine(0).endsWith(ChatColor.DARK_PURPLE + "[HOME]"))
 					{
-						_plugin.getManagers().getUserManager().getUser(event.getPlayer().getName())
-								.addHommeNumbre(clickedBlock);
+						UserManager.getUser(event.getPlayer().getName()).addHommeNumbre(clickedBlock);
 						event.setCancelled(true);
 					}
 					else if (sign.getLine(0).endsWith(ChatColor.DARK_PURPLE + "[NIGHT]"))
@@ -121,7 +121,7 @@ public class PlayerListener implements Listener
 
 			if (event.getAction() == Action.LEFT_CLICK_AIR)
 			{
-				User user = _plugin.getManagers().getUserManager().getUser(player.getName());
+				User user = UserManager.getUser(player.getName());
 				if (player.getItemInHand().getType() == Material.COMPASS)
 				{
 					if (player.hasPermission(MyPlugin.builder) || !user.getStringVariable("boussole").isEmpty())
@@ -172,9 +172,9 @@ public class PlayerListener implements Listener
 
 			event.setCancelled(true);
 		}
-		catch (MyException ex)
+		catch (HeavenException ex)
 		{
-			Message.sendMessage(event.getPlayer(), ex.getMessage());
+			ChatUtil.sendMessage(event.getPlayer(), ex.getMessage());
 		}
 	}
 
@@ -202,18 +202,18 @@ public class PlayerListener implements Listener
 		}
 	}
 
-	// creer un manager quand j'aurai le temps (Gestion des panneaux dans une class dï¿½diï¿½)
-	private void sellHead(Player player, Sign sign) throws MyException
+	// creer un manager quand j'aurai le temps (Gestion des panneaux dans une class dédié)
+	private void sellHead(Player player, Sign sign) throws HeavenException
 	{
-		User user = _plugin.getManagers().getUserManager().getUser(player.getName());
+		User user = UserManager.getUser(player.getName());
 
 		int prix = Integer.parseInt(ChatColor.stripColor(sign.getLine(3)).replace(" Jetons", ""));
 
 		if ((user.getInteractBlock() == null) || !Stuff.blocksEquals(user.getInteractBlock(), sign.getBlock()))
 		{
 			user.setInteractBlock(sign.getBlock());
-			Message.sendMessage(Bukkit.getPlayer(player.getName()),
-					"Cliquez une seconde fois pour confirmer l'achat de la tï¿½te " + sign.getLine(2) + " pour {" + prix
+			ChatUtil.sendMessage(Bukkit.getPlayer(player.getName()),
+					"Cliquez une seconde fois pour confirmer l'achat de la téte " + sign.getLine(2) + " pour {" + prix
 							+ "} Jetons.");
 			return;
 		}
@@ -230,22 +230,22 @@ public class PlayerListener implements Listener
 		head.setItemMeta(meta);
 		player.getInventory().addItem(head);
 
-		Message.sendMessage(player, "Vous ï¿½tes maintenant l'heureux propriï¿½taire de la tï¿½te de " + sign.getLine(2)
-				+ ", cela vous a coutï¿½ {" + prix + "} Jetons !");
+		ChatUtil.sendMessage(player, "Vous étes maintenant l'heureux propriétaire de la téte de " + sign.getLine(2)
+				+ ", cela vous a couté {" + prix + "} Jetons !");
 		user.stateBalance();
 	}
 
-	// creer un manager quand j'aurai le temps (Gestion des panneaux dans une class dï¿½diï¿½)
-	private void sellBloc(Player player, Sign sign) throws MyException
+	// creer un manager quand j'aurai le temps (Gestion des panneaux dans une class dédié)
+	private void sellBloc(Player player, Sign sign) throws HeavenException
 	{
-		User user = _plugin.getManagers().getUserManager().getUser(player.getName());
+		User user = UserManager.getUser(player.getName());
 
 		int prix = Integer.parseInt(ChatColor.stripColor(sign.getLine(3)).replace(" Jetons", ""));
 
 		if ((user.getInteractBlock() == null) || !Stuff.blocksEquals(user.getInteractBlock(), sign.getBlock()))
 		{
 			user.setInteractBlock(sign.getBlock());
-			Message.sendMessage(Bukkit.getPlayer(player.getName()),
+			ChatUtil.sendMessage(Bukkit.getPlayer(player.getName()),
 					"Cliquez une seconde fois pour confirmer l'achat du bloc pour {" + prix + "} Jetons.");
 			return;
 		}
@@ -268,7 +268,7 @@ public class PlayerListener implements Listener
 
 		if (mat == Material.AIR)
 		{
-			Message.sendError(Bukkit.getPlayer(player.getName()), "Problï¿½me de panneau. ( " + mat.name() + " )");
+			ChatUtil.sendMessage(Bukkit.getPlayer(player.getName()), "{Probléme de panneau. ( " + mat.name() + " )}");
 			return;
 		}
 
@@ -276,21 +276,21 @@ public class PlayerListener implements Listener
 
 		player.getInventory().addItem(new ItemStack(mat)); // Faire selon orientation panneau
 
-		Message.sendMessage(player, "Vous ï¿½tes maintenant l'heureux propriï¿½taire d'un bloc de {" + mat.name()
-				+ "}, cela vous a coutï¿½ {" + prix + "} Jetons !");
+		ChatUtil.sendMessage(player, "Vous étes maintenant l'heureux propriétaire d'un bloc de {" + mat.name()
+				+ "}, cela vous a couté {" + prix + "} Jetons !");
 		user.stateBalance();
 
 	}
 
-	private void sellNight(Player player, Sign sign) throws MyException
+	private void sellNight(Player player, Sign sign) throws HeavenException
 	{
 
-		User user = _plugin.getManagers().getUserManager().getUser(player.getName());
+		User user = UserManager.getUser(player.getName());
 
 		if ((user.getInteractBlock() == null) || !Stuff.blocksEquals(user.getInteractBlock(), sign.getBlock()))
 		{
 			user.setInteractBlock(sign.getBlock());
-			Message.sendMessage(Bukkit.getPlayer(player.getName()),
+			ChatUtil.sendMessage(Bukkit.getPlayer(player.getName()),
 					"Cliquez une seconde fois pour confirmer l'achat de la nuit pour 200 Jetons.");
 			return;
 		}
@@ -301,20 +301,20 @@ public class PlayerListener implements Listener
 
 		player.getWorld().setTime(18000L);
 
-		Message.broadcastEventMessage(player.getName() + "} vous souhaite une bonne nuit !");
+		ChatUtil.broadcastMessage(player.getName() + "} vous souhaite une bonne nuit !");
 		user.stateBalance();
 	}
 
 	@SuppressWarnings("deprecation")
-	private void sellBeer(Player player, Sign sign) throws MyException
+	private void sellBeer(Player player, Sign sign) throws HeavenException
 	{
 
-		User user = _plugin.getManagers().getUserManager().getUser(player.getName());
+		User user = UserManager.getUser(player.getName());
 
 		if ((user.getInteractBlock() == null) || !Stuff.blocksEquals(user.getInteractBlock(), sign.getBlock()))
 		{
 			user.setInteractBlock(sign.getBlock());
-			Message.sendMessage(Bukkit.getPlayer(player.getName()), "Tu veux ta biï¿½re jeune Panda ? Tapes moi, allï¿½..");
+			ChatUtil.sendMessage(Bukkit.getPlayer(player.getName()), "Tu veux ta biére jeune Panda ? Tapes moi, allé..");
 			return;
 		}
 
@@ -322,17 +322,17 @@ public class PlayerListener implements Listener
 
 		user.updateBalance(-10);
 
-		ItemStack is = new ItemStack(Material.POTION, 1); // La potion sera l'item ï¿½ donner, et ï¿½ modifier.
-		PotionMeta meta = (PotionMeta) is.getItemMeta(); // On rï¿½cupï¿½re la mï¿½ta actuelle de l'item afin de la modifier.
+		ItemStack is = new ItemStack(Material.POTION, 1); // La potion sera l'item é donner, et é modifier.
+		PotionMeta meta = (PotionMeta) is.getItemMeta(); // On récupére la méta actuelle de l'item afin de la modifier.
 		meta.addCustomEffect((new PotionEffect(PotionEffectType.CONFUSION, 200, 2)), true); // On ajoute un effet de
-																							// confusion ï¿½ la potion.
+																							// confusion é la potion.
 		meta.setMainEffect(PotionEffectType.FIRE_RESISTANCE); // L'aspect de la potion, ici fire_resistance donc un
-																// aspect plutï¿½t orangï¿½.
+																// aspect plutét orangé.
 		is.setItemMeta(meta); // On applique les modifications sur l'item.
 		player.getInventory().addItem(is); // On donne l'item au joueur.
-		player.updateInventory(); // On met ï¿½ jour son inventaire.
+		player.updateInventory(); // On met é jour son inventaire.
 
-		Message.broadcastEventMessage(player.getName() + "} se m'est raide ï¿½ la taverne !");
+		ChatUtil.broadcastMessage(player.getName() + "} se m'est raide é la taverne !");
 		user.stateBalance();
 	}
 }

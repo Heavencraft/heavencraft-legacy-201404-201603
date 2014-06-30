@@ -5,13 +5,16 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPortalEnterEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import fr.heavencraft.Permissions;
 import fr.heavencraft.utils.ChatUtil;
 import fr.heavencraft.utils.DevUtil;
+import fr.heavencraft.utils.PlayerUtil;
 
 public class WorldsListener implements Listener
 {
@@ -52,7 +55,7 @@ public class WorldsListener implements Listener
 
 		else if (l.getWorld().getName().equals("world_old") || l.getWorld().getName().equals("world_origine"))
 		{
-			if (!event.getPlayer().hasPermission("heavenrp.administrator.world"))
+			if (!event.getPlayer().hasPermission(Permissions.TPWORLD))
 				event.getPlayer().teleport(WorldsManager.getSpawn());
 		}
 	}
@@ -72,17 +75,22 @@ public class WorldsListener implements Listener
 		if (block.getWorld() != WorldsManager.getWorld())
 			return;
 
+		final Player player = (Player) event.getEntity();
+
 		switch (block.getRelative(BlockFace.DOWN).getType())
 		{
 			case NETHERRACK:
-				event.getEntity().teleport(WorldsManager.getSpawnNether());
+				PlayerUtil.teleportPlayer(player, WorldsManager.getSpawnNether());
 				break;
+
 			case ENDER_STONE:
-				event.getEntity().teleport(WorldsManager.getSpawnTheEnd());
+				PlayerUtil.teleportPlayer(player, WorldsManager.getSpawnTheEnd());
 				break;
+
 			case SAND:
-				event.getEntity().teleport(WorldsManager.getResourcesSpawn());
+				PlayerUtil.teleportPlayer(player, WorldsManager.getResourcesSpawn());
 				break;
+
 			default:
 				break;
 		}

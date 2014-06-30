@@ -21,6 +21,10 @@ public class Permissions
 	public static final String TPPOS = "heavencraft.commands.tppos";
 	public static final String TPWORLD = "heavencraft.commands.tpworld";
 
+	// Signs
+	public static final String COOKIE_SIGN = "heavencraft.signs.cookie";
+	public static final String LINK_SIGN = "heavencraft.signs.link";
+
 	// Color on signs
 	public static final String COLORED_SIGNS = "heavencraft.coloredsigns";
 }

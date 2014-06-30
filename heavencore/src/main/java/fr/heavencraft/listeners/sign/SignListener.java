@@ -1,4 +1,4 @@
-package fr.heavencraft.listeners;
+package fr.heavencraft.listeners.sign;
 
 import static fr.heavencraft.utils.DevUtil.registerListener;
 

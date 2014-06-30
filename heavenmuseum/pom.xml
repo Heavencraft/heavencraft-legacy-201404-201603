@@ -4,20 +4,37 @@
 	<groupId>fr.heavencraft</groupId>
 	<artifactId>heavenmuseum</artifactId>
 	<version>1.0</version>
-
-	<repositories>
-		<repository>
-			<id>bukkit-repo</id>
-			<url>http://repo.bukkit.org/content/groups/public/</url>
-		</repository>
-	</repositories>
-
+	
 	<dependencies>
 		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>bukkit</artifactId>
-			<version>1.7.9-R0.1</version>
+			<groupId>fr.heavencraft</groupId>
+			<artifactId>heavencore</artifactId>
+			<version>1.0</version>
 		</dependency>
 	</dependencies>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.1</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<artifactSet>
+						<includes>
+							<include>fr.heavencraft:heavencore</include>
+						</includes>
+					</artifactSet>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
