@@ -18,8 +18,8 @@ import fr.manu67100.heavenrp.laposte.Files;
 
 public class HeavenRP extends HeavenPlugin
 {
-	private final static String RP_DB_URL = "jdbc:mysql://localhost:3306/minecraft-semirp?user=mc-sql&password=MfGJQMBzmAS5xYhH&zeroDateTimeBehavior=convertToNull&?autoReconnect=true";
-	private final static String MAIN_DB_URL = "jdbc:mysql://localhost:3306/mc-db?user=mc-sql&password=MfGJQMBzmAS5xYhH&zeroDateTimeBehavior=convertToNull&?autoReconnect=true";
+	private final static String RP_DB_URL = "jdbc:mysql://localhost:3306/minecraft-semirp?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull&?autoReconnect=true";
+	private final static String MAIN_DB_URL = "jdbc:mysql://localhost:3306/mc-db?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull&?autoReconnect=true";
 	// private final static String RP_DB_URL = "jdbc:mysql://localhost:3306/minecraft-rp?user=root&password=root";
 	// private final static String MAIN_DB_URL = "jdbc:mysql://localhost:3306/mc-db?user=root&password=root";
 	private static WorldGuardPlugin _WGP;
@@ -48,12 +48,11 @@ public class HeavenRP extends HeavenPlugin
 		new StoresListener(this);
 		_storesManager = new StoresManager(this);
 		_storesManager.init();
-		
-		
+
 		// La Poste
 		Files.getRegions().options().copyDefaults(true);
 		Files.saveRegions();
-		
+
 	}
 
 	public static Connection getConnection()
@@ -106,19 +105,21 @@ public class HeavenRP extends HeavenPlugin
 	{
 		return _auctionManager;
 	}
-	
-	public static WorldGuardPlugin getWorldGuard() {
+
+	public static WorldGuardPlugin getWorldGuard()
+	{
 
 		if (_WGP == null)
 		{
 			Plugin plugin = getInstance().getServer().getPluginManager().getPlugin("WorldGuard");
-			if (plugin == null || !(plugin instanceof WorldGuardPlugin)) {
+			if (plugin == null || !(plugin instanceof WorldGuardPlugin))
+			{
 				_WGP = null;
 			}
 			else
 			{
 				_WGP = (WorldGuardPlugin) plugin;
-			}			
+			}
 		}
 		return _WGP;
 	}
