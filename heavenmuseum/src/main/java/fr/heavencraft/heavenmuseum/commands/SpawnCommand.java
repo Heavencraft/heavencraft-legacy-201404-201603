@@ -1,12 +1,14 @@
-package fr.tenkei.creaplugin.commands.user.teleport;
+package fr.heavencraft.heavenmuseum.commands;
+
+import static fr.heavencraft.utils.ChatUtil.sendMessage;
+import static fr.heavencraft.utils.PlayerUtil.teleportPlayer;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
-import fr.heavencraft.utils.ChatUtil;
-import fr.tenkei.creaplugin.managers.WorldsManager;
+import fr.heavencraft.heavenmuseum.managers.WorldsManager;
 
 public class SpawnCommand extends HeavenCommand
 {
@@ -18,18 +20,17 @@ public class SpawnCommand extends HeavenCommand
 	@Override
 	protected void onPlayerCommand(Player player, String[] args) throws HeavenException
 	{
-		player.teleport(WorldsManager.getTheCreative().getSpawnLocation());
+		teleportPlayer(player, WorldsManager.getSpawn());
+		sendMessage(player, "Vous avez été téléporté au spawn du musée.");
 	}
 
 	@Override
 	protected void onConsoleCommand(CommandSender sender, String[] args) throws HeavenException
 	{
-		ChatUtil.sendMessage(sender, "Cette commande n'est pas utilisable depuis la console.");
 	}
 
 	@Override
 	protected void sendUsage(CommandSender sender)
 	{
-
 	}
 }

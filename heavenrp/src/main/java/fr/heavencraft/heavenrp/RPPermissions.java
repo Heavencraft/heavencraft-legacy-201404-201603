@@ -16,13 +16,13 @@ public class RPPermissions
 	public static final String PVP4 = "heavencraft.commands.pvp4";
 	public static final String TPHOME = "heavencraft.commands.tphome";
 	public static final String WARP = "heavencraft.commands.warp";
+	public static final String POSTE_ADMIN = "heavencraft.commands.poste.admin";
 
 	/*
 	 * Signs
 	 */
 
 	public static final String DONJON_SIGN = "heavencraft.signs.donjon";
-	public static final String LINK_SIGN = "heavencraft.signs.link";
 	public static final String LIVRET_SIGN = "heavencraft.signs.livret";
 	public static final String LIVRETPRO_SIGN = "heavencraft.signs.livretpro";
 	public static final String PROVINCE_SIGN = "heavencraft.signs.province";
@@ -36,9 +36,4 @@ public class RPPermissions
 
 	public static final String WEB_COMMAND = "heavencraft.commands.web";
 	public static final String KEY = "heavencraft.commands.key";
-	
-	/*
-	 * La Poste
-	 */
-	public static final String POSTE_ADMIN = "heavencraft.commands.poste.admin";
 }

@@ -9,13 +9,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 
+import fr.heavencraft.utils.ChatUtil;
 import fr.tenkei.creaplugin.MyPlugin;
-import fr.tenkei.creaplugin.utils.Message;
 import fr.tenkei.creaplugin.utils.Stuff;
 
-
-
-public class ProtectionHangingListener implements Listener {
+public class ProtectionHangingListener implements Listener
+{
 
 	public ProtectionHangingListener(MyPlugin plugin)
 	{
@@ -30,7 +29,7 @@ public class ProtectionHangingListener implements Listener {
 
 		if (!Stuff.canBeDestroyed(player, block))
 		{
-			Message.sendMessage(player, "Cet endroit est protégé.");
+			ChatUtil.sendMessage(player, "Cet endroit est protégé.");
 			event.setCancelled(true);
 		}
 	}
@@ -43,7 +42,7 @@ public class ProtectionHangingListener implements Listener {
 
 		if (!Stuff.canBeDestroyed(player, block))
 		{
-			Message.sendMessage(player, "Cet endroit est protégé.");
+			ChatUtil.sendMessage(player, "Cet endroit est protégé.");
 			event.setCancelled(true);
 		}
 	}

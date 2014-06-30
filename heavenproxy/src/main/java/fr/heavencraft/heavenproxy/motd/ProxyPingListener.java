@@ -9,7 +9,7 @@ import fr.heavencraft.heavenproxy.Utils;
 
 public class ProxyPingListener implements Listener
 {
-	private static final String FIRST_LINE = "§l§fHeaven§bcraft§r [1.7.9]\n";
+	private static final String FIRST_LINE = "§l§fHeaven§bcraft§r [1.7.10]\n";
 
 	public ProxyPingListener()
 	{
@@ -22,9 +22,9 @@ public class ProxyPingListener implements Listener
 		String description = FIRST_LINE;
 
 		description += getServerString("Semi-RP", "semirp") + " ";
-		description += getServerString("Créatif", "creative") + " ";
+		description += getServerString("Créatif", "creative", "musee", "build") + " ";
 		description += getServerString("Factions", "factions") + " ";
-		description += getServerString("Freebuild", "origines", "ultrahard") + " ";
+		description += getServerString("Survie", "origines", "ultrahard") + " ";
 		description += getServerString("Jeux", "infected", "tntrun", "mariokart", "paintball", "hungergames");
 
 		event.getResponse().setDescription(description);

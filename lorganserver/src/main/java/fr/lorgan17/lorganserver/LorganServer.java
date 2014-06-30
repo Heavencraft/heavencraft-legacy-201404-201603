@@ -25,7 +25,7 @@ import fr.lorgan17.lorganserver.managers.WorldsManager;
 
 public class LorganServer extends HeavenPlugin
 {
-	private final static String SURVIVAL_DB_URL = "jdbc:mysql://localhost:3306/minecraft-survie?user=mc-sql&password=MfGJQMBzmAS5xYhH";
+	private final static String SURVIVAL_DB_URL = "jdbc:mysql://localhost:3306/minecraft-survie?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca";
 	private static Connection _connection;
 
 	@Override

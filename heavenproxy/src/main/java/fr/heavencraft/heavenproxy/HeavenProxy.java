@@ -20,6 +20,7 @@ import fr.heavencraft.heavenproxy.commands.ListCommand;
 import fr.heavencraft.heavenproxy.commands.MeCommand;
 import fr.heavencraft.heavenproxy.commands.ModoCommand;
 import fr.heavencraft.heavenproxy.commands.NexusCommand;
+import fr.heavencraft.heavenproxy.commands.OuestCommand;
 import fr.heavencraft.heavenproxy.commands.ReplyCommand;
 import fr.heavencraft.heavenproxy.commands.SayCommand;
 import fr.heavencraft.heavenproxy.commands.SendCommand;
@@ -43,9 +44,9 @@ import fr.heavencraft.heavenproxy.warn.WarnCommand;
 
 public class HeavenProxy extends Plugin
 {
-	private final static String DB_URL = "jdbc:mysql://localhost:3306/proxy?user=mc-sql&password=MfGJQMBzmAS5xYhH&zeroDateTimeBehavior=convertToNull";
-	private final static String MAIN_DB_URL = "jdbc:mysql://localhost:3306/mc-db?user=mc-sql&password=MfGJQMBzmAS5xYhH&zeroDateTimeBehavior=convertToNull";
-	private final static String SRP_DB_URL = "jdbc:mysql://localhost:3306/minecraft-semirp?user=mc-sql&password=MfGJQMBzmAS5xYhH&zeroDateTimeBehavior=convertToNull";
+	private final static String DB_URL = "jdbc:mysql://localhost:3306/proxy?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull";
+	private final static String MAIN_DB_URL = "jdbc:mysql://localhost:3306/mc-db?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull";
+	private final static String SRP_DB_URL = "jdbc:mysql://localhost:3306/minecraft-semirp?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull";
 
 	private static Connection _connection;
 	private static Connection _mainConnection;
@@ -73,6 +74,7 @@ public class HeavenProxy extends Plugin
 			new MeCommand();
 			new ModoCommand();
 			new NexusCommand();
+			new OuestCommand();
 			new ReplyCommand();
 			new SayCommand();
 			new SendCommand();

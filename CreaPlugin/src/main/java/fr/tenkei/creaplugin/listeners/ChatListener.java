@@ -41,7 +41,7 @@ public class ChatListener implements Listener {
 	}
 
 	/*@EventHandler(ignoreCancelled = true)
-	private void onPlayerChat(AsyncPlayerChatEvent event) throws MyException
+	private void onPlayerChat(AsyncPlayerChatEvent event) throws HeavenException
 	{
 		String message = event.getMessage();
 		if (event.getPlayer().hasPermission(MyPlugin.archiModo))

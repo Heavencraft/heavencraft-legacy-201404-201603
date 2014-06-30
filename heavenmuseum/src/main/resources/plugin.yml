@@ -2,3 +2,7 @@ main: fr.heavencraft.heavenmuseum.HeavenMuseum
 name: HeavenMuseum
 version: 1.0
 author: lorgan17
+commands:
+  accepter:
+  rejoindre:
+  spawn:

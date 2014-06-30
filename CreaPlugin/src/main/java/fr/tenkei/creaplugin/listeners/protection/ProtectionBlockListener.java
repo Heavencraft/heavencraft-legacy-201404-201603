@@ -19,8 +19,8 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
+import fr.heavencraft.utils.ChatUtil;
 import fr.tenkei.creaplugin.MyPlugin;
-import fr.tenkei.creaplugin.utils.Message;
 import fr.tenkei.creaplugin.utils.Stuff;
 
 public class ProtectionBlockListener implements Listener
@@ -76,7 +76,7 @@ public class ProtectionBlockListener implements Listener
 
 		if (!Stuff.canBeDestroyed(player, block))
 		{
-			Message.sendMessage(player, "Cet endroit est protï¿½gï¿½.");
+			ChatUtil.sendMessage(player, "Cet endroit est protégé.");
 			event.setCancelled(true);
 		}
 	}
@@ -97,7 +97,7 @@ public class ProtectionBlockListener implements Listener
 
 		if (!Stuff.canBeDestroyed(player, block))
 		{
-			Message.sendMessage(player, "Cet endroit est protï¿½gï¿½.");
+			ChatUtil.sendMessage(player, "Cet endroit est protégé.");
 			event.setCancelled(true);
 		}
 
@@ -143,7 +143,7 @@ public class ProtectionBlockListener implements Listener
 
 		if (!Stuff.canBeDestroyed(player, block))
 		{
-			Message.sendMessage(player, "Cet endroit est protï¿½gï¿½.");
+			ChatUtil.sendMessage(player, "Cet endroit est protégé.");
 			event.setCancelled(true);
 		}
 	}

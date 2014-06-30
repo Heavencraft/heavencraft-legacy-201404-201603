@@ -15,6 +15,7 @@ public class AutoMessageTask implements Runnable
 
 	private final String[] messages = new String[] {
 			// Messages sérieux
+			"N'oubliez pas de /voter pour le serveur !",
 			"Des mini-jeux sont installés au Nexus !",
 			"Les §9modérateurs§r ne sont pas là pour vous téléporter ou vous expliquer comment jouer !",
 			"Les joueurs qui écrivent avec le moins de fautes d'orthographe sont ceux que l'on prend le plus au sérieux.",
@@ -30,6 +31,7 @@ public class AutoMessageTask implements Runnable
 			"(SRP) Vous êtes nouveau ? Consultez le tutoriel accessible via la commande §b/tuto§r.",
 			"(SRP) Besoins d'une parcelle ? Demandez-en une à un maire. La liste des maires connectés est visible avec §b/maires§r.",
 			"(SRP) Vous pouvez ajouter d'autres joueurs dans votre protection via §b/region addmember§r.",
+			"(SRP) Venez vous battre dans la ville PVP !",
 
 			// Autres serveurs
 			"(Créa) Vous avez un grand projet de construction mais pas assez de ressources ? Rendez-vous sur la map Créabiome !",
