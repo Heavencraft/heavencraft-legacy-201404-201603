@@ -72,7 +72,7 @@ public class HeavenAventure extends JavaPlugin
 		try {
 			if ((_mainConnection == null) || (_mainConnection.isClosed())) {
 				_mainConnection = DriverManager
-						.getConnection("jdbc:mysql://localhost:3306/mc-db?user=mc-sql&password=MfGJQMBzmAS5xYhH&zeroDateTimeBehavior=convertToNull&?autoReconnect=true");
+						.getConnection("jdbc:mysql://localhost:3306/mc-db?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull&?autoReconnect=true");
 			}
 		} catch (SQLException ex) {
 			ex.printStackTrace();
