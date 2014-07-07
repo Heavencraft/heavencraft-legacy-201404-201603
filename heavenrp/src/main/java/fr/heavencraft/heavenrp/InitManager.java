@@ -77,6 +77,7 @@ import fr.manu67100.heavenrp.laposte.handlers.PopupMenuAPI;
 import fr.manu67100.heavenrp.laposte.handlers.PostOfficeManager;
 import fr.manu67100.heavenrp.laposte.listeners.InventoryListener;
 import fr.manu67100.heavenrp.laposte.listeners.PostOfficeListener;
+import fr.manu67100.heavenrp.laposte.listeners.PostePlayerListener;
 import fr.manu67100.heavenrp.laposte.listeners.SignListener;
 
 public class InitManager
@@ -238,6 +239,7 @@ public class InitManager
 		new SignListener();
 		new InventoryListener();
 		new PopupMenuAPI();
+		new PostePlayerListener();
 		PostOfficeManager.LoadOffices();
 	}
 }

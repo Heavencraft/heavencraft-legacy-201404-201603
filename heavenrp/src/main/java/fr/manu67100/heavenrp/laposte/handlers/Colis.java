@@ -3,6 +3,7 @@ package fr.manu67100.heavenrp.laposte.handlers;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -37,7 +38,7 @@ public class Colis {
 			
 			this.expediteur = Bukkit.getServer().getPlayer(expID);
 			this.destinataire =  Bukkit.getServer().getPlayer(destID);
-			this.contenu = InventoryUtils.StringToInventory(rs.getString("contenu"));
+			this.contenu = PosteUtils.StringToInventory(rs.getString("contenu"));
 			this._ID = ID;
 		}
 		catch (SQLException e)
@@ -77,7 +78,7 @@ public class Colis {
 					"INSERT INTO poste_colis (expediteur, destinataire, dateEnvoi, contenu, isLOG) VALUES (?, ?, NOW(), ?, ?)");
 			ps.setString(1, this.expediteur.getUniqueId().toString());
 			ps.setString(2, this.destinataire.getUniqueId().toString());
-			ps.setString(3, InventoryUtils.InventoryToString(this.contenu));
+			ps.setString(3, PosteUtils.InventoryToString(this.contenu));
 			ps.setBoolean(4, false);
 			ps.executeUpdate();
 			//inserer le log aussi
@@ -85,6 +86,7 @@ public class Colis {
 			ps.executeUpdate();
 			
 			expediteur.sendMessage(String.format(FORMAT_POSTE, "Votre colis a été bien envoyé."));
+			destinataire.sendMessage(String.format(FORMAT_POSTE, "Vous avez recu un colis, vous pouvez le récuperer a la poste!"));
 		}
 
 		catch (SQLException ex)
@@ -119,6 +121,8 @@ public class Colis {
 		}
 		
 	}
+	
+	
 
 
 }
