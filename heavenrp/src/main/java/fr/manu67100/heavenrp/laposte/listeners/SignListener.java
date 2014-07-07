@@ -24,6 +24,7 @@ import fr.manu67100.heavenrp.laposte.handlers.Colis;
 import fr.manu67100.heavenrp.laposte.handlers.MenuItem;
 import fr.manu67100.heavenrp.laposte.handlers.PopupMenu;
 import fr.manu67100.heavenrp.laposte.handlers.PopupMenuAPI;
+import fr.manu67100.heavenrp.laposte.handlers.PosteUtils;
 
 public class SignListener implements Listener
 {
@@ -72,7 +73,7 @@ public class SignListener implements Listener
 
 		ArrayList<Colis> mesColis = new ArrayList<Colis>();
 
-		for (String id : getColisRecus(e.getPlayer().getUniqueId().toString()))
+		for (String id : PosteUtils.getColisRecus(e.getPlayer().getUniqueId().toString()))
 		{
 			mesColis.add(new Colis(Integer.parseInt(id)));
 		}
@@ -111,29 +112,6 @@ public class SignListener implements Listener
 		menuMesColis.switchMenu(e.getPlayer(), menuMesColis);
 	}
 
-	private ArrayList<String> getColisRecus(String UUID)
-	{
-		ArrayList<String> liste = new ArrayList<String>();
-
-		try
-		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"SELECT `IDcolis` FROM `poste_colis`  WHERE `destinataire` = ? AND `isLOG` = '0'");
-			ps.setString(1, UUID);
-			ResultSet rs = ps.executeQuery();
-
-			while (rs.next())
-			{
-				liste.add(rs.getString("IDcolis"));
-			}
-
-			return liste;
-		}
-		catch (SQLException ex)
-		{
-			ex.printStackTrace();
-			return null;
-		}
-	}
+	
 
 }
