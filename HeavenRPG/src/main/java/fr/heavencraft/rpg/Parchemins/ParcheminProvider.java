@@ -10,7 +10,7 @@ import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPousseeQuantique;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminTonnereDivin;
 
 public class ParcheminProvider {
-	private static ArrayList<Parchemin> parchemins = new ArrayList<Parchemin>();
+	private static ArrayList<IParchemin> parchemins = new ArrayList<IParchemin>();
 	
 	public static void LoadParchemins()
 	{
@@ -21,19 +21,19 @@ public class ParcheminProvider {
 	}
 	
 	
-	public static void addParchemin(Parchemin p)
+	public static void addParchemin(IParchemin p)
 	{
 		if(!parchemins.contains(p))
 			parchemins.add(p);
 	}
 	
-	public static void removeParchemin(Parchemin p)
+	public static void removeParchemin(IParchemin p)
 	{
 		if(parchemins.contains(p))
 			parchemins.remove(p);
 	}
 	
-	public static ArrayList<Parchemin> getParchemins()
+	public static ArrayList<IParchemin> getParchemins()
 	{
 		return parchemins;
 	}
@@ -43,9 +43,9 @@ public class ParcheminProvider {
 	 * @param item
 	 * @return
 	 */
-	public static Parchemin getParcheminByItem(ItemStack item)
+	public static IParchemin getParcheminByItem(ItemStack item)
 	{
-		for(Parchemin p: parchemins)
+		for(IParchemin p: parchemins)
 		{
 			if(p.getItem().getItemMeta().getDisplayName().equalsIgnoreCase(item.getItemMeta().getDisplayName()))
 				return p;

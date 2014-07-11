@@ -19,10 +19,10 @@ import org.bukkit.util.BlockIterator;
 
 import fr.heavencraft.Utils.ParticleEffect;
 import fr.heavencraft.rpg.HeavenRPG;
-import fr.heavencraft.rpg.Parchemins.Parchemin;
+import fr.heavencraft.rpg.Parchemins.IParchemin;
 import fr.heavencraft.rpg.player.RPGPlayer;
 
-public class ParcheminTonnereDivin implements Parchemin{
+public class ParcheminTonnereDivin implements IParchemin{
 
 	public int RPGexpieirence() {
 		return 0;

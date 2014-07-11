@@ -9,6 +9,8 @@ import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 
 import fr.heavencraft.rpg.RPGFiles;
 import fr.heavencraft.rpg.ZoneUtils;
+import fr.heavencraft.rpg.mobs.MobManager;
+import fr.heavencraft.rpg.mobs.MobManager.RPGMob;
 
 public class ZoneManager {
 	public static class Zone {
@@ -86,14 +88,24 @@ public class ZoneManager {
 		if(RPGFiles.getZones().getConfigurationSection("Zones") != null)
 			for(String a : RPGFiles.getZones().getConfigurationSection("Zones").getKeys(false))
 			{
-				Zone z = new Zone(a);
-				z._zoneLevel = RPGFiles.getZones().getInt("Zones." + a + ".level");
-				z._name = RPGFiles.getZones().getString("Zones." + a + ".name");			
-				Location l1 = ZoneUtils.deserializeLoc( RPGFiles.getZones().getString("Zones." + a + ".loc1"));
-				Location l2 = ZoneUtils.deserializeLoc( RPGFiles.getZones().getString("Zones." + a + ".loc2"));
-				z._cubo = new CuboidSelection(l1.getWorld(), l1, l2);
-				addZone(z);
-				Bukkit.broadcastMessage(z.getName());
+			
+				try {
+					Zone z = new Zone(a);
+					z._zoneLevel = RPGFiles.getZones().getInt("Zones." + a + ".level");
+					z._name = RPGFiles.getZones().getString("Zones." + a + ".name");			
+					Bukkit.broadcastMessage("L1 de "+ a + " : " + RPGFiles.getZones().getString("Zones." + a + ".loc1"));
+					Location l1 = ZoneUtils.deserializeLoc( RPGFiles.getZones().getString("Zones." + a + ".loc1"));
+					Bukkit.broadcastMessage("L2 de "+ a + " : " + RPGFiles.getZones().getString("Zones." + a + ".loc2"));
+					Location l2 = ZoneUtils.deserializeLoc( RPGFiles.getZones().getString("Zones." + a + ".loc2"));
+					z._cubo = new CuboidSelection(l1.getWorld(), l1, l2);
+					addZone(z);
+					Bukkit.broadcastMessage(z.getName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				
 			}
 	}
 	
@@ -160,4 +172,6 @@ public class ZoneManager {
 		}
 		return null;
 	}
+	
+	
 }

@@ -14,10 +14,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.heavencraft.Utils.ParticleEffect;
 import fr.heavencraft.rpg.HeavenRPG;
-import fr.heavencraft.rpg.Parchemins.Parchemin;
+import fr.heavencraft.rpg.Parchemins.IParchemin;
 import fr.heavencraft.rpg.player.RPGPlayer;
 
-public class ParcheminAuraDeLaBienfaisansce implements Parchemin{
+public class ParcheminAuraDeLaBienfaisansce implements IParchemin{
 
 	public int RPGexpieirence() {
 		return 0;

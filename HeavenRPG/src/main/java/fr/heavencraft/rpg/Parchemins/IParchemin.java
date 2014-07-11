@@ -4,7 +4,7 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.heavencraft.rpg.player.RPGPlayer;
 
-public interface Parchemin {
+public interface IParchemin {
 	/**
 	 * L'expérience nécessaire a l'execution du parchemin.
 	 * @return
