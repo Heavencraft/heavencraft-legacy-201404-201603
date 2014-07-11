@@ -73,6 +73,19 @@ public class MobManager {
 		return null;
 	}
 	
+	/**
+	 * Supprime tout les mobs spéciaux
+	 */
+	public static void killAllMobs()
+	{
+		for(RPGMob mob : getRPGMobs())
+        {
+        	mob.getMob().remove();
+        	removeMob(mob);
+        }
+	}
+	
+	
 	public static ArrayList<RPGMob> getRPGMobs()
 	{
 		return entities;

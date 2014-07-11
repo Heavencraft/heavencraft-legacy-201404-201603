@@ -24,7 +24,7 @@ public class ParcheminsListener implements Listener {
 	{
 		if(event.getPlayer().getItemInHand().getType() == Material.PAPER)
 		{
-			Parchemin p = ParcheminProvider.getParcheminByItem(event.getPlayer().getItemInHand());
+			IParchemin p = ParcheminProvider.getParcheminByItem(event.getPlayer().getItemInHand());
 			if(p != null)
 			{
 				if(!p.canDo(RPGPlayerManager.getRPGPlayer(event.getPlayer())))

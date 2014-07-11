@@ -38,11 +38,7 @@ public class HeavenRPG extends JavaPlugin {
 	@Override
     public void onDisable() {
         
-        for(RPGMob mob : MobManager.getRPGMobs())
-        {
-        	mob.getMob().remove();
-        	MobManager.removeMob(mob);
-        }
+        MobManager.killAllMobs();
         
     }
 
