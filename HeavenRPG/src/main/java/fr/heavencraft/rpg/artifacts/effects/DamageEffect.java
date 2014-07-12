@@ -6,6 +6,9 @@ import org.bukkit.entity.Player;
 
 import fr.heavencraft.exceptions.HeavenException;
 
+/**
+ * Effect which deals damages to near targets
+ */
 public class DamageEffect extends TargetEffect
 {
 	private final double _damage;
