@@ -37,11 +37,11 @@ public class LicenceCommand extends HeavenCommand
 						ChatUtil.sendMessage(player, "Elle expirera le %1$s.",
 								dateFormat.format(user.getLicenseExpireDate()));
 						ChatUtil.sendMessage(player,
-								"Faites {/licence marchand valider} pour acheter 1 mois supplémentaire. Il vous en coûtera 1000 pièces d'or.");
+								"Faites {/licence marchand valider} pour acheter 1 mois supplémentaire. Il vous en coûtera 750 pièces d'or.");
 					}
 					else if (user.alreadyHasDealerLicense())
 						ChatUtil.sendMessage(player,
-								"La licence de marchand vous coûtera 1000 pièces d'or. Faites {/licence marchand valider} pour valider");
+								"La licence de marchand vous coûtera 750 pièces d'or. Faites {/licence marchand valider} pour valider");
 					else
 						ChatUtil.sendMessage(player,
 								"La licence de marchand vous coûtera 500 pièces d'or. Faites {/licence marchand valider} pour valider");
@@ -62,7 +62,7 @@ public class LicenceCommand extends HeavenCommand
 					{
 						if (user.alreadyHasDealerLicense())
 						{
-							user.updateBalance(-1000);
+							user.updateBalance(-750);
 							user.buyDealerLicense();
 							ChatUtil.sendMessage(player, "Vous venez d'acquérir la licence de marchand pour 1 mois.");
 						}
