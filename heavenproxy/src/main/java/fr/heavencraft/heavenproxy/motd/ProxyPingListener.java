@@ -23,7 +23,7 @@ public class ProxyPingListener implements Listener
 
 		description += getServerString("Semi-RP", "semirp") + " ";
 		description += getServerString("Créatif", "creative", "musee", "build") + " ";
-		description += getServerString("Factions", "factions") + " ";
+		//description += getServerString("Factions", "factions") + " ";
 		description += getServerString("Survie", "origines", "ultrahard") + " ";
 		description += getServerString("Jeux", "infected", "tntrun", "mariokart", "paintball", "hungergames");
 
