@@ -57,7 +57,8 @@ public class ParcheminLeSouffleDuNecromentien implements IParchemin{
 					if(e instanceof Player)
 					{
 						Player player = (Player) e;
-						player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 10 ,10));
+						
+						player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 255 ,1000));
 					}
 				}
 				
