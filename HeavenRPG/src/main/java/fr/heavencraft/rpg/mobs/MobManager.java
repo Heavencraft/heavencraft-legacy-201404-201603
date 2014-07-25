@@ -36,7 +36,7 @@ public class MobManager {
 	}
 	
 	
-	private static String[] barArray = new String[21];;
+	private static String[] barArray = new String[21];
 	private static ArrayList<RPGMob> entities = new ArrayList<RPGMob>();
 
 	public MobManager()
