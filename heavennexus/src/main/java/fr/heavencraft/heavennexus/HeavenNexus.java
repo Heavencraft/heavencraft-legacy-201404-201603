@@ -6,13 +6,13 @@ import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.heavencraft.generators.EmptyChunkGenerator;
-import fr.heavencraft.heavennexus.listeners.JumpListener;
 import fr.heavencraft.heavennexus.listeners.NameTagListener;
 import fr.heavencraft.heavennexus.listeners.ServerListener;
 import fr.heavencraft.heavennexus.listeners.WatchListener;
 import fr.heavencraft.heavennexus.listeners.WeatherListener;
 import fr.heavencraft.heavennexus.listeners.sign.ChestSignListener;
 import fr.heavencraft.listeners.ColoredSignsListener;
+import fr.heavencraft.listeners.JumpListener;
 import fr.heavencraft.listeners.NoChatListener;
 import fr.heavencraft.listeners.RedstoneLampListener;
 import fr.heavencraft.utils.DevUtil;
@@ -30,7 +30,7 @@ public class HeavenNexus extends JavaPlugin
 		new NoChatListener();
 		new RedstoneLampListener();
 
-		new JumpListener(this);
+		new JumpListener();
 		new NameTagListener();
 		new ServerListener();
 		new WatchListener(this);
