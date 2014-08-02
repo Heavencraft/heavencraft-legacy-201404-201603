@@ -44,7 +44,7 @@ public class LicenceCommand extends HeavenCommand
 								"La licence de marchand vous coûtera 750 pièces d'or. Faites {/licence marchand valider} pour valider");
 					else
 						ChatUtil.sendMessage(player,
-								"La licence de marchand vous coûtera 500 pièces d'or. Faites {/licence marchand valider} pour valider");
+								"La licence de marchand vous coûtera 400 pièces d'or. Faites {/licence marchand valider} pour valider");
 				}
 				/*
 				 * else if (args[0].equalsIgnoreCase("ressources")) { if (user.hasSurvivalLicense())
@@ -68,7 +68,7 @@ public class LicenceCommand extends HeavenCommand
 						}
 						else
 						{
-							user.updateBalance(-500);
+							user.updateBalance(-400);
 							user.buyDealerLicense();
 							ChatUtil.sendMessage(player, "Vous venez d'acquérir la licence de marchand pour 1 mois.");
 						}
