@@ -10,6 +10,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
+
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.exceptions.SQLErrorException;
 import fr.heavencraft.heavenrp.HeavenRP;
@@ -180,13 +182,18 @@ public class BankAccountsManager
 
 			ps.executeUpdate();
 		}
+		catch (MySQLIntegrityConstraintViolationException ex)
+		{
+			ex.printStackTrace();
+			throw new HeavenException("Le compte en banque {%1$s} existe déjà.", owner);
+		}
 		catch (SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new SQLErrorException();
 		}
 	}
-	
+
 	public static void deleteBankAccount(String name, BankAccountType type) throws HeavenException
 	{
 		try
@@ -256,21 +263,17 @@ public class BankAccountsManager
 		try
 		{
 			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"(SELECT ba.id, ba.owner, ba.type " + // Sélection des comptes de villes
-					"FROM bank_account ba, mayors m, users u " +
-					"WHERE ba.type = 'T' " +
-					"AND ba.owner = m.region_name " +
-					"AND m.user_id = u.id " +
-					"AND u.name = ?) " +
-					"UNION " +
-					"(SELECT ba.id, ba.owner, ba.type " + // Sélection des comptes d'entreprises
-					"FROM bank_account ba, enterprises e, enterprises_members em, users u " +
-					"WHERE ba.type ='E' " +
-					"AND ba.owner = e.name " +
-					"AND e.id = em.enterprise_id " +
-					"AND em.user_id = u.id " +
-					"AND u.name = ?);");
-			
+					"(SELECT ba.id, ba.owner, ba.type "
+							+ // Sélection des comptes de villes
+							"FROM bank_account ba, mayors m, users u " + "WHERE ba.type = 'T' "
+							+ "AND ba.owner = m.region_name " + "AND m.user_id = u.id " + "AND u.name = ?) "
+							+ "UNION "
+							+ "(SELECT ba.id, ba.owner, ba.type "
+							+ // Sélection des comptes d'entreprises
+							"FROM bank_account ba, enterprises e, enterprises_members em, users u "
+							+ "WHERE ba.type ='E' " + "AND ba.owner = e.name " + "AND e.id = em.enterprise_id "
+							+ "AND em.user_id = u.id " + "AND u.name = ?);");
+
 			ps.setString(1, owner);
 			ps.setString(2, owner);
 			ResultSet rs = ps.executeQuery();

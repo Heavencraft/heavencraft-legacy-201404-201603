@@ -33,6 +33,7 @@ import fr.heavencraft.heavenrp.economy.EconomyListener;
 import fr.heavencraft.heavenrp.economy.GoldListener;
 import fr.heavencraft.heavenrp.economy.LivretProSignListener;
 import fr.heavencraft.heavenrp.economy.LivretSignListener;
+import fr.heavencraft.heavenrp.general.BourseListener;
 import fr.heavencraft.heavenrp.general.PumpkinLampListener;
 import fr.heavencraft.heavenrp.general.RecipeManager;
 import fr.heavencraft.heavenrp.general.ServerListener;
@@ -42,6 +43,7 @@ import fr.heavencraft.heavenrp.horses.HorsesListener;
 import fr.heavencraft.heavenrp.key.DonjonSignListener;
 import fr.heavencraft.heavenrp.provinces.ProvinceListener;
 import fr.heavencraft.heavenrp.provinces.ProvinceSignListener;
+import fr.heavencraft.heavenrp.shops.Stock2SignListener;
 import fr.heavencraft.heavenrp.warps.WarpSignListener;
 import fr.heavencraft.heavenrp.worlds.WorldsListener;
 import fr.heavencraft.heavenrp.worlds.WorldsManager;
@@ -193,6 +195,7 @@ public class InitManager
 		new LivretSignListener();
 
 		// General
+		new BourseListener();
 		new PumpkinLampListener();
 		new RecipeManager();
 		new ServerListener();
@@ -241,5 +244,8 @@ public class InitManager
 		new PopupMenuAPI();
 		new PostePlayerListener();
 		PostOfficeManager.LoadOffices();
+
+		// Coffre2
+		new Stock2SignListener();
 	}
 }
