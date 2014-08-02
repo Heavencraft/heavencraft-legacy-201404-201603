@@ -52,7 +52,7 @@ import fr.heavencraft.listeners.JumpListener;
 import fr.heavencraft.listeners.NoChatListener;
 import fr.heavencraft.listeners.RedstoneLampListener;
 import fr.heavencraft.listeners.sign.CookieSignListener;
-import fr.heavencraft.listeners.sign.LinkListener;
+import fr.heavencraft.listeners.sign.LinkSignListener;
 import fr.heavencraft.tasks.SaveTask;
 import fr.lorgan17.heavenrp.commands.mod.EventCommand;
 import fr.lorgan17.heavenrp.commands.mod.ModpackCommand;
@@ -225,15 +225,15 @@ public class InitManager
 		// Listeners
 		new JumpListener();
 		new LampadaireListener();
-		new LinkListener();
+		new LinkSignListener();
 		new PVP4Manager();
 		new PVPManager();
 		new SnowballListener();
 
 		// new AdminShop();
-		
+
 		// La Poste
-		
+
 		new PostOfficeListener();
 		new WGRegionEventsListener();
 		new SignListener();
