@@ -270,6 +270,8 @@ public class Utils
 			return "Ori ";
 		else if (serverName.equalsIgnoreCase("creative") || serverName.equalsIgnoreCase("build"))
 			return "Créa";
+		else if (serverName.equalsIgnoreCase("fun"))
+			return "Fun";
 		else if (serverName.equalsIgnoreCase("factions"))
 			return "Fac";
 		else if (serverName.equalsIgnoreCase("infected"))
