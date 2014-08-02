@@ -85,11 +85,11 @@ public class MuteListener implements Listener
 			return;
 
 		String message = event.getMessage().toLowerCase();
+		boolean isPrivateMessage = message.startsWith("/m ") || message.startsWith("/msg ")
+				|| message.startsWith("/t ") || message.startsWith("/tell ") || message.startsWith("/w ");
 
 		// Si c'est une commande autre que /m, /me ou /send -> on fait rien
-		if (event.isCommand() && !message.startsWith("/m ") && !message.startsWith("/msg ")
-				&& !message.startsWith("/t ") && !message.startsWith("/tell ") && !message.startsWith("/w ")
-				&& !message.startsWith("/me ") && !message.startsWith("/envoyer "))
+		if (event.isCommand() && !isPrivateMessage && !message.startsWith("/me ") && !message.startsWith("/envoyer "))
 			return;
 
 		ProxiedPlayer player = (ProxiedPlayer) event.getSender();
@@ -107,6 +107,10 @@ public class MuteListener implements Listener
 			for (String bannedWord : bannedWords)
 				if (word.equalsIgnoreCase(bannedWord))
 				{
+					// Le cas du "merde"
+					if (isPrivateMessage && bannedWord.equalsIgnoreCase("merde"))
+						continue;
+
 					MuteManager.mutePlayer(playerName, 5);
 					Utils.sendMessage(player,
 							"Vous avez été mute pour {5} minutes par {le Prof. Chen} pour avoir dit {%1$s}.", word);
