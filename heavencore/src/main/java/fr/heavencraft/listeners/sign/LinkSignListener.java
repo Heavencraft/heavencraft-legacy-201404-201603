@@ -8,9 +8,9 @@ import fr.heavencraft.Permissions;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.utils.ChatUtil;
 
-public class LinkListener extends SignListener
+public class LinkSignListener extends SignListener
 {
-	public LinkListener()
+	public LinkSignListener()
 	{
 		super("Lien", Permissions.LINK_SIGN);
 	}
