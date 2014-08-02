@@ -48,6 +48,6 @@ public class HeavenNexus extends HeavenPlugin
 
 	public static Location getSpawn()
 	{
-		return new Location(Bukkit.getWorld("world"), 0.5, 169, 0.5, 270, 0);
+		return new Location(Bukkit.getWorld("world"), 0.5, 100, 0.5, 0, 0);
 	}
 }
