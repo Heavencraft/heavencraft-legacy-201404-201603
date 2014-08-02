@@ -15,7 +15,7 @@ import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccou
 
 public class UserProvider
 {
-	private static Map<String, User> _usersByName = new HashMap<String, User>();
+	private static Map<String, User> usersByName = new HashMap<String, User>();
 
 	public static void createUser(String uuid, String name)
 	{
@@ -43,12 +43,12 @@ public class UserProvider
 
 	public static void removeFromCache(String name)
 	{
-		_usersByName.remove(name);
+		usersByName.remove(name);
 	}
 
 	public static User getUserByName(String name) throws HeavenException
 	{
-		User user = _usersByName.get(name);
+		User user = usersByName.get(name);
 
 		if (user != null)
 			return user;
@@ -66,14 +66,14 @@ public class UserProvider
 
 			user = new User(rs);
 
-			_usersByName.put(name, user);
+			usersByName.put(name, user);
 			return user;
 		}
 
 		catch (SQLException ex)
 		{
 			ex.printStackTrace();
-			throw new UserNotFoundException(name);
+			throw new SQLErrorException();
 		}
 	}
 
