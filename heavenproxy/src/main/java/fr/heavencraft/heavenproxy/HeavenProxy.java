@@ -238,9 +238,8 @@ public class HeavenProxy extends Plugin
 
 	public static void convertUserList()
 	{
-		new Thread()
+		ProxyServer.getInstance().getScheduler().runAsync(HeavenProxy.getInstance(), new Runnable()
 		{
-
 			@Override
 			public void run()
 			{
@@ -277,15 +276,13 @@ public class HeavenProxy extends Plugin
 					e.printStackTrace();
 				}
 			}
-
-		}.start();
+		});
 	}
 
 	public static void convertUserSemirp()
 	{
-		new Thread()
+		ProxyServer.getInstance().getScheduler().runAsync(HeavenProxy.getInstance(), new Runnable()
 		{
-
 			@Override
 			public void run()
 			{
@@ -324,6 +321,6 @@ public class HeavenProxy extends Plugin
 				}
 			}
 
-		}.start();
+		});
 	}
 }
