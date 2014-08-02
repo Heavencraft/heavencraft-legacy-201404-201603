@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -83,12 +85,16 @@ public class Deployer
 	private static void copyJar(File origin, String directory)
 	{
 		Path filePath = origin.toPath();
-		Path dirPath = new File(directory).toPath();
+		File destFile = new File(directory);
+		Path dirPath = destFile.toPath();
 
 		try
 		{
-			System.out.println("Copying " + filePath + " to " + dirPath);
-			Files.copy(filePath, dirPath, StandardCopyOption.REPLACE_EXISTING);
+			if (!FileUtils.contentEquals(origin, destFile))
+			{
+				System.out.println("Copying " + filePath + " to " + dirPath);
+				Files.copy(filePath, dirPath, StandardCopyOption.REPLACE_EXISTING);
+			}
 		}
 		catch (IOException ex)
 		{
