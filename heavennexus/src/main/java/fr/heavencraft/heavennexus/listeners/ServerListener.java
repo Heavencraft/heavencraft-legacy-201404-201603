@@ -1,9 +1,13 @@
 package fr.heavencraft.heavennexus.listeners;
 
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPhysicsEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
@@ -34,5 +38,14 @@ public class ServerListener implements Listener
 	{
 		if (event.getChangedType() == Material.PORTAL)
 			event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onEntityDamage(EntityDamageEvent event)
+	{
+		if (!event.getEntityType().equals(EntityType.PLAYER) || !event.getCause().equals(DamageCause.FALL))
+			return;
+
+		event.setCancelled(true);
 	}
 }
