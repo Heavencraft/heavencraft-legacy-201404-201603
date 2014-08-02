@@ -48,6 +48,7 @@ import fr.heavencraft.heavenrp.worlds.WorldsManager;
 import fr.heavencraft.listeners.AntiCheatListener;
 import fr.heavencraft.listeners.AntiLagListener;
 import fr.heavencraft.listeners.ColoredSignsListener;
+import fr.heavencraft.listeners.JumpListener;
 import fr.heavencraft.listeners.NoChatListener;
 import fr.heavencraft.listeners.RedstoneLampListener;
 import fr.heavencraft.listeners.sign.CookieSignListener;
@@ -62,7 +63,6 @@ import fr.lorgan17.heavenrp.commands.user.LicenceCommand;
 import fr.lorgan17.heavenrp.commands.user.MaireCommand;
 import fr.lorgan17.heavenrp.commands.user.MairesCommand;
 import fr.lorgan17.heavenrp.commands.user.ParcelleCommand;
-import fr.lorgan17.heavenrp.listeners.JumpListener;
 import fr.lorgan17.heavenrp.listeners.LampadaireListener;
 import fr.lorgan17.heavenrp.listeners.PVP4Manager;
 import fr.lorgan17.heavenrp.listeners.PVPManager;
@@ -160,7 +160,7 @@ public class InitManager
 		new MaireCommand();
 		new MairesCommand();
 		new ParcelleCommand();
-		
+
 		// Commandes Poste
 		new colisCommand();
 		new reloadRegion();
