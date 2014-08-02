@@ -3,8 +3,8 @@ package fr.heavencraft.heavennexus;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.plugin.java.JavaPlugin;
 
+import fr.heavencraft.HeavenPlugin;
 import fr.heavencraft.generators.EmptyChunkGenerator;
 import fr.heavencraft.heavennexus.listeners.NameTagListener;
 import fr.heavencraft.heavennexus.listeners.ServerListener;
@@ -15,15 +15,13 @@ import fr.heavencraft.listeners.ColoredSignsListener;
 import fr.heavencraft.listeners.JumpListener;
 import fr.heavencraft.listeners.NoChatListener;
 import fr.heavencraft.listeners.RedstoneLampListener;
-import fr.heavencraft.utils.DevUtil;
 
-public class HeavenNexus extends JavaPlugin
+public class HeavenNexus extends HeavenPlugin
 {
 	@Override
 	public void onEnable()
 	{
 		super.onEnable();
-		DevUtil.setPlugin(this);
 
 		// From HeavenCore
 		new ColoredSignsListener();
