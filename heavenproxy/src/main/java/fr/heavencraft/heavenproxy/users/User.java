@@ -76,7 +76,7 @@ public class User
 
 	void setLastLogin(Timestamp lastLogin) throws HeavenException
 	{
-		if (_lastLogin.equals(lastLogin))
+		if (lastLogin == null || lastLogin.equals(_lastLogin))
 			return;
 
 		try (PreparedStatement ps = HeavenProxy.getConnection().prepareStatement(
