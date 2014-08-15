@@ -14,7 +14,6 @@ public class ManagersManager
 	private WorldEditPlugin _worldEdit;
 
 	private final AVManager _avManager;
-	private final SaveManager _saveManager;
 	private final WarpsManager _warpsManager;
 
 	public ManagersManager(MyPlugin plugin)
@@ -30,7 +29,6 @@ public class ManagersManager
 
 		// Avec donnée membre
 		_avManager = new AVManager(this);
-		_saveManager = new SaveManager(plugin, this);
 		_warpsManager = new WarpsManager();
 	}
 
@@ -49,11 +47,6 @@ public class ManagersManager
 	public AVManager getAVManager()
 	{
 		return _avManager;
-	}
-
-	public SaveManager getSaveManager()
-	{
-		return _saveManager;
 	}
 
 	public WarpsManager getWarpsManager()

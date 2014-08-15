@@ -1,12 +1,7 @@
 package fr.tenkei.creaplugin.listeners.protection;
 
-import net.minecraft.server.v1_7_R3.WorldServer;
-
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.craftbukkit.v1_7_R3.CraftWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -18,17 +13,18 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Sign;
 
 import fr.heavencraft.utils.ChatUtil;
+import fr.heavencraft.utils.DevUtil;
 import fr.tenkei.creaplugin.MyPlugin;
 import fr.tenkei.creaplugin.utils.Stuff;
 
 public class ProtectionBlockListener implements Listener
 {
-
 	public ProtectionBlockListener(MyPlugin plugin)
 	{
-		Bukkit.getPluginManager().registerEvents(this, plugin);
+		DevUtil.registerListener(this);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -39,7 +35,6 @@ public class ProtectionBlockListener implements Listener
 
 		if (!Stuff.canBeDestroyed(player, block))
 			event.setCancelled(true);
-
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -81,19 +76,19 @@ public class ProtectionBlockListener implements Listener
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockPlace(BlockPlaceEvent event)
 	{
 		Player player = event.getPlayer();
 		Block block = event.getBlockPlaced();
 
-		if (block.getTypeId() == 68)
-			if (block.getRelative(BlockFace.NORTH).getTypeId() == 125
-					|| block.getRelative(BlockFace.SOUTH).getTypeId() == 125
-					|| block.getRelative(BlockFace.EAST).getTypeId() == 125
-					|| block.getRelative(BlockFace.WEST).getTypeId() == 125)
+		if (block.getType() == Material.WALL_SIGN)
+		{
+			Sign sign = (Sign) block.getState();
+
+			if (block.getRelative(sign.getAttachedFace()).getType() == Material.WOOD_DOUBLE_STEP)
 				return; // On laisse poser
+		}
 
 		if (!Stuff.canBeDestroyed(player, block))
 		{
@@ -101,7 +96,7 @@ public class ProtectionBlockListener implements Listener
 			event.setCancelled(true);
 		}
 
-		if (block.getTypeId() == 144 || block.getTypeId() == 397)
+		if (block.getType() == Material.SKULL || block.getType() == Material.SKULL_ITEM)
 		{
 			// player.getEquipment().setItemInHand(new ItemStack(Material.AIR));
 			ItemStack itemInHand = player.getEquipment().getItemInHand();
@@ -109,37 +104,21 @@ public class ProtectionBlockListener implements Listener
 			player.getEquipment().setItemInHand(itemInHand);
 			return;
 		}
-
-		Block b = event.getBlock();
-
-		if (b.getTypeId() != 123)
-			return;
-
-		WorldServer ws = ((CraftWorld) b.getWorld()).getHandle();
-
-		boolean mem = ws.isStatic;
-		if (!mem)
-			ws.isStatic = true;
-
-		b.setTypeIdAndData(Material.REDSTONE_LAMP_ON.getId(), (byte) 0, false);
-
-		if (!mem)
-			ws.isStatic = false;
 	}
 
-	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onSignChange(SignChangeEvent event)
 	{
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
 
-		if (block.getType().getId() == 68)
-			if (block.getRelative(BlockFace.NORTH).getTypeId() == 125
-					|| block.getRelative(BlockFace.SOUTH).getTypeId() == 125
-					|| block.getRelative(BlockFace.EAST).getTypeId() == 125
-					|| block.getRelative(BlockFace.WEST).getTypeId() == 125)
-				return;
+		if (block.getType() == Material.WALL_SIGN)
+		{
+			Sign sign = (Sign) block.getState();
+
+			if (block.getRelative(sign.getAttachedFace()).getType() == Material.WOOD_DOUBLE_STEP)
+				return; // On laisse poser
+		}
 
 		if (!Stuff.canBeDestroyed(player, block))
 		{

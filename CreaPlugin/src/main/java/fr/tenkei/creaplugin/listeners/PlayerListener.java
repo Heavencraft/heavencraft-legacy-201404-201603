@@ -2,8 +2,6 @@ package fr.tenkei.creaplugin.listeners;
 
 import java.util.HashSet;
 
-import net.minecraft.server.v1_7_R3.WorldServer;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -12,7 +10,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
-import org.bukkit.craftbukkit.v1_7_R3.CraftWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -30,9 +27,9 @@ import org.bukkit.potion.PotionEffectType;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.utils.ChatUtil;
 import fr.tenkei.creaplugin.MyPlugin;
-import fr.tenkei.creaplugin.managers.UserManager;
 import fr.tenkei.creaplugin.managers.WorldsManager;
-import fr.tenkei.creaplugin.managers.entities.User;
+import fr.tenkei.creaplugin.users.User;
+import fr.tenkei.creaplugin.users.UserProvider;
 import fr.tenkei.creaplugin.utils.Stuff;
 
 public class PlayerListener implements Listener
@@ -70,8 +67,7 @@ public class PlayerListener implements Listener
 
 	}
 
-	@SuppressWarnings("deprecation")
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
 		try
@@ -88,11 +84,11 @@ public class PlayerListener implements Listener
 						_plugin.getManagers().getAVManager().achat(sign, event.getPlayer());
 						event.setCancelled(true);
 					}
-					else if (sign.getLine(0).endsWith(ChatColor.DARK_PURPLE + "[HOME]"))
-					{
-						UserManager.getUser(event.getPlayer().getName()).addHommeNumbre(clickedBlock);
-						event.setCancelled(true);
-					}
+					// else if (sign.getLine(0).endsWith(ChatColor.DARK_PURPLE + "[HOME]"))
+					// {
+					// UserManager.getUser(event.getPlayer().getName()).addHommeNumbre(clickedBlock);
+					// event.setCancelled(true);
+					// }
 					else if (sign.getLine(0).endsWith(ChatColor.DARK_PURPLE + "[NIGHT]"))
 					{
 						sellNight(event.getPlayer(), sign);
@@ -113,64 +109,8 @@ public class PlayerListener implements Listener
 						sellBeer(event.getPlayer(), sign);
 						event.setCancelled(true);
 					}
-
 				}
 			}
-
-			Player player = event.getPlayer();
-
-			if (event.getAction() == Action.LEFT_CLICK_AIR)
-			{
-				User user = UserManager.getUser(player.getName());
-				if (player.getItemInHand().getType() == Material.COMPASS)
-				{
-					if (player.hasPermission(MyPlugin.builder) || !user.getStringVariable("boussole").isEmpty())
-					{
-						HashSet<Byte> bytes = new HashSet<Byte>();
-						bytes.add((byte) 0);
-						bytes.add((byte) 8);
-						bytes.add((byte) 9);
-						bytes.add((byte) 10);
-						bytes.add((byte) 11);
-						bytes.add((byte) 50);
-						bytes.add((byte) 51);
-						bytes.add((byte) 65);
-						bytes.add((byte) 78);
-						bytes.add((byte) 106);
-
-						Block block = player.getTargetBlock(bytes, 100);
-						teleportPlayerOnBlock(player, block, bytes);
-						event.setCancelled(true);
-					}
-				}
-			}
-
-			if (event.isCancelled())
-				return;
-
-			if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
-				return;
-
-			Block b = event.getClickedBlock();
-
-			if (b.getTypeId() != 123)
-				return;
-
-			if (!event.hasItem() || event.getItem().getType() != Material.FLINT_AND_STEEL)
-				return;
-
-			WorldServer ws = ((CraftWorld) b.getWorld()).getHandle();
-
-			boolean mem = ws.isStatic;
-			if (!mem)
-				ws.isStatic = true;
-
-			b.setTypeIdAndData(Material.REDSTONE_LAMP_ON.getId(), (byte) 0, false);
-
-			if (!mem)
-				ws.isStatic = false;
-
-			event.setCancelled(true);
 		}
 		catch (HeavenException ex)
 		{
@@ -205,7 +145,7 @@ public class PlayerListener implements Listener
 	// creer un manager quand j'aurai le temps (Gestion des panneaux dans une class dédié)
 	private void sellHead(Player player, Sign sign) throws HeavenException
 	{
-		User user = UserManager.getUser(player.getName());
+		User user = UserProvider.getUserByName(player.getName());
 
 		int prix = Integer.parseInt(ChatColor.stripColor(sign.getLine(3)).replace(" Jetons", ""));
 
@@ -238,7 +178,7 @@ public class PlayerListener implements Listener
 	// creer un manager quand j'aurai le temps (Gestion des panneaux dans une class dédié)
 	private void sellBloc(Player player, Sign sign) throws HeavenException
 	{
-		User user = UserManager.getUser(player.getName());
+		User user = UserProvider.getUserByName(player.getName());
 
 		int prix = Integer.parseInt(ChatColor.stripColor(sign.getLine(3)).replace(" Jetons", ""));
 
@@ -285,7 +225,7 @@ public class PlayerListener implements Listener
 	private void sellNight(Player player, Sign sign) throws HeavenException
 	{
 
-		User user = UserManager.getUser(player.getName());
+		User user = UserProvider.getUserByName(player.getName());
 
 		if ((user.getInteractBlock() == null) || !Stuff.blocksEquals(user.getInteractBlock(), sign.getBlock()))
 		{
@@ -309,7 +249,7 @@ public class PlayerListener implements Listener
 	private void sellBeer(Player player, Sign sign) throws HeavenException
 	{
 
-		User user = UserManager.getUser(player.getName());
+		User user = UserProvider.getUserByName(player.getName());
 
 		if ((user.getInteractBlock() == null) || !Stuff.blocksEquals(user.getInteractBlock(), sign.getBlock()))
 		{

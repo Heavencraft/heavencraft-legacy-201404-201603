@@ -11,7 +11,8 @@ import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.utils.ChatUtil;
 import fr.tenkei.creaplugin.MyPlugin;
 import fr.tenkei.creaplugin.managers.entities.Region;
-import fr.tenkei.creaplugin.managers.entities.User;
+import fr.tenkei.creaplugin.users.User;
+import fr.tenkei.creaplugin.users.UserProvider;
 import fr.tenkei.creaplugin.utils.Stuff;
 
 public class AVManager
@@ -68,7 +69,7 @@ public class AVManager
 
 		int prix = Integer.parseInt(ChatColor.stripColor(sign.getLine(3)).replace(" Jetons", ""));
 
-		User user = UserManager.getUser(p.getName());
+		User user = UserProvider.getUserByName(p.getName());
 
 		Block confirmBlock = user.getInteractBlock();
 

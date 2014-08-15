@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.utils.ChatUtil;
-import fr.tenkei.creaplugin.managers.UserManager;
+import fr.tenkei.creaplugin.users.UserProvider;
 
 public class JetonsCommand extends HeavenCommand
 {
@@ -19,7 +19,7 @@ public class JetonsCommand extends HeavenCommand
 	protected void onPlayerCommand(Player player, String[] args) throws HeavenException
 	{
 		if (args.length == 0)
-			ChatUtil.sendMessage(player, "Vous avez {" + UserManager.getUser(player.getName()).getJeton()
+			ChatUtil.sendMessage(player, "Vous avez {" + UserProvider.getUserByName(player.getName()).getJetons()
 					+ "} jetons sur vous.");
 	}
 

@@ -11,8 +11,9 @@ import fr.tenkei.creaplugin.commands.admin.BiomeCommand;
 import fr.tenkei.creaplugin.commands.admin.OldCommand;
 import fr.tenkei.creaplugin.commands.admin.SetspawnCommand;
 import fr.tenkei.creaplugin.commands.builder.BuildCommand;
-import fr.tenkei.creaplugin.commands.user.HomeCommandHome;
-import fr.tenkei.creaplugin.commands.user.HomeCommandSetHome;
+import fr.tenkei.creaplugin.commands.homes.HomeCommand;
+import fr.tenkei.creaplugin.commands.homes.SethomeCommand;
+import fr.tenkei.creaplugin.commands.homes.TphomeCommand;
 import fr.tenkei.creaplugin.commands.user.HpsCommand;
 import fr.tenkei.creaplugin.commands.user.JetonsCommand;
 import fr.tenkei.creaplugin.commands.user.ProtectionCommand;
@@ -41,8 +42,9 @@ public class CommandsManager
 		// User
 		new SpawnCommand();
 
-		new HomeCommandHome();
-		new HomeCommandSetHome();
+		new HomeCommand();
+		new SethomeCommand();
+		new TphomeCommand();
 
 		new HpsCommand();
 		new JetonsCommand();

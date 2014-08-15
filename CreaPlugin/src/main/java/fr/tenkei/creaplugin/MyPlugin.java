@@ -5,10 +5,11 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 
 import fr.heavencraft.HeavenPlugin;
+import fr.heavencraft.tasks.SaveTask;
 import fr.tenkei.creaplugin.commands.CommandsManager;
 import fr.tenkei.creaplugin.listeners.ListenersManager;
 import fr.tenkei.creaplugin.managers.ManagersManager;
-import fr.tenkei.creaplugin.managers.UserManager;
+import fr.tenkei.creaplugin.users.JetonsTask;
 
 public class MyPlugin extends HeavenPlugin
 {
@@ -38,6 +39,9 @@ public class MyPlugin extends HeavenPlugin
 		// Gestionnaire de listeners
 		new ListenersManager(this);
 
+		new JetonsTask();
+		new SaveTask();
+
 		_log.info(pluginTag + " " + getDescription().getVersion() + " created by " + getDescription().getAuthors());
 	}
 
@@ -47,7 +51,6 @@ public class MyPlugin extends HeavenPlugin
 
 		try
 		{
-			UserManager.saveAllUsers();
 			Bukkit.getScheduler().cancelTasks(this);
 		}
 		catch (Exception ex)
