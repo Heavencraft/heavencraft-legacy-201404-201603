@@ -7,7 +7,7 @@ import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.utils.ChatUtil;
 import fr.tenkei.creaplugin.managers.HpsManager;
-import fr.tenkei.creaplugin.managers.UserManager;
+import fr.tenkei.creaplugin.users.UserProvider;
 import fr.tenkei.creaplugin.utils.Stuff;
 
 public class HpsCommand extends HeavenCommand
@@ -33,7 +33,7 @@ public class HpsCommand extends HeavenCommand
 			throw new HeavenException("Le nombre est incorrect.");
 
 		HpsManager.removeBalance(player.getName(), hps);
-		UserManager.getUser(player.getName()).updateBalance(hps * HpsManager.TAUX_JETON);
+		UserProvider.getUserByName(player.getName()).updateBalance(hps * HpsManager.TAUX_JETON);
 
 		ChatUtil.sendMessage(player, "%1$s HPs ont été retirés de votre compte", hps);
 		ChatUtil.sendMessage(player, "Vous avez reçu {%1$s} Jetons.", hps * HpsManager.TAUX_JETON);

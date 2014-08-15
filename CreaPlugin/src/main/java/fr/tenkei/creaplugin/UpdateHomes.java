@@ -10,6 +10,8 @@ import java.util.Map.Entry;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
+import fr.heavencraft.exceptions.HeavenException;
+import fr.tenkei.creaplugin.users.UserProvider;
 import fr.tenkei.creaplugin.utils.ConnectionManager;
 import fr.tenkei.creaplugin.utils.Stuff;
 
@@ -20,15 +22,45 @@ public class UpdateHomes
 		try
 		{
 			PreparedStatement ps = ConnectionManager.getConnection().prepareStatement(
-					"SELECT DISTINCT id, varString FROM users WHERE varString != ''");
+					"SELECT DISTINCT id, name, varString FROM users WHERE varString != ''");
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next())
 			{
-				updatePlayer(rs.getInt("id"), rs.getString("varString"));
+				createOrUpdateHomes(rs.getString("name"), rs.getString("varString"));
+				// updatePlayer(rs.getInt("id"), rs.getString("varString"));
 			}
 		}
 		catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private static void createOrUpdateHomes(String name, String varString)
+	{
+		try
+		{
+			Map<String, String> map = toMap(varString);
+
+			for (Entry<String, String> entry : map.entrySet())
+			{
+				if (entry.getKey().startsWith("home_"))
+				{
+					int homeNb = Integer.parseInt(entry.getKey().substring(5));
+					Location home = Stuff.stringToLocation(entry.getValue());
+
+					if (home.getWorld() == null)
+					{
+						home.setWorld(Bukkit.getWorld("world_creative"));
+					}
+
+					UserProvider.getUserByName(name).setHome(homeNb, home);
+				}
+			}
+		}
+		catch (HeavenException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();

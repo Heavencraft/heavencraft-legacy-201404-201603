@@ -15,6 +15,7 @@ import fr.heavencraft.utils.ChatUtil;
 import fr.tenkei.creaplugin.exceptions.MemberNotFoundException;
 import fr.tenkei.creaplugin.exceptions.RegionNotFoundException;
 import fr.tenkei.creaplugin.managers.WorldsManager;
+import fr.tenkei.creaplugin.users.User;
 import fr.tenkei.creaplugin.utils.ConnectionManager;
 
 public class Region

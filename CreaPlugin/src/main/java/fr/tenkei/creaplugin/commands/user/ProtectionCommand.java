@@ -7,8 +7,8 @@ import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.utils.ChatUtil;
 import fr.tenkei.creaplugin.exceptions.NotOwnerException;
-import fr.tenkei.creaplugin.managers.UserManager;
 import fr.tenkei.creaplugin.managers.entities.Region;
+import fr.tenkei.creaplugin.users.UserProvider;
 
 public class ProtectionCommand extends HeavenCommand
 {
@@ -51,7 +51,7 @@ public class ProtectionCommand extends HeavenCommand
 			if (!region.isMember(playerName, true))
 				throw new NotOwnerException();
 
-			region.addMember(UserManager.getUser(user), false);
+			region.addMember(UserProvider.getUserByName(user), false);
 
 			ChatUtil.sendMessage(player, "Le joueur {" + user + "} est désormais membre de la protection {" + regionId
 					+ "}.");

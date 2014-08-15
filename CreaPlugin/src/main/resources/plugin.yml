@@ -24,6 +24,7 @@ commands:
   tphere:
     aliases: [s]
   tpbiome:
+  tphome:
   tpold:
   protection:
   setspawn:
