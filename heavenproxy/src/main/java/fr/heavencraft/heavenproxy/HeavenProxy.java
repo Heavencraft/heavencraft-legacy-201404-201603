@@ -5,9 +5,15 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
+
+import com.mojang.api.profiles.HttpProfileRepository;
+import com.mojang.api.profiles.Profile;
+import com.mojang.api.profiles.ProfileRepository;
+
 import fr.heavencraft.heavenproxy.ban.BanCommand;
 import fr.heavencraft.heavenproxy.ban.BanListener;
 import fr.heavencraft.heavenproxy.ban.UnbanCommand;
@@ -29,6 +35,7 @@ import fr.heavencraft.heavenproxy.commands.TellCommand;
 import fr.heavencraft.heavenproxy.commands.TextCommand;
 import fr.heavencraft.heavenproxy.commands.VoterCommand;
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
+import fr.heavencraft.heavenproxy.exceptions.UUIDNotFoundException;
 import fr.heavencraft.heavenproxy.kick.KickCommand;
 import fr.heavencraft.heavenproxy.kick.RagequitCommand;
 import fr.heavencraft.heavenproxy.listeners.LogListener;
@@ -47,10 +54,12 @@ public class HeavenProxy extends Plugin
 	private final static String DB_URL = "jdbc:mysql://localhost:3306/proxy?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull";
 	private final static String MAIN_DB_URL = "jdbc:mysql://localhost:3306/mc-db?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull";
 	private final static String SRP_DB_URL = "jdbc:mysql://localhost:3306/minecraft-semirp?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull";
+	private final static String CREA_DB_URL = "jdbc:mysql://localhost:3306/minecraft-creative?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull";
 
 	private static Connection _connection;
 	private static Connection _mainConnection;
 	private static Connection _srpConnection;
+	private static Connection _creaConnection;
 
 	private static HeavenProxy _instance;
 
@@ -120,6 +129,7 @@ public class HeavenProxy extends Plugin
 			convertBanList();
 			convertUserList();
 			convertUserSemirp();
+			convertUserCrea();
 		}
 		catch (Throwable t)
 		{
@@ -193,6 +203,24 @@ public class HeavenProxy extends Plugin
 		}
 
 		return _srpConnection;
+	}
+
+	public static Connection getCreaConnection()
+	{
+		try
+		{
+			if (_creaConnection == null || _creaConnection.isClosed())
+			{
+				_creaConnection = DriverManager.getConnection(CREA_DB_URL);
+			}
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			ProxyServer.getInstance().stop();
+		}
+
+		return _creaConnection;
 	}
 
 	public static HeavenProxy getInstance()
@@ -310,6 +338,71 @@ public class HeavenProxy extends Plugin
 						catch (HeavenException ex)
 						{
 							System.out.println(ex.getMessage());
+						}
+					}
+
+				}
+				catch (SQLException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		});
+	}
+
+	public static void convertUserCrea()
+	{
+		ProxyServer.getInstance().getScheduler().runAsync(HeavenProxy.getInstance(), new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				try
+				{
+					PreparedStatement ps = getCreaConnection().prepareStatement(
+							"SELECT name FROM users WHERE uuid = ''");
+					ResultSet rs = ps.executeQuery();
+
+					while (true)
+					{
+						ArrayList<String> names = new ArrayList<String>();
+
+						for (int i = 0; i != 100; i++)
+							if (rs.next())
+								names.add(rs.getString("name"));
+
+						if (names.size() == 0)
+							return;
+
+						ProfileRepository repository = new HttpProfileRepository("minecraft");
+						Profile[] profiles = repository.findProfilesByNames(names.toArray(new String[names.size()]));
+
+						for (Profile profile : profiles)
+						{
+							try
+							{
+
+								String name = profile.getName();
+								String uuid = profile.getId();
+
+								if (name == null || uuid == null)
+									throw new UUIDNotFoundException(name);
+
+								PreparedStatement ps2 = getCreaConnection().prepareStatement(
+										"UPDATE users SET uuid = ? WHERE name = ?");
+								ps2.setString(1, uuid);
+								ps2.setString(2, name);
+
+								ps2.executeUpdate();
+								System.out.println(name + " -> " + uuid);
+							}
+							catch (HeavenException ex)
+							{
+								System.out.println(ex.getMessage());
+								ex.printStackTrace();
+							}
 						}
 					}
 
