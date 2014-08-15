@@ -43,7 +43,7 @@ public class AutoMessageTask implements Runnable
 
 			// Messages fun
 			"Vous aimez les cookies ? Ça tombe bien ! Moi aussi !", "Je mange des petits suisses (miam).",
-			"§cMaxou§r is watching you !", "Non §9Pinepy§r ! C'est un warp, pas un wrap !" };
+			"§cBig Brother§r is watching you !", "Non §9Pinepy§r ! C'est un warp, pas un wrap !" };
 
 	public AutoMessageTask()
 	{
