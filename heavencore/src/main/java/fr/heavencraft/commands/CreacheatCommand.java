@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import fr.heavencraft.Permissions;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.utils.ChatUtil;
+import fr.heavencraft.utils.PlayerUtil;
 
 public class CreacheatCommand extends HeavenCommand
 {
@@ -34,7 +35,12 @@ public class CreacheatCommand extends HeavenCommand
 	@Override
 	protected void onConsoleCommand(CommandSender sender, String[] args) throws HeavenException
 	{
-		ChatUtil.sendMessage(sender, "Cette commande n'est pas utilisable depuis la console.");
+		if (args.length != 1)
+			return;
+
+		Player player = PlayerUtil.getPlayer(args[0]);
+
+		ChatUtil.sendMessage(sender, "{%1$s} est en mode {%2$s}.", player.getName(), player.getGameMode().name());
 	}
 
 	@Override
