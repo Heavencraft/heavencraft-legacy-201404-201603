@@ -12,11 +12,10 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
 import fr.tenkei.creaplugin.MyPlugin;
-import fr.tenkei.creaplugin.managers.WorldsManager;
 import fr.tenkei.creaplugin.utils.Stuff;
 
-
-public class ProtectionEntityListener implements Listener {
+public class ProtectionEntityListener implements Listener
+{
 
 	public ProtectionEntityListener(MyPlugin plugin)
 	{
@@ -27,7 +26,7 @@ public class ProtectionEntityListener implements Listener {
 	public void onEntityExplode(EntityExplodeEvent event)
 	{
 		List<Block> toRemove = new ArrayList<Block>();
-		
+
 		for (Block block : event.blockList())
 		{
 			if (!Stuff.canBeDestroyed(null, block))
@@ -35,15 +34,14 @@ public class ProtectionEntityListener implements Listener {
 				toRemove.add(block);
 			}
 		}
-		
+
 		for (Block block : toRemove)
 			event.blockList().remove(block);
 	}
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onCreatureSpawn(CreatureSpawnEvent event)
 	{
-		if (WorldsManager.getTheCreative() == event.getLocation().getWorld())
-			event.setCancelled(true);
-    }
+		event.setCancelled(true);
+	}
 }
