@@ -118,19 +118,20 @@ public class MuteListener implements Listener
 			return;
 		}
 
+		String inputMessage = event.getMessage();
 		String outputMessage = "";
 
-		for (String word : message.split(" "))
-			for (String bannedWord : bannedWords)
-				if (word.equalsIgnoreCase(bannedWord))
-				{
-					outputMessage += (outputMessage == "" ? "" : " ")
-							+ replaceWords.get(rnd.nextInt(replaceWords.size()));
-				}
-				else
-				{
-					outputMessage += (outputMessage == "" ? "" : " ") + word;
-				}
+		for (String word : inputMessage.split(" "))
+		{
+			if (bannedWords.contains(word.toLowerCase()))
+			{
+				outputMessage += (outputMessage == "" ? "" : " ") + replaceWords.get(rnd.nextInt(replaceWords.size()));
+			}
+			else
+			{
+				outputMessage += (outputMessage == "" ? "" : " ") + word;
+			}
+		}
 
 		event.setMessage(outputMessage);
 
