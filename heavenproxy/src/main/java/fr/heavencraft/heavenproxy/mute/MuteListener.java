@@ -2,6 +2,7 @@ package fr.heavencraft.heavenproxy.mute;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Logger;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -15,7 +16,9 @@ public class MuteListener implements Listener
 	private static final String TAG = "[MuteListener] ";
 
 	private final Logger log = Utils.getLogger();
+	private final Random rnd = new Random();
 	private final List<String> bannedWords = new ArrayList<String>();
+	private final List<String> replaceWords = new ArrayList<String>();
 
 	public MuteListener()
 	{
@@ -72,6 +75,19 @@ public class MuteListener implements Listener
 		bannedWords.add("minefield");
 		bannedWords.add("thecraft");
 
+		// Mots de remplacement
+		replaceWords.add("poney");
+		replaceWords.add("poulette");
+		replaceWords.add("fraise");
+		replaceWords.add("lait demi-écrémé");
+		replaceWords.add("pika");
+		replaceWords.add("[censuré]");
+		replaceWords.add("cuniculiculture");
+		replaceWords.add("compote");
+		replaceWords.add("balançoire");
+		replaceWords.add("pastèque");
+		replaceWords.add("§k§k§k§k§k§k§k");
+
 		log.info(TAG + "Initialized");
 	}
 
@@ -102,21 +118,37 @@ public class MuteListener implements Listener
 			return;
 		}
 
-		// Mots interdits
+		String outputMessage = "";
+
 		for (String word : message.split(" "))
 			for (String bannedWord : bannedWords)
 				if (word.equalsIgnoreCase(bannedWord))
 				{
-					// Le cas du "merde"
-					if (isPrivateMessage && bannedWord.equalsIgnoreCase("merde"))
-						continue;
-
-					MuteManager.mutePlayer(playerName, 5);
-					Utils.sendMessage(player,
-							"Vous avez été mute pour {5} minutes par {le Prof. Chen} pour avoir dit {%1$s}.", word);
-
-					event.setCancelled(true);
-					return;
+					outputMessage += (outputMessage == "" ? "" : " ")
+							+ replaceWords.get(rnd.nextInt(replaceWords.size()));
 				}
+				else
+				{
+					outputMessage += (outputMessage == "" ? "" : " ") + word;
+				}
+
+		event.setMessage(outputMessage);
+
+		// Mots interdits
+		// for (String word : message.split(" "))
+		// for (String bannedWord : bannedWords)
+		// if (word.equalsIgnoreCase(bannedWord))
+		// {
+		// // Le cas du "merde"
+		// if (isPrivateMessage && bannedWord.equalsIgnoreCase("merde"))
+		// continue;
+		//
+		// MuteManager.mutePlayer(playerName, 5);
+		// Utils.sendMessage(player,
+		// "Vous avez été mute pour {5} minutes par {le Prof. Chen} pour avoir dit {%1$s}.", word);
+		//
+		// event.setCancelled(true);
+		// return;
+		// }
 	}
 }
