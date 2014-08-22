@@ -11,7 +11,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
 import fr.heavencraft.rpg.mobs.MobManager;
-import fr.heavencraft.rpg.mobs.MobManager.RPGMob;
 
 public class HeavenRPG extends JavaPlugin {
 	private final static String RP_DB_URL = "jdbc:mysql://localhost:3306/minecraft-semirp?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull&?autoReconnect=true";

@@ -6,36 +6,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 
 import fr.heavencraft.rpg.HeavenRPG;
+import fr.heavencraft.rpg.zones.Zone;
+import fr.heavencraft.rpg.zones.ZoneManager;
 
 public class MobManager {
-	public static class RPGMob {
-		private LivingEntity mob;
-		private int level;
-		
-		public RPGMob(LivingEntity entity, int level)
-		{
-			this.mob = entity;
-			this.level = level;
-		}
-		
-		public LivingEntity getMob() {
-			return mob;
-		}
-		public void setMob(LivingEntity mob) {
-			this.mob = mob;
-		}
-		public int getLevel() {
-			return level;
-		}
-		public void setLevel(int level) {
-			this.level = level;
-		}
-		
-		
-		
-	}
-	
-	
+
 	private static String[] barArray = new String[21];
 	private static ArrayList<RPGMob> entities = new ArrayList<RPGMob>();
 
@@ -45,9 +20,9 @@ public class MobManager {
 		barArray = getDefaultsBars();
 	}
 
-	public static void createMob(LivingEntity mob, int level)
-	{
-		RPGMob rmob = new RPGMob(mob,level);	
+	public static void createMob(LivingEntity mob, Zone zone)
+	{	
+		RPGMob rmob = new RPGMob(mob,zone.get_zoneLevel(), zone);	
 		if(!entities.contains(rmob))
 			entities.add(rmob);
 	}
@@ -56,7 +31,7 @@ public class MobManager {
 		if(!entities.contains(mob))
 			entities.add(mob);
 	}
-	
+
 	public static void removeMob(RPGMob mob)
 	{
 		if(entities.contains(mob))
@@ -72,25 +47,25 @@ public class MobManager {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Supprime tout les mobs spéciaux
 	 */
 	public static void killAllMobs()
 	{
 		for(RPGMob mob : getRPGMobs())
-        {
-        	mob.getMob().remove();
-        	removeMob(mob);
-        }
+		{
+			mob.getMob().remove();
+		}
+		entities.clear();
 	}
-	
-	
+
+
 	public static ArrayList<RPGMob> getRPGMobs()
 	{
 		return entities;
 	}
-	
+
 	public static void showMobHealthBar (final RPGMob mob) {
 
 		if(!entities.contains(mob))
@@ -107,21 +82,24 @@ public class MobManager {
 				//if the health is 0
 				if (health <= 0.0) 
 					return;
-				
+
 				if(health >= 18.0)
-					mob.getMob().setCustomName("§r§6[Lv." + mob.getLevel() + "] §r" + mob.getMob().getType().name());
+					if(ZoneManager.getZoneByName(mob.getSpawnZone()).getMobCustomName(mob.getMob()) == null)
+						mob.getMob().setCustomName("§r§6[Lv." + mob.getLevel() + "] §r");
+					else
+						mob.getMob().setCustomName("§r§6[Lv." + mob.getLevel() + "] §r" + ZoneManager.getZoneByName(mob.getSpawnZone()).getMobCustomName(mob.getMob()));		
 				else
 				{
-				barArray = MobManager.getDefaultsBars();		
-				mob.getMob().setCustomName("§r§6[Lv." + mob.getLevel() + "] §r" + barArray[roundUpPositiveWithMax(((health/max) * 20.0), 20)]);
+					barArray = MobManager.getDefaultsBars();		
+					mob.getMob().setCustomName("§r§6[Lv." + mob.getLevel() + "] §r" + barArray[roundUpPositiveWithMax(((health/max) * 20.0), 20)]);
 				}
 			}});
 	}
-	
+
 	public static void hideBar(RPGMob mob) {
 		if(!entities.contains(mob))
 			return;
-		
+
 		String cname = mob.getMob().getCustomName();
 		if (cname != null && !cname.startsWith("§r")) {
 			//it's a real name! Don't touch it!
@@ -130,7 +108,7 @@ public class MobManager {
 		mob.getMob().setCustomName("");
 		mob.getMob().setCustomNameVisible(false);
 	}
-	
+
 
 	public static int roundUpPositive(double d) {
 		int i = (int) d;

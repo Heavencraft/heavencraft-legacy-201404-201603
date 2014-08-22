@@ -9,76 +9,9 @@ import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 
 import fr.heavencraft.rpg.RPGFiles;
 import fr.heavencraft.rpg.ZoneUtils;
-import fr.heavencraft.rpg.mobs.MobManager;
-import fr.heavencraft.rpg.mobs.MobManager.RPGMob;
 
 public class ZoneManager {
-	public static class Zone {
-
-		private String _UniqueName;
-		private String _name;
-		private int _zoneLevel;
-		private CuboidSelection _cubo;
-		
-		/**
-		 * Constructeur, pour charger une zone depuis la config
-		 * @param name
-		 */
-		public Zone(String name)
-		{
-			this._name = name;
-			this._UniqueName = name;
-			this._zoneLevel = RPGFiles.getZones().getInt("Zones." + this._UniqueName + ".level");
-		}
-		
-		/**
-		 * Constructeur pour créer une zone dans la config.
-		 * @param name
-		 * @param level
-		 * @param cubo
-		 */
-		public Zone(String name, int level, CuboidSelection cubo)
-		{
-			this._UniqueName = name;
-			this.setName(name);
-			this.setZoneLevel(level);
-			this.setCubo(cubo);
-		}
-
-		public String getUniqueName() {
-			return _UniqueName;
-		}
-		
-		public String getName() {
-			return _name;
-		}
-		
-		public void setName(String _name) {
-			RPGFiles.getZones().set("Zones." + this._UniqueName + ".name", _name);
-			this._name = _name;
-			RPGFiles.saveZones();
-		}
-
-		public int getZoneLevel() {
-			return _zoneLevel;
-		}
-		public void setZoneLevel(int level) {
-			RPGFiles.getZones().set("Zones." + this._UniqueName + ".level", level);
-			this._zoneLevel = level;
-			RPGFiles.saveZones();
-		}
-
-		public CuboidSelection getCubo() {
-			return _cubo;
-		}
-		
-		public void setCubo(CuboidSelection _cubo) {
-			this._cubo = _cubo;
-			RPGFiles.getZones().set("Zones." + this._UniqueName + ".l1",  ZoneUtils.serializeLoc(_cubo.getMinimumPoint()));
-			RPGFiles.getZones().set("Zones." + this._UniqueName + ".l2", ZoneUtils.serializeLoc(_cubo.getMaximumPoint()));
-			RPGFiles.saveZones();
-		}	
-	}
+	
 		
 	private static ArrayList<Zone> zones = new ArrayList<Zone>();
 	
@@ -87,25 +20,15 @@ public class ZoneManager {
 		zones.clear();
 		if(RPGFiles.getZones().getConfigurationSection("Zones") != null)
 			for(String a : RPGFiles.getZones().getConfigurationSection("Zones").getKeys(false))
-			{
-			
-				try {
+			{		
 					Zone z = new Zone(a);
-					z._zoneLevel = RPGFiles.getZones().getInt("Zones." + a + ".level");
-					z._name = RPGFiles.getZones().getString("Zones." + a + ".name");			
-					Bukkit.broadcastMessage("L1 de "+ a + " : " + RPGFiles.getZones().getString("Zones." + a + ".loc1"));
-					Location l1 = ZoneUtils.deserializeLoc( RPGFiles.getZones().getString("Zones." + a + ".loc1"));
-					Bukkit.broadcastMessage("L2 de "+ a + " : " + RPGFiles.getZones().getString("Zones." + a + ".loc2"));
-					Location l2 = ZoneUtils.deserializeLoc( RPGFiles.getZones().getString("Zones." + a + ".loc2"));
-					z._cubo = new CuboidSelection(l1.getWorld(), l1, l2);
+					z.set_zoneLevel(RPGFiles.getZones().getInt("Zones." + a + ".level"));
+					z.set_name(RPGFiles.getZones().getString("Zones." + a + ".name"));			
+					Location l1 = ZoneUtils.deserializeLoc(RPGFiles.getZones().getString("Zones." + a + ".l1"));
+					Location l2 = ZoneUtils.deserializeLoc( RPGFiles.getZones().getString("Zones." + a + ".l2"));
+					z.set_cubo(new CuboidSelection(l1.getWorld(), l1, l2));
 					addZone(z);
-					Bukkit.broadcastMessage(z.getName());
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				
+					Bukkit.broadcastMessage(z.getName() + " a ete chargee.");
 			}
 	}
 	
@@ -139,31 +62,58 @@ public class ZoneManager {
 	 */
 	public static void removeZone(Zone z)
 	{
-		//TODO Supprimer des configs
 		if(zones.contains(z))
+		{
+			RPGFiles.getZones().set("Zones." + z.get_name(), null);
+			RPGFiles.saveZones();
 			zones.remove(z);
+		}		
 	}
 	
 	/**
 	 * Retourne la zone dans laquelle se trouve la position. (Peut etre null)
+	 * Renvoie la zone au plus grand niveau.
 	 * @param l
 	 * @return
 	 */
 	public static Zone getZone(Location l)
 	{
+		ArrayList<Zone> foundZones = new ArrayList<Zone>();
+		
 		for(Zone z : zones)
-		{
 			if(z.getCubo().contains(l))
-				return z;
-		}
-		return null;
+				foundZones.add(z);
+		
+		Zone higestLevel = null;
+		for(Zone z: foundZones)
+			if(higestLevel == null)
+				higestLevel = z;
+			else if(higestLevel.get_zoneLevel() < z.getZoneLevel())
+				higestLevel = z;
+		return higestLevel;
 	}
+	
+	/**
+	 * Retourne une liste des zones.
+	 * @param l
+	 * @return
+	 */
+	public static ArrayList<Zone> getZones(Location l)
+	{
+		ArrayList<Zone> foundZones = new ArrayList<Zone>();
+		for(Zone z : zones)
+			if(z.getCubo().contains(l))
+				foundZones.add(z);
+		return foundZones;
+	}
+	
+	
 	/**
 	 * Retourne la zone avec ce nom. (Peut etre null)
 	 * @param name
 	 * @return
 	 */
-	public static Zone getZone(String name)
+	public static Zone getZoneByName(String name)
 	{
 		for(Zone z : zones)
 		{
