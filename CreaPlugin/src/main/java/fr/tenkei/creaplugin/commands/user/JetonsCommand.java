@@ -1,5 +1,8 @@
 package fr.tenkei.creaplugin.commands.user;
 
+import java.util.logging.Level;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -26,7 +29,10 @@ public class JetonsCommand extends HeavenCommand
 	@Override
 	protected void onConsoleCommand(CommandSender sender, String[] args) throws HeavenException
 	{
-
+		if(args.length != 3)
+			return;
+		UserProvider.getUserByName(args[1]).updateBalance(Integer.parseInt(args[2]));
+		Bukkit.getLogger().log(Level.INFO, "Solde mis a jour");
 	}
 
 	@Override
