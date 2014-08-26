@@ -8,7 +8,7 @@ import fr.heavencraft.rpg.ChatUtil;
 import fr.heavencraft.rpg.HeavenCommand;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminAuraDeLaBienfaisansce;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminLePetitPetDuNord;
-import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminLeSouffleDuNecromentien;
+import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminLeSouffleDuNecromantien;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPousseeQuantique;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminTonnereDivin;
 
@@ -32,7 +32,7 @@ public class ParcheminCommand extends HeavenCommand {
 			else if(args[0].equalsIgnoreCase("4"))
 				player.getInventory().addItem(new ParcheminAuraDeLaBienfaisansce().getItem());
 			else if(args[0].equalsIgnoreCase("5"))
-				player.getInventory().addItem(new ParcheminLeSouffleDuNecromentien().getItem());
+				player.getInventory().addItem(new ParcheminLeSouffleDuNecromantien().getItem());
 			return;	
 		}
 		

@@ -13,37 +13,26 @@ public class RPGFiles {
 
 	// Set up all the needed things for files
 		public static YamlConfiguration Zones = null;
+		public static YamlConfiguration Dungeons = null;
 		public static File zonesFile = null;
-		
-//		public static FileConfiguration getConfig() {
-//			return HeavenRPG.getInstance().getConfig();
-//		}
-//
-//		public static void saveConfig() {
-//			HeavenRPG.getInstance().saveConfig();
-//		}
-//
-//		public static void reloadConfig() {
-//			HeavenRPG.getInstance().reloadConfig();
-//		}
+		public static File dungeonFile = null;
 
 		public static void saveAll() {
-//			saveConfig();
 			saveZones();
+			saveDungeons();
 		}
 
 		public static void reloadAll() {
-//			reloadConfig();
-			reloadClasses();
+			reloadZones();
+			reloadDungeons();
 		}
 		
 		
 		// Reload Abilities File
-		public static void reloadClasses() {
+		public static void reloadZones() {
 			if (zonesFile == null)
 				zonesFile = new File(Bukkit.getPluginManager().getPlugin("HeavenRPG").getDataFolder(), "Zones.yml");
-			Zones = YamlConfiguration.loadConfiguration(zonesFile);
-			
+			Zones = YamlConfiguration.loadConfiguration(zonesFile);		
 			// Look for defaults in the jar
 			InputStream defConfigStream = Bukkit.getPluginManager().getPlugin("HeavenRPG").getResource("Zones.yml");
 			if (defConfigStream != null)
@@ -53,11 +42,31 @@ public class RPGFiles {
 					Zones.setDefaults(defConfig);
 			}
 		}
+		
+		public static void reloadDungeons() {		
+			if (dungeonFile == null)
+				dungeonFile = new File(Bukkit.getPluginManager().getPlugin("HeavenRPG").getDataFolder(), "Dungeons.yml");
+			Dungeons = YamlConfiguration.loadConfiguration(dungeonFile);		
+			// Look for defaults in the jar
+			InputStream defConfigStream = Bukkit.getPluginManager().getPlugin("HeavenRPG").getResource("Dungeons.yml");
+			if (defConfigStream != null)
+			{
+				YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+				if (!dungeonFile.exists() || dungeonFile.length() == 0)
+					Dungeons.setDefaults(defConfig);
+			}
+		}
 
 		public static FileConfiguration getZones() {
 			if (Zones == null)
-				reloadClasses();
+				reloadZones();
 			return Zones;
+		}
+		
+		public static FileConfiguration getDungeons() {
+			if (Dungeons == null)
+				reloadDungeons();
+			return Dungeons;
 		}
 
 		public static void saveZones() {
@@ -69,6 +78,18 @@ public class RPGFiles {
 			} catch (IOException ex)
 			{
 				Bukkit.getLogger().log(Level.SEVERE, "Could not save config " + zonesFile, ex);
+			}
+		}
+		
+		public static void saveDungeons() {
+			if (Dungeons == null || dungeonFile == null)
+				return;
+			try
+			{
+				getDungeons().save(dungeonFile);
+			} catch (IOException ex)
+			{
+				Bukkit.getLogger().log(Level.SEVERE, "Could not save config " + dungeonFile, ex);
 			}
 		}
 }

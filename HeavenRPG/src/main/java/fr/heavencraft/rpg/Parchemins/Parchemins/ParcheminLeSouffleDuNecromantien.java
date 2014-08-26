@@ -17,7 +17,7 @@ import fr.heavencraft.rpg.HeavenRPG;
 import fr.heavencraft.rpg.Parchemins.IParchemin;
 import fr.heavencraft.rpg.player.RPGPlayer;
 
-public class ParcheminLeSouffleDuNecromentien implements IParchemin{
+public class ParcheminLeSouffleDuNecromantien implements IParchemin{
 
 	public int RPGexpieirence() {
 		return 0;
@@ -32,7 +32,7 @@ public class ParcheminLeSouffleDuNecromentien implements IParchemin{
 	public ItemStack getItem() {
 		ItemStack parchemin = new ItemStack(Material.PAPER);
 		ItemMeta met = parchemin.getItemMeta();
-		met.setDisplayName(ChatColor.BLUE + "Souffle du nécromencien");
+		met.setDisplayName(ChatColor.BLUE + "Souffle du nécromancien");
 		parchemin.setItemMeta(met);
 		return parchemin;
 	}

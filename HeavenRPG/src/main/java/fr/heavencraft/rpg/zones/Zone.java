@@ -13,8 +13,8 @@ import org.bukkit.inventory.ItemStack;
 
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 
+import fr.heavencraft.Utils.DevUtils;
 import fr.heavencraft.rpg.RPGFiles;
-import fr.heavencraft.rpg.ZoneUtils;
 import fr.heavencraft.rpg.mobs.MobAttribute;
 
 public class Zone {
@@ -149,8 +149,8 @@ public class Zone {
 
 	public void setCubo(CuboidSelection _cubo) {
 		this.set_cubo(_cubo);
-		RPGFiles.getZones().set("Zones." + this._UniqueName + ".l1",  ZoneUtils.serializeLoc(_cubo.getMinimumPoint()));
-		RPGFiles.getZones().set("Zones." + this._UniqueName + ".l2", ZoneUtils.serializeLoc(_cubo.getMaximumPoint()));
+		RPGFiles.getZones().set("Zones." + this._UniqueName + ".l1",  DevUtils.serializeLoc(_cubo.getMinimumPoint()));
+		RPGFiles.getZones().set("Zones." + this._UniqueName + ".l2", DevUtils.serializeLoc(_cubo.getMaximumPoint()));
 		RPGFiles.saveZones();
 	}
 
