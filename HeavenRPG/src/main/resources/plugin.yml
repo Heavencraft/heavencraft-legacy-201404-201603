@@ -4,3 +4,4 @@ main: fr.heavencraft.rpg.HeavenRPG
 commands:
     zone:
     parchemin:
+    donjon:

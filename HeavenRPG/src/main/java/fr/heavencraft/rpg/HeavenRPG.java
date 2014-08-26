@@ -28,6 +28,7 @@ public class HeavenRPG extends JavaPlugin {
 		super.onEnable();
 		_instance = this;
 		
+		RPGFiles.getDungeons().options().copyDefaults(true);
 		RPGFiles.getZones().options().copyDefaults(true);
 		RPGFiles.saveAll();
 		// Charger tout les listners 

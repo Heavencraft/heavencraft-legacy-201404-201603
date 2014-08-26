@@ -7,8 +7,8 @@ import org.bukkit.Location;
 
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 
+import fr.heavencraft.Utils.DevUtils;
 import fr.heavencraft.rpg.RPGFiles;
-import fr.heavencraft.rpg.ZoneUtils;
 
 public class ZoneManager {
 	
@@ -24,8 +24,8 @@ public class ZoneManager {
 					Zone z = new Zone(a);
 					z.set_zoneLevel(RPGFiles.getZones().getInt("Zones." + a + ".level"));
 					z.set_name(RPGFiles.getZones().getString("Zones." + a + ".name"));			
-					Location l1 = ZoneUtils.deserializeLoc(RPGFiles.getZones().getString("Zones." + a + ".l1"));
-					Location l2 = ZoneUtils.deserializeLoc( RPGFiles.getZones().getString("Zones." + a + ".l2"));
+					Location l1 = DevUtils.deserializeLoc(RPGFiles.getZones().getString("Zones." + a + ".l1"));
+					Location l2 = DevUtils.deserializeLoc( RPGFiles.getZones().getString("Zones." + a + ".l2"));
 					z.set_cubo(new CuboidSelection(l1.getWorld(), l1, l2));
 					addZone(z);
 					Bukkit.broadcastMessage(z.getName() + " a ete chargee.");

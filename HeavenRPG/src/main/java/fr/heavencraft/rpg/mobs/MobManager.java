@@ -54,9 +54,7 @@ public class MobManager {
 	public static void killAllMobs()
 	{
 		for(RPGMob mob : getRPGMobs())
-		{
 			mob.getMob().remove();
-		}
 		entities.clear();
 	}
 

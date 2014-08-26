@@ -1,9 +1,9 @@
-package fr.heavencraft.rpg;
+package fr.heavencraft.Utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
-public class ZoneUtils {
+public class DevUtils {
 
 	public static String serializeLoc(Location l){
 		return l.getWorld().getName()+","+l.getBlockX()+","+l.getBlockY()+","+l.getBlockZ();
