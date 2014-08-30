@@ -72,7 +72,8 @@ public class HorsesListener implements Listener
 
 		if (!HorsesManager.canUse(horse, player))
 		{
-			DevUtil.logInfo("%1$s tried to damage %2$s's horse", player.getName(), horse.getOwner().getName());
+			if (horse.getOwner() != null)
+				DevUtil.logInfo("%1$s tried to damage %2$s's horse", player.getName(), horse.getOwner().getName());
 
 			event.setCancelled(true);
 		}
