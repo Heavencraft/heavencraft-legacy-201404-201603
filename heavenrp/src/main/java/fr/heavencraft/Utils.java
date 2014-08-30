@@ -24,16 +24,6 @@ public class Utils
 	 * Player
 	 */
 
-	public static String ArrayToString(String[] array, int start, String separator)
-	{
-		String result = "";
-
-		for (int i = start; i != array.length; i++)
-			result += (result == "" ? "" : separator) + array[i];
-
-		return result;
-	}
-
 	public static boolean isToday(Date date)
 	{
 		if (date == null)
