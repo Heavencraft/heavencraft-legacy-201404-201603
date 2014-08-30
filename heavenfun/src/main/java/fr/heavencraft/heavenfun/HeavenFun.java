@@ -13,7 +13,7 @@ import fr.heavencraft.listeners.sign.LinkSignListener;
 
 public class HeavenFun extends HeavenPlugin
 {
-	public static final Location SPAWN = new Location(Bukkit.getWorld("world"), 0, 100, 0);
+	private static Location spawn;
 
 	@Override
 	public void onEnable()
@@ -30,5 +30,13 @@ public class HeavenFun extends HeavenPlugin
 
 		new ColoredSignsListener();
 		new LinkSignListener();
+	}
+
+	public static Location getSpawn()
+	{
+		if (spawn == null)
+			spawn = new Location(Bukkit.getWorld("world"), 0, 100, 0);
+
+		return spawn;
 	}
 }
