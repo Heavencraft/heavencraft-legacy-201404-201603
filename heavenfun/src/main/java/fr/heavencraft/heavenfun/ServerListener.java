@@ -17,12 +17,12 @@ public class ServerListener implements Listener
 	@EventHandler
 	private void onPlayerRespawn(PlayerRespawnEvent event)
 	{
-		event.setRespawnLocation(HeavenFun.SPAWN);
+		event.setRespawnLocation(HeavenFun.getSpawn());
 	}
 
 	@EventHandler
 	private void onPlayerLogin(PlayerLoginEvent event)
 	{
-		event.getPlayer().teleport(HeavenFun.SPAWN);
+		event.getPlayer().teleport(HeavenFun.getSpawn());
 	}
 }
