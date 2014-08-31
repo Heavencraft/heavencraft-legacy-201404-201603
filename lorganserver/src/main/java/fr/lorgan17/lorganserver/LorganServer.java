@@ -79,7 +79,7 @@ public class LorganServer extends HeavenPlugin
 			return true;
 		else if (player == null)
 			return false;
-		else if (player.isOp())
+		else if (player.hasPermission(OriginesPermissions.PROTECTION_BYPASS))
 			return true;
 		else
 			return region.isMember(player.getName(), false);
