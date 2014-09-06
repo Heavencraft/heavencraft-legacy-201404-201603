@@ -35,12 +35,18 @@ public class UsersListener implements Listener
 		if (event.isCancelled())
 			return;
 
-		if (event.getConnection().getVersion() != ProtocolConstants.MINECRAFT_1_7_6)
+		switch (event.getConnection().getVersion())
 		{
-			event.setCancelled(true);
-			event.setCancelReason("§fHeaven§bcraft§r est en 1.7.10.\n\nMerci de vous connecter avec cette version.");
+			case ProtocolConstants.MINECRAFT_1_7_6:
+			case ProtocolConstants.MINECRAFT_SNAPSHOT: // TODO lorgan17 : change this
+				return;
 
-			log.info(TAG + "[onLogin] " + event.getConnection().getName() + " is not in 1.7.10.");
+			default:
+				event.setCancelled(true);
+				event.setCancelReason("§fHeaven§bcraft§r est en 1.7.10.\n\nMerci de vous connecter avec cette version.");
+
+				log.info(TAG + "[onLogin] " + event.getConnection().getName() + " is not in 1.7.10.");
+				break;
 		}
 	}
 
