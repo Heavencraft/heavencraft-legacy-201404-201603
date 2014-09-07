@@ -66,22 +66,24 @@ public class BuyhomeCommand extends HeavenCommand
 	{
 		switch (homeNumber)
 		{
+			case 2:
+				return 100;
 			case 3:
-				return 1000;
+				return 200;
 			case 4:
-				return 2000;
+				return 400;
 			case 5:
-				return 3000;
+				return 800;
 			case 6:
-				return 4000;
+				return 1600;
 			case 7:
-				return 5000;
+				return 3200;
 			case 8:
-				return 6000;
+				return 6400;
 			case 9:
-				return 7000;
+				return 12800;
 			case 10:
-				return 8000;
+				return 25600;
 			default:
 				throw new HeavenException("Vous avez déjà acheté tous les points d'habitation.");
 		}
