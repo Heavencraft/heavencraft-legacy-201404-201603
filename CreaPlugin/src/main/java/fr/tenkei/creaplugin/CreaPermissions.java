@@ -11,4 +11,10 @@ public class CreaPermissions
 	public static final String SETSPAWN = "heavencraft.commands.setspawn";
 	public static final String BUILD = "heavencraft.commands.build";
 	public static final String TPHOME = "heavencraft.commands.tphome";
+
+	/*
+	 * Signs
+	 */
+
+	public static final String NIGHT_SIGN = "heavencraft.signs.night";
 }

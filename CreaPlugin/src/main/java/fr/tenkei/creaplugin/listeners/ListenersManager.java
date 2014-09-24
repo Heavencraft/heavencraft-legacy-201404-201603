@@ -22,6 +22,7 @@ public class ListenersManager
 		new JumpListener(plugin);
 		new RedstoneLampListener();
 		new LinkSignListener();
+		new NightSignListener();
 
 		new UserListener();
 
