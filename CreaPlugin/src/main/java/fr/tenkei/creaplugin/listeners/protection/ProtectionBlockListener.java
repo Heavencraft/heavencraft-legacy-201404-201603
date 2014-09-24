@@ -84,7 +84,7 @@ public class ProtectionBlockListener implements Listener
 
 		if (block.getType() == Material.WALL_SIGN)
 		{
-			Sign sign = (Sign) block.getState();
+			Sign sign = (Sign) block.getType().getNewData(block.getData());
 
 			if (block.getRelative(sign.getAttachedFace()).getType() == Material.WOOD_DOUBLE_STEP)
 				return; // On laisse poser
@@ -114,7 +114,7 @@ public class ProtectionBlockListener implements Listener
 
 		if (block.getType() == Material.WALL_SIGN)
 		{
-			Sign sign = (Sign) block.getState();
+			Sign sign = (Sign) block.getType().getNewData(block.getData());
 
 			if (block.getRelative(sign.getAttachedFace()).getType() == Material.WOOD_DOUBLE_STEP)
 				return; // On laisse poser

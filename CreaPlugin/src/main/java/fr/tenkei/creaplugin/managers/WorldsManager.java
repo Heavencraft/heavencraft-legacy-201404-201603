@@ -88,4 +88,8 @@ public class WorldsManager
 		return Bukkit.getWorld(name) != null;
 	}
 
+	public static Location getTutoLocation()
+	{
+		return new Location(getTheCreative(), -699.5, 100, -699.5);
+	}
 }
