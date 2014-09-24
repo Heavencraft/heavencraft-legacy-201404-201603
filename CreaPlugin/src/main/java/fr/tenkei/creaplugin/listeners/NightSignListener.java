@@ -23,7 +23,7 @@ public class NightSignListener extends SignListener
 
 	public NightSignListener()
 	{
-		super("Night", CreaPermissions.NIGHT_SIGN);
+		super("Nuit", CreaPermissions.NIGHT_SIGN);
 	}
 
 	@Override
