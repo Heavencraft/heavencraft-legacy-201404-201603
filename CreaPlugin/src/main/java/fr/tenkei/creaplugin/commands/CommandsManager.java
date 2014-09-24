@@ -19,6 +19,7 @@ import fr.tenkei.creaplugin.commands.user.HpsCommand;
 import fr.tenkei.creaplugin.commands.user.JetonsCommand;
 import fr.tenkei.creaplugin.commands.user.ProtectionCommand;
 import fr.tenkei.creaplugin.commands.user.teleport.SpawnCommand;
+import fr.tenkei.creaplugin.commands.user.teleport.TutoCommand;
 
 public class CommandsManager
 {
@@ -42,6 +43,7 @@ public class CommandsManager
 
 		// User
 		new SpawnCommand();
+		new TutoCommand();
 
 		// Homes
 		new HomeCommand();
