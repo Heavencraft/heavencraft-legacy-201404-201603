@@ -28,10 +28,7 @@ public class DungeonListener implements Listener {
 
 		DungeonRoom dgr = DungeonManager.getRoomByLocation(event.getEntity().getLocation());
 		if(dgr != null)
-		{
-			Bukkit.broadcastMessage(event.getEntity().getType().toString());
 			dgr.add_mob(event.getEntity());
-		}
 	}
 
 	@EventHandler (ignoreCancelled = true, priority = EventPriority.LOW)
