@@ -1,5 +1,7 @@
 package fr.heavencraft.utils;
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -74,5 +76,20 @@ public class DevUtil
 			throw new HeavenException("Le nombre {%1$s} est incorrect.", s);
 
 		return i;
+	}
+
+	public static String arrayToString(List<String> array, int start, String separator)
+	{
+		return arrayToString(array.toArray(new String[array.size()]), start, separator);
+	}
+
+	public static String arrayToString(String[] array, int start, String separator)
+	{
+		String result = "";
+
+		for (int i = start; i != array.length; i++)
+			result += (result == "" ? "" : separator) + array[i];
+
+		return result;
 	}
 }

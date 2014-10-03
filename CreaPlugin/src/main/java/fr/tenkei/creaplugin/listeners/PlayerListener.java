@@ -89,11 +89,6 @@ public class PlayerListener implements Listener
 					// UserManager.getUser(event.getPlayer().getName()).addHommeNumbre(clickedBlock);
 					// event.setCancelled(true);
 					// }
-					else if (sign.getLine(0).endsWith(ChatColor.DARK_PURPLE + "[NIGHT]"))
-					{
-						sellNight(event.getPlayer(), sign);
-						event.setCancelled(true);
-					}
 					else if (sign.getLine(0).endsWith(ChatColor.DARK_PURPLE + "[HEAD]"))
 					{
 						sellHead(event.getPlayer(), sign);
@@ -220,29 +215,6 @@ public class PlayerListener implements Listener
 				+ "}, cela vous a couté {" + prix + "} Jetons !");
 		user.stateBalance();
 
-	}
-
-	private void sellNight(Player player, Sign sign) throws HeavenException
-	{
-
-		User user = UserProvider.getUserByName(player.getName());
-
-		if ((user.getInteractBlock() == null) || !Stuff.blocksEquals(user.getInteractBlock(), sign.getBlock()))
-		{
-			user.setInteractBlock(sign.getBlock());
-			ChatUtil.sendMessage(Bukkit.getPlayer(player.getName()),
-					"Cliquez une seconde fois pour confirmer l'achat de la nuit pour 200 Jetons.");
-			return;
-		}
-
-		user.setInteractBlock(null);
-
-		user.updateBalance(-200);
-
-		player.getWorld().setTime(18000L);
-
-		ChatUtil.broadcastMessage(player.getName() + "} vous souhaite une bonne nuit !");
-		user.stateBalance();
 	}
 
 	@SuppressWarnings("deprecation")

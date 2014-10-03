@@ -18,7 +18,7 @@ public class SpawnCommand extends HeavenCommand
 	@Override
 	protected void onPlayerCommand(Player player, String[] args) throws HeavenException
 	{
-		player.teleport(HeavenFun.SPAWN);
+		player.teleport(HeavenFun.getSpawn());
 		ChatUtil.sendMessage(player, "Vous avez été téléporté au spawn.");
 	}
 

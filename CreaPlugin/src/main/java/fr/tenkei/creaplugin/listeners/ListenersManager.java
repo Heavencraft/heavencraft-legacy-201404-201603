@@ -1,6 +1,7 @@
 package fr.tenkei.creaplugin.listeners;
 
 import fr.heavencraft.listeners.RedstoneLampListener;
+import fr.heavencraft.listeners.sign.LinkSignListener;
 import fr.tenkei.creaplugin.MyPlugin;
 import fr.tenkei.creaplugin.listeners.protection.ProtectionBlockListener;
 import fr.tenkei.creaplugin.listeners.protection.ProtectionEntityListener;
@@ -20,6 +21,8 @@ public class ListenersManager
 		new PlayerListener(plugin);
 		new JumpListener(plugin);
 		new RedstoneLampListener();
+		new LinkSignListener();
+		new NightSignListener();
 
 		new UserListener();
 

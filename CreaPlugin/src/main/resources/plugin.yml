@@ -10,6 +10,7 @@ commands:
   accepter:
     aliases: [yes]
   spawn:
+  buyhome:
   home:
     aliases: [h, maison]
   sethome:
@@ -26,5 +27,6 @@ commands:
   tpbiome:
   tphome:
   tpold:
+  tuto:
   protection:
   setspawn:
