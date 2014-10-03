@@ -24,16 +24,6 @@ public class Utils
 	 * Player
 	 */
 
-	public static String ArrayToString(String[] array, int start, String separator)
-	{
-		String result = "";
-
-		for (int i = start; i != array.length; i++)
-			result += (result == "" ? "" : separator) + array[i];
-
-		return result;
-	}
-
 	public static boolean isToday(Date date)
 	{
 		if (date == null)
@@ -169,55 +159,66 @@ public class Utils
 
 		return new Location(world, x + 0.5D, y, z + 0.5D, loc.getYaw(), loc.getPitch());
 	}
-	
+
 	/**
 	 * Permet de mettre en forme des strings longs, pour les mettre dans des livres
+	 * 
 	 * @param text
 	 * @param lineLength
 	 * @return
 	 */
-    public static List<String> wrapWords(String text, int lineLength) {
-        String[] intendedLines = text.split("\\n");
-        ArrayList<String> lines = new ArrayList<>();
-        for (String intendedLine : intendedLines) {
-            String[] words = intendedLine.split(" ");
-            StringBuilder buffer = new StringBuilder();
+	public static List<String> wrapWords(String text, int lineLength)
+	{
+		String[] intendedLines = text.split("\\n");
+		ArrayList<String> lines = new ArrayList<>();
+		for (String intendedLine : intendedLines)
+		{
+			String[] words = intendedLine.split(" ");
+			StringBuilder buffer = new StringBuilder();
 
-            for (String word : words) {
-                if (word.length() >= lineLength) {
-                    if (buffer.length() != 0) {
-                        lines.add(buffer.toString());
-                    }
-                    lines.add(word);
-                    buffer = new StringBuilder();
-                    continue;
-                }
-                if (buffer.length() + word.length() >= lineLength) {
-                    lines.add(buffer.toString());
-                    buffer = new StringBuilder();
-                }
-                if (buffer.length() != 0) {
-                    buffer.append(' ');
-                }
-                buffer.append(word);
-            }
-            lines.add(buffer.toString());
-        }
+			for (String word : words)
+			{
+				if (word.length() >= lineLength)
+				{
+					if (buffer.length() != 0)
+					{
+						lines.add(buffer.toString());
+					}
+					lines.add(word);
+					buffer = new StringBuilder();
+					continue;
+				}
+				if (buffer.length() + word.length() >= lineLength)
+				{
+					lines.add(buffer.toString());
+					buffer = new StringBuilder();
+				}
+				if (buffer.length() != 0)
+				{
+					buffer.append(' ');
+				}
+				buffer.append(word);
+			}
+			lines.add(buffer.toString());
+		}
 
-        return lines;
-    }
-    
-   /**
-   * Retourne le nombre d'emplacements vides dans un inventaire
-   * @param inventory
-   * @return
-   */
-    public static int getEmptySlots(Inventory inventory) {
-    	  int slotsLibres = 0;
-    	  for (ItemStack is : inventory.getContents()) {
-    	   if (is == null)
-    		   slotsLibres ++;
-    	  }
-    	  return slotsLibres;
-    	 }
+		return lines;
+	}
+
+	/**
+	 * Retourne le nombre d'emplacements vides dans un inventaire
+	 * 
+	 * @param inventory
+	 * @return
+	 */
+	public static int getEmptySlots(Inventory inventory)
+	{
+		int slotsLibres = 0;
+		for (ItemStack is : inventory.getContents())
+		{
+			if (is == null)
+				slotsLibres++;
+		}
+		return slotsLibres;
+	}
 }

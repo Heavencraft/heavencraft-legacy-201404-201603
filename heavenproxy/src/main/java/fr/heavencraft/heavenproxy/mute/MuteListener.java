@@ -35,6 +35,7 @@ public class MuteListener implements Listener
 		bannedWords.add("bounioul");
 		bannedWords.add("catin");
 		bannedWords.add("ciboire");
+		bannedWords.add("con");
 		bannedWords.add("conasse");
 		bannedWords.add("connard");
 		bannedWords.add("connasse");
@@ -86,7 +87,6 @@ public class MuteListener implements Listener
 		replaceWords.add("compote");
 		replaceWords.add("balançoire");
 		replaceWords.add("pastèque");
-		replaceWords.add("§k§k§k§k§k§k§k");
 
 		log.info(TAG + "Initialized");
 	}
@@ -118,38 +118,27 @@ public class MuteListener implements Listener
 			return;
 		}
 
-		String inputMessage = event.getMessage();
-		String outputMessage = "";
-
-		for (String word : inputMessage.split(" "))
+		// Mots interdits
+		for (String word : removePunctuation(message).split(" "))
 		{
-			if (bannedWords.contains(word.toLowerCase()))
+			if (bannedWords.contains(word))
 			{
-				outputMessage += (outputMessage == "" ? "" : " ") + replaceWords.get(rnd.nextInt(replaceWords.size()));
-			}
-			else
-			{
-				outputMessage += (outputMessage == "" ? "" : " ") + word;
+				// Le cas du "merde"
+				if (isPrivateMessage && word.equals("merde"))
+					continue;
+
+				MuteManager.mutePlayer(playerName, 5);
+				Utils.sendMessage(player,
+						"Vous avez été mute pour {5} minutes par {le Prof. Chen} pour avoir dit {%1$s}.", word);
+
+				event.setCancelled(true);
+				return;
 			}
 		}
+	}
 
-		event.setMessage(outputMessage);
-
-		// Mots interdits
-		// for (String word : message.split(" "))
-		// for (String bannedWord : bannedWords)
-		// if (word.equalsIgnoreCase(bannedWord))
-		// {
-		// // Le cas du "merde"
-		// if (isPrivateMessage && bannedWord.equalsIgnoreCase("merde"))
-		// continue;
-		//
-		// MuteManager.mutePlayer(playerName, 5);
-		// Utils.sendMessage(player,
-		// "Vous avez été mute pour {5} minutes par {le Prof. Chen} pour avoir dit {%1$s}.", word);
-		//
-		// event.setCancelled(true);
-		// return;
-		// }
+	private static String removePunctuation(String str)
+	{
+		return str.replaceAll("[^\\p{L}\\w\\s]", "");
 	}
 }

@@ -6,13 +6,20 @@ import org.bukkit.entity.Player;
 
 import fr.heavencraft.Permissions;
 import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.utils.ChatUtil;
 import fr.heavencraft.utils.DevUtil;
 
 public class SpawnmobCommand extends HeavenCommand
 {
+	private String availableMobs = "";
+
 	public SpawnmobCommand()
 	{
 		super("spawnmob", Permissions.SPAWNMOB);
+
+		for (EntityType entity : EntityType.values())
+			if (entity.isSpawnable())
+				availableMobs += (availableMobs != "" ? ", " : "") + entity.getName();
 	}
 
 	@Override
@@ -20,14 +27,22 @@ public class SpawnmobCommand extends HeavenCommand
 	{
 		if (args.length == 0)
 		{
+			sendUsage(player);
 			return;
 		}
+
 		int nb = 1;
 
 		if (args.length > 1)
 			nb = DevUtil.toUint(args[1]);
 
 		EntityType entity = EntityType.fromName(args[0]);
+
+		if (entity == null || !entity.isSpawnable())
+		{
+			sendUsage(player);
+			return;
+		}
 
 		for (int i = 0; i != nb; i++)
 			player.getWorld().spawnEntity(player.getLocation(), entity);
@@ -36,15 +51,12 @@ public class SpawnmobCommand extends HeavenCommand
 	@Override
 	protected void onConsoleCommand(CommandSender sender, String[] args) throws HeavenException
 	{
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	protected void sendUsage(CommandSender sender)
 	{
-		// TODO Auto-generated method stub
-
+		ChatUtil.sendMessage(sender, "/{spawnmob} nom [quantité]");
+		ChatUtil.sendMessage(sender, availableMobs);
 	}
-
 }

@@ -1,0 +1,31 @@
+name: HeavenCrea
+main: fr.heavencraft.heavencrea.HeavenCrea
+author: Heavencraft
+version: 1.0
+commands:
+  build:
+    aliases: [bp, tpbuild]
+  rejoindre:
+    aliases: [join]
+  accepter:
+    aliases: [yes]
+  spawn:
+  buyhome:
+  home:
+    aliases: [h, maison]
+  sethome:
+  hps:
+    aliases: [argent]
+  jetons:
+    aliases: [jeton]
+  head:
+    aliases: [tete]
+  tppos:
+  tp:
+  tphere:
+    aliases: [s]
+  tpbiome:
+  tphome:
+  tpold:
+  protection:
+  setspawn:
