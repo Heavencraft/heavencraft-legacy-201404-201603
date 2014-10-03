@@ -5,6 +5,7 @@ import fr.heavencraft.rpg.Parchemins.ParcheminCommand;
 import fr.heavencraft.rpg.Parchemins.ParcheminProvider;
 import fr.heavencraft.rpg.Parchemins.ParcheminsListener;
 import fr.heavencraft.rpg.donjon.DungeonCommand;
+import fr.heavencraft.rpg.donjon.DungeonListener;
 import fr.heavencraft.rpg.donjon.DungeonManager;
 import fr.heavencraft.rpg.donjon.DungeonSignListener;
 import fr.heavencraft.rpg.mobs.MobListener;
@@ -46,6 +47,7 @@ public class InitManager {
 		new MobListener();
 		new ParcheminsListener();
 		new DungeonSignListener();
+		new DungeonListener();
 	}
 	
 	private static void initOther()
