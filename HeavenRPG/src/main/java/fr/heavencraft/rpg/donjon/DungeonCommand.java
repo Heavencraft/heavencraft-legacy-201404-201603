@@ -11,11 +11,13 @@ import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.rpg.ChatUtil;
 import fr.heavencraft.rpg.HeavenCommand;
 import fr.heavencraft.rpg.HeavenRPG;
+import fr.heavencraft.rpg.RPGpermissions;
 import fr.heavencraft.rpg.donjon.Dungeon.DungeonRoom;
 
 public class DungeonCommand extends HeavenCommand{
 	private final static String DUNGEON_ALREADY_EXIST = "Ce donjon existe déjà!";
 	private final static String DUNGEON_DOES_NOT_EXIST = "Ce donjon n'existe pas!";
+	private final static String NO_PERMISSION = "Vous n'avez pas la permission";
 	private final static String DUNGEON_CREATED = "Donjon crée avec succes!";
 	private final static String DUNGEON_DELETED = "Donjon supprimé avec succes!";
 	private final static String DUNGEON_LOBBY_SET = "Lobby du donjon définie!";
@@ -33,7 +35,12 @@ public class DungeonCommand extends HeavenCommand{
 	@Override
 	protected void onPlayerCommand(Player player, String[] args) throws HeavenException {
 
-
+		if (!player.hasPermission(RPGpermissions.DONJON_ADMIN))
+		{
+			ChatUtil.sendMessage(player, NO_PERMISSION);
+			return;
+		}
+		
 		if(args.length == 0)
 		{
 			sendUsage(player);
