@@ -1,6 +1,7 @@
 package fr.heavencraft.rpg.donjon;
 
-import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -10,19 +11,22 @@ import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.rpg.ChatUtil;
 import fr.heavencraft.rpg.HeavenCommand;
 import fr.heavencraft.rpg.HeavenRPG;
+import fr.heavencraft.rpg.RPGpermissions;
 import fr.heavencraft.rpg.donjon.Dungeon.DungeonRoom;
 
 public class DungeonCommand extends HeavenCommand{
 	private final static String DUNGEON_ALREADY_EXIST = "Ce donjon existe déjà!";
 	private final static String DUNGEON_DOES_NOT_EXIST = "Ce donjon n'existe pas!";
+	private final static String NO_PERMISSION = "Vous n'avez pas la permission";
 	private final static String DUNGEON_CREATED = "Donjon crée avec succes!";
 	private final static String DUNGEON_DELETED = "Donjon supprimé avec succes!";
 	private final static String DUNGEON_LOBBY_SET = "Lobby du donjon définie!";
 	private final static String DUNGEON_ROOM_CREATED = "Salle de donjon n{%1$s} crée avec succes!";
 	private final static String DUNGEON_ROOM_DELETED = "Salle de donjon n{%1$s} supprimé avec succes!";
 	private final static String DUNGEON_ROOM_UPDATED = "Salle de donjon a été mise a jour!";
+	private final static String DUNGEON_ROOM_TRIGGER_DEFINED = "Le trigger de la salle a été mise a jour!";
 	private final static String NO_SELECTION = "Vous devez d'abord faire une selection avec World Edit.";
-	
+
 	public DungeonCommand()
 	{
 		super("donjon");
@@ -30,14 +34,19 @@ public class DungeonCommand extends HeavenCommand{
 
 	@Override
 	protected void onPlayerCommand(Player player, String[] args) throws HeavenException {
-		
+
+		if (!player.hasPermission(RPGpermissions.DONJON_ADMIN))
+		{
+			ChatUtil.sendMessage(player, NO_PERMISSION);
+			return;
+		}
 		
 		if(args.length == 0)
 		{
 			sendUsage(player);
 			return;
 		}
-		
+
 		if(args[0].equalsIgnoreCase("list"))
 		{
 			ChatUtil.sendMessage(player, "Donjons: ");
@@ -60,7 +69,7 @@ public class DungeonCommand extends HeavenCommand{
 				ChatUtil.sendMessage(player, DUNGEON_ALREADY_EXIST);
 				return;
 			}
-			
+
 			//Créer l'instance
 			DungeonManager.createDungeon(args[1], Integer.parseInt(args[2]));
 			ChatUtil.sendMessage(player, DUNGEON_CREATED);
@@ -73,7 +82,7 @@ public class DungeonCommand extends HeavenCommand{
 				sendUsage(player);
 				return;
 			}
-			
+
 			Dungeon dg = DungeonManager.getDungeonByName(args[1]);
 			if(dg == null)
 			{
@@ -84,30 +93,34 @@ public class DungeonCommand extends HeavenCommand{
 			ChatUtil.sendMessage(player, DUNGEON_DELETED);
 			return;
 		}
-		
+
 		if(DungeonManager.getDungeonByName(args[0]) == null)
 		{
 			ChatUtil.sendMessage(player, DUNGEON_DOES_NOT_EXIST);
 			return;
 		}
-		
+
 		Dungeon dg = DungeonManager.getDungeonByName(args[0]);
 		if(args.length == 1)
 		{
-			//TODO Envoyer l'état du donjon
-			ChatUtil.sendMessage(player, "~~ " + dg.get_name() 
-					+ " | Req.Player: " + dg.get_requiredPlayerAmmount() 
-					+ " | Actual Room: " + dg.getActualRoom() 
-					+ " | Tot.Rooms: " + dg.get_rooms().size());
-			
+			// Envoyer l'état du donjon
+			ChatUtil.sendMessage(player, "~~ " + dg.get_name());
+			if(dg.is_Running())
+				ChatUtil.sendMessage(player, "     │ " + ChatColor.DARK_AQUA + "Running: " + ChatColor.GREEN + "true" );
+			else
+				ChatUtil.sendMessage(player, "     │ " + ChatColor.DARK_AQUA + "Running: " + ChatColor.RED + "false" );
+			ChatUtil.sendMessage(player, "     │ " + ChatColor.DARK_AQUA + "Player: " + ChatColor.GREEN + dg.get_requiredPlayerAmmount() );
+			ChatUtil.sendMessage(player, "     │ " + ChatColor.DARK_AQUA + "Actual Room: " + ChatColor.GREEN + dg.getActualRoom() + ChatColor.RED + " / " + dg.get_rooms().size());
+			ChatUtil.sendMessage(player, "     │ " + ChatColor.DARK_AQUA + "Tot.Rooms: " + ChatColor.GREEN + dg.get_rooms().size());
+
 			for(DungeonRoom dgr : dg.get_rooms())
 			{
-				ChatUtil.sendMessage(player, "  - " + dgr.get_index() + " | mobs: " + dgr.get_mobs().size() + " | " + dgr.get_spawn().toString());
+				ChatUtil.sendMessage(player, "     ├ " + dgr.get_index() + " | mobs: " + dgr.get_mobs().size());
 			}
-			
+
 			return;
 		}
-		
+
 		if(args[1].equalsIgnoreCase("lobby"))
 		{
 			DungeonManager.setLobby(dg, player.getLocation());
@@ -117,7 +130,7 @@ public class DungeonCommand extends HeavenCommand{
 		else if(args[1].equalsIgnoreCase("room"))
 		{
 			DungeonRoom dgr = dg.getDungeonRoomByIndex(Integer.parseInt(args[2]));
-			
+
 			//La salle n'existe pas, la créer
 			if(dgr == null)
 			{
@@ -127,7 +140,7 @@ public class DungeonCommand extends HeavenCommand{
 					ChatUtil.sendMessage(player, NO_SELECTION);
 					return;
 				}
-				
+
 				DungeonManager.createDungeonRoom(dg, Integer.parseInt(args[2]), player.getLocation(),s);
 				ChatUtil.sendMessage(player, DUNGEON_ROOM_CREATED, args[2]);
 				return;
@@ -137,7 +150,7 @@ public class DungeonCommand extends HeavenCommand{
 				sendUsage(player);
 				return;
 			}
-			
+
 			if(args[3].equalsIgnoreCase("delete"))
 			{
 				//supprimer le dgr
@@ -152,13 +165,21 @@ public class DungeonCommand extends HeavenCommand{
 				ChatUtil.sendMessage(player, DUNGEON_ROOM_UPDATED, args[2]);
 				return;
 			}
+			else if(args[3].equalsIgnoreCase("trigger"))
+			{
+				// Trigger
+				Location l = player.getLocation();
+				l.setY(l.getY() -1);
+				DungeonManager.updateDungeonRoomTrigger(dg, dgr, l);
+				ChatUtil.sendMessage(player, DUNGEON_ROOM_TRIGGER_DEFINED);
+			}
 			else
 			{
 				sendUsage(player);
 				return;
 			}
 		}
-		
+
 	}
 
 	@Override
@@ -175,5 +196,6 @@ public class DungeonCommand extends HeavenCommand{
 		ChatUtil.sendMessage(sender, "/{donjon} <nom donjon> room <index 0-99> | Définie le spawn de la salle séléctionée au WE.");
 		ChatUtil.sendMessage(sender, "/{donjon} <nom donjon> room <index 0-99> delete | Supprime la salle.");
 		ChatUtil.sendMessage(sender, "/{donjon} <nom donjon> room <index 0-99> spawn | Modifie le spawn de la salle.");
+		ChatUtil.sendMessage(sender, "/{donjon} <nom donjon> room <index 0-99> trigger | Définie le bloc en dessous comme le bloc trigger.");
 	}
 }
