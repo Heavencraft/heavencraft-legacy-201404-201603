@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.rpg.ChatUtil;
 import fr.heavencraft.rpg.HeavenCommand;
+import fr.heavencraft.rpg.RPGpermissions;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminAuraDeLaBienfaisansce;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminLePetitPetDuNord;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminLeSouffleDuNecromantien;
@@ -17,9 +18,15 @@ public class ParcheminCommand extends HeavenCommand {
 	public ParcheminCommand() {
 		super("parchemin");
 	}
-
+	private final static String NO_PERMISSION = "Vous n'avez pas la permission";
+	
 	@Override
 	protected void onPlayerCommand(Player player, String[] args) throws HeavenException {
+		if (!player.hasPermission(RPGpermissions.DONJON_ADMIN))
+		{
+			ChatUtil.sendMessage(player, NO_PERMISSION);
+			return;
+		}
 		
 		if(args.length == 1)
 		{

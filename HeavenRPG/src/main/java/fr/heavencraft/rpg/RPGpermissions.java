@@ -11,4 +11,11 @@ public class RPGpermissions {
 	 * Dungeons
 	 */
 	public static final String DONJON_SIGN = "heavencraft.signs.donjon";
+	public static final String DONJON_ADMIN = "heavencraft.donjon.admin";
+	
+	
+	/*
+	 * Parchemin
+	 */
+	public static final String PARCHEMIN_ADMIN = "heavencraft.parchemin.admin";
 }
