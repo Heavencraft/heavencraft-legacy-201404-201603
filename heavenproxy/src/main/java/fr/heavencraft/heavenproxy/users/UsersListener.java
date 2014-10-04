@@ -6,13 +6,11 @@ import java.util.logging.Logger;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
-import net.md_5.bungee.protocol.ProtocolConstants;
 import fr.heavencraft.heavenproxy.Utils;
 import fr.heavencraft.heavenproxy.chat.ChatManager;
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
@@ -29,20 +27,20 @@ public class UsersListener implements Listener
 		log.info(TAG + "Initialized");
 	}
 
-	@EventHandler
-	public void onLogin(LoginEvent event)
-	{
-		if (event.isCancelled())
-			return;
-
-		if (event.getConnection().getVersion() != ProtocolConstants.MINECRAFT_1_7_6)
-		{
-			event.setCancelled(true);
-			event.setCancelReason("§fHeaven§bcraft§r est en 1.7.10.\n\nMerci de vous connecter avec cette version.");
-
-			log.info(TAG + "[onLogin] " + event.getConnection().getName() + " is not in 1.7.10.");
-		}
-	}
+	// @EventHandler
+	// public void onLogin(LoginEvent event)
+	// {
+	// if (event.isCancelled())
+	// return;
+	//
+	// if (event.getConnection().getVersion() != ProtocolConstants.MINECRAFT_1_7_6)
+	// {
+	// event.setCancelled(true);
+	// event.setCancelReason("§fHeaven§bcraft§r est en 1.7.10.\n\nMerci de vous connecter avec cette version.");
+	//
+	// log.info(TAG + "[onLogin] " + event.getConnection().getName() + " is not in 1.7.10.");
+	// }
+	// }
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPostLogin(PostLoginEvent event)
