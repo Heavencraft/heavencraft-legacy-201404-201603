@@ -262,34 +262,14 @@ public class Utils
 	{
 		String serverName = player.getServer().getInfo().getName();
 
-		if (serverName.equalsIgnoreCase("nexus"))
-			return "Nex";
-		else if (serverName.equalsIgnoreCase("semirp"))
-			return "SRP";
-		else if (serverName.equalsIgnoreCase("origines"))
-			return "Ori ";
-		else if (serverName.equalsIgnoreCase("creative") || serverName.equalsIgnoreCase("build"))
-			return "Créa";
-		else if (serverName.equalsIgnoreCase("fun"))
-			return "Fun";
-		else if (serverName.equalsIgnoreCase("factions"))
-			return "Fac";
-		else if (serverName.equalsIgnoreCase("infected"))
-			return "Inf";
-		else if (serverName.equalsIgnoreCase("musee"))
-			return "Mus";
-		else if (serverName.equalsIgnoreCase("mariokart"))
-			return "MK";
-		else if (serverName.equalsIgnoreCase("tntrun"))
-			return "TNT";
-		else if (serverName.equalsIgnoreCase("ultrahard"))
-			return "UH";
-		else if (serverName.equalsIgnoreCase("paintball"))
-			return "PB";
-		else if (serverName.equalsIgnoreCase("hungergames"))
-			return "HG";
-		else
-			return serverName.substring(0, 3);
+		return Server.getUniqueInstanceByName(serverName).getPrefix();
+	}
+
+	public static String getServerDisplayName(ProxiedPlayer player)
+	{
+		String serverName = player.getServer().getInfo().getName();
+
+		return Server.getUniqueInstanceByName(serverName).getDisplayName();
 	}
 
 	public static boolean isInteger(String s)
