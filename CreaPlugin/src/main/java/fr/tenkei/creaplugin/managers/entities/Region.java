@@ -11,6 +11,7 @@ import org.bukkit.World;
 import com.mysql.jdbc.Statement;
 
 import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.exceptions.SQLErrorException;
 import fr.heavencraft.utils.ChatUtil;
 import fr.tenkei.creaplugin.exceptions.MemberNotFoundException;
 import fr.tenkei.creaplugin.exceptions.RegionNotFoundException;
@@ -212,6 +213,23 @@ public class Region
 		catch (SQLException ex)
 		{
 			ex.printStackTrace();
+		}
+	}
+
+	public void removeAllMembersAndOwners() throws SQLErrorException
+	{
+		try
+		{
+			PreparedStatement ps = ConnectionManager.getConnection().prepareStatement(
+					"DELETE FROM regions_users WHERE region_id = ?");
+			ps.setInt(1, _id);
+
+			ps.executeUpdate();
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			throw new SQLErrorException();
 		}
 	}
 
