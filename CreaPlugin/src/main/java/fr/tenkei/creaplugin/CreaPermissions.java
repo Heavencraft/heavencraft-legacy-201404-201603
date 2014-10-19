@@ -11,6 +11,7 @@ public class CreaPermissions
 	public static final String SETSPAWN = "heavencraft.commands.setspawn";
 	public static final String BUILD = "heavencraft.commands.build";
 	public static final String TPHOME = "heavencraft.commands.tphome";
+	public static final String PARCELLE = "heavencraft.commands.parcelle";
 
 	/*
 	 * Signs
