@@ -9,6 +9,7 @@ import fr.heavencraft.commands.TpposCommand;
 import fr.tenkei.creaplugin.MyPlugin;
 import fr.tenkei.creaplugin.commands.admin.BiomeCommand;
 import fr.tenkei.creaplugin.commands.admin.OldCommand;
+import fr.tenkei.creaplugin.commands.admin.ParcelleCommand;
 import fr.tenkei.creaplugin.commands.admin.SetspawnCommand;
 import fr.tenkei.creaplugin.commands.builder.BuildCommand;
 import fr.tenkei.creaplugin.commands.homes.BuyhomeCommand;
@@ -64,6 +65,7 @@ public class CommandsManager
 		// Admin
 		new BiomeCommand();
 		new OldCommand();
+		new ParcelleCommand();
 		new SetspawnCommand();
 	}
 }
