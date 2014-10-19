@@ -20,7 +20,7 @@ public class DungeonListener implements Listener {
 		Bukkit.getPluginManager().registerEvents(this, HeavenRPG.getInstance());
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onCreatureSpawn(CreatureSpawnEvent event)
 	{
 		if (!(event.getEntity() instanceof LivingEntity))
