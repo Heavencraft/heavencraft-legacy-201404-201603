@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import fr.heavencraft.rpg.HeavenRPG;
@@ -33,6 +34,17 @@ public class DungeonListener implements Listener {
 
 	@EventHandler (ignoreCancelled = true, priority = EventPriority.LOW)
 	public void onEntityDeath(EntityDeathEvent event) {
+		if (!(event.getEntity() instanceof LivingEntity)) 
+			return;
+
+		DungeonRoom dgr = DungeonManager.getRoomByEntity(event.getEntity());
+
+		if(dgr != null)
+			dgr.remove_mob(event.getEntity());
+	}
+	
+	@EventHandler (ignoreCancelled = true, priority = EventPriority.LOW)
+	public void onEntityExplode(EntityExplodeEvent event) {
 		if (!(event.getEntity() instanceof LivingEntity)) 
 			return;
 
