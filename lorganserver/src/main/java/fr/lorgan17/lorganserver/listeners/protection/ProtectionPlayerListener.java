@@ -16,7 +16,10 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.exceptions.SQLErrorException;
 import fr.heavencraft.utils.ChatUtil;
+import fr.heavencraft.utils.DevUtil;
 import fr.lorgan17.lorganserver.LorganServer;
 import fr.lorgan17.lorganserver.entities.Region;
 
@@ -82,20 +85,28 @@ public class ProtectionPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	private void onPlayerInteract(PlayerInteractEvent event)
 	{
-		switch (event.getAction())
+		try
 		{
-			case RIGHT_CLICK_BLOCK:
-				onPlayerRightClickBlock(event);
-				break;
-			case PHYSICAL:
-				onPlayerPhysical(event);
-				break;
-			default:
-				break;
+			switch (event.getAction())
+			{
+				case RIGHT_CLICK_BLOCK:
+					onPlayerRightClickBlock(event);
+					break;
+				case PHYSICAL:
+					onPlayerPhysical(event);
+					break;
+				default:
+					break;
+			}
+		}
+		catch (HeavenException ex)
+		{
+			ex.printStackTrace();
+			ChatUtil.sendMessage(event.getPlayer(), ex.getMessage());
 		}
 	}
 
-	private void onPlayerRightClickBlock(PlayerInteractEvent event)
+	private void onPlayerRightClickBlock(PlayerInteractEvent event) throws SQLErrorException
 	{
 		Block block = event.getClickedBlock();
 		ItemStack item = event.getItem();
@@ -108,7 +119,12 @@ public class ProtectionPlayerListener implements Listener
 			if (region == null)
 				ChatUtil.sendMessage(player, "Aucune protection.");
 			else
+			{
 				ChatUtil.sendMessage(player, "Protection : " + region.getId());
+				ChatUtil.sendMessage(player, "Propriétaires : %1$s",
+						DevUtil.arrayToString(region.getMembers(true), 0, ", "));
+				ChatUtil.sendMessage(player, "Membres : %1$s", DevUtil.arrayToString(region.getMembers(false), 0, ", "));
+			}
 
 			event.setUseItemInHand(Result.DENY);
 			event.setCancelled(true);
