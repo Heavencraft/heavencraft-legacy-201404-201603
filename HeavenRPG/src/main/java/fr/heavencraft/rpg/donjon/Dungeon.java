@@ -310,6 +310,9 @@ public class Dungeon {
 			ChatUtil.broadcastMessage(DUNGEON_REQUIRE_TRIGGER);
 			return;
 		}
+		for(Entity mob : dgr.get_mobs())
+			mob.remove();
+		dgr._mobs.clear();
 
 		Block redstoneBlock = dgr.get_trigger().getBlock();
 		Bukkit.getServer()
