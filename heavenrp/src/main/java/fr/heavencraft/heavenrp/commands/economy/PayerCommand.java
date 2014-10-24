@@ -38,7 +38,7 @@ public class PayerCommand extends HeavenCommand
 		BankAccount dest;
 
 		if (args[0].equalsIgnoreCase("joueur"))
-			dest = BankAccountsManager.getBankAccount(PlayerUtil.getPlayer(args[1]).getName(), BankAccountType.USER);
+			dest = BankAccountsManager.getBankAccount(PlayerUtil.getExactName(args[1]), BankAccountType.USER);
 
 		else if (args[0].equalsIgnoreCase("ville"))
 			dest = BankAccountsManager.getBankAccount(args[1], BankAccountType.TOWN);
