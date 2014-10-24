@@ -27,14 +27,16 @@ public class AutoMessageTask implements Runnable
 			"Utilisez §b/rejoindre [pseudo]§r pour vous téléporter à un joueur sur la map ressources ou dans le Créatif.",
 
 			// Semi-RP
-			"(SRP) Trouvez du travail, ou des travailleurs au cube du travail, à Stonebridge et Centralia. Topic : bit.ly/1mJCwYC",
+			"(SRP) Trouvez du travail ou un employé au Cube du Travail, en face de la bourse du spawn. Topic : bit.ly/1mJCwYC",
 			"(SRP) Vous êtes nouveau ? Consultez le tutoriel accessible via la commande §b/tuto§r.",
 			"(SRP) Besoins d'une parcelle ? Demandez-en une à un maire. La liste des maires connectés est visible avec §b/maires§r.",
 			"(SRP) Vous pouvez ajouter d'autres joueurs dans votre protection via §b/region addmember§r.",
 			"(SRP) Venez vous battre dans la ville PVP !",
+			"(SRP) Voici un rapport qui nous a été envoyé pour vous, peuple d'Heavencraft. A vous de jouer ! bit.ly/ZN0xsX",
 
 			// Autres serveurs
 			"(Créa) Vous avez un grand projet de construction mais pas assez de ressources ? Rendez-vous sur la map Créabiome !",
+			"(Créa) Sondage: Nous avons besoin de votre avis ! bit.ly/1yVYlyC",
 
 			// Messages d'informations
 			"Heavencraft a été créé le 28 Mars 2011 !",
