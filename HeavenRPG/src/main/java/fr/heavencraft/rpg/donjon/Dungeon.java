@@ -272,6 +272,14 @@ public class Dungeon {
 		// Vider la liste des joueurs
 		_inDungeon.clear();
 
+		//Destroy Entities
+				for(DungeonRoom dgr : _rooms)
+				{
+					for(Entity mob : dgr.get_mobs())
+						mob.remove();
+					dgr._mobs.clear();
+				}
+				
 		// Réninitialiser le pointeur
 		setActualRoom(0);
 		// Marquer le donjon comme en jeu
