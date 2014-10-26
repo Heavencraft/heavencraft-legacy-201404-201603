@@ -1,6 +1,7 @@
 package fr.heavencraft.rpg.donjon;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,6 +28,12 @@ public class DungeonListener implements Listener {
 		if (!(event.getEntity() instanceof LivingEntity))
 			return;
 
+		//exclusions:
+		if(event.getEntity().getType() == EntityType.BAT ||
+				event.getEntity().getType() == EntityType.CREEPER ||
+				event.getEntity().getType() == EntityType.ENDERMAN)
+			return;
+		
 		DungeonRoom dgr = DungeonManager.getRoomByLocation(event.getEntity().getLocation());
 		if(dgr != null)
 			dgr.add_mob(event.getEntity());
