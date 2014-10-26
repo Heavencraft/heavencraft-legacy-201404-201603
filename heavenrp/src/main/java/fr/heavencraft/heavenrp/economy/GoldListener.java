@@ -4,6 +4,7 @@ import static fr.heavencraft.utils.DevUtil.registerListener;
 
 import java.util.Arrays;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -24,7 +25,7 @@ import fr.heavencraft.utils.DevUtil;
 public class GoldListener implements Listener
 {
 	private static final Material GOLD_MATERIAL = Material.GOLD_NUGGET;
-	private static final String GOLD_NAME = "Pièce d'or";
+	private static final String GOLD_NAME = ChatColor.GOLD + "Pièce d'or";
 
 	public GoldListener()
 	{
@@ -38,9 +39,6 @@ public class GoldListener implements Listener
 
 		try
 		{
-			if (!player.isOp())
-				return;
-
 			ItemStack item = event.getItem().getItemStack();
 
 			if (!isGold(item))
@@ -84,9 +82,9 @@ public class GoldListener implements Listener
 		return true;
 	}
 
-	private void onPlayerDeath2(PlayerDeathEvent event) throws HeavenException
+	@EventHandler
+	private void onPlayerDeath(PlayerDeathEvent event) throws HeavenException
 	{
-
 		Player player = event.getEntity();
 		User user = UserProvider.getUserByName(player.getName());
 
@@ -110,30 +108,5 @@ public class GoldListener implements Listener
 		meta.setLore(Arrays.asList(Integer.toString(qty)));
 		item.setItemMeta(meta);
 		location.getWorld().dropItem(location, item);
-	}
-
-	@EventHandler
-	public void onPlayerDeath(PlayerDeathEvent event) throws HeavenException
-	{
-		Player player = event.getEntity();
-
-		if (player.isOp())
-		{
-			onPlayerDeath2(event);
-			return;
-		}
-
-		User user = UserProvider.getUserByName(player.getName());
-
-		int newBalance = (int) (user.getBalance() * 0.8D);
-		int delta = user.getBalance() - newBalance;
-
-		if (delta != 0)
-		{
-			user.updateBalance(-delta);
-			ChatUtil.sendMessage(player, "Vous avez perdu {%1$s} pièces d'or que vous aviez dans votre bourse.",
-					new Object[] { Integer.valueOf(delta) });
-			ChatUtil.sendMessage(player, "Pensez à déposer vôtre argent à la banque la prochaine fois.");
-		}
 	}
 }

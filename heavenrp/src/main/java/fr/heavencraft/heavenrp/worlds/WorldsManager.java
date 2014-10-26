@@ -39,9 +39,9 @@ public class WorldsManager
 			creator.createWorld();
 		}
 
-		if (!isLoaded("world_old"))
+		if (!isLoaded("world_dungeon"))
 		{
-			WorldCreator creator = new WorldCreator("world_old");
+			WorldCreator creator = new WorldCreator("world_dungeon");
 			creator.generator(new EmptyChunkGenerator());
 			creator.environment(World.Environment.NORMAL);
 			creator.createWorld();

@@ -3,6 +3,8 @@ package fr.lorgan17.lorganserver.entities;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -10,6 +12,7 @@ import org.bukkit.OfflinePlayer;
 import com.mysql.jdbc.Statement;
 
 import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.exceptions.SQLErrorException;
 import fr.lorgan17.lorganserver.LorganServer;
 import fr.lorgan17.lorganserver.exceptions.MemberNotFoundException;
 import fr.lorgan17.lorganserver.exceptions.RegionNotFoundException;
@@ -123,6 +126,36 @@ public class Region
 		catch (SQLException ex)
 		{
 			ex.printStackTrace();
+		}
+	}
+
+	public List<String> getMembers(boolean owner) throws SQLErrorException
+	{
+		try
+		{
+			PreparedStatement ps = LorganServer
+					.getConnection()
+					.prepareStatement(
+							"SELECT u.name FROM regions_users ru, users u  WHERE ru.region_id = ? AND ru.owner = ? AND ru.user_id = u.id");
+			ps.setInt(1, _id);
+			ps.setBoolean(2, owner);
+
+			ResultSet rs = ps.executeQuery();
+			List<String> result = new ArrayList<String>();
+
+			while (rs.next())
+			{
+				result.add(rs.getString("name"));
+			}
+
+			ps.close();
+			return result;
+		}
+
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			throw new SQLErrorException();
 		}
 	}
 
