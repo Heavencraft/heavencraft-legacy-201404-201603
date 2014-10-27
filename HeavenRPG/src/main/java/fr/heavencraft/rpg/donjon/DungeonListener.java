@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -74,17 +75,42 @@ public class DungeonListener implements Listener {
 			dgr.remove_mob(event.getEntity());
 	}
 	
-	
+
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerDamage(EntityDamageEvent e) {
-
 		if (!(e.getEntity() instanceof Player))
+			return;	
+		
+		Player victim = (Player) e.getEntity();		
+		Dungeon dg = DungeonManager.getDungeonByUser(victim);
+		if(dg == null)
 			return;
-		Player victim = (Player) e.getEntity();
+				
+		if (victim.getHealth() - e.getDamage() <= 0)
+		{
+			e.setDamage(0);
+			dg.handlePlayerDeath(victim);
+			e.setCancelled(true);
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onPlayerDamageByEntity(EntityDamageByEntityEvent e) {
+		if (!(e.getEntity() instanceof Player))
+			return;	
+		
+		Player victim = (Player) e.getEntity();		
 		Dungeon dg = DungeonManager.getDungeonByUser(victim);
 		if(dg == null)
 			return;
 		
+		//On annule les dégats caussées par les joueurs entre-eux
+		if(e.getDamager().getType() == EntityType.PLAYER) {
+			e.setDamage(0);
+			e.setCancelled(true);
+			return;
+		}
+				
 		if (victim.getHealth() - e.getDamage() <= 0)
 		{
 			e.setDamage(0);
