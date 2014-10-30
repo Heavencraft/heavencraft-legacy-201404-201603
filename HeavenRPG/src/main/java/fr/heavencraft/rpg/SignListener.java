@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -64,7 +65,7 @@ public abstract class SignListener implements Listener {
 			event.getBlock().breakNaturally();
 		}
 
-		@EventHandler(ignoreCancelled = true)
+		@EventHandler(priority = EventPriority.LOWEST)
 		public void onPlayerInteract(PlayerInteractEvent event)
 		{
 			if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
