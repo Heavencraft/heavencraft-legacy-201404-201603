@@ -2,6 +2,7 @@ package fr.heavencraft.rpg.donjon;
 
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.SignChangeEvent;
 
 import fr.heavencraft.exceptions.HeavenException;
@@ -12,7 +13,7 @@ import fr.heavencraft.rpg.SignListener;
 public class DungeonSignListener extends SignListener {
 	private final static String DUNGEON_DOES_NOT_EXIST = "Ce donjon n'existe pas!";
 	private final static String DUNGEON_DOES_NOT_HAVE_THIS_ROOM = "Ce donjon n'a pas cette salle!";
-	private final static String YOU_ARE_NOT_IN_DUNGEON = "Vous n'Ã¨tes dans aucun donjon!";
+	private final static String YOU_ARE_NOT_IN_DUNGEON = "Vous n'êtes dans aucun donjon!";
 
 	public DungeonSignListener()
 	{
