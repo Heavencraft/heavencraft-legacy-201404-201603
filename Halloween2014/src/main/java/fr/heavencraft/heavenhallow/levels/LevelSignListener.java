@@ -38,6 +38,7 @@ public class LevelSignListener extends SignListener{
 				next = Level.THEFALL;
 			else
 				Bukkit.broadcastMessage("MAUVAIS STAGE! CLAMPIN!");
+			
 			HallowPlayerManager.handlePlayerStage(next, player);
 	}
 }
