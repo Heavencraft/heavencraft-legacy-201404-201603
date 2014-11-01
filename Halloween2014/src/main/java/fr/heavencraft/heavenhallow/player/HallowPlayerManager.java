@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -36,6 +37,11 @@ public class HallowPlayerManager {
 	{
 		final HallowPlayer hp = getHallowPlayer(p.getName());
 
+		if(hp == null)
+		{
+			createHallowPlayer(new HallowPlayer(p));
+			return;
+		}
 
 		if(nextStage == Level.THEMOON)
 		{
@@ -163,10 +169,12 @@ public class HallowPlayerManager {
 	public static void handlePlayerRespawn(Player p)
 	{
 		HallowPlayer hp = getHallowPlayer(p.getName());
+		hp.getPlayer().setGameMode(GameMode.SURVIVAL);
+		hp.getPlayer().setFlying(false);
+		hp.getPlayer().setFireTicks(1);
 		hp.getPlayer().teleport(hp.getLevel().getSpawnLoc());
 		hp.getPlayer().setHealth(20);
 		hp.getPlayer().setFoodLevel(20);
-		hp.getPlayer().setFireTicks(0);
 		hp.getPlayer().getActivePotionEffects().clear();
 	}
 
@@ -192,6 +200,7 @@ public class HallowPlayerManager {
 				players.remove(player);
 		}
 	}
+	
 	public static void removeHallowPlayer(HallowPlayer IP) {
 		players.remove(IP);
 	}
@@ -204,10 +213,16 @@ public class HallowPlayerManager {
 	public static HallowPlayer getHallowPlayer(String playerName) {
 		for (HallowPlayer IP : players)
 		{
-			if (IP.getPlayer().getName().equalsIgnoreCase(playerName))
-				return IP;
+			if(IP.getPlayer() != null)
+			{
+				Bukkit.getLogger().log(java.util.logging.Level.WARNING, "Liste: " + IP.getPlayer().getName());
+				if (IP.getPlayer().getName().equalsIgnoreCase(playerName))
+					return IP;
+			}
+				
 		}
-		return createHallowPlayer(Bukkit.getPlayer(playerName));
+		Bukkit.getLogger().log(java.util.logging.Level.WARNING, "Creation a la volee d un utilisateur hallow: " + playerName);
+		return null;
 	}
 
 	/**
@@ -221,6 +236,7 @@ public class HallowPlayerManager {
 			if (IP.getPlayer() == p)
 				return IP;
 		}
+		Bukkit.getLogger().log(java.util.logging.Level.WARNING, "Creation a la volee d un utilisateur hallow: " + p.getDisplayName());
 		return createHallowPlayer(p);
 	}
 }
