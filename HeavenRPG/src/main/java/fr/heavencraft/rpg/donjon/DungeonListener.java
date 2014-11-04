@@ -1,15 +1,18 @@
 package fr.heavencraft.rpg.donjon;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import fr.heavencraft.rpg.HeavenRPG;
@@ -27,9 +30,27 @@ public class DungeonListener implements Listener {
 		if (!(event.getEntity() instanceof LivingEntity))
 			return;
 
+		//exclusions:
+		if(event.getEntity().getType() == EntityType.BAT ||
+				event.getEntity().getType() == EntityType.CREEPER ||
+				event.getEntity().getType() == EntityType.ENDERMAN)
+			return;
+		
 		DungeonRoom dgr = DungeonManager.getRoomByLocation(event.getEntity().getLocation());
 		if(dgr != null)
 			dgr.add_mob(event.getEntity());
+	}
+	
+	@EventHandler
+	public void customDespawn(ItemDespawnEvent event)
+	{
+		if (!(event.getEntity() instanceof LivingEntity)) 
+			return;
+
+		DungeonRoom dgr = DungeonManager.getRoomByEntity(event.getEntity());
+
+		if(dgr != null)
+			dgr.remove_mob(event.getEntity());
 	}
 
 	@EventHandler (ignoreCancelled = true, priority = EventPriority.LOW)
@@ -54,17 +75,42 @@ public class DungeonListener implements Listener {
 			dgr.remove_mob(event.getEntity());
 	}
 	
-	
+
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerDamage(EntityDamageEvent e) {
-
 		if (!(e.getEntity() instanceof Player))
+			return;	
+		
+		Player victim = (Player) e.getEntity();		
+		Dungeon dg = DungeonManager.getDungeonByUser(victim);
+		if(dg == null)
 			return;
-		Player victim = (Player) e.getEntity();
+				
+		if (victim.getHealth() - e.getDamage() <= 0)
+		{
+			e.setDamage(0);
+			dg.handlePlayerDeath(victim);
+			e.setCancelled(true);
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onPlayerDamageByEntity(EntityDamageByEntityEvent e) {
+		if (!(e.getEntity() instanceof Player))
+			return;	
+		
+		Player victim = (Player) e.getEntity();		
 		Dungeon dg = DungeonManager.getDungeonByUser(victim);
 		if(dg == null)
 			return;
 		
+		//On annule les dégats caussées par les joueurs entre-eux
+		if(e.getDamager().getType() == EntityType.PLAYER) {
+			e.setDamage(0);
+			e.setCancelled(true);
+			return;
+		}
+				
 		if (victim.getHealth() - e.getDamage() <= 0)
 		{
 			e.setDamage(0);

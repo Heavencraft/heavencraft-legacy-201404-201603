@@ -52,7 +52,7 @@ public class ParcheminPousseeQuantique implements IParchemin{
 				ParticleEffect.CLOUD.display(player.getPlayer().getLocation().add(0, 1, 0), 10, 0, 0, 0, 10, 1000);
 				
 				
-				List<Entity> entities = player.getPlayer().getNearbyEntities(10, 10, 10);
+				List<Entity> entities = player.getPlayer().getNearbyEntities(6, 6, 6);
 				for(Entity e : entities)
 				{
 					Vector unitVector = e.getLocation().toVector().subtract(player.getPlayer().getLocation().toVector()).normalize();
