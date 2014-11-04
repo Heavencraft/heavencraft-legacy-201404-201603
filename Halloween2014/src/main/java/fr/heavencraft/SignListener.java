@@ -1,4 +1,4 @@
-package fr.heavencraft.rpg;
+package fr.heavencraft;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -26,7 +26,7 @@ public abstract class SignListener implements Listener {
 		_tag = "[" + tag + "]";
 		_permission = permission;
 
-		Bukkit.getPluginManager().registerEvents(new InternalListener(), HeavenRPG.getInstance());
+		Bukkit.getPluginManager().registerEvents(new InternalListener(), HeavenHallow.getInstance());
 	}
 	
 	protected abstract boolean onSignPlace(Player player, SignChangeEvent event) throws HeavenException;

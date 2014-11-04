@@ -58,6 +58,7 @@ public class ParcheminLePetitPetDuNord implements IParchemin{
 				ParticleEffect.FIREWORKS_SPARK.display(player.getPlayer().getLocation().add(0, 1, 0), 10, 0, 0, 0, 10, 1000);
 				
 				Fireball fb = player.getPlayer().launchProjectile(Fireball.class);
+				fb.setFireTicks(0);
 				fb.setShooter(player.getPlayer());
 				fb.setVelocity(fb.getVelocity().multiply(2));
 				fb.setYield(2);
