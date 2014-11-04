@@ -36,7 +36,6 @@ public class AutoMessageTask implements Runnable
 
 			// Autres serveurs
 			"(Créa) Vous avez un grand projet de construction mais pas assez de ressources ? Rendez-vous sur la map Créabiome !",
-			"(Créa) Sondage: Nous avons besoin de votre avis ! bit.ly/1yVYlyC",
 
 			// Messages d'informations
 			"Heavencraft a été créé le 28 Mars 2011 !",
