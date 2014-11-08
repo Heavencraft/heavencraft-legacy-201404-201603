@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminAuraDeLaBienfaisansce;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminLePetitPetDuNord;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminLeSouffleDuNecromantien;
+import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPortailDuMineur;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPousseeQuantique;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminTonnereDivin;
 
@@ -20,6 +21,7 @@ public class ParcheminProvider {
 		addParchemin(new ParcheminPousseeQuantique());
 		addParchemin(new ParcheminAuraDeLaBienfaisansce());
 		addParchemin(new ParcheminLeSouffleDuNecromantien());
+		addParchemin(new ParcheminPortailDuMineur());
 	}
 	
 	

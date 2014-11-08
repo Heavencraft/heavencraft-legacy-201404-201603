@@ -222,9 +222,16 @@ public class Dungeon {
 		if(dgr == null)
 			return;
 		
+		List<Entity> tmp = dgr.get_mobs();
+		for(int i = 0; i < tmp.size(); i++)
+		{
+			if(tmp.get(i).isDead())
+				dgr.get_mobs().remove(i);
+		}
+		
 		// Check if all mobs are dead
 		if(dgr.get_mobs().size() != 0)
-		{
+		{		
 			ChatUtil.sendMessage(p, DUNGEON_X_MOBS_LEFT, dgr.get_mobs().size());
 			return;
 		}
