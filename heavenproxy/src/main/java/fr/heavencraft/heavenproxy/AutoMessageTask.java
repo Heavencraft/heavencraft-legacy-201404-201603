@@ -33,6 +33,7 @@ public class AutoMessageTask implements Runnable
 			"(SRP) Vous pouvez ajouter d'autres joueurs dans votre protection via §b/region addmember§r.",
 			"(SRP) Venez vous battre dans la ville PVP !",
 			"(SRP) Voici un rapport qui nous a été envoyé pour vous, peuple d'Heavencraft. A vous de jouer ! bit.ly/ZN0xsX",
+			"(SRP) §6Dubay§f a obtenu le §6Prix de la fleur d'or§f, nous vous recommandons fortement de la visiter !",
 
 			// Autres serveurs
 			"(Créa) Vous avez un grand projet de construction mais pas assez de ressources ? Rendez-vous sur la map Créabiome !",
