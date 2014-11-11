@@ -183,8 +183,7 @@ public class Vault extends JavaPlugin
 	private void loadEconomy()
 	{
 		// Try to load HeavenRP
-		hookEconomy("HeavenRP", Economy_HeavenRP.class, ServicePriority.Normal,
-				"co.uk.silvania.cities.digicoin.DigiCoin");
+		hookEconomy("HeavenRP", Economy_HeavenRP.class, ServicePriority.Normal, "fr.heavencraft.heavenrp.HeavenRP");
 	}
 
 	/**
@@ -217,6 +216,7 @@ public class Vault extends JavaPlugin
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 			log.severe(String.format(
 					"[Economy] There was an error hooking %s - check to make sure you're using a compatible version!",
 					name));
