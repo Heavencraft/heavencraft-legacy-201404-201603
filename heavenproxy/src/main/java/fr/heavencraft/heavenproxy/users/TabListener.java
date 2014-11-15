@@ -6,6 +6,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
+import net.md_5.bungee.event.EventPriority;
 import fr.heavencraft.heavenproxy.Utils;
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
 
@@ -21,7 +22,7 @@ public class TabListener implements Listener
 		log.info(TAG + "Initialized");
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPostLogin(PostLoginEvent event) throws HeavenException
 	{
 		ProxiedPlayer player = event.getPlayer();
