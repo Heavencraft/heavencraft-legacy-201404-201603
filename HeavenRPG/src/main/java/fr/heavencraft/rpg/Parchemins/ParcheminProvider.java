@@ -8,8 +8,11 @@ import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminAuraDeLaBienfaisansce;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminLePetitPetDuNord;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminLeSouffleDuNecromantien;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPortailDuMineur;
+import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPortailDuTempleDesSables;
+import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPortailMontageDeNeige;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPousseeQuantique;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminTonnereDivin;
+import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminTourDeGarde;
 
 public class ParcheminProvider {
 	private static ArrayList<IParchemin> parchemins = new ArrayList<IParchemin>();
@@ -22,6 +25,9 @@ public class ParcheminProvider {
 		addParchemin(new ParcheminAuraDeLaBienfaisansce());
 		addParchemin(new ParcheminLeSouffleDuNecromantien());
 		addParchemin(new ParcheminPortailDuMineur());
+		addParchemin(new ParcheminPortailDuTempleDesSables());
+		addParchemin(new ParcheminTourDeGarde());
+		addParchemin(new ParcheminPortailMontageDeNeige());
 	}
 	
 	

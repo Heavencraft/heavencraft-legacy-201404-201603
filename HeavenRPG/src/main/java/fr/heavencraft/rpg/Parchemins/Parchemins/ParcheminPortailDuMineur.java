@@ -34,7 +34,7 @@ public class ParcheminPortailDuMineur implements IParchemin{
 	public ItemStack getItem() {
 		ItemStack parchemin = new ItemStack(Material.PAPER);
 		ItemMeta met = parchemin.getItemMeta();
-		met.setDisplayName(ChatColor.GREEN + "Portail du Mineur");
+		met.setDisplayName(ChatColor.GREEN + "Portail: Le Mineur");
 		parchemin.setItemMeta(met);
 		return parchemin;
 	}
@@ -50,7 +50,7 @@ public class ParcheminPortailDuMineur implements IParchemin{
 			public void run() {
 				ParticleEffect.SPELL.display(player.getPlayer().getLocation().add(0, 1, 0), 10, 0, 0, 0, 10, 1000);
 				
-				player.getPlayer().teleport(new Location(player.getPlayer().getWorld(), -4174, 76, -196));
+				player.getPlayer().teleport(new Location(player.getPlayer().getWorld(), -4174, 76, -196, 63,5));
 				
 				player.getPlayer().removePotionEffect(PotionEffectType.SLOW);
 				player.getPlayer().removePotionEffect(PotionEffectType.SLOW_DIGGING);
