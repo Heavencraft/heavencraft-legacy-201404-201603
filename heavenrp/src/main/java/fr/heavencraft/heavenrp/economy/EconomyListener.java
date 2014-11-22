@@ -37,8 +37,8 @@ public class EconomyListener implements Listener
 
 		if (!Utils.isToday(user.getLastLogin()))
 		{
-			user.updateBalance(25);
-			ChatUtil.sendMessage(player, ChatColor.AQUA + "Vous venez d'obtenir 25 pièces d'or en vous connectant !");
+			user.updateBalance(5);
+			ChatUtil.sendMessage(player, ChatColor.AQUA + "Vous venez d'obtenir 5 pièces d'or en vous connectant !");
 
 			int benefit = (int) (account.getBalance() * 0.001D);
 
