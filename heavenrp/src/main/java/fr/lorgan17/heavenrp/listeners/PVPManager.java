@@ -70,7 +70,7 @@ public class PVPManager implements Listener
 			isTeamBattle = false;
 			maxpoints = 0;
 
-			broadcastMessage("Le combat vient d'être interompu !");
+			broadcastMessage("Le combat vient d'être interrompu !");
 		}
 	}
 

@@ -58,7 +58,7 @@ public class PVP4Manager implements Listener
 	{
 		if (isFighting)
 		{
-			broadcastMessage("Le combat vient d'être intérompu !");
+			broadcastMessage("Le combat vient d'être interrompu !");
 			fighters.clear();
 			isFighting = false;
 		}
