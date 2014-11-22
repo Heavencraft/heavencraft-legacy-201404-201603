@@ -27,6 +27,9 @@ public class AccepterCommand extends HeavenCommand
 		}
 		Player toTeleport = PlayerUtil.getPlayer(args[0]);
 
+		if (!player.hasPermission(Permissions.REJOINDRE))
+			throw new HeavenException("Vous n'êtes pas actuellement dans le monde ressources.");
+
 		if (!toTeleport.hasPermission(Permissions.REJOINDRE))
 			throw new HeavenException("{%1$s} n'est pas actuellement dans le monde ressources.", toTeleport.getName());
 

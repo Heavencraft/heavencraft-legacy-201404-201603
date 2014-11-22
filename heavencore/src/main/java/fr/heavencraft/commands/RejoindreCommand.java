@@ -32,6 +32,9 @@ public class RejoindreCommand extends HeavenCommand
 
 		Player destination = PlayerUtil.getPlayer(args[0]);
 
+		if (!player.hasPermission(Permissions.REJOINDRE))
+			throw new HeavenException("Vous n'êtes pas actuellement dans le monde ressources.");
+
 		if (!destination.hasPermission(Permissions.REJOINDRE))
 			throw new HeavenException("{%1$s} n'est pas actuellement dans le monde ressources.", destination.getName());
 
