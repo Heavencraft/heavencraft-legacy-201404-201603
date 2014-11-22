@@ -30,9 +30,10 @@ import fr.heavencraft.heavenrp.commands.teleport.SpawnCommand;
 import fr.heavencraft.heavenrp.commands.teleport.TutoCommand;
 import fr.heavencraft.heavenrp.commands.warps.WarpCommand;
 import fr.heavencraft.heavenrp.economy.EconomyListener;
-import fr.heavencraft.heavenrp.economy.GoldListener;
+import fr.heavencraft.heavenrp.economy.GoldDropListener;
 import fr.heavencraft.heavenrp.economy.LivretProSignListener;
 import fr.heavencraft.heavenrp.economy.LivretSignListener;
+import fr.heavencraft.heavenrp.economy.MoneyTask;
 import fr.heavencraft.heavenrp.general.BourseListener;
 import fr.heavencraft.heavenrp.general.PumpkinLampListener;
 import fr.heavencraft.heavenrp.general.RecipeManager;
@@ -123,6 +124,7 @@ public class InitManager
 		new EntrepriseCommand();
 		new LivretproCommand();
 		new PayerCommand();
+		new MoneyTask();
 
 		// Homes
 		new BuyhomeCommand();
@@ -190,7 +192,7 @@ public class InitManager
 
 		// Economy
 		new EconomyListener();
-		new GoldListener();
+		new GoldDropListener();
 		new LivretProSignListener();
 		new LivretSignListener();
 
