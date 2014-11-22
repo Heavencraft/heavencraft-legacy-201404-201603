@@ -22,12 +22,12 @@ import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.heavencraft.utils.ChatUtil;
 import fr.heavencraft.utils.DevUtil;
 
-public class GoldListener implements Listener
+public class GoldDropListener implements Listener
 {
 	private static final Material GOLD_MATERIAL = Material.GOLD_NUGGET;
 	private static final String GOLD_NAME = ChatColor.GOLD + "Pièce d'or";
 
-	public GoldListener()
+	public GoldDropListener()
 	{
 		registerListener(this);
 	}
