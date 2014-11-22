@@ -1,6 +1,7 @@
 package fr.heavencraft.rpg.donjon;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -99,6 +100,17 @@ public class DungeonListener implements Listener {
 		if (!(e.getEntity() instanceof Player))
 			return;	
 		
+		
+		if((e.getDamager() instanceof Arrow)) {
+			Arrow a = (Arrow)e.getDamager();	
+			if (!(a.getShooter() instanceof Player)) 
+			      return;
+			e.setDamage(0);
+			e.setCancelled(true);
+			return;     
+		}
+			 
+		
 		Player victim = (Player) e.getEntity();		
 		Dungeon dg = DungeonManager.getDungeonByUser(victim);
 		if(dg == null)
@@ -116,6 +128,7 @@ public class DungeonListener implements Listener {
 			e.setDamage(0);
 			dg.handlePlayerDeath(victim);
 			e.setCancelled(true);
+			return;
 		}
 	}
 	

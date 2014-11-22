@@ -45,7 +45,7 @@ public class Program implements Runnable
 					System.out.println(new Date() + " ***** PROXY IS DOWN *****");
 					relaunchProxy();
 
-					Thread.sleep(30000);
+					Thread.sleep(20000);
 				}
 			}
 		}
