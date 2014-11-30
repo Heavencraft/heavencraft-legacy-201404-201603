@@ -10,6 +10,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
+import fr.heavencraft.utils.DevUtil;
 
 public class MoneyTask extends BukkitRunnable
 {
@@ -27,6 +28,8 @@ public class MoneyTask extends BukkitRunnable
 		{
 			Player[] players = Bukkit.getOnlinePlayers();
 			int amount = getAmount();
+
+			DevUtil.logInfo("[MoneyTask] giving %1$s po to %2$s players", amount, players.length);
 
 			for (Player player : players)
 			{
