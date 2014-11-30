@@ -18,6 +18,10 @@ import fr.manu67100.heavenrp.laposte.Files;
 
 public class HeavenRP extends HeavenPlugin
 {
+	// For test server
+	// private final static String RP_DB_URL =
+	// "jdbc:mysql://localhost:3306/minecraft-semirp-test?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull&?autoReconnect=true";
+
 	private final static String RP_DB_URL = "jdbc:mysql://localhost:3306/minecraft-semirp?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull&?autoReconnect=true";
 	private final static String MAIN_DB_URL = "jdbc:mysql://localhost:3306/mc-db?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull&?autoReconnect=true";
 	// private final static String RP_DB_URL = "jdbc:mysql://localhost:3306/minecraft-rp?user=root&password=root";
