@@ -3,6 +3,7 @@ package fr.heavencraft.heavenrp.economy;
 import static fr.heavencraft.utils.DevUtil.getPlugin;
 
 import java.util.Calendar;
+import java.util.Collection;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -26,10 +27,10 @@ public class MoneyTask extends BukkitRunnable
 	{
 		try
 		{
-			Player[] players = Bukkit.getOnlinePlayers();
+			Collection<? extends Player> players = Bukkit.getOnlinePlayers();
 			int amount = getAmount();
 
-			DevUtil.logInfo("[MoneyTask] giving %1$s po to %2$s players", amount, players.length);
+			DevUtil.logInfo("[MoneyTask] giving %1$s po to %2$s players", amount, players.size());
 
 			for (Player player : players)
 			{
