@@ -48,7 +48,7 @@ public class ParcheminLeSouffleDuNecromantien implements IParchemin{
 
 				
 				
-				ParticleEffect.CLOUD.display(player.getPlayer().getLocation().add(0, 1, 0), 10, 0, 0, 0, 10, 1000);
+				ParticleEffect.CLOUD.display((float)10, (float)0, (float)0, (float)0, 10,player.getPlayer().getLocation(), 1000);
 				
 				
 				List<Entity> entities = player.getPlayer().getNearbyEntities(5, 5, 5);

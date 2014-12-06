@@ -44,9 +44,8 @@ public class RecipeManager
 		Bukkit.addRecipe(saddle);
 		
 		// Mushroom Stem
-		ShapedRecipe mushroomStem = new ShapedRecipe(new ItemStack(Material.HUGE_MUSHROOM_1, 1, (short) 10));
-		mushroomStem.shape(new String[] { "   ", "vv", "   " });
-		mushroomStem.setIngredient('v', Material.HUGE_MUSHROOM_1);
+		ShapelessRecipe mushroomStem = new ShapelessRecipe(new ItemStack(Material.HUGE_MUSHROOM_1, 1, (short) 15))
+			.addIngredient(2,Material.HUGE_MUSHROOM_1);
 		Bukkit.addRecipe(mushroomStem);
 	}
 }

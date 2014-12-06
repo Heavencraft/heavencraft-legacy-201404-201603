@@ -43,7 +43,7 @@ public class ParcheminLePetitPetDuNord implements IParchemin{
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				ParticleEffect.PORTAL.display(player.getPlayer().getLocation(), 10, 0, 0, 0, 1, 1000);
+				ParticleEffect.PORTAL.display((float)10, (float)0, (float)0, (float)0, 10,player.getPlayer().getLocation(), 1000);
 				counter += 1;
 				if(counter >= 5)
 					this.cancel();
@@ -55,7 +55,7 @@ public class ParcheminLePetitPetDuNord implements IParchemin{
 			@Override
 			public void run() {
 				
-				ParticleEffect.FIREWORKS_SPARK.display(player.getPlayer().getLocation().add(0, 1, 0), 10, 0, 0, 0, 10, 1000);
+				ParticleEffect.FIREWORKS_SPARK.display((float)10, (float)0, (float)0, (float)0, 10,player.getPlayer().getLocation(), 1000);
 				
 				Fireball fb = player.getPlayer().launchProjectile(Fireball.class);
 				fb.setFireTicks(0);
