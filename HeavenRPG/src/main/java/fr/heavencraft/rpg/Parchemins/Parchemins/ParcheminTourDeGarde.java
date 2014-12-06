@@ -48,7 +48,7 @@ public class ParcheminTourDeGarde implements IParchemin{
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				ParticleEffect.SPELL.display(player.getPlayer().getLocation().add(0, 1, 0), 10, 0, 0, 0, 10, 1000);
+				ParticleEffect.SPELL.display((float)10, (float)0, (float)0, (float)0, 10,player.getPlayer().getLocation(), 1000);
 				
 				player.getPlayer().teleport(new Location(player.getPlayer().getWorld(), -1932, 64, -1179, 91,8));
 				
@@ -61,7 +61,7 @@ public class ParcheminTourDeGarde implements IParchemin{
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				ParticleEffect.FIREWORKS_SPARK.display(player.getPlayer().getLocation().add(0, 1, 0), 10, 0, 0, 0, 10, 1000);
+				ParticleEffect.FIREWORKS_SPARK.display((float)10, (float)0, (float)0, (float)0, 10,player.getPlayer().getLocation(), 1000);
 				player.getPlayer().removePotionEffect(PotionEffectType.CONFUSION);
 			}	
 		}.runTaskLater(HeavenRPG.getInstance(), 40);	
