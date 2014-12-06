@@ -42,7 +42,7 @@ public class CommandsManager
 		// Homes
 		new HomeCommand();
 		new SethomeCommand();
-		new BuyhomeCommand();é
+		new BuyhomeCommand();
 		new TphomeCommand();
 
 		new HpsCommand();
