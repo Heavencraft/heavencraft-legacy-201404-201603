@@ -1,6 +1,7 @@
 name: HeavenRP
 version: 1.0
 main: fr.heavencraft.heavenrp.HeavenRP
+depend: [WorldEdit, WorldGuard]
 commands:
 #
 # HeavenCore
