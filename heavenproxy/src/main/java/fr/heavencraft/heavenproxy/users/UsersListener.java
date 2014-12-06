@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -19,6 +20,7 @@ public class UsersListener implements Listener
 {
 	private static final String TAG = "[UsersListener] ";
 	private static final Logger log = Utils.getLogger();
+	public static final int MINECRAFT_1_8 = 47;
 
 	public UsersListener()
 	{
@@ -27,20 +29,20 @@ public class UsersListener implements Listener
 		log.info(TAG + "Initialized");
 	}
 
-	// @EventHandler
-	// public void onLogin(LoginEvent event)
-	// {
-	// if (event.isCancelled())
-	// return;
-	//
-	// if (event.getConnection().getVersion() != ProtocolConstants.MINECRAFT_1_7_6)
-	// {
-	// event.setCancelled(true);
-	// event.setCancelReason("§fHeaven§bcraft§r est en 1.7.10.\n\nMerci de vous connecter avec cette version.");
-	//
-	// log.info(TAG + "[onLogin] " + event.getConnection().getName() + " is not in 1.7.10.");
-	// }
-	// }
+	@EventHandler
+	public void onLogin(LoginEvent event)
+	{
+		if (event.isCancelled())
+			return;
+
+		if (event.getConnection().getVersion() != MINECRAFT_1_8)
+		{
+			event.setCancelled(true);
+			event.setCancelReason("§fHeaven§bcraft§r est en 1.8.1.\n\nMerci de vous connecter avec cette version.");
+
+			log.info(TAG + "[onLogin] " + event.getConnection().getName() + " is not in 1.8.1.");
+		}
+	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPostLogin(PostLoginEvent event)
