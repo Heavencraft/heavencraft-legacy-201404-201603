@@ -295,7 +295,7 @@ public class AdventWoolEvent
 			// user.setBooleanVariable("adventWool", false);
 			// user.saveToFile();
 			_plugin.setAventDate(player.getName());
-			player.sendMessage(ChatColor.RED + "[No�l] " + ChatColor.GOLD
+			player.sendMessage(ChatColor.RED + "[Noël] " + ChatColor.GOLD
 					+ "Vous venez d'ouvrir votre laine de l'avent !");
 			block.getWorld().playEffect(location, Effect.POTION_BREAK, 1);
 			ItemStack[] stacks = generateRandomItems();
