@@ -96,6 +96,7 @@ public class ProtectionEntityListener implements Listener
 			case MINECART_MOB_SPAWNER:
 			case MINECART_TNT:
 			case ITEM_FRAME:
+			case ARMOR_STAND:
 				if (!LorganServer.canBeDestroyed(player, block))
 				{
 					ChatUtil.sendMessage(player, "Cet endroit est protégé.");
