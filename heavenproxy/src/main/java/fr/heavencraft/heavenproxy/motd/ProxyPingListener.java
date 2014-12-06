@@ -9,7 +9,7 @@ import fr.heavencraft.heavenproxy.Utils;
 
 public class ProxyPingListener implements Listener
 {
-	private static final String FIRST_LINE = "§l§fHeaven§bcraft§r [1.7.10] [1.8]\n";
+	private static final String FIRST_LINE = "§l§fHeaven§bcraft§r [1.8.1]\n";
 
 	public ProxyPingListener()
 	{
