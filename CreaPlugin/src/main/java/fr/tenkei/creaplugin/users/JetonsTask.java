@@ -2,6 +2,8 @@ package fr.tenkei.creaplugin.users;
 
 import static fr.heavencraft.utils.DevUtil.getPlugin;
 
+import java.util.Collection;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -23,8 +25,8 @@ public class JetonsTask extends BukkitRunnable
 	{
 		try
 		{
-			Player[] players = Bukkit.getOnlinePlayers();
-			int nbJetons = players.length > 5 ? players.length : 5;
+			Collection<? extends Player> players = Bukkit.getOnlinePlayers();
+			int nbJetons = players.size() > 5 ? players.size() : 5;
 
 			for (Player player : players)
 			{
