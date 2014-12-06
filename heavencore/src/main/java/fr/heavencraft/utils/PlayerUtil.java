@@ -106,7 +106,15 @@ public class PlayerUtil
 
 			ChatUtil.sendMessage(player, "Ton cheval a été téléporté avec toi. S'il n'est pas là, {déco reco}.");
 
-			horse.setPassenger(player);
+			Bukkit.getScheduler().runTaskLater(DevUtil.getPlugin(), new Runnable()
+			{
+
+				@Override
+				public void run()
+				{
+					horse.setPassenger(player);
+				}
+			}, 20);
 		}
 
 		else
