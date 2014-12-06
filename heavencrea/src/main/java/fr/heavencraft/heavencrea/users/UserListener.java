@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.exceptions.UserNotFoundException;
 import fr.heavencraft.utils.ChatUtil;
+import fr.heavencraft.utils.DevUtil;
 import fr.heavencraft.utils.PlayerUtil;
 
 public class UserListener implements Listener
@@ -38,7 +39,7 @@ public class UserListener implements Listener
 		catch (UserNotFoundException ex)
 		{
 			UserProvider.createUser(uuid, name);
-			MyPlugin.log("Nouveau joueur : " + event.getPlayer().getName());
+			DevUtil.logInfo("Nouveau joueur : %1$s", event.getPlayer().getName());
 		}
 		catch (HeavenException ex)
 		{
