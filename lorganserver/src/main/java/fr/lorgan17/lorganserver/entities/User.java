@@ -27,12 +27,10 @@ public class User
 
 	public static void createUser(String name)
 	{
-		try
+		try (PreparedStatement ps = LorganServer.getConnection().prepareStatement(
+				"INSERT INTO users (name) VALUES (?);"))
 		{
-			PreparedStatement ps = LorganServer.getConnection()
-					.prepareStatement("INSERT INTO users (name) VALUES (?);");
 			ps.setString(1, name);
-
 			ps.executeUpdate();
 		}
 
@@ -44,18 +42,18 @@ public class User
 
 	public static User getUserByName(String name) throws HeavenException
 	{
-		try
+		try (PreparedStatement ps = LorganServer.getConnection().prepareStatement(
+				"SELECT * FROM users WHERE name = ? LIMIT 1"))
 		{
-			PreparedStatement ps = LorganServer.getConnection().prepareStatement(
-					"SELECT * FROM users WHERE name = ? LIMIT 1");
 			ps.setString(1, name);
 
-			ResultSet rs = ps.executeQuery();
+			try (ResultSet rs = ps.executeQuery())
+			{
+				if (!rs.next())
+					throw new UserNotFoundException(name);
 
-			if (!rs.next())
-				throw new UserNotFoundException(name);
-
-			return new User(rs.getInt(1), name);
+				return new User(rs.getInt(1), name);
+			}
 		}
 
 		catch (SQLException ex)

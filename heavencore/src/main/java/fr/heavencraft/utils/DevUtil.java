@@ -1,6 +1,6 @@
 package fr.heavencraft.utils;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -78,7 +78,7 @@ public class DevUtil
 		return i;
 	}
 
-	public static String arrayToString(List<String> array, int start, String separator)
+	public static String arrayToString(Collection<String> array, int start, String separator)
 	{
 		return arrayToString(array.toArray(new String[array.size()]), start, separator);
 	}

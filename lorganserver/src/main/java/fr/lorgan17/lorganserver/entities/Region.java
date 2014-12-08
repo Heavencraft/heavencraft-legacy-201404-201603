@@ -3,8 +3,8 @@ package fr.lorgan17.lorganserver.entities;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -41,14 +41,12 @@ public class Region
 
 	public void delete() throws HeavenException
 	{
-		try
+		try (PreparedStatement ps = LorganServer.getConnection().prepareStatement("DELETE FROM regions WHERE id = ?"))
 		{
-			PreparedStatement ps = LorganServer.getConnection().prepareStatement("DELETE FROM regions WHERE id = ?");
 			ps.setInt(1, _id);
 
 			if (ps.executeUpdate() == 0)
 				throw new HeavenException("Oups, la suppression a échouée");
-
 		}
 
 		catch (SQLException ex)
@@ -61,10 +59,9 @@ public class Region
 	{
 		User user = User.getUserByName(name);
 
-		try
+		try (PreparedStatement ps = LorganServer.getConnection().prepareStatement(
+				"INSERT INTO regions_users (region_id, user_id, owner) VALUES (?, ?, ?);"))
 		{
-			PreparedStatement ps = LorganServer.getConnection().prepareStatement(
-					"INSERT INTO regions_users (region_id, user_id, owner) VALUES (?, ?, ?);");
 			ps.setInt(1, _id);
 			ps.setInt(2, user.getId());
 			ps.setBoolean(3, owner);
@@ -85,21 +82,21 @@ public class Region
 			if (player.getName().equals(name))
 				return true;
 
-		try
+		try (PreparedStatement ps = LorganServer
+				.getConnection()
+				.prepareStatement(
+						"SELECT owner FROM regions_users ru, users u WHERE ru.region_id = ? AND ru.user_id = u.id AND u.name = ? LIMIT 1"))
 		{
-			PreparedStatement ps = LorganServer
-					.getConnection()
-					.prepareStatement(
-							"SELECT owner FROM regions_users ru, users u WHERE ru.region_id = ? AND ru.user_id = u.id AND u.name = ? LIMIT 1");
 			ps.setInt(1, _id);
 			ps.setString(2, name);
 
-			ResultSet rs = ps.executeQuery();
+			try (ResultSet rs = ps.executeQuery())
+			{
+				if (!rs.next())
+					return false;
 
-			if (!rs.next())
-				return false;
-
-			return owner ? rs.getBoolean(1) : true;
+				return owner ? rs.getBoolean(1) : true;
+			}
 		}
 
 		catch (SQLException ex)
@@ -111,12 +108,11 @@ public class Region
 
 	public void removeMember(String name) throws HeavenException
 	{
-		try
+		try (PreparedStatement ps = LorganServer
+				.getConnection()
+				.prepareStatement(
+						"DELETE FROM regions_users WHERE region_id = ? AND user_id = (SELECT id FROM users WHERE name = ?) AND owner = 0"))
 		{
-			PreparedStatement ps = LorganServer
-					.getConnection()
-					.prepareStatement(
-							"DELETE FROM regions_users WHERE region_id = ? AND user_id = (SELECT id FROM users WHERE name = ?) AND owner = 0");
 			ps.setInt(1, _id);
 			ps.setString(2, name);
 
@@ -129,27 +125,25 @@ public class Region
 		}
 	}
 
-	public List<String> getMembers(boolean owner) throws SQLErrorException
+	public Collection<String> getMembers(boolean owner) throws SQLErrorException
 	{
-		try
+		try (PreparedStatement ps = LorganServer
+				.getConnection()
+				.prepareStatement(
+						"SELECT u.name FROM regions_users ru, users u  WHERE ru.region_id = ? AND ru.owner = ? AND ru.user_id = u.id"))
 		{
-			PreparedStatement ps = LorganServer
-					.getConnection()
-					.prepareStatement(
-							"SELECT u.name FROM regions_users ru, users u  WHERE ru.region_id = ? AND ru.owner = ? AND ru.user_id = u.id");
 			ps.setInt(1, _id);
 			ps.setBoolean(2, owner);
 
-			ResultSet rs = ps.executeQuery();
-			List<String> result = new ArrayList<String>();
-
-			while (rs.next())
+			try (ResultSet rs = ps.executeQuery())
 			{
-				result.add(rs.getString("name"));
-			}
+				Collection<String> result = new HashSet<String>();
 
-			ps.close();
-			return result;
+				while (rs.next())
+					result.add(rs.getString("name"));
+
+				return result;
+			}
 		}
 
 		catch (SQLException ex)
@@ -184,43 +178,50 @@ public class Region
 
 		try
 		{
-			PreparedStatement ps = LorganServer.getConnection().prepareStatement(
+			try (PreparedStatement ps = LorganServer.getConnection().prepareStatement(
 					"SELECT id FROM regions WHERE " + "(? BETWEEN x1 AND x2 AND ? BETWEEN z1 AND z2) OR "
 							+ "(? BETWEEN x1 AND x2 AND ? BETWEEN z1 AND z2) OR "
 							+ "(x1 BETWEEN ? AND ? AND z1 BETWEEN ? AND ?) OR "
-							+ "(x2 BETWEEN ? AND ? AND z2 BETWEEN ? AND ?)");
-			ps.setInt(1, x1);
-			ps.setInt(2, z1);
-			ps.setInt(3, x2);
-			ps.setInt(4, z2);
-			ps.setInt(5, x1);
-			ps.setInt(6, x2);
-			ps.setInt(7, z1);
-			ps.setInt(8, z2);
-			ps.setInt(9, x1);
-			ps.setInt(10, x2);
-			ps.setInt(11, z1);
-			ps.setInt(12, z2);
+							+ "(x2 BETWEEN ? AND ? AND z2 BETWEEN ? AND ?)"))
+			{
+				ps.setInt(1, x1);
+				ps.setInt(2, z1);
+				ps.setInt(3, x2);
+				ps.setInt(4, z2);
+				ps.setInt(5, x1);
+				ps.setInt(6, x2);
+				ps.setInt(7, z1);
+				ps.setInt(8, z2);
+				ps.setInt(9, x1);
+				ps.setInt(10, x2);
+				ps.setInt(11, z1);
+				ps.setInt(12, z2);
 
-			ResultSet rs = ps.executeQuery();
+				try (ResultSet rs = ps.executeQuery())
+				{
+					if (rs.next())
+						throw new HeavenException("Une protection existe déjà ici.");
+				}
+			}
 
-			if (rs.next())
-				throw new HeavenException("Une protection existe déjà ici.");
+			try (PreparedStatement ps = LorganServer.getConnection().prepareStatement(
+					"INSERT INTO regions (x1, z1, x2, z2) VALUES (?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS))
+			{
+				ps.setInt(1, x1);
+				ps.setInt(2, z1);
+				ps.setInt(3, x2);
+				ps.setInt(4, z2);
 
-			ps = LorganServer.getConnection().prepareStatement(
-					"INSERT INTO regions (x1, z1, x2, z2) VALUES (?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
-			ps.setInt(1, x1);
-			ps.setInt(2, z1);
-			ps.setInt(3, x2);
-			ps.setInt(4, z2);
+				ps.executeUpdate();
 
-			ps.executeUpdate();
+				try (ResultSet rs = ps.getGeneratedKeys())
+				{
+					rs.next();
 
-			rs = ps.getGeneratedKeys();
-			rs.next();
-
-			Region region = getRegionById(rs.getInt(1));
-			region.addMember(owner, true);
+					Region region = getRegionById(rs.getInt(1));
+					region.addMember(owner, true);
+				}
+			}
 		}
 		catch (SQLException ex)
 		{
@@ -231,18 +232,18 @@ public class Region
 
 	public static Region getRegionById(int id) throws HeavenException
 	{
-		try
+		try (PreparedStatement ps = LorganServer.getConnection().prepareStatement(
+				"SELECT r.x1, r.z1, r.x2, r.z2 FROM regions r WHERE r.id = ? LIMIT 1"))
 		{
-			PreparedStatement ps = LorganServer.getConnection().prepareStatement(
-					"SELECT r.x1, r.z1, r.x2, r.z2 FROM regions r WHERE r.id = ? LIMIT 1");
 			ps.setInt(1, id);
 
-			ResultSet rs = ps.executeQuery();
+			try (ResultSet rs = ps.executeQuery())
+			{
+				if (!rs.next())
+					throw new RegionNotFoundException(id);
 
-			if (!rs.next())
-				throw new RegionNotFoundException(id);
-
-			return new Region(id, rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4));
+				return new Region(id, rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4));
+			}
 		}
 		catch (SQLException ex)
 		{
@@ -253,21 +254,21 @@ public class Region
 
 	public static Region getRegionByLocation(int x, int z)
 	{
-		try
+		try (PreparedStatement ps = LorganServer
+				.getConnection()
+				.prepareStatement(
+						"SELECT r.id, r.x1, r.z1, r.x2, r.z2 FROM regions r WHERE ? BETWEEN r.x1 AND r.x2 AND ? BETWEEN r.z1 AND r.z2 LIMIT 1"))
 		{
-			PreparedStatement ps = LorganServer
-					.getConnection()
-					.prepareStatement(
-							"SELECT r.id, r.x1, r.z1, r.x2, r.z2 FROM regions r WHERE ? BETWEEN r.x1 AND r.x2 AND ? BETWEEN r.z1 AND r.z2 LIMIT 1");
 			ps.setInt(1, x);
 			ps.setInt(2, z);
 
-			ResultSet rs = ps.executeQuery();
+			try (ResultSet rs = ps.executeQuery())
+			{
+				if (!rs.next())
+					return null;
 
-			if (!rs.next())
-				return null;
-
-			return new Region(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5));
+				return new Region(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5));
+			}
 		}
 		catch (SQLException ex)
 		{
