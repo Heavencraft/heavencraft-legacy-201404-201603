@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 
+import org.bukkit.World;
+
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenguard.HeavenGuard;
 
@@ -13,12 +15,12 @@ public class SQLRegion implements Region
 	private final String parentName;
 
 	private final String world;
-	private final int x1;
-	private final int y1;
-	private final int z1;
-	private final int x2;
-	private final int y2;
-	private final int z2;
+	private final int minX;
+	private final int minY;
+	private final int minZ;
+	private final int maxX;
+	private final int maxY;
+	private final int maxZ;
 
 	SQLRegion(ResultSet rs) throws SQLException
 	{
@@ -26,12 +28,12 @@ public class SQLRegion implements Region
 		parentName = rs.getString("parent_name");
 
 		world = rs.getString("world");
-		x1 = rs.getInt("x1");
-		y1 = rs.getInt("y1");
-		z1 = rs.getInt("z1");
-		x2 = rs.getInt("x2");
-		y2 = rs.getInt("y2");
-		z2 = rs.getInt("z2");
+		minX = rs.getInt("min_x");
+		minY = rs.getInt("min_y");
+		minZ = rs.getInt("min_z");
+		maxX = rs.getInt("max_x");
+		maxY = rs.getInt("max_y");
+		maxZ = rs.getInt("max_z");
 	}
 
 	@Override
@@ -85,8 +87,8 @@ public class SQLRegion implements Region
 	public boolean contains(String world, int x, int y, int z)
 	{
 		return this.world.equalsIgnoreCase(world) //
-				&& x1 <= x && x <= x2 //
-				&& y1 <= y && y <= y2 //
-				&& z1 <= z && z <= z2;
+				&& minX <= x && x <= maxX //
+				&& minY <= y && y <= maxY //
+				&& minZ <= z && z <= maxZ;
 	}
 }

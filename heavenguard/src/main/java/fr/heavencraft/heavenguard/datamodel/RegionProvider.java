@@ -6,7 +6,7 @@ import fr.heavencraft.exceptions.HeavenException;
 
 public interface RegionProvider
 {
-	void createRegion(String name, String world, int x1, int y1, int z1, int x2, int y2, int z2);
+	void createRegion(String name, String world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ);
 
 	Region getRegionByName(String name) throws HeavenException;
 
