@@ -30,7 +30,6 @@ public class SQLRegionProvider implements RegionProvider
 	@Override
 	public void createRegion(String name, String world, int x1, int y1, int z1, int x2, int y2, int z2)
 	{
-		// TODO Auto-generated method stub
 
 	}
 
