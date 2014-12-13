@@ -17,7 +17,7 @@ public class SQLRegionProvider implements RegionProvider
 {
 	private static final String CREATE_REGION = "INSERT INTO regions (name, world, x1, y1, z1, x2, y2, z2) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
 	private static final String GET_REGION_BY_NAME = "SELECT * FROM regions WHERE name = ? LIMIT 1";
-	private static final String GET_REGIONS_AT_LOCATION = "SELECT * FROM regions WHERE world = ? AND ? BETWEEN x1 AND x2 AND ? BETWEEN y1 AND y2 AND ? BETWEEN z1 AND z2";
+	private static final String GET_REGIONS_AT_LOCATION = "SELECT * FROM regions WHERE world = ? AND ? BETWEEN min_x AND max_x AND ? BETWEEN y_min AND y_max AND ? BETWEEN z_min AND z_max";
 
 	private final Map<String, Region> regionsByName = new ConcurrentHashMap<String, Region>();
 
@@ -28,7 +28,7 @@ public class SQLRegionProvider implements RegionProvider
 	}
 
 	@Override
-	public void createRegion(String name, String world, int x1, int y1, int z1, int x2, int y2, int z2)
+	public void createRegion(String name, String world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ)
 	{
 
 	}
