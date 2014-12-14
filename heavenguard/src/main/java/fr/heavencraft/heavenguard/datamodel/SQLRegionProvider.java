@@ -11,15 +11,33 @@ import java.util.concurrent.ConcurrentHashMap;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.exceptions.SQLErrorException;
 import fr.heavencraft.heavenguard.HeavenGuard;
+import fr.heavencraft.heavenguard.api.Region;
+import fr.heavencraft.heavenguard.api.RegionProvider;
 import fr.heavencraft.heavenguard.exceptions.RegionNotFoundException;
 
 public class SQLRegionProvider implements RegionProvider
 {
-	private static final String CREATE_REGION = "INSERT INTO regions (name, world, x1, y1, z1, x2, y2, z2) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
-	private static final String GET_REGION_BY_NAME = "SELECT * FROM regions WHERE name = ? LIMIT 1";
-	private static final String GET_REGIONS_AT_LOCATION = "SELECT * FROM regions WHERE world = ? AND ? BETWEEN min_x AND max_x AND ? BETWEEN y_min AND y_max AND ? BETWEEN z_min AND z_max";
+	/*
+	 * SQL Queries
+	 */
 
+	private static final String CREATE_REGION = "INSERT INTO regions (name, world, min_x, min_y, min_z, max_x, max_y, max_z) VALUES (LOWER(?), LOWER(?), ?, ?, ?, ?, ?, ?);";
+	private static final String GET_REGION_BY_ID = "SELECT * FROM regions WHERE id = ? LIMIT 1;";
+	private static final String GET_REGION_BY_NAME = "SELECT * FROM regions WHERE name = LOWER(?) LIMIT 1;";
+	private static final String GET_REGIONS_AT_LOCATION = "SELECT * FROM regions WHERE world = LOWER(?) AND ? BETWEEN min_x AND max_x AND ? BETWEEN y_min AND y_max AND ? BETWEEN z_min AND z_max;";
+
+	/*
+	 * Cache
+	 */
+
+	private final Map<Integer, Region> regionsById = new ConcurrentHashMap<Integer, Region>();
 	private final Map<String, Region> regionsByName = new ConcurrentHashMap<String, Region>();
+
+	private void addToCache(Region region)
+	{
+		regionsById.put(region.getId(), region);
+		regionsByName.put(region.getName(), region);
+	}
 
 	@Override
 	public void clearCache()
@@ -29,15 +47,61 @@ public class SQLRegionProvider implements RegionProvider
 
 	@Override
 	public void createRegion(String name, String world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ)
+			throws HeavenException
 	{
+		try (PreparedStatement ps = HeavenGuard.getConnection().prepareStatement(CREATE_REGION))
+		{
+			ps.setString(1, name);
+			ps.setString(2, world);
+			ps.setInt(3, minX);
+			ps.setInt(4, minY);
+			ps.setInt(5, minZ);
+			ps.setInt(6, minX);
+			ps.setInt(7, minY);
+			ps.setInt(8, minZ);
+			ps.executeUpdate();
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			throw new SQLErrorException();
+		}
+	}
 
+	@Override
+	public Region getRegionById(int id) throws HeavenException
+	{
+		// Search from cache
+		Region region = regionsById.get(id);
+
+		if (region != null)
+			return region;
+
+		// Search from database
+		try (PreparedStatement ps = HeavenGuard.getConnection().prepareStatement(GET_REGION_BY_ID))
+		{
+			ps.setInt(1, id);
+
+			try (ResultSet rs = ps.executeQuery())
+			{
+				if (!rs.next())
+					throw new RegionNotFoundException(id);
+
+				region = new SQLRegion(rs);
+				addToCache(region);
+				return region;
+			}
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			throw new SQLErrorException();
+		}
 	}
 
 	@Override
 	public Region getRegionByName(String name) throws HeavenException
 	{
-		name = name.toLowerCase();
-
 		// Search from cache
 		Region region = regionsByName.get(name);
 
@@ -55,7 +119,7 @@ public class SQLRegionProvider implements RegionProvider
 					throw new RegionNotFoundException(name);
 
 				region = new SQLRegion(rs);
-				regionsByName.put(name, region);
+				addToCache(region);
 				return region;
 			}
 		}
@@ -84,10 +148,8 @@ public class SQLRegionProvider implements RegionProvider
 				while (rs.next())
 				{
 					Region region = new SQLRegion(rs);
+					addToCache(region);
 					regions.add(region);
-
-					// Add region to cache
-					regionsByName.put(region.getName(), region);
 				}
 
 				return regions;

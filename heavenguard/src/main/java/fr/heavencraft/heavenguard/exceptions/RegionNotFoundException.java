@@ -6,6 +6,11 @@ public class RegionNotFoundException extends HeavenException
 {
 	private static final long serialVersionUID = 1L;
 
+	public RegionNotFoundException(int id)
+	{
+		super("La protection {%1$s} n'existe pas.", id);
+	}
+	
 	public RegionNotFoundException(String name)
 	{
 		super("La protection {%1$s} n'existe pas.", name);
