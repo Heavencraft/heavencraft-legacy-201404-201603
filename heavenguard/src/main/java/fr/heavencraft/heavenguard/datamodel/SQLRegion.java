@@ -1,18 +1,24 @@
 package fr.heavencraft.heavenguard.datamodel;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.UUID;
 
 import org.bukkit.World;
 
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenguard.HeavenGuard;
+import fr.heavencraft.heavenguard.api.Region;
 
 public class SQLRegion implements Region
 {
+	private static final String ADD_MEMBER = "REPLACE INTO region_members (region_name, member_uuid, owner) VALUES (?, ?, ?);";
+
+	private final int id;
 	private final String name;
-	private final String parentName;
+	private final int parentId;
 
 	private final String world;
 	private final int minX;
@@ -24,8 +30,9 @@ public class SQLRegion implements Region
 
 	SQLRegion(ResultSet rs) throws SQLException
 	{
+		id = rs.getInt("id");
 		name = rs.getString("name");
-		parentName = rs.getString("parent_name");
+		parentId = rs.getInt("parent_id");
 
 		world = rs.getString("world");
 		minX = rs.getInt("min_x");
@@ -37,9 +44,31 @@ public class SQLRegion implements Region
 	}
 
 	@Override
+	public int getId()
+	{
+		return id;
+	}
+
+	@Override
 	public String getName()
 	{
 		return name;
+	}
+
+	@Override
+	public boolean canBuilt(UUID player)
+	{
+		Collection<UUID> members = getMembers(false);
+
+		if (members.contains(player))
+			return true;
+
+		Region parent = getParent();
+
+		if (parent != null)
+			return parent.canBuilt(player);
+
+		return false;
 	}
 
 	@Override
@@ -47,7 +76,7 @@ public class SQLRegion implements Region
 	{
 		try
 		{
-			return HeavenGuard.getRegionProvider().getRegionByName(parentName);
+			return HeavenGuard.getRegionProvider().getRegionById(parentId);
 		}
 		catch (HeavenException ex)
 		{
@@ -56,28 +85,36 @@ public class SQLRegion implements Region
 	}
 
 	@Override
-	public void addMember(String name, boolean owner)
+	public void addMember(UUID player, boolean owner)
 	{
-		// TODO Auto-generated method stub
-
+		// try (PreparedStatement ps = HeavenGuard.getConnection()
+		// .prepareStatement(ADD_MEMBER))
+		// {
+		// ps.setInt(1, id);
+		// ps.setString(2, x);
+		//
+		// } catch (SQLException ex)
+		// {
+		// ex.printStackTrace();
+		// }
 	}
 
 	@Override
-	public boolean isMember(String name, boolean owner)
+	public boolean isMember(UUID player, boolean owner)
 	{
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void removeMember(String name, boolean owner)
+	public void removeMember(UUID player, boolean owner)
 	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public Collection<String> getMembers(boolean owner)
+	public Collection<UUID> getMembers(boolean owner)
 	{
 		// TODO Auto-generated method stub
 		return null;
@@ -91,4 +128,5 @@ public class SQLRegion implements Region
 				&& minY <= y && y <= maxY //
 				&& minZ <= z && z <= maxZ;
 	}
+
 }
