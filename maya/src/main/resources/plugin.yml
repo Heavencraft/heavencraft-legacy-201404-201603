@@ -1,0 +1,10 @@
+﻿name: MayaPlugin
+version: 2.0
+main: fr.lorgan17.maya.MayaPlugin
+commands:
+  butcher:
+  spawnmob:
+  spawn:
+  rejoindre:
+  roucoups:
+  tppos:
