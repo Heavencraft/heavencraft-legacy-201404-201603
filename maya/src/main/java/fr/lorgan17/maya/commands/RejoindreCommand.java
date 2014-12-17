@@ -21,7 +21,7 @@ public class RejoindreCommand extends MayaCommand
 			Player player2 = Bukkit.getPlayer(args[0]);
 			
 			if (player2 == null)
-				MayaPlugin.sendMessage(player, "Le joueur {" + args[0] + "} n'est pas connecté.");
+				MayaPlugin.sendMessage(player, "Le joueur {" + args[0] + "} n'est pas connect√©.");
 			else
 				player.teleport(player2);
 		}
@@ -39,6 +39,6 @@ public class RejoindreCommand extends MayaCommand
 	@Override
 	public void sendUsage(CommandSender sender)
 	{
-		MayaPlugin.sendMessage(sender, "{/rejoindre} <joueur> : se téléporter à un joueur.");
+		MayaPlugin.sendMessage(sender, "{/rejoindre} <joueur> : se t√©l√©porter √† un joueur.");
 	}
 }

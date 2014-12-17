@@ -36,18 +36,18 @@ public class PlayerListener implements Listener
 		
 		Player player = event.getPlayer();
 		
-		MayaPlugin.sendMessage(player,"{Bienvenue à l'event fin du monde !}");
+		MayaPlugin.sendMessage(player,"{Bienvenue √† l'event fin du monde !}");
 		MayaPlugin.sendMessage(player,"Commandes disponibles :");
-		MayaPlugin.sendMessage(player, "{/rejoindre} <joueur> : se téléporter à un joueur.");
-		MayaPlugin.sendMessage(player, "{/tppos} <x> <y> <z> : se tp à une position (go dynmap)");
-		MayaPlugin.sendMessage(player, "{/roucoups} : ow you, pokémons..");
+		MayaPlugin.sendMessage(player, "{/rejoindre} <joueur> : se t√©l√©porter √† un joueur.");
+		MayaPlugin.sendMessage(player, "{/tppos} <x> <y> <z> : se tp √† une position (go dynmap)");
+		MayaPlugin.sendMessage(player, "{/roucoups} : ow you, pok√©mons..");
 		MayaPlugin.sendMessage(player, "{/spawn} : revenir au spawn.");
 		MayaPlugin.sendMessage(player, "{/spawnmob} <mob> <nombre> : faire spawner des mobs.");
 
 		setInventory(player);
 		player.teleport(MayaPlugin.spawn);
 		
-		MayaPlugin.sendMessage(player, "Vous venez de percevoir {votre paquetage réglementaire}. Bonne fin du monde !");
+		MayaPlugin.sendMessage(player, "Vous venez de percevoir {votre paquetage r√©glementaire}. Bonne fin du monde !");
 	}
 	
 	@EventHandler
