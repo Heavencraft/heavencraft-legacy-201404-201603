@@ -1,11 +1,9 @@
-package fr.lorgan17.maya.commands;
+package fr.lorgan17.maya;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import fr.lorgan17.maya.MayaPlugin;
 
 public abstract class MayaCommand implements CommandExecutor
 {

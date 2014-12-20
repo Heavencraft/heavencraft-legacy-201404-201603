@@ -3,6 +3,7 @@ package fr.lorgan17.maya.commands;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import fr.lorgan17.maya.MayaCommand;
 import fr.lorgan17.maya.MayaPlugin;
 
 public class SpawnCommand extends MayaCommand
