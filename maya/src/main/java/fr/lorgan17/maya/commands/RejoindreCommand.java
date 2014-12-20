@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import fr.lorgan17.maya.MayaCommand;
 import fr.lorgan17.maya.MayaPlugin;
 
 public class RejoindreCommand extends MayaCommand

@@ -7,6 +7,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
+import fr.lorgan17.maya.MayaCommand;
 import fr.lorgan17.maya.MayaPlugin;
 
 public class ButcherCommand extends MayaCommand
