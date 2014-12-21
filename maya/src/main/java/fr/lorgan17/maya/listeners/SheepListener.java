@@ -1,8 +1,5 @@
 package fr.lorgan17.maya.listeners;
 
-import java.util.Random;
-
-import org.bukkit.DyeColor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
@@ -17,13 +14,6 @@ import fr.lorgan17.maya.MayaListener;
  */
 public class SheepListener extends MayaListener
 {
-	private static final Random rnd = new Random();
-
-	private static DyeColor getRandomColor()
-	{
-		return DyeColor.values()[rnd.nextInt(DyeColor.values().length)];
-	}
-
 	@EventHandler
 	private void onEntityDeath(EntityDeathEvent event)
 	{
@@ -33,8 +23,6 @@ public class SheepListener extends MayaListener
 
 			if (sheep.isAdult())
 			{
-				log.info("Adult sheep death");
-
 				// Create an explosion (4 = TNT force)
 				sheep.getWorld().createExplosion(sheep.getLocation(), 4);
 
@@ -42,14 +30,13 @@ public class SheepListener extends MayaListener
 				for (int i = 0; i != 4; i++)
 				{
 					Sheep baby = (Sheep) sheep.getWorld().spawnEntity(sheep.getLocation(), EntityType.SHEEP);
+					baby.setCustomName("jeb_");
+					baby.setCustomNameVisible(false);
 					baby.setBaby();
-					baby.setColor(getRandomColor());
 				}
 			}
 			else
 			{
-				log.info("Baby sheep death");
-
 				// Create a small explosion
 				sheep.getWorld().createExplosion(sheep.getLocation(), 1);
 			}

@@ -11,8 +11,8 @@ import fr.lorgan17.maya.commands.DevenirCommand;
 import fr.lorgan17.maya.commands.RejoindreCommand;
 import fr.lorgan17.maya.commands.RoucoupsCommand;
 import fr.lorgan17.maya.commands.SpawnCommand;
-import fr.lorgan17.maya.commands.SpawnmobCommand;
 import fr.lorgan17.maya.commands.TpposCommnand;
+import fr.lorgan17.maya.listeners.BeautifulDeathListener;
 import fr.lorgan17.maya.listeners.ChatListener;
 import fr.lorgan17.maya.listeners.ExplosionListener;
 import fr.lorgan17.maya.listeners.PlayerListener;
@@ -34,6 +34,7 @@ public class MayaPlugin extends JavaPlugin
 
 		spawn = new Location(Bukkit.getWorld("world"), 145.5, 67, 130.5, 270, 0);
 
+		new BeautifulDeathListener();
 		new ChatListener();
 		new ExplosionListener();
 		new PlayerListener();
@@ -45,7 +46,7 @@ public class MayaPlugin extends JavaPlugin
 		new RejoindreCommand();
 		new RoucoupsCommand();
 		new SpawnCommand();
-		new SpawnmobCommand();
+		// new SpawnmobCommand();
 		new TpposCommnand();
 	}
 
