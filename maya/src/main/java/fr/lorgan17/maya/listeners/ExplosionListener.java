@@ -20,7 +20,7 @@ public class ExplosionListener extends MayaListener
 	{
 		if (event.getEntityType() == EntityType.PRIMED_TNT)
 		{
-			event.setRadius(8);
+			event.setRadius(6);
 		}
 	}
 
@@ -30,7 +30,7 @@ public class ExplosionListener extends MayaListener
 		if (event.getEntityType() == EntityType.ARROW)
 		{
 			Entity entity = event.getEntity();
-			entity.getWorld().createExplosion(entity.getLocation(), 12);
+			entity.getWorld().createExplosion(entity.getLocation(), 8);
 		}
 	}
 }

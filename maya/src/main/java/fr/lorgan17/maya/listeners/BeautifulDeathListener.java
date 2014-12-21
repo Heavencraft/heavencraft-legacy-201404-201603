@@ -2,120 +2,107 @@ package fr.lorgan17.maya.listeners;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
+import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Builder;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.inventory.meta.FireworkMeta;
 
-import fr.lorgan17.maya.MayaPlugin;
+import fr.lorgan17.maya.MayaListener;
 
-public class BeautifulDeathListener implements Listener
+public class BeautifulDeathListener extends MayaListener
 {
-	FireworkEffect.Type ANIMALS_FW = Type.BALL;
-	FireworkEffect.Type MONSTER_FW = Type.BALL_LARGE;
-	FireworkEffect.Type PLAYER_FIREWORK = Type.STAR;
+	private static final Random rnd = new Random();
 
-	Map<EntityType, FireworkEffect> builders = new HashMap<EntityType, FireworkEffect>();
+	private static final FireworkEffect.Type ANIMALS_FW = Type.BALL;
+	private static final FireworkEffect.Type MONSTER_FW = Type.BALL_LARGE;
+	private static final FireworkEffect.Type PLAYER_FW = Type.STAR;
+	private static final FireworkEffect.Type CREEPER_FW = Type.CREEPER;
 
-	public BeautifulDeathListener(MayaPlugin plugin)
+	private final Map<EntityType, Builder> builders = new HashMap<EntityType, Builder>();
+
+	public BeautifulDeathListener()
 	{
-		Bukkit.getPluginManager().registerEvents(this, plugin);
+		super();
 
-		for (EntityType entityType : EntityType.values())
+		// Animals
+		addBuilder(EntityType.CHICKEN, ANIMALS_FW, getRandomColor(), getRandomColor());
+		addBuilder(EntityType.COW, ANIMALS_FW, getRandomColor(), getRandomColor());
+		addBuilder(EntityType.HORSE, ANIMALS_FW, getRandomColor(), getRandomColor());
+		addBuilder(EntityType.MUSHROOM_COW, ANIMALS_FW, getRandomColor(), getRandomColor());
+		addBuilder(EntityType.OCELOT, ANIMALS_FW, getRandomColor(), getRandomColor());
+		addBuilder(EntityType.PIG, ANIMALS_FW, getRandomColor(), getRandomColor());
+		addBuilder(EntityType.RABBIT, ANIMALS_FW, getRandomColor(), getRandomColor());
+		addBuilder(EntityType.SHEEP, ANIMALS_FW, getRandomColor(), getRandomColor());
+		addBuilder(EntityType.WOLF, ANIMALS_FW, getRandomColor(), getRandomColor());
+
+		// Monster
+		addBuilder(EntityType.BLAZE, MONSTER_FW, getRandomColor(), getRandomColor());
+		addBuilder(EntityType.CAVE_SPIDER, MONSTER_FW, getRandomColor(), getRandomColor());
+		addBuilder(EntityType.ENDERMAN, MONSTER_FW, getRandomColor(), getRandomColor());
+		addBuilder(EntityType.ENDERMITE, MONSTER_FW, getRandomColor(), getRandomColor());
+		addBuilder(EntityType.GIANT, MONSTER_FW, getRandomColor(), getRandomColor());
+		addBuilder(EntityType.GUARDIAN, MONSTER_FW, getRandomColor(), getRandomColor());
+		addBuilder(EntityType.PIG_ZOMBIE, MONSTER_FW, getRandomColor(), getRandomColor());
+		addBuilder(EntityType.SILVERFISH, MONSTER_FW, getRandomColor(), getRandomColor());
+		addBuilder(EntityType.SKELETON, MONSTER_FW, getRandomColor(), getRandomColor());
+		addBuilder(EntityType.SPIDER, MONSTER_FW, getRandomColor(), getRandomColor());
+		addBuilder(EntityType.WITCH, MONSTER_FW, getRandomColor(), getRandomColor());
+		addBuilder(EntityType.WITHER, MONSTER_FW, getRandomColor(), getRandomColor());
+		addBuilder(EntityType.ZOMBIE, MONSTER_FW, getRandomColor(), getRandomColor());
+
+		// Player
+		addBuilder(EntityType.PLAYER, PLAYER_FW, getRandomColor(), getRandomColor());
+
+		// Creeper
+		addBuilder(EntityType.CREEPER, CREEPER_FW, getRandomColor(), getRandomColor());
+	}
+
+	private void addBuilder(EntityType entityType, Type type, Color color1, Color color2)
+	{
+		Builder builder = FireworkEffect.builder().withFlicker().withColor(color1).withFade(color2).with(type).withTrail();
+		builders.put(entityType, builder);
+	}
+
+	private static Color getRandomColor()
+	{
+		DyeColor color = DyeColor.values()[rnd.nextInt(DyeColor.values().length)];
+
+		switch (color)
 		{
-			builders.put(entityType, FireworkEffect.builder().with(ANIMALS_FW).withColor(Color.BLUE).build());
+			case BLACK:
+			case GRAY:
+			case WHITE:
+				return getRandomColor();
+
+			default:
+				return color.getColor();
 		}
-		//
-		// // Animals
-		// builders.put(EntityType.CHICKEN,
-		// FireworkEffect.builder().with(ANIMALS_FW).trail(true).withColor(Color.AQUA)).flicker(
-		// true);
-		// builders.put(EntityType.COW,
-		// FireworkEffect.builder().with(ANIMALS_FW).trail(false).withColor(Color.AQUA)).flicker(true);
-		// builders.put(EntityType.MUSHROOM_COW,
-		// FireworkEffect.builder().with(ANIMALS_FW).trail(true).withColor(Color.BLACK))
-		// .flicker(true);
-		// builders.put(EntityType.HORSE,
-		// FireworkEffect.builder().with(ANIMALS_FW).trail(false).withColor(Color.BLACK)).flicker(
-		// true);
-		// builders.put(EntityType.OCELOT,
-		// FireworkEffect.builder().with(ANIMALS_FW).trail(true).withColor(Color.BLUE))
-		// .flicker(true);
-		// builders.put(EntityType.PIG,
-		// FireworkEffect.builder().with(ANIMALS_FW).trail(false).withColor(Color.BLUE)).flicker(true);
-		// builders.put(EntityType.RABBIT,
-		// FireworkEffect.builder().with(ANIMALS_FW).trail(true).withColor(Color.FUCHSIA)).flicker(
-		// true);
-		// builders.put(EntityType.SHEEP,
-		// FireworkEffect.builder().with(ANIMALS_FW).trail(false).withColor(Color.FUCHSIA)).flicker(
-		// true);
-		// builders.put(EntityType.WOLF,
-		// FireworkEffect.builder().with(ANIMALS_FW).trail(true).withColor(Color.GRAY)).flicker(true);
-		//
-		// // Monster
-		// builders.put(EntityType.BLAZE,
-		// FireworkEffect.builder().with(MONSTER_FW).trail(false).withColor(Color.GRAY))
-		// .flicker(true);
-		// builders.put(EntityType.CREEPER,
-		// FireworkEffect.builder().with(MONSTER_FW).trail(true).withColor(Color.GREEN)).flicker(
-		// true);
-		// builders.put(EntityType.ENDERMAN,
-		// FireworkEffect.builder().with(MONSTER_FW).trail(false).withColor(Color.GREEN)).flicker(
-		// true);
-		// builders.put(EntityType.ENDERMITE,
-		// FireworkEffect.builder().with(MONSTER_FW).trail(true).withColor(Color.LIME)).flicker(
-		// true);
-		// builders.put(EntityType.GIANT,
-		// FireworkEffect.builder().with(MONSTER_FW).trail(false).withColor(Color.LIME))
-		// .flicker(true);
-		// builders.put(EntityType.GUARDIAN,
-		// FireworkEffect.builder().with(MONSTER_FW).trail(true).withColor(Color.MAROON)).flicker(
-		// true);
-		// builders.put(EntityType.SILVERFISH,
-		// FireworkEffect.builder().with(MONSTER_FW).trail(false).withColor(Color.MAROON))
-		// .flicker(true);
-		// builders.put(EntityType.SKELETON,
-		// FireworkEffect.builder().with(MONSTER_FW).trail(true).withColor(Color.NAVY)).flicker(
-		// true);
-		// builders.put(EntityType.SPIDER,
-		// FireworkEffect.builder().with(MONSTER_FW).trail(false).withColor(Color.NAVY)).flicker(
-		// true);
-		// builders.put(EntityType.CAVE_SPIDER,
-		// FireworkEffect.builder().with(MONSTER_FW).trail(true).withColor(Color.OLIVE))
-		// .flicker(true);
-		// builders.put(EntityType.WITCH,
-		// FireworkEffect.builder().with(MONSTER_FW).trail(false).withColor(Color.OLIVE)).flicker(
-		// true);
-		// builders.put(EntityType.WITHER,
-		// FireworkEffect.builder().with(MONSTER_FW).trail(true).withColor(Color.ORANGE)).flicker(
-		// true);
-		// builders.put(EntityType.ZOMBIE,
-		// FireworkEffect.builder().with(MONSTER_FW).trail(false).withColor(Color.ORANGE)).flicker(
-		// true);
-		// builders.put(EntityType.PIG_ZOMBIE,
-		// FireworkEffect.builder().with(MONSTER_FW).trail(true).withColor(Color.PURPLE))
-		// .flicker(true);
 	}
 
 	@EventHandler
 	private void onEntityDeath(EntityDeathEvent event)
 	{
-
 		Firework firework = (Firework) event.getEntity().getWorld()
 				.spawnEntity(event.getEntity().getLocation(), EntityType.FIREWORK);
 
-		FireworkEffect effect = builders.get(event.getEntityType());
+		Builder builder = builders.get(event.getEntityType());
 
-		if (effect != null)
+		if (builder != null)
 		{
-			firework.getFireworkMeta().addEffects(effect);
-			firework.getFireworkMeta().setPower(20);
+			FireworkMeta meta = firework.getFireworkMeta();
+
+			meta.addEffects(builder.build());
+			meta.setPower(1);
+
+			firework.setFireworkMeta(meta);
 		}
 	}
 }
