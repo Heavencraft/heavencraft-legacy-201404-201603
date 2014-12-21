@@ -45,7 +45,7 @@ public class RecipeManager
 		
 		// Mushroom Stem
 		ShapelessRecipe mushroomStem = new ShapelessRecipe(new ItemStack(Material.HUGE_MUSHROOM_1, 1, (short) 15))
-			.addIngredient(2,Material.HUGE_MUSHROOM_1);
+			 .addIngredient(2, Material.HUGE_MUSHROOM_1);
 		Bukkit.addRecipe(mushroomStem);
 	}
 }
