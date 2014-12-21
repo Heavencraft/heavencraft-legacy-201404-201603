@@ -1,0 +1,5 @@
+name: HeavenHallow
+version: 1.0
+main: fr.heavencraft.HeavenNoel
+commands:
+    bonbon:
