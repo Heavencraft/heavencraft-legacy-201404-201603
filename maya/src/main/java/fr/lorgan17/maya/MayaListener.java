@@ -7,11 +7,16 @@ import org.bukkit.event.Listener;
 
 public abstract class MayaListener implements Listener
 {
-	protected final Logger log = Logger.getLogger(getClass().getSimpleName());
+	private final Logger log = Bukkit.getLogger();
 
 	protected MayaListener()
 	{
 		Bukkit.getPluginManager().registerEvents(this, MayaPlugin.getInstance());
-		log.info("Initialized");
+		log("Initialized");
+	}
+
+	protected void log(String format, Object... args)
+	{
+		log.info("[" + getClass().getSimpleName() + "] " + String.format(format, args));
 	}
 }
