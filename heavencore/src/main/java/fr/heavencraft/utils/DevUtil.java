@@ -37,6 +37,11 @@ public class DevUtil
 		plugin.getLogger().info(String.format(format, args));
 	}
 
+	public static void logError(String format, Object... args)
+	{
+		plugin.getLogger().severe(String.format(format, args));
+	}
+
 	public static WorldEditPlugin getWorldEdit()
 	{
 		return (WorldEditPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
