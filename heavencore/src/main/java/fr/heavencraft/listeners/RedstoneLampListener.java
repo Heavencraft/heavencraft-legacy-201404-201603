@@ -5,11 +5,15 @@ import static fr.heavencraft.utils.DevUtil.registerListener;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.InventoryHolder;
+
+import fr.heavencraft.utils.DevUtil;
 
 /**
  * This listener allow players to light a redstone lamp with a lighter
@@ -18,6 +22,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
  */
 public class RedstoneLampListener implements Listener
 {
+	private static final BlockFace[] FACES =
+	{ BlockFace.UP, BlockFace.DOWN, BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST };
+
 	public RedstoneLampListener()
 	{
 		registerListener(this);
@@ -37,7 +44,27 @@ public class RedstoneLampListener implements Listener
 		if (!event.hasItem() || event.getItem().getType() != Material.FLINT_AND_STEEL)
 			return;
 
-		block.setType(Material.REDSTONE_LAMP_ON);
+		// For each block next to the redstone lamp
+		for (BlockFace face : FACES)
+		{
+			Block relative = block.getRelative(face);
+
+			// Do not replace block containing inventory
+			if (!(relative.getState() instanceof InventoryHolder))
+			{
+				BlockState state = relative.getState();
+				relative.setType(Material.REDSTONE_BLOCK); // Replace block
+				state.update(true); // Restore previous state
+				break;
+			}
+		}
+
+		if (block.getType() != Material.REDSTONE_LAMP_ON)
+		{
+			DevUtil.logError("RedstoneLampListener is not working properly. Failed to replace block at %1$s %2$s %3$s %4$s",
+					block.getWorld().getName(), block.getX(), block.getY(), block.getZ());
+		}
+
 		event.setCancelled(true);
 	}
 
