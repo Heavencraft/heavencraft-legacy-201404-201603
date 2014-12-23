@@ -98,20 +98,17 @@ public class PlayerUtil
 		{
 			final Horse horse = (Horse) player.getVehicle();
 
-			horse.eject();
-
-			horse.teleport(location);
-			horse.setHealth(horse.getMaxHealth());
 			player.teleport(location);
+			horse.teleport(player);
 
 			ChatUtil.sendMessage(player, "Ton cheval a été téléporté avec toi. S'il n'est pas là, {déco reco}.");
 
 			Bukkit.getScheduler().runTaskLater(DevUtil.getPlugin(), new Runnable()
 			{
-
 				@Override
 				public void run()
 				{
+					horse.setHealth(horse.getMaxHealth());
 					horse.setPassenger(player);
 				}
 			}, 20);
