@@ -9,6 +9,7 @@ public class Racer {
 	private String player;
 	private boolean alreadyPerformed = false;
 	private long starttime;
+	private long bestperf;
 	
 	public Racer(Player p)
 	{
@@ -16,7 +17,7 @@ public class Racer {
 		if(NoelFiles.getPlayers().getConfigurationSection("Players." + p.getName()) != null)
 		{
 			// Le joueur existe
-			int time = NoelFiles.getPlayers().getInt("Players." + p.getPlayer().getName() + ".race");
+			bestperf = NoelFiles.getPlayers().getLong("Players." + p.getPlayer().getName() + ".race");
 			setAlreadyPerformed(true);
 		}
 		else
@@ -28,10 +29,21 @@ public class Racer {
 		return Bukkit.getPlayer(player);
 	}
 
-	public void setPerformanceRecord(int time) {
-		NoelFiles.getPlayers().set("Players." + this.player + ".race", time);
-		NoelFiles.savePlayers();
-		setAlreadyPerformed(true);
+	public boolean savePerformanceRecord(long time) {
+		if(!alreadyPerformed) {
+			NoelFiles.getPlayers().set("Players." + this.player + ".race", time);
+			NoelFiles.savePlayers();
+			setAlreadyPerformed(true);
+			return true;
+		}
+		else if(time<bestperf)
+		{
+			NoelFiles.getPlayers().set("Players." + this.player + ".race", time);
+			NoelFiles.savePlayers();
+			setAlreadyPerformed(true);
+			return true;
+		}
+		return false;
 	}
 
 	public boolean isAlreadyPerformed() {

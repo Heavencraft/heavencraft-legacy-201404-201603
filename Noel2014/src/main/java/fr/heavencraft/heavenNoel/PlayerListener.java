@@ -2,7 +2,6 @@ package fr.heavencraft.heavenNoel;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,7 +15,6 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 
 import fr.heavencraft.HeavenNoel;
 
@@ -56,7 +54,7 @@ public class PlayerListener implements Listener {
 			@Override
 			public void run() {
 
-				Racer IP = RacerManager.getHalowPlayer(e.getPlayer());
+				Racer IP = RacerManager.getRacer(e.getPlayer());
 				RacerManager.removeRacer(IP);
 			}
 		}, 2L);
@@ -67,46 +65,20 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerDamage(EntityDamageEvent e) {
-		if (!(e.getEntity() instanceof Player))
-			return;	
-		Player victim = (Player) e.getEntity();		
-
-		if (victim.getHealth() - e.getDamage() <= 0)
-		{
 			e.setDamage(0);
-			RacerManager.handlePlayerRespawn(victim);
 			e.setCancelled(true);
-		}
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerDamageByEntity(EntityDamageByEntityEvent e) {
-		if (!(e.getEntity() instanceof Player))
-			return;	
-
-		Player victim = (Player) e.getEntity();		
-
-		if (victim.getHealth() - e.getDamage() <= 0)
-		{
-			e.setDamage(0);
-			RacerManager.handlePlayerRespawn(victim);
-			e.setCancelled(true);
-		}
+		e.setCancelled(true);
+		return;
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerDamageByEntity(EntityDamageByBlockEvent e) {
-		if (!(e.getEntity() instanceof Player))
-			return;	
-
-		Player victim = (Player) e.getEntity();		
-
-		if (victim.getHealth() - e.getDamage() <= 0)
-		{
-			e.setDamage(0);
-			RacerManager.handlePlayerRespawn(victim);
-			e.setCancelled(true);
-		}
+		e.setCancelled(true);
+		return;
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)

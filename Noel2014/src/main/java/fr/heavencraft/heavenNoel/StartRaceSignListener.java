@@ -1,5 +1,6 @@
 package fr.heavencraft.heavenNoel;
 
+import org.bukkit.Bukkit;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
@@ -11,7 +12,7 @@ import fr.heavencraft.exceptions.HeavenException;
 public class StartRaceSignListener extends SignListener{
 	public StartRaceSignListener()
 	{
-		super("Depart!", NoelPermissions.NOEL_ADMIN);
+		super("Depart", NoelPermissions.NOEL_ADMIN);
 	}
 
 	@Override
@@ -21,7 +22,6 @@ public class StartRaceSignListener extends SignListener{
 
 	@Override
 	protected void onSignClick(Player player, Sign sign) throws HeavenException {
-		
 		if(RacerManager.getRacer(player) == null)
 		{
 			Racer racer = new Racer(player);
@@ -29,6 +29,6 @@ public class StartRaceSignListener extends SignListener{
 		}
 		else
 			RacerManager.getRacer(player);
-		
+		RacerManager.handleRacerStart(player);
 	}
 }

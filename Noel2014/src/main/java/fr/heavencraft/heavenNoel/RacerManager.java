@@ -1,18 +1,28 @@
 package fr.heavencraft.heavenNoel;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import fr.heavencraft.ChatUtil;
+import fr.heavencraft.exceptions.PlayerNotConnectedException;
+
 public class RacerManager {
 	private static ArrayList<Racer> players = new ArrayList<Racer>();
-	private static Calendar now = Calendar.getInstance();
 	
+	private final static String Run_done_in = "Performance: {%1$s} secondes!";
+	private final static String Message_Start = "Il me faut ces codes ! Suis les poteaux et ne perds pas de temps! Manu";
 	private final static String Message_Done = "Vos actions d'aujourd'hui ont permis de débloquer un des 5 codes nécessaires pour sauver le serveur, il m'a bien été transmis, merci. Manu";
-	private final static Location start_run = new Location(Bukkit.getWorld("sommet"), 0, 64, 0);
+	private final static String New_Personal_Record = "Vous avez fait un nouveau temps record personnel!";
+	
+	private final static Location lobby = new Location(Bukkit.getWorld("sommet"), 69, 71, -2);
+	private final static Location start_run = new Location(Bukkit.getWorld("sommet"), 31, 26, -45);
 	
 	
 	public static void handleRacerStart(final Player p)
@@ -24,20 +34,34 @@ public class RacerManager {
 			hp = getRacer(p.getName());
 			return;
 		}
-		
+		try {
+			ChatUtil.sendMessage(p.getName(), Message_Start);
+		} catch (PlayerNotConnectedException e) {
+		}
+		p.teleport(start_run);
+		Calendar now = Calendar.getInstance();
 		hp.setStarttime(now.getTimeInMillis());
-		//TODO Logique de téléportation
 	}
 
 	public static void handleRacerEnd(Racer r)
 	{
-		//TODO Logique de fin de course
-		int delta = (int)(now.getTimeInMillis()-r.getStarttime());
+		Calendar now = Calendar.getInstance();
+		long delta = (now.getTimeInMillis()-r.getStarttime());
+		//Logique de fin de course
+			
 		if(!r.isAlreadyPerformed())
-			r.setPerformanceRecord(delta);
+			ChatUtil.sendMessage(r.getPlayer(), Message_Done);
+	
+		boolean isNewRecord = r.savePerformanceRecord(delta);
+		if(isNewRecord)
+			ChatUtil.sendMessage(r.getPlayer(), New_Personal_Record);
 		
+		DateFormat formatter = new SimpleDateFormat("ss,SSS");
+
 		
-		
+		ChatUtil.sendMessage(r.getPlayer(), Run_done_in, formatter.format(new Date(delta)));
+		r.getPlayer().teleport(lobby);
+		RacerManager.removeRacer(r);
 	}
 	
 	public static void createRacer(Racer p)
