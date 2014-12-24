@@ -61,7 +61,7 @@ public class ParcheminTonnereDivin implements IParchemin{
 			@Override
 			public void run() {
 
-				ParticleEffect.SPLASH.display((float)10, (float)0, (float)0, (float)0, 10,player.getPlayer().getLocation(), 1000);
+				ParticleEffect.WATER_SPLASH.display((float)10, (float)0, (float)0, (float)0, 10,player.getPlayer().getLocation(), 1000);
 				// On récupère l'entitée visée a 45 blocs, sinon, on foudroie le lanceur.
 				Entity e = getTarget(player.getPlayer(),45);
 				if (e != null)

@@ -46,8 +46,6 @@ public class ParcheminPousseeQuantique implements IParchemin{
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-
-				
 				
 				ParticleEffect.CLOUD.display((float)10, (float)0, (float)0, (float)0, 10,player.getPlayer().getLocation(), 1000);
 				
