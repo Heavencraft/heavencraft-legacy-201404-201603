@@ -1,5 +1,6 @@
 package fr.heavencraft.rpg;
 
+import fr.heavencraft.Utils.ChatUtil;
 import fr.heavencraft.Utils.DevUtils;
 import fr.heavencraft.rpg.Parchemins.ParcheminCommand;
 import fr.heavencraft.rpg.Parchemins.ParcheminProvider;

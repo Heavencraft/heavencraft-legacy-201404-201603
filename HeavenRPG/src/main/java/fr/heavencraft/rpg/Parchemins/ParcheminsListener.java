@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import fr.heavencraft.rpg.ChatUtil;
+import fr.heavencraft.Utils.ChatUtil;
 import fr.heavencraft.rpg.HeavenRPG;
 import fr.heavencraft.rpg.player.RPGPlayerManager;
 

@@ -3,8 +3,8 @@ package fr.heavencraft.rpg.Parchemins;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import fr.heavencraft.Utils.ChatUtil;
 import fr.heavencraft.exceptions.HeavenException;
-import fr.heavencraft.rpg.ChatUtil;
 import fr.heavencraft.rpg.HeavenCommand;
 import fr.heavencraft.rpg.RPGpermissions;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminAuraDeLaBienfaisansce;

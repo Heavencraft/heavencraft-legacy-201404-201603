@@ -12,13 +12,14 @@ import org.bukkit.event.Listener;
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 import com.sk89q.worldedit.bukkit.selections.Selection;
 
+import fr.heavencraft.Utils.ChatUtil;
 import fr.heavencraft.Utils.DevUtils;
-import fr.heavencraft.rpg.ChatUtil;
 import fr.heavencraft.rpg.RPGFiles;
 import fr.heavencraft.rpg.donjon.Dungeon.DungeonRoom;
 
 public class DungeonManager implements Listener{
 	private static List<Dungeon> _dungeons= new ArrayList<Dungeon>();
+	private static boolean _debug = false;
 
 	public static List<Dungeon> get_dungeons() {
 		return _dungeons;
@@ -177,6 +178,18 @@ public class DungeonManager implements Listener{
 				dg.evacDungeon();
 			}
 		}
+	}
+
+
+
+	public static boolean is_debug() {
+		return _debug;
+	}
+
+
+
+	public static void set_debug(boolean _debug) {
+		DungeonManager._debug = _debug;
 	}
 	
 

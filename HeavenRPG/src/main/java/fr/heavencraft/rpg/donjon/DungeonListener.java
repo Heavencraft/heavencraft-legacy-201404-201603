@@ -16,6 +16,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import fr.heavencraft.Utils.DevUtils;
 import fr.heavencraft.rpg.HeavenRPG;
 import fr.heavencraft.rpg.donjon.Dungeon.DungeonRoom;
 
@@ -79,20 +80,27 @@ public class DungeonListener implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerDamage(EntityDamageEvent e) {
+		
+		return;
+		/*
 		if (!(e.getEntity() instanceof Player))
 			return;	
 		
-		Player victim = (Player) e.getEntity();		
+		Player victim = (Player) e.getEntity();
+		
 		Dungeon dg = DungeonManager.getDungeonByUser(victim);
 		if(dg == null)
 			return;
-				
-		if (victim.getHealth() - e.getDamage() <= 0)
+		
+		if(DungeonManager.is_debug())
+			DevUtils.log("~~onPlayerDamage: || Victim Health: {%1$s} || EventCausedDamage: {%2$s} || Is Deadly: {%3$b}", victim.getHealth() + " ",e.getDamage()+ " ", ((victim.getHealth() - e.getDamage()) <= 0) + " " );
+		
+		if ((victim.getHealth() - e.getDamage()) <= 0)
 		{
 			e.setDamage(0);
 			dg.handlePlayerDeath(victim);
 			e.setCancelled(true);
-		}
+		} */
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -123,6 +131,9 @@ public class DungeonListener implements Listener {
 			return;
 		}
 				
+		if(DungeonManager.is_debug())
+			DevUtils.log("~~onPlayerDamageByEntity: || Victim Health: {%1$s} || EventCausedDamage: {%2$s} || Is Deadly: {%3$s}",victim.getHealth() + " ",e.getDamage()+ " ", ((victim.getHealth() - e.getDamage()) <= 0) + " " );
+		
 		if (victim.getHealth() - e.getDamage() <= 0)
 		{
 			e.setDamage(0);

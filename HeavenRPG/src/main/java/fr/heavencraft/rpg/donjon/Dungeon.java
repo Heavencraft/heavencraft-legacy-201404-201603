@@ -17,7 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 
-import fr.heavencraft.rpg.ChatUtil;
+import fr.heavencraft.Utils.ChatUtil;
 import fr.heavencraft.rpg.HeavenRPG;
 import fr.heavencraft.rpg.RPGFiles;
 
