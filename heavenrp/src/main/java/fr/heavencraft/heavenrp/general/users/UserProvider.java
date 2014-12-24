@@ -76,6 +76,38 @@ public class UserProvider
 			throw new SQLErrorException();
 		}
 	}
+	
+	/**
+	 * Returns an User using his uuid.
+	 * Remark: This function does not add the user to the cache.
+	 * @param uuid
+	 * @return
+	 * @throws HeavenException
+	 */
+	public static User getUserByUUID(String uuid) throws HeavenException
+	{
+		User user = null;
+		try
+		{
+			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+					"SELECT * FROM users WHERE uuid = ? LIMIT 1;");
+			ps.setString(1, uuid);
+
+			ResultSet rs = ps.executeQuery();
+
+			if (!rs.next())
+				throw new UserNotFoundException(uuid);
+
+			user = new User(rs);
+			return user;
+		}
+
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			throw new SQLErrorException();
+		}
+	}
 
 	public static void updateName(String uuid, String name) throws HeavenException
 	{
