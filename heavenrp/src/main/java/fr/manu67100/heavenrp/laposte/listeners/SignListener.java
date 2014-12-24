@@ -82,9 +82,7 @@ public class SignListener implements Listener
 		int index = 0;
 		for (final Colis colis : mesColis)
 		{
-
-			MenuItem bouton = new MenuItem("Colis de " + colis.getExpediteur().getName(), new MaterialData(
-					Material.CHEST))
+			MenuItem bouton = new MenuItem("Colis de " + colis.getExpediteur(), new MaterialData(Material.CHEST))
 			{
 				@Override
 				public void onClick(Player player)
@@ -103,7 +101,7 @@ public class SignListener implements Listener
 				}
 			};
 
-			bouton.setDescriptions(Utils.wrapWords("Colis de: " + colis.getExpediteur().getName(), 40));
+			bouton.setDescriptions(Utils.wrapWords("Colis de: " + colis.getExpediteur(), 40));
 			menuMesColis.addMenuItem(bouton, index);
 			index++;
 		}

@@ -43,16 +43,13 @@ public class InventoryListener implements Listener{
 
 			// Creer le colis
 
-
 			User user;
 			try {
 				user = UserProvider.getUserByName(p.getName());
-
-
 				if (user.getBalance() -45 > 0)
 				{
 					user.updateBalance(-45);
-					Colis colis = new Colis(p, JoueursEnEditionDeColis.getDestinataire(p),e.getInventory());
+					Colis colis = new Colis(p.getName(), JoueursEnEditionDeColis.getDestinataire(p).getName(),e.getInventory());
 					colis.envoyer();
 					JoueursEnEditionDeColis.removePlayer(p);
 					return;
