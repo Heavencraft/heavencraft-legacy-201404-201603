@@ -11,7 +11,7 @@ import fr.heavencraft.exceptions.HeavenException;
 public class EndRaceSignListener extends SignListener{
 	public EndRaceSignListener()
 	{
-		super("Arrivée!", NoelPermissions.NOEL_ADMIN);
+		super("Arrivee", NoelPermissions.NOEL_ADMIN);
 	}
 
 	@Override
@@ -24,10 +24,5 @@ public class EndRaceSignListener extends SignListener{
 		Racer r = RacerManager.getRacer(player);
 		if(r != null)
 			RacerManager.handleRacerEnd(r);
-		else
-			RacerManager.getRacer(player);
-		
-		
-		
 	}
 }

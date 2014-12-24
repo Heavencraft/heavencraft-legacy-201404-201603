@@ -43,8 +43,7 @@ public abstract class SignListener implements Listener {
 		private void onSignChange(SignChangeEvent event)
 		{
 			Player player = event.getPlayer();
-
-			if (player == null || !player.hasPermission(_permission) || !event.getLine(0).equalsIgnoreCase(_tag))
+			if (player == null || !player.isOp() || !player.hasPermission(_permission) ||!event.getLine(0).equalsIgnoreCase(_tag))
 				return;
 
 			try

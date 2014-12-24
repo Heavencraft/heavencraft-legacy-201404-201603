@@ -1,6 +1,7 @@
 package fr.heavencraft;
 
 import fr.heavencraft.Utils.DevUtils;
+import fr.heavencraft.heavenNoel.EndRaceSignListener;
 import fr.heavencraft.heavenNoel.PlayerListener;
 import fr.heavencraft.heavenNoel.StartRaceSignListener;
 
@@ -26,6 +27,7 @@ public class InitManager {
 	{
 		new PlayerListener();
 		new StartRaceSignListener();
+		new EndRaceSignListener();
 	}
 	
 	private static void initOther()
