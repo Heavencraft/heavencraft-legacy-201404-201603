@@ -3,30 +3,53 @@ package fr.heavencraft.heavenguard.api;
 import java.util.Collection;
 import java.util.UUID;
 
+import fr.heavencraft.exceptions.HeavenException;
+
 public interface Region
 {
-	int getId();
-	
 	String getName();
 
-	boolean contains(String world, int x, int y, int z);
-	
 	boolean canBuilt(UUID player);
 
-	/**
-	 * @return the parent region, or null if this region don't have parent.
+	/*
+	 * Parent
 	 */
+
 	Region getParent();
+
+	void setParent(String name) throws HeavenException;
+
+	/*
+	 * Coordonnées
+	 */
+
+	boolean contains(String world, int x, int y, int z);
+
+	void redefine(String world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) throws HeavenException;
+
+	String getWorld();
+
+	int getMinX();
+
+	int getMinY();
+
+	int getMinZ();
+
+	int getMaxX();
+
+	int getMaxY();
+
+	int getMaxZ();
 
 	/*
 	 * Members
 	 */
 
-	void addMember(UUID id, boolean owner);
+	void addMember(UUID player, boolean owner) throws HeavenException;
 
-	boolean isMember(UUID id, boolean owner);
+	boolean isMember(UUID player, boolean owner);
 
-	void removeMember(UUID id, boolean owner);
+	void removeMember(UUID player, boolean owner) throws HeavenException;
 
 	Collection<UUID> getMembers(boolean owner);
 }
