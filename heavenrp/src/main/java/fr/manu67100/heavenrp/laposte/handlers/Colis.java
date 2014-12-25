@@ -37,8 +37,8 @@ public class Colis {
 			{
 				this.contenu = null;
 			}
-			UUID expID = UUID.fromString((rs.getString("expediteur")));
-			UUID destID = UUID.fromString((rs.getString("destinataire")));
+			String expID = rs.getString("expediteur");
+			String destID = rs.getString("destinataire");
 			
 			//this.expediteur = Bukkit.getServer().getPlayer(expID);
 			try {
