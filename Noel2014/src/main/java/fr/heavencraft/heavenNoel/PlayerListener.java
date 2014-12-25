@@ -25,11 +25,16 @@ public class PlayerListener implements Listener {
 	}
 
 	// When a player joins the server, create a RPGPlayer for them
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onJoinCreateHallowPlayer(PlayerJoinEvent e) {
 		e.setJoinMessage("");
 		e.getPlayer().setGameMode(GameMode.SURVIVAL);
 		e.getPlayer().setFlying(false);
 		e.getPlayer().teleport(RacerManager.getLobby());
+		e.getPlayer().setGameMode(GameMode.SURVIVAL);
+		e.getPlayer().getInventory().clear();
+		e.getPlayer().setHealth(20);
+		e.getPlayer().setSaturation(20);
 	}
 
 	// When a player leaves the server willingly, delete the RPGPlayer of them
