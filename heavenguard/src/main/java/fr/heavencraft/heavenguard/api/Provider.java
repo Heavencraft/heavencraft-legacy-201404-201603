@@ -1,6 +1,6 @@
 package fr.heavencraft.heavenguard.api;
 
-public interface Provider {
-
+public interface Provider
+{
 	void clearCache();
 }
