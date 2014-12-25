@@ -9,7 +9,7 @@ public class TextCommand extends HeavenCommand
 {
 	public TextCommand()
 	{
-		super("text", "heavencraft.commands.text", new String[] {});
+		super("text", "heavencraft.commands.text", new String[] { "d", "dire" });
 	}
 
 	@Override
