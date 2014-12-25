@@ -14,6 +14,7 @@ import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPortailDuMineur;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPortailDuTempleDesSables;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPortailMontageDeNeige;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPousseeQuantique;
+import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminTchernocraft;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminTonnereDivin;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminTourDeGarde;
 
@@ -52,6 +53,8 @@ public class ParcheminCommand extends HeavenCommand {
 				player.getInventory().addItem(new ParcheminTourDeGarde().getItem());
 			else if(args[0].equalsIgnoreCase("9"))
 				player.getInventory().addItem(new ParcheminPortailMontageDeNeige().getItem());
+			else if(args[0].equalsIgnoreCase("10"))
+				player.getInventory().addItem(new ParcheminTchernocraft().getItem());
 			return;	
 		}
 		
@@ -67,7 +70,7 @@ public class ParcheminCommand extends HeavenCommand {
 
 	@Override
 	protected void sendUsage(CommandSender sender) {
-		ChatUtil.sendMessage(sender, "/{parchemin} <1,2,3,4,5,6,7,8> | Donne un parchemin.");
+		ChatUtil.sendMessage(sender, "/{parchemin} <1-10> | Donne un parchemin.");
 	}
 
 }
