@@ -11,6 +11,7 @@ import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPortailDuMineur;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPortailDuTempleDesSables;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPortailMontageDeNeige;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPousseeQuantique;
+import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminTchernocraft;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminTonnereDivin;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminTourDeGarde;
 
@@ -28,6 +29,7 @@ public class ParcheminProvider {
 		addParchemin(new ParcheminPortailDuTempleDesSables());
 		addParchemin(new ParcheminTourDeGarde());
 		addParchemin(new ParcheminPortailMontageDeNeige());
+		addParchemin(new ParcheminTchernocraft());
 	}
 	
 	
