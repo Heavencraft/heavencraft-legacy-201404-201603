@@ -16,12 +16,16 @@ import fr.heavencraft.exceptions.PlayerNotConnectedException;
 public class RacerManager {
 	private static ArrayList<Racer> players = new ArrayList<Racer>();
 	
-	private final static String Run_done_in = "Performance: {%1$s} secondes!";
+	private final static String Run_done_in = "Performance: {%1$s} ms!";
 	private final static String Message_Start = "Il me faut ces codes ! Suis les poteaux et ne perds pas de temps! Manu";
 	private final static String Message_Done = "Vos actions d'aujourd'hui ont permis de débloquer un des 5 codes nécessaires pour sauver le serveur, il m'a bien été transmis, merci. Manu";
 	private final static String New_Personal_Record = "Vous avez fait un nouveau temps record personnel!";
 	
-	private final static Location lobby = new Location(Bukkit.getWorld("sommet"), 69, 71, -2);
+	private final static Location lobby = new Location(Bukkit.getWorld("sommet"), 67, 72, -2);
+	public static Location getLobby() {
+		return lobby;
+	}
+
 	private final static Location start_run = new Location(Bukkit.getWorld("sommet"), 31, 26, -45);
 	
 	
@@ -56,10 +60,11 @@ public class RacerManager {
 		if(isNewRecord)
 			ChatUtil.sendMessage(r.getPlayer(), New_Personal_Record);
 		
-		DateFormat formatter = new SimpleDateFormat("ss,SSS");
+		//DateFormat formatter = new SimpleDateFormat("ss,SSS");
 
 		
-		ChatUtil.sendMessage(r.getPlayer(), Run_done_in, formatter.format(new Date(delta)));
+		//ChatUtil.sendMessage(r.getPlayer(), Run_done_in, formatter.format(new Date(delta)));
+		ChatUtil.sendMessage(r.getPlayer(), Run_done_in, delta);
 		r.getPlayer().teleport(lobby);
 		RacerManager.removeRacer(r);
 	}

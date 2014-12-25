@@ -29,6 +29,7 @@ public class PlayerListener implements Listener {
 		e.setJoinMessage("");
 		e.getPlayer().setGameMode(GameMode.SURVIVAL);
 		e.getPlayer().setFlying(false);
+		e.getPlayer().teleport(RacerManager.getLobby());
 	}
 
 	// When a player leaves the server willingly, delete the RPGPlayer of them
