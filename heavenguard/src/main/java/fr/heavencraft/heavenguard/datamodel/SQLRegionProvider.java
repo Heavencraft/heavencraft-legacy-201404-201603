@@ -14,6 +14,7 @@ import fr.heavencraft.heavenguard.api.Region;
 import fr.heavencraft.heavenguard.api.RegionProvider;
 import fr.heavencraft.heavenguard.bukkit.HeavenGuard;
 import fr.heavencraft.heavenguard.exceptions.RegionNotFoundException;
+import fr.heavencraft.utils.HeavenLog;
 
 public class SQLRegionProvider implements RegionProvider
 {
@@ -41,6 +42,8 @@ public class SQLRegionProvider implements RegionProvider
 	{
 		regionsByName.clear();
 	}
+
+	private final HeavenLog log = HeavenLog.getLogger(getClass());
 
 	@Override
 	public void createRegion(String name, String world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ)
@@ -72,7 +75,10 @@ public class SQLRegionProvider implements RegionProvider
 		Region region = regionsByName.get(name);
 
 		if (region != null)
+		{
+			log.info("Loaded from cache : %1$s", name);
 			return region;
+		}
 
 		// Search from database
 		try (PreparedStatement ps = HeavenGuard.getConnection().prepareStatement(GET_REGION_BY_NAME))
@@ -86,6 +92,7 @@ public class SQLRegionProvider implements RegionProvider
 
 				region = new SQLRegion(rs);
 				addToCache(region);
+				log.info("Loaded from database : %1$s", name);
 				return region;
 			}
 		}
@@ -113,8 +120,15 @@ public class SQLRegionProvider implements RegionProvider
 
 				while (rs.next())
 				{
-					Region region = new SQLRegion(rs);
-					addToCache(region);
+					// Region exists in cache -> use that one.
+					Region region = regionsByName.get(rs.getString("name"));
+
+					if (region == null)
+					{
+						region = new SQLRegion(rs);
+						addToCache(region);
+					}
+
 					regions.add(region);
 				}
 

@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 import fr.heavencraft.exceptions.HeavenException;
@@ -14,6 +13,7 @@ import fr.heavencraft.utils.ChatUtil;
 
 public class InfoSubCommand implements SubCommand
 {
+
 	@Override
 	public boolean hasPermission(CommandSender sender)
 	{
@@ -48,7 +48,7 @@ public class InfoSubCommand implements SubCommand
 
 			for (Iterator<UUID> it = owners.iterator(); it.hasNext();)
 			{
-				str.append(Bukkit.getOfflinePlayer(it.next()).getName());
+				str.append(HeavenGuard.getInstance().getUniqueIdProvider().getNameFromUniqueId(it.next()));
 
 				if (it.hasNext())
 					str.append(", ");
@@ -64,7 +64,7 @@ public class InfoSubCommand implements SubCommand
 
 			for (Iterator<UUID> it = members.iterator(); it.hasNext();)
 			{
-				str.append(Bukkit.getOfflinePlayer(it.next()).getName());
+				str.append(HeavenGuard.getInstance().getUniqueIdProvider().getNameFromUniqueId(it.next()));
 
 				if (it.hasNext())
 					str.append(", ");
