@@ -47,5 +47,9 @@ public class RecipeManager
 		ShapelessRecipe mushroomStem = new ShapelessRecipe(new ItemStack(Material.HUGE_MUSHROOM_1, 1, (short) 15))
 			 .addIngredient(2, Material.HUGE_MUSHROOM_1);
 		Bukkit.addRecipe(mushroomStem);
+		
+		// Packed Ice
+		ShapelessRecipe packedShapelessRecipe = new ShapelessRecipe(new ItemStack(Material.PACKED_ICE, 1, (short) 3)).addIngredient(4, Material.ICE);
+		Bukkit.addRecipe(packedShapelessRecipe);
 	}
 }
