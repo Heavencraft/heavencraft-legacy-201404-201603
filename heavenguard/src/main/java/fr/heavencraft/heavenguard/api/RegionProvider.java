@@ -2,6 +2,7 @@ package fr.heavencraft.heavenguard.api;
 
 import java.util.Collection;
 
+import fr.heavencraft.api.providers.Provider;
 import fr.heavencraft.exceptions.HeavenException;
 
 public interface RegionProvider extends Provider

@@ -1,4 +1,4 @@
-package fr.heavencraft.heavenguard.api;
+package fr.heavencraft.api.providers;
 
 public interface Provider
 {
