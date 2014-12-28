@@ -1,7 +1,5 @@
 package fr.heavencraft.rpg.zones;
 
-import java.util.logging.Level;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.LivingEntity;
@@ -9,7 +7,6 @@ import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Spider;
 import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.inventory.ItemStack;
 
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 
