@@ -1,8 +1,5 @@
 package fr.manu67100.heavenrp.laposte.listeners;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
@@ -20,19 +17,20 @@ import org.bukkit.material.MaterialData;
 import fr.heavencraft.Utils;
 import fr.heavencraft.heavenrp.HeavenRP;
 import fr.heavencraft.utils.ChatUtil;
+import fr.heavencraft.utils.PlayerUtil;
 import fr.manu67100.heavenrp.laposte.handlers.Colis;
 import fr.manu67100.heavenrp.laposte.handlers.MenuItem;
 import fr.manu67100.heavenrp.laposte.handlers.PopupMenu;
 import fr.manu67100.heavenrp.laposte.handlers.PopupMenuAPI;
 import fr.manu67100.heavenrp.laposte.handlers.PosteUtils;
 
-public class SignListener implements Listener
+public class PostOfficeSignListener implements Listener
 {
 	private final String _permission;
 	private final String _tag;
 	private final static String FORMAT_POSTE = "§4[§6La Poste§4] §6%1$s";
 
-	public SignListener()
+	public PostOfficeSignListener()
 	{
 		_permission = "LaPoste.admin";
 		_tag = "[" + "Poste" + "]";
@@ -73,7 +71,7 @@ public class SignListener implements Listener
 
 		ArrayList<Colis> mesColis = new ArrayList<Colis>();
 
-		for (String id : PosteUtils.getColisRecus(e.getPlayer().getUniqueId().toString()))
+		for (String id : PosteUtils.getColisRecus(PlayerUtil.getUUID(e.getPlayer())))
 		{
 			mesColis.add(new Colis(Integer.parseInt(id)));
 		}
@@ -82,9 +80,7 @@ public class SignListener implements Listener
 		int index = 0;
 		for (final Colis colis : mesColis)
 		{
-
-			MenuItem bouton = new MenuItem("Colis de " + colis.getExpediteur().getName(), new MaterialData(
-					Material.CHEST))
+			MenuItem bouton = new MenuItem("Colis de " + colis.getExpediteur(), new MaterialData(Material.CHEST))
 			{
 				@Override
 				public void onClick(Player player)
@@ -103,7 +99,7 @@ public class SignListener implements Listener
 				}
 			};
 
-			bouton.setDescriptions(Utils.wrapWords("Colis de: " + colis.getExpediteur().getName(), 40));
+			bouton.setDescriptions(Utils.wrapWords("Colis de: " + colis.getExpediteur(), 40));
 			menuMesColis.addMenuItem(bouton, index);
 			index++;
 		}

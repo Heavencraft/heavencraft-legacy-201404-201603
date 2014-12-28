@@ -3,17 +3,19 @@ package fr.heavencraft.rpg.Parchemins;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import fr.heavencraft.Utils.ChatUtil;
 import fr.heavencraft.exceptions.HeavenException;
-import fr.heavencraft.rpg.ChatUtil;
 import fr.heavencraft.rpg.HeavenCommand;
 import fr.heavencraft.rpg.RPGpermissions;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminAuraDeLaBienfaisansce;
+import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminExtractionPoste2;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminLePetitPetDuNord;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminLeSouffleDuNecromantien;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPortailDuMineur;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPortailDuTempleDesSables;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPortailMontageDeNeige;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPousseeQuantique;
+import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminTchernocraft;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminTonnereDivin;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminTourDeGarde;
 
@@ -52,6 +54,10 @@ public class ParcheminCommand extends HeavenCommand {
 				player.getInventory().addItem(new ParcheminTourDeGarde().getItem());
 			else if(args[0].equalsIgnoreCase("9"))
 				player.getInventory().addItem(new ParcheminPortailMontageDeNeige().getItem());
+			else if(args[0].equalsIgnoreCase("10"))
+				player.getInventory().addItem(new ParcheminTchernocraft().getItem());
+			else if(args[0].equalsIgnoreCase("11"))
+				player.getInventory().addItem(new ParcheminExtractionPoste2().getItem());
 			return;	
 		}
 		
@@ -67,7 +73,7 @@ public class ParcheminCommand extends HeavenCommand {
 
 	@Override
 	protected void sendUsage(CommandSender sender) {
-		ChatUtil.sendMessage(sender, "/{parchemin} <1,2,3,4,5,6,7,8> | Donne un parchemin.");
+		ChatUtil.sendMessage(sender, "/{parchemin} <1-11> | Donne un parchemin.");
 	}
 
 }
