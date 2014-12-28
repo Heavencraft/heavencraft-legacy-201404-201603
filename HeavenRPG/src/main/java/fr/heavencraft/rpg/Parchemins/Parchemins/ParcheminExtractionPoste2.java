@@ -14,7 +14,7 @@ import fr.heavencraft.rpg.HeavenRPG;
 import fr.heavencraft.rpg.Parchemins.IParchemin;
 import fr.heavencraft.rpg.player.RPGPlayer;
 
-public class ParcheminPortailMontageDeNeige implements IParchemin{
+public class ParcheminExtractionPoste2 implements IParchemin{
 
 	public int RPGexpieirence() {
 		return 0;
@@ -29,7 +29,7 @@ public class ParcheminPortailMontageDeNeige implements IParchemin{
 	public ItemStack getItem() {
 		ItemStack parchemin = new ItemStack(Material.PAPER);
 		ItemMeta met = parchemin.getItemMeta();
-		met.setDisplayName(ChatColor.GREEN + "Portail: la Montagne de Neige");
+		met.setDisplayName(ChatColor.GREEN + "Portail: Poste d'extraction #2");
 		parchemin.setItemMeta(met);
 		return parchemin;
 	}
@@ -45,7 +45,7 @@ public class ParcheminPortailMontageDeNeige implements IParchemin{
 			public void run() {
 				ParticleEffect.SPELL.display((float)10, (float)0, (float)0, (float)0, 10,player.getPlayer().getLocation(), 1000);
 				
-				player.getPlayer().teleport(new Location(player.getPlayer().getWorld(), -1581, 110, -2307, 37,2));
+				player.getPlayer().teleport(new Location(player.getPlayer().getWorld(), 2495, 69, -973, 1,4));
 				
 				player.getPlayer().removePotionEffect(PotionEffectType.SLOW);
 				player.getPlayer().removePotionEffect(PotionEffectType.SLOW_DIGGING);
@@ -56,7 +56,7 @@ public class ParcheminPortailMontageDeNeige implements IParchemin{
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				ParticleEffect.FIREWORKS_SPARK.display((float)10, (float)0, (float)0, (float)0, 1,player.getPlayer().getLocation(), 1000);
+				ParticleEffect.FIREWORKS_SPARK.display((float)10, (float)0, (float)0, (float)0, 10,player.getPlayer().getLocation(), 1000);
 				player.getPlayer().removePotionEffect(PotionEffectType.CONFUSION);
 			}	
 		}.runTaskLater(HeavenRPG.getInstance(), 40);	
