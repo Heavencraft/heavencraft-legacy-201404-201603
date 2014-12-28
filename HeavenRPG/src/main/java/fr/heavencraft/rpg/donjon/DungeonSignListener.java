@@ -2,7 +2,6 @@ package fr.heavencraft.rpg.donjon;
 
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.SignChangeEvent;
 
 import fr.heavencraft.Utils.ChatUtil;
