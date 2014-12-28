@@ -7,8 +7,8 @@ import org.bukkit.entity.Player;
 
 import com.sk89q.worldedit.bukkit.selections.Selection;
 
+import fr.heavencraft.Utils.ChatUtil;
 import fr.heavencraft.exceptions.HeavenException;
-import fr.heavencraft.rpg.ChatUtil;
 import fr.heavencraft.rpg.HeavenCommand;
 import fr.heavencraft.rpg.HeavenRPG;
 import fr.heavencraft.rpg.RPGpermissions;
@@ -26,7 +26,9 @@ public class DungeonCommand extends HeavenCommand{
 	private final static String DUNGEON_ROOM_UPDATED = "Salle de donjon a été mise a jour!";
 	private final static String DUNGEON_ROOM_TRIGGER_DEFINED = "Le trigger de la salle a été mise a jour!";
 	private final static String NO_SELECTION = "Vous devez d'abord faire une selection avec World Edit.";
-
+	private final static String DEBUG_MODE_ACTIVE = "Le mode débug est activé.";
+	private final static String DEBUG_MODE_INACTIVE = "Le mode débug est désactivé.";
+	
 	public DungeonCommand()
 	{
 		super("donjon");
@@ -54,6 +56,17 @@ public class DungeonCommand extends HeavenCommand{
 			{
 				ChatUtil.sendMessage(player, " - " + dg.get_name());
 			}	
+			return;
+		}
+		else if(args[0].equalsIgnoreCase("debug")) 
+		{
+			if(DungeonManager.is_debug()) {
+				DungeonManager.set_debug(false);
+				ChatUtil.sendMessage(player, DEBUG_MODE_INACTIVE);
+			}else{
+				DungeonManager.set_debug(true);
+				ChatUtil.sendMessage(player, DEBUG_MODE_ACTIVE);
+			}
 			return;
 		}
 		else if(args[0].equalsIgnoreCase("create"))
@@ -192,6 +205,7 @@ public class DungeonCommand extends HeavenCommand{
 		ChatUtil.sendMessage(sender, "/{donjon} create <nom donjon> <joueurs> | Crée un nouveau donjon et définie le nombre de joueurs requis.");
 		ChatUtil.sendMessage(sender, "/{donjon} delete <nom donjon> | Supprime le donjon.");
 		ChatUtil.sendMessage(sender, "/{donjon} list | Affiche une liste des donjons.");
+		ChatUtil.sendMessage(sender, "/{donjon} debug | Active le mode débug.");
 		ChatUtil.sendMessage(sender, "/{donjon} <nom donjon> lobby | Définie le spawn de la lobby.");
 		ChatUtil.sendMessage(sender, "/{donjon} <nom donjon> room <index 0-99> | Définie le spawn de la salle séléctionée au WE.");
 		ChatUtil.sendMessage(sender, "/{donjon} <nom donjon> room <index 0-99> delete | Supprime la salle.");

@@ -14,6 +14,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import fr.heavencraft.Utils.ChatUtil;
 import fr.heavencraft.exceptions.HeavenException;
 
 public abstract class SignListener implements Listener {

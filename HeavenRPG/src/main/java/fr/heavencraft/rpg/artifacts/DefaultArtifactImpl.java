@@ -2,8 +2,8 @@ package fr.heavencraft.rpg.artifacts;
 
 import org.bukkit.entity.Player;
 
+import fr.heavencraft.Utils.ChatUtil;
 import fr.heavencraft.exceptions.HeavenException;
-import fr.heavencraft.rpg.ChatUtil;
 import fr.heavencraft.rpg.artifacts.effects.Effect;
 
 public class DefaultArtifactImpl implements Artifact

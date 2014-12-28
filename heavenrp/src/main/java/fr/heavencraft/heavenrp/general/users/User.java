@@ -19,6 +19,7 @@ import fr.heavencraft.heavenrp.provinces.ProvincesManager.Province;
 public class User
 {
 	private final int _id;
+	private final String _uuid;
 	private final String _name;
 	private int _balance;
 	private int _homeNumber;
@@ -29,6 +30,7 @@ public class User
 	User(ResultSet rs) throws SQLException
 	{
 		_id = rs.getInt("id");
+		_uuid = rs.getString("uuid");
 		_name = rs.getString("name");
 		_balance = rs.getInt("balance");
 		_homeNumber = rs.getInt("homeNumber");
@@ -40,7 +42,12 @@ public class User
 	{
 		return _id;
 	}
-
+	
+	public String getUUID()
+	{
+		return _uuid;
+	}
+	
 	public String getName()
 	{
 		return _name;

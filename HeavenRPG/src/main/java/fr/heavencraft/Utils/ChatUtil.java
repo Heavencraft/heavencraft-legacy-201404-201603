@@ -1,4 +1,4 @@
-package fr.heavencraft.rpg;
+package fr.heavencraft.Utils;
 
 import java.util.List;
 
