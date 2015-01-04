@@ -8,6 +8,7 @@ public interface ConnectionProvider extends Provider
 {
 	public enum Database
 	{
+		WEB("mc-db"), //
 		PROXY("proxy"), //
 		SEMIRP("minecraft-semirp"), //
 		TEST("test");
@@ -25,5 +26,5 @@ public interface ConnectionProvider extends Provider
 		}
 	}
 
-	Connection getConnection(Database database);
+	Connection getConnection();
 }
