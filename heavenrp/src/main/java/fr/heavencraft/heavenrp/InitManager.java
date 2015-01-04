@@ -44,6 +44,7 @@ import fr.heavencraft.heavenrp.horses.HorsesListener;
 import fr.heavencraft.heavenrp.key.DonjonSignListener;
 import fr.heavencraft.heavenrp.provinces.ProvinceListener;
 import fr.heavencraft.heavenrp.provinces.ProvinceSignListener;
+import fr.heavencraft.heavenrp.scoreboards.ProvinceScoreboards;
 import fr.heavencraft.heavenrp.shops.Stock2SignListener;
 import fr.heavencraft.heavenrp.warps.WarpSignListener;
 import fr.heavencraft.heavenrp.worlds.WorldsListener;
@@ -249,5 +250,8 @@ public class InitManager
 
 		// Coffre2
 		new Stock2SignListener();
+		
+		// Teams
+		new ProvinceScoreboards();
 	}
 }

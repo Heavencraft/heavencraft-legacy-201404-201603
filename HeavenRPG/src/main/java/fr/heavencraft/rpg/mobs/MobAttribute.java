@@ -34,11 +34,11 @@ public class MobAttribute {
 		boots = bo;
 	}
 	private boolean enabled;
-	
+
 	private String zoneName;
 
 	private String mobType;
-	
+
 	private String customName;
 
 	private double damage;
@@ -61,7 +61,7 @@ public class MobAttribute {
 		this.damage = damage;
 		RPGFiles.getZones().set("Zones." + zoneName + ".attributes." + mobType + ".damage", damage);
 		RPGFiles.saveZones();
-		
+
 	}
 
 	public double getLife() {
@@ -72,7 +72,7 @@ public class MobAttribute {
 		this.life = life;
 		RPGFiles.getZones().set("Zones." + zoneName + ".attributes." + mobType + ".life", life);
 		RPGFiles.saveZones();
-		
+
 	}
 
 	public  ItemStack getHead() {
@@ -84,7 +84,7 @@ public class MobAttribute {
 			this.head = new ItemStack(Material.AIR, 1);
 		else
 			this.head = head;
-		
+
 		RPGFiles.getZones().set("Zones." + zoneName + ".attributes." + mobType + ".head", this.head);
 		RPGFiles.saveZones();
 	}
@@ -98,7 +98,7 @@ public class MobAttribute {
 			this.chest = new ItemStack(Material.AIR, 1);
 		else
 			this.chest = chest;
-		
+
 		RPGFiles.getZones().set("Zones." + zoneName + ".attributes." + mobType + ".chestplate", this.chest);
 		RPGFiles.saveZones();
 	}
@@ -126,7 +126,7 @@ public class MobAttribute {
 			this.boots = new ItemStack(Material.AIR, 1);
 		else
 			this.boots = boots;
-		
+
 		RPGFiles.getZones().set("Zones." + zoneName + ".attributes." + mobType + ".boots", this.boots);
 		RPGFiles.saveZones();
 	}
@@ -144,7 +144,6 @@ public class MobAttribute {
 	public boolean getEnabled() {
 		return enabled;
 	}
-
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 		RPGFiles.getZones().set("Zones." + zoneName + ".attributes." + mobType + ".enabled", enabled);

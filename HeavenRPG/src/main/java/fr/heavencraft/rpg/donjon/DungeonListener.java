@@ -149,8 +149,5 @@ public class DungeonListener implements Listener {
 		if(dg == null)
 			return;
 		dg.handlePlayerDisconnect(event.getPlayer());
-		
 	}
-
-
 }

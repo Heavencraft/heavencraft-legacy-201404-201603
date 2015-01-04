@@ -58,7 +58,6 @@ public class MobManager {
 		entities.clear();
 	}
 
-
 	public static ArrayList<RPGMob> getRPGMobs()
 	{
 		return entities;
