@@ -8,6 +8,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.heavencraft.heavenrp.provinces.ProvincesManager.Province;
+import fr.heavencraft.heavenrp.scoreboards.ProvinceScoreboards;
 import fr.heavencraft.utils.ChatUtil;
 import fr.heavencraft.utils.DevUtil;
 
@@ -25,6 +26,9 @@ public class ProvinceListener implements Listener
 
 		Province province = UserProvider.getUserByName(player.getName()).getProvince();
 
+		// Apply province colors
+		ProvinceScoreboards.applyTeamColor(player);
+		
 		if (province == null)
 			ChatUtil.sendMessage(player, "Vous n'avez pas encore choisi de province.");
 	}
