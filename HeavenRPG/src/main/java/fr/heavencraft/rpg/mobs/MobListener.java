@@ -113,8 +113,4 @@ public class MobListener implements Listener {
 			MobManager.hideBar(MobManager.getRPGMob(event.getEntity()));
 		}
 	}
-
-	
-
-	
 }

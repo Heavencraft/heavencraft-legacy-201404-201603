@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import org.bukkit.inventory.ItemStack;
 
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminAuraDeLaBienfaisansce;
+import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminAntreDesPoissions;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminExtractionPoste2;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminLePetitPetDuNord;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminLeSouffleDuNecromantien;
+import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminMineDeCharbon;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPortailDuMineur;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPortailDuTempleDesSables;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPortailMontageDeNeige;
@@ -32,6 +34,8 @@ public class ParcheminProvider {
 		addParchemin(new ParcheminPortailMontageDeNeige());
 		addParchemin(new ParcheminTchernocraft());
 		addParchemin(new ParcheminExtractionPoste2());
+		addParchemin(new ParcheminAntreDesPoissions());
+		addParchemin(new ParcheminMineDeCharbon());
 	}
 	
 	
@@ -66,5 +70,4 @@ public class ParcheminProvider {
 		}
 		return null;
 	}
-	
 }

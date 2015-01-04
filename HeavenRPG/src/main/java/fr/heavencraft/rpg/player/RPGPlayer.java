@@ -40,5 +40,4 @@ public class RPGPlayer {
 		return this.reputation;
 	}
 	
-	
 }
