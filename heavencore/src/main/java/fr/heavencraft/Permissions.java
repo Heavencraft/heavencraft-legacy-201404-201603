@@ -27,4 +27,6 @@ public class Permissions
 
 	// Color on signs
 	public static final String COLORED_SIGNS = "heavencraft.coloredsigns";
+
+	public static final String FORBIDDEN_BLOCKS = "heavencraft.forbiddenblocks.bypass";
 }
