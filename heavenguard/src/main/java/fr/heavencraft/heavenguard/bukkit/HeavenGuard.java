@@ -1,9 +1,9 @@
 package fr.heavencraft.heavenguard.bukkit;
 
-import java.sql.Connection;
-
 import fr.heavencraft.HeavenPlugin;
+import fr.heavencraft.api.providers.connection.ConnectionProvider;
 import fr.heavencraft.api.providers.connection.ConnectionProvider.Database;
+import fr.heavencraft.api.providers.connection.DefaultConnectionProvider;
 import fr.heavencraft.heavenguard.api.RegionManager;
 import fr.heavencraft.heavenguard.api.RegionProvider;
 import fr.heavencraft.heavenguard.bukkit.commands.RegionCommand;
@@ -33,10 +33,12 @@ public class HeavenGuard extends HeavenPlugin
 		return instance;
 	}
 
-	private static RegionProvider regionProvider = new SQLRegionProvider();
-	private static RegionManager regionManager = new RegionManager(regionProvider);
+	private static RegionProvider regionProvider;
+	private static RegionManager regionManager;
 
 	private static String database;
+
+	private ConnectionProvider connectionProvider;
 
 	@Override
 	public void onEnable()
@@ -49,11 +51,11 @@ public class HeavenGuard extends HeavenPlugin
 		new BlockListener();
 
 		new RegionCommand();
-	}
 
-	public static Connection getConnection()
-	{
-		return instance.getConnectionProvider().getConnection(Database.TEST);
+		connectionProvider = new DefaultConnectionProvider(Database.TEST);
+
+		regionProvider = new SQLRegionProvider(connectionProvider);
+		regionManager = new RegionManager(regionProvider);
 	}
 
 	public static RegionProvider getRegionProvider()
