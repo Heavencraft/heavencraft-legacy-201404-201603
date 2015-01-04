@@ -7,8 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import fr.heavencraft.HeavenPlugin;
-import fr.heavencraft.api.providers.connection.ConnectionProvider.Database;
+import fr.heavencraft.api.providers.connection.ConnectionProvider;
 import fr.heavencraft.exceptions.UserNotFoundException;
 import fr.heavencraft.utils.HeavenLog;
 
@@ -18,12 +17,12 @@ public class DefaultUniqueIdProvider implements UniqueIdProvider
 
 	protected final HeavenLog log = HeavenLog.getLogger(getClass());
 
-	private final HeavenPlugin plugin;
+	private final ConnectionProvider connectionProvider;
 	private final Map<UUID, String> nameByUniqueId = new ConcurrentHashMap<UUID, String>();
 
-	public DefaultUniqueIdProvider(HeavenPlugin plugin)
+	public DefaultUniqueIdProvider(ConnectionProvider connectionProvider)
 	{
-		this.plugin = plugin;
+		this.connectionProvider = connectionProvider;
 	}
 
 	@Override
@@ -37,7 +36,7 @@ public class DefaultUniqueIdProvider implements UniqueIdProvider
 			return name;
 		}
 
-		try (PreparedStatement ps = plugin.getConnectionProvider().getConnection(Database.PROXY).prepareStatement(GET_NAME))
+		try (PreparedStatement ps = connectionProvider.getConnection().prepareStatement(GET_NAME))
 		{
 			ps.setString(1, id.toString().replace("-", ""));
 
@@ -64,5 +63,4 @@ public class DefaultUniqueIdProvider implements UniqueIdProvider
 	{
 		nameByUniqueId.clear();
 	}
-
 }

@@ -4,14 +4,14 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 
-import fr.heavencraft.HeavenPlugin;
+import fr.heavencraft.api.providers.connection.ConnectionProvider;
 import fr.heavencraft.exceptions.UserNotFoundException;
 
 public class BukkitUniqueIdProvider extends DefaultUniqueIdProvider
 {
-	public BukkitUniqueIdProvider(HeavenPlugin plugin)
+	public BukkitUniqueIdProvider(ConnectionProvider connectionProvider)
 	{
-		super(plugin);
+		super(connectionProvider);
 	}
 
 	@Override

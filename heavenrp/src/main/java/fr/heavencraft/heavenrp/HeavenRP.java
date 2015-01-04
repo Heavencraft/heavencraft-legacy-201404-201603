@@ -1,16 +1,16 @@
 package fr.heavencraft.heavenrp;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import fr.heavencraft.HeavenPlugin;
+import fr.heavencraft.api.providers.connection.ConnectionProvider;
+import fr.heavencraft.api.providers.connection.ConnectionProvider.Database;
+import fr.heavencraft.api.providers.connection.DefaultConnectionProvider;
 import fr.heavencraft.heavenrp.stores.StoresListener;
 import fr.heavencraft.heavenrp.stores.StoresManager;
 import fr.lorgan17.heavenrp.managers.AuctionManager;
@@ -18,19 +18,11 @@ import fr.manu67100.heavenrp.laposte.Files;
 
 public class HeavenRP extends HeavenPlugin
 {
-	// For test server
-	 //private final static String RP_DB_URL =
-	 //"jdbc:mysql://localhost:3306/minecraft-semirp-test?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull&?autoReconnect=true";
-
-	private final static String RP_DB_URL = "jdbc:mysql://localhost:3306/minecraft-semirp?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull&?autoReconnect=true";
-	private final static String MAIN_DB_URL = "jdbc:mysql://localhost:3306/mc-db?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull&?autoReconnect=true";
-	// private final static String RP_DB_URL = "jdbc:mysql://localhost:3306/minecraft-rp?user=root&password=root";
-	// private final static String MAIN_DB_URL = "jdbc:mysql://localhost:3306/mc-db?user=root&password=root";
 	private static WorldGuardPlugin _WGP;
 	private static HeavenRP _instance;
 
-	private static Connection _connection;
-	private static Connection _mainConnection;
+	private static ConnectionProvider srpConnection;
+	private static ConnectionProvider mainConnection;
 
 	private static StoresManager _storesManager;
 	private static AuctionManager _auctionManager;
@@ -43,6 +35,8 @@ public class HeavenRP extends HeavenPlugin
 		super.onEnable();
 
 		_instance = this;
+		srpConnection = new DefaultConnectionProvider(Database.SEMIRP);
+		mainConnection = new DefaultConnectionProvider(Database.WEB);
 
 		InitManager.init();
 
@@ -59,40 +53,16 @@ public class HeavenRP extends HeavenPlugin
 
 	}
 
+	@Deprecated
 	public static Connection getConnection()
 	{
-		try
-		{
-			if (_connection == null || _connection.isClosed())
-			{
-				_connection = DriverManager.getConnection(RP_DB_URL);
-			}
-		}
-		catch (SQLException ex)
-		{
-			ex.printStackTrace();
-			Bukkit.shutdown();
-		}
-
-		return _connection;
+		return srpConnection.getConnection();
 	}
 
+	@Deprecated
 	public static Connection getMainConnection()
 	{
-		try
-		{
-			if (_mainConnection == null || _mainConnection.isClosed())
-			{
-				_mainConnection = DriverManager.getConnection(MAIN_DB_URL);
-			}
-		}
-		catch (SQLException ex)
-		{
-			ex.printStackTrace();
-			Bukkit.shutdown();
-		}
-
-		return _mainConnection;
+		return mainConnection.getConnection();
 	}
 
 	public static HeavenRP getInstance()
