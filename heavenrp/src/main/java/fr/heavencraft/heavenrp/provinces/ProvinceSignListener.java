@@ -10,6 +10,7 @@ import fr.heavencraft.heavenrp.RPPermissions;
 import fr.heavencraft.heavenrp.general.users.User;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.heavencraft.heavenrp.provinces.ProvincesManager.Province;
+import fr.heavencraft.heavenrp.scoreboards.ProvinceScoreboards;
 import fr.heavencraft.listeners.sign.SignListener;
 import fr.heavencraft.utils.ChatUtil;
 
@@ -65,6 +66,9 @@ public class ProvinceSignListener extends SignListener
 		Province province = ProvincesManager.getProvinceByName(provinceName);
 		user.setProvince(province.getId());
 
+		// Apply province colors
+		ProvinceScoreboards.applyTeamColor(player);
+		
 		ChatUtil.sendMessage(player, "Vous venez de rejoindre la province de {%1$s}.", province.getName());
 	}
 
@@ -78,6 +82,9 @@ public class ProvinceSignListener extends SignListener
 		user.updateBalance(-50);
 		user.removeProvince();
 
+		// Apply province colors
+		ProvinceScoreboards.applyTeamColor(player);
+		
 		ChatUtil.sendMessage(player, "Vous ne faîtes plus partie d'aucune province.");
 		ChatUtil.sendMessage(player, "Les frais de dossier vous ont coûté {50} pièces d'or.");
 	}
