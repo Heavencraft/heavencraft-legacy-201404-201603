@@ -8,9 +8,11 @@ import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.rpg.HeavenCommand;
 import fr.heavencraft.rpg.RPGpermissions;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminAuraDeLaBienfaisansce;
+import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminAntreDesPoissions;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminExtractionPoste2;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminLePetitPetDuNord;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminLeSouffleDuNecromantien;
+import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminMineDeCharbon;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPortailDuMineur;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPortailDuTempleDesSables;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminPortailMontageDeNeige;
@@ -58,6 +60,10 @@ public class ParcheminCommand extends HeavenCommand {
 				player.getInventory().addItem(new ParcheminTchernocraft().getItem());
 			else if(args[0].equalsIgnoreCase("11"))
 				player.getInventory().addItem(new ParcheminExtractionPoste2().getItem());
+			else if(args[0].equalsIgnoreCase("12"))
+				player.getInventory().addItem(new ParcheminAntreDesPoissions().getItem());
+			else if(args[0].equalsIgnoreCase("13"))
+				player.getInventory().addItem(new ParcheminMineDeCharbon().getItem());
 			return;	
 		}
 		
@@ -73,7 +79,7 @@ public class ParcheminCommand extends HeavenCommand {
 
 	@Override
 	protected void sendUsage(CommandSender sender) {
-		ChatUtil.sendMessage(sender, "/{parchemin} <1-11> | Donne un parchemin.");
+		ChatUtil.sendMessage(sender, "/{parchemin} <1-13> | Donne un parchemin.");
 	}
 
 }

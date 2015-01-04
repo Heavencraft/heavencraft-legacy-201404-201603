@@ -180,8 +180,6 @@ public class DungeonManager implements Listener{
 		}
 	}
 
-
-
 	public static boolean is_debug() {
 		return _debug;
 	}
