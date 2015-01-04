@@ -12,7 +12,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenguard.api.Region;
 import fr.heavencraft.heavenguard.bukkit.HeavenGuard;
 import fr.heavencraft.utils.ChatUtil;
@@ -39,34 +38,27 @@ public class PlayerListener implements Listener
 
 	public void displayRegionAt(Player player, Location location)
 	{
-		try
+		Collection<Region> regions = HeavenGuard.getRegionProvider().getRegionsAtLocation(location.getWorld().getName(),
+				location.getBlockX(), location.getBlockY(), location.getBlockZ());
+
+		// player.sendMessage(ChatColor.YELLOW + "Pouvez-vous construire ? "
+		// + (set.canBuild(localPlayer) ? "Oui" : "Non"));
+
+		if (regions.isEmpty())
 		{
-			Collection<Region> regions = HeavenGuard.getRegionProvider().getRegionsAtLocation(location.getWorld().getName(),
-					location.getBlockX(), location.getBlockY(), location.getBlockZ());
-
-			// player.sendMessage(ChatColor.YELLOW + "Pouvez-vous construire ? "
-			// + (set.canBuild(localPlayer) ? "Oui" : "Non"));
-
-			if (regions.isEmpty())
-			{
-				ChatUtil.sendMessage(player, "Il n'y a aucune protection ici.");
-				return;
-			}
-
-			StringBuilder str = new StringBuilder();
-			for (Iterator<Region> it = regions.iterator(); it.hasNext();)
-			{
-				str.append(it.next().getName());
-
-				if (it.hasNext())
-					str.append(", ");
-			}
-
-			ChatUtil.sendMessage(player, "Liste des protections actives ici : " + str.toString());
+			ChatUtil.sendMessage(player, "Il n'y a aucune protection ici.");
+			return;
 		}
-		catch (HeavenException e)
+
+		StringBuilder str = new StringBuilder();
+		for (Iterator<Region> it = regions.iterator(); it.hasNext();)
 		{
-			e.printStackTrace();
+			str.append(it.next().getName());
+
+			if (it.hasNext())
+				str.append(", ");
 		}
+
+		ChatUtil.sendMessage(player, "Liste des protections actives ici : " + str.toString());
 	}
 }

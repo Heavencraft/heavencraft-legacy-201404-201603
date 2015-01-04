@@ -7,13 +7,13 @@ import java.util.UUID;
 import org.bukkit.command.CommandSender;
 
 import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.exceptions.UserNotFoundException;
 import fr.heavencraft.heavenguard.api.Region;
 import fr.heavencraft.heavenguard.bukkit.HeavenGuard;
 import fr.heavencraft.utils.ChatUtil;
 
 public class InfoSubCommand implements SubCommand
 {
-
 	@Override
 	public boolean hasPermission(CommandSender sender)
 	{
@@ -29,7 +29,18 @@ public class InfoSubCommand implements SubCommand
 			return;
 		}
 
-		Region region = HeavenGuard.getRegionProvider().getRegionByName(args[1]);
+		info(sender, args[1].toLowerCase());
+	}
+
+	@Override
+	public void sendUsage(CommandSender sender)
+	{
+		ChatUtil.sendMessage(sender, "/{region} info <protection>");
+	}
+
+	private void info(CommandSender sender, String name) throws HeavenException, UserNotFoundException
+	{
+		Region region = HeavenGuard.getRegionProvider().getRegionByName(name);
 
 		ChatUtil.sendMessage(sender, "Protection : %1$s", region.getName());
 		ChatUtil.sendMessage(sender, "Coordonnées : [{%1$s %2$s %3$s}] -> [{%4$s %5$s %6$s}] ({%7$s})", //
@@ -72,11 +83,5 @@ public class InfoSubCommand implements SubCommand
 
 			ChatUtil.sendMessage(sender, "Membres : %1$s", str.toString());
 		}
-	}
-
-	@Override
-	public void sendUsage(CommandSender sender)
-	{
-		ChatUtil.sendMessage(sender, "/{region} info <protection>");
 	}
 }

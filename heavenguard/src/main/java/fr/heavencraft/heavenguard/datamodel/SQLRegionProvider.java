@@ -3,85 +3,78 @@ package fr.heavencraft.heavenguard.datamodel;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.Bukkit;
+
+import fr.heavencraft.api.providers.connection.ConnectionProvider;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.exceptions.SQLErrorException;
 import fr.heavencraft.heavenguard.api.Region;
 import fr.heavencraft.heavenguard.api.RegionProvider;
-import fr.heavencraft.heavenguard.bukkit.HeavenGuard;
 import fr.heavencraft.heavenguard.exceptions.RegionNotFoundException;
 import fr.heavencraft.utils.HeavenLog;
 
 public class SQLRegionProvider implements RegionProvider
 {
-	/*
-	 * SQL Queries
-	 */
+	// SQL Queries
+	private static final String PRELOAD = "SELECT * FROM regions;";
+	private static final String LOAD_REGION = "SELECT * FROM regions WHERE name = LOWER(?) LIMIT 1;";
 
 	private static final String CREATE_REGION = "INSERT INTO regions (name, world, min_x, min_y, min_z, max_x, max_y, max_z) VALUES (LOWER(?), LOWER(?), ?, ?, ?, ?, ?, ?);";
-	private static final String GET_REGION_BY_NAME = "SELECT * FROM regions WHERE name = LOWER(?) LIMIT 1;";
-	private static final String GET_REGIONS_AT_LOCATION = "SELECT * FROM regions WHERE world = LOWER(?) AND ? BETWEEN min_x AND max_x AND ? BETWEEN min_y AND max_y AND ? BETWEEN min_z AND max_z;";
+	private static final String DELETE_REGION = "DELETE FROM regions WHERE name = LOWER(?) LIMIT 1;";
+
+	// Logger
+	private final HeavenLog log = HeavenLog.getLogger(getClass());
+
+	// Cache
+	private final Map<String, Region> regionsByName = new HashMap<String, Region>();
+	private final Map<String, Collection<Region>> regionsByWorld = new HashMap<String, Collection<Region>>();
+
+	// Connection to the database
+	private final ConnectionProvider connectionProvider;
+
+	public SQLRegionProvider(ConnectionProvider connectionProvider)
+	{
+		this.connectionProvider = connectionProvider;
+
+		loadFromDatabase();
+	}
 
 	/*
 	 * Cache
 	 */
 
-	private final Map<String, Region> regionsByName = new ConcurrentHashMap<String, Region>();
-
-	private void addToCache(Region region)
+	private void loadFromDatabase()
 	{
-		regionsByName.put(region.getName(), region);
-	}
-
-	@Override
-	public void clearCache()
-	{
-		regionsByName.clear();
-	}
-
-	private final HeavenLog log = HeavenLog.getLogger(getClass());
-
-	@Override
-	public void createRegion(String name, String world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ)
-			throws HeavenException
-	{
-		try (PreparedStatement ps = HeavenGuard.getConnection().prepareStatement(CREATE_REGION))
+		try (PreparedStatement ps = connectionProvider.getConnection().prepareStatement(PRELOAD))
 		{
-			ps.setString(1, name);
-			ps.setString(2, world);
-			ps.setInt(3, minX);
-			ps.setInt(4, minY);
-			ps.setInt(5, minZ);
-			ps.setInt(6, maxX);
-			ps.setInt(7, maxY);
-			ps.setInt(8, maxZ);
-			ps.executeUpdate();
+			try (ResultSet rs = ps.executeQuery())
+			{
+				int count = 0;
+
+				while (rs.next())
+				{
+					++count;
+					addToCache(new SQLRegion(connectionProvider, rs));
+				}
+
+				log.info("%1$s regions loaded from database.", count);
+			}
 		}
 		catch (SQLException ex)
 		{
 			ex.printStackTrace();
-			throw new SQLErrorException();
+			Bukkit.shutdown(); // Close server if we can't load regions
 		}
 	}
 
-	@Override
-	public Region getRegionByName(String name) throws HeavenException
+	private Region loadRegion(String name) throws RegionNotFoundException, SQLErrorException
 	{
-		// Search from cache
-		Region region = regionsByName.get(name);
-
-		if (region != null)
-		{
-			log.info("Loaded from cache : %1$s", name);
-			return region;
-		}
-
-		// Search from database
-		try (PreparedStatement ps = HeavenGuard.getConnection().prepareStatement(GET_REGION_BY_NAME))
+		try (PreparedStatement ps = connectionProvider.getConnection().prepareStatement(LOAD_REGION))
 		{
 			ps.setString(1, name);
 
@@ -90,9 +83,8 @@ public class SQLRegionProvider implements RegionProvider
 				if (!rs.next())
 					throw new RegionNotFoundException(name);
 
-				region = new SQLRegion(rs);
+				Region region = new SQLRegion(connectionProvider, rs);
 				addToCache(region);
-				log.info("Loaded from database : %1$s", name);
 				return region;
 			}
 		}
@@ -103,42 +95,126 @@ public class SQLRegionProvider implements RegionProvider
 		}
 	}
 
-	@Override
-	public Collection<Region> getRegionsAtLocation(String world, int x, int y, int z) throws HeavenException
+	/*
+	 * Cache management
+	 */
+
+	private void addToCache(Region region)
 	{
-		// Search from database
-		try (PreparedStatement ps = HeavenGuard.getConnection().prepareStatement(GET_REGIONS_AT_LOCATION))
+		// Add to "Name -> Region" cache
+		regionsByName.put(region.getName(), region);
+
+		// Add to "World -> Regions" cache
+		Collection<Region> regions = regionsByWorld.get(region.getWorld());
+
+		if (regions == null)
 		{
-			ps.setString(1, world);
-			ps.setInt(2, x);
-			ps.setInt(3, y);
-			ps.setInt(4, z);
+			regions = new ArrayList<Region>();
+			regionsByWorld.put(region.getWorld(), regions);
+		}
 
-			try (ResultSet rs = ps.executeQuery())
+		regions.add(region);
+	}
+
+	private void removeFromCache(Region region)
+	{
+		// Remove from "Name -> Region" cache
+		regionsByName.remove(region.getName());
+
+		// Remove from "World -> Regions" cache
+		regionsByWorld.get(region.getWorld()).remove(region);
+	}
+
+	@Override
+	public void clearCache()
+	{
+		// Clear caches
+		regionsByName.clear();
+		regionsByWorld.clear();
+
+		// Reload regions from database
+		loadFromDatabase();
+	}
+
+	@Override
+	public Region createRegion(String name, String world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ)
+			throws HeavenException
+	{
+		try (PreparedStatement ps = connectionProvider.getConnection().prepareStatement(CREATE_REGION))
+		{
+			ps.setString(1, name);
+			ps.setString(2, world);
+			ps.setInt(3, minX);
+			ps.setInt(4, minY);
+			ps.setInt(5, minZ);
+			ps.setInt(6, maxX);
+			ps.setInt(7, maxY);
+			ps.setInt(8, maxZ);
+
+			if (ps.executeUpdate() != 1)
 			{
-				Collection<Region> regions = new HashSet<Region>();
-
-				while (rs.next())
-				{
-					// Region exists in cache -> use that one.
-					Region region = regionsByName.get(rs.getString("name"));
-
-					if (region == null)
-					{
-						region = new SQLRegion(rs);
-						addToCache(region);
-					}
-
-					regions.add(region);
-				}
-
-				return regions;
+				throw new HeavenException("La region existe déjà");
 			}
+
+			return loadRegion(name);
 		}
 		catch (SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new SQLErrorException();
 		}
+	}
+
+	@Override
+	public void deleteRegion(String name) throws HeavenException
+	{
+		try (PreparedStatement ps = connectionProvider.getConnection().prepareStatement(DELETE_REGION))
+		{
+			ps.setString(1, name);
+
+			if (ps.executeUpdate() != 1)
+				throw new HeavenException("La protection {%1$s} n'a pas pu être supprimée.");
+
+			removeFromCache(getRegionByName(name));
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			new SQLErrorException();
+		}
+	}
+
+	/*
+	 * Retrieving region(s)
+	 */
+
+	@Override
+	public Region getRegionByName(String name) throws HeavenException
+	{
+		Region region = regionsByName.get(name);
+
+		if (region == null)
+			throw new RegionNotFoundException(name);
+
+		return region;
+	}
+
+	@Override
+	public Collection<Region> getRegionsAtLocation(String world, int x, int y, int z)
+	{
+		Collection<Region> regionsAtLocation = new ArrayList<Region>();
+		Collection<Region> regionsInWorld = regionsByWorld.get(world);
+
+		if (regionsInWorld != null)
+		{
+			for (Region region : regionsInWorld)
+			{
+				// Optimization : don't check world twice
+				if (region.containsSameWorld(x, y, z))
+					regionsAtLocation.add(region);
+			}
+		}
+
+		return regionsAtLocation;
 	}
 }
