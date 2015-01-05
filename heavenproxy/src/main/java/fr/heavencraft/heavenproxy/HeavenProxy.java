@@ -16,6 +16,7 @@ import com.mojang.api.profiles.ProfileRepository;
 
 import fr.heavencraft.heavenproxy.ban.BanCommand;
 import fr.heavencraft.heavenproxy.ban.BanListener;
+import fr.heavencraft.heavenproxy.ban.SilentBanListener;
 import fr.heavencraft.heavenproxy.ban.UnbanCommand;
 import fr.heavencraft.heavenproxy.chat.ChatListener;
 import fr.heavencraft.heavenproxy.chat.FloodListener;
@@ -95,6 +96,7 @@ public class HeavenProxy extends Plugin
 			// Ban
 			new BanCommand();
 			new BanListener();
+			new SilentBanListener();
 			new UnbanCommand();
 
 			// Chat
@@ -242,8 +244,7 @@ public class HeavenProxy extends Plugin
 					String name = rs.getString("name");
 					String uuid = Utils.getUUID(name);
 
-					PreparedStatement ps2 = getConnection().prepareStatement(
-							"UPDATE banlist SET uuid = ? WHERE name = ?");
+					PreparedStatement ps2 = getConnection().prepareStatement("UPDATE banlist SET uuid = ? WHERE name = ?");
 					ps2.setString(1, uuid);
 					ps2.setString(2, name);
 
@@ -283,8 +284,7 @@ public class HeavenProxy extends Plugin
 							String name = rs.getString("name");
 							String uuid = Utils.getUUID(name);
 
-							PreparedStatement ps2 = getConnection().prepareStatement(
-									"UPDATE users SET uuid = ? WHERE name = ?");
+							PreparedStatement ps2 = getConnection().prepareStatement("UPDATE users SET uuid = ? WHERE name = ?");
 							ps2.setString(1, uuid);
 							ps2.setString(2, name);
 
@@ -316,8 +316,7 @@ public class HeavenProxy extends Plugin
 			{
 				try
 				{
-					PreparedStatement ps = getSrpConnection()
-							.prepareStatement("SELECT name FROM users WHERE uuid = ''");
+					PreparedStatement ps = getSrpConnection().prepareStatement("SELECT name FROM users WHERE uuid = ''");
 					ResultSet rs = ps.executeQuery();
 
 					while (rs.next())
@@ -361,8 +360,7 @@ public class HeavenProxy extends Plugin
 			{
 				try
 				{
-					PreparedStatement ps = getCreaConnection().prepareStatement(
-							"SELECT name FROM users WHERE uuid = ''");
+					PreparedStatement ps = getCreaConnection().prepareStatement("SELECT name FROM users WHERE uuid = ''");
 					ResultSet rs = ps.executeQuery();
 
 					while (true)
