@@ -2,29 +2,37 @@ package fr.heavencraft.heavenguard.datamodel;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.UUID;
 
 import fr.heavencraft.api.providers.connection.ConnectionProvider;
+import fr.heavencraft.common.logs.HeavenLog;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.exceptions.SQLErrorException;
+import fr.heavencraft.heavenguard.api.Flag;
 import fr.heavencraft.heavenguard.api.Region;
 import fr.heavencraft.heavenguard.bukkit.HeavenGuard;
 
 public class SQLRegion implements Region
 {
+	// Log
+	private static final HeavenLog log = HeavenLog.getLogger(SQLRegion.class);
+
+	// SQL queries
+	private static final String SETPARENT = "UPDATE regions SET parent_name = LOWER(?) WHERE name = LOWER(?) LIMIT 1";
+	private static final String REDEFINE = "UPDATE regions SET world = LOWER(?), min_x = ?, min_y = ?, min_z = ?, max_x = ?, max_y = ?, max_z = ? WHERE name = LOWER(?) LIMIT 1";
+	private static final String LOAD_MEMBERS = "SELECT uuid, owner FROM regions_members WHERE region_name = LOWER(?);";
 	private static final String ADD_MEMBER = "INSERT INTO regions_members (region_name, uuid, owner) VALUES (LOWER(?), ?, ?);";
 	private static final String REMOVE_MEMBER = "DELETE FROM regions_members WHERE region_name = LOWER(?) AND uuid = ? AND owner = ? LIMIT 1;";
 
-	private static final String IS_MEMBER = "SELECT owner FROM regions_members WHERE region_name = LOWER(?) AND uuid = ? LIMIT 1;";
-	private static final String GET_MEMBERS = "SELECT uuid FROM regions_members WHERE region_name = LOWER(?) AND owner = ?;";
-
-	private static final String REDEFINE = "UPDATE regions SET world = LOWER(?), min_x = ?, min_y = ?, min_z = ?, max_x = ?, max_y = ?, max_z = ? WHERE name = LOWER(?) LIMIT 1";
-	private static final String SETPARENT = "UPDATE regions SET parent_name = LOWER(?) WHERE name = LOWER(?) LIMIT 1";
-
-	private static final String LOAD_MEMBERS = "SELECT uuid, owner FROM regions_members WHERE region_name = LOWER(?);";
+	private static final String FLAG_PREFIX = "flag_";
+	private static final String SET_FLAG = "UPDATE regions SET %1$s = ? WHERE name = LOWER(?) LIMIT 1;";
 
 	private final ConnectionProvider connectionProvider;
 
@@ -42,6 +50,9 @@ public class SQLRegion implements Region
 	private final Collection<UUID> members = new HashSet<UUID>();
 	private final Collection<UUID> owners = new HashSet<UUID>();
 
+	// Flags
+	private final Map<Flag, Boolean> booleanFlags = new HashMap<Flag, Boolean>();
+
 	SQLRegion(ConnectionProvider connectionProvider, ResultSet rs) throws SQLException
 	{
 		this.connectionProvider = connectionProvider;
@@ -56,6 +67,40 @@ public class SQLRegion implements Region
 		maxX = rs.getInt("max_x");
 		maxY = rs.getInt("max_y");
 		maxZ = rs.getInt("max_z");
+
+		// Load flags
+		ResultSetMetaData metadata = rs.getMetaData();
+		int columnCount = metadata.getColumnCount();
+
+		for (int column = 1; column <= columnCount; column++)
+		{
+			String columnName = metadata.getColumnName(column);
+
+			if (columnName.startsWith(FLAG_PREFIX))
+			{
+				Flag flag = Flag.getUniqueInstanceByName(columnName.substring(FLAG_PREFIX.length()));
+
+				if (flag == null)
+				{
+					log.warn("Unknown flag %1$s", columnName);
+					continue;
+				}
+
+				switch (metadata.getColumnType(column))
+				{
+					case Types.BIT:
+						Boolean booleanValue = rs.getBoolean(columnName);
+
+						if (!rs.wasNull())
+							booleanFlags.put(flag, booleanValue);
+						break;
+
+					default:
+						break;
+				}
+			}
+
+		}
 
 		loadMembers();
 	}
@@ -90,6 +135,10 @@ public class SQLRegion implements Region
 	@Override
 	public boolean canBuilt(UUID player)
 	{
+		// If this region is public
+		if (getBooleanFlag(Flag.PUBLIC) == Boolean.TRUE)
+			return true;
+
 		// Members/Owners of this region can build there
 		if (isMember(player, false))
 			return true;
@@ -276,31 +325,6 @@ public class SQLRegion implements Region
 			return owners.contains(player) || members.contains(player);
 	}
 
-	// @Override
-	// public boolean isMember(UUID player, boolean owner)
-	// {
-	// try (PreparedStatement ps =
-	// HeavenGuard.getConnection().prepareStatement(IS_MEMBER))
-	// {
-	// ps.setString(1, name);
-	// ps.setString(2, player.toString());
-	//
-	// try (ResultSet rs = ps.executeQuery())
-	// {
-	// if (!rs.next())
-	// return false;
-	//
-	// return owner ? rs.getBoolean("owner") : true;
-	// }
-	// }
-	// catch (SQLException ex)
-	// {
-	// ex.printStackTrace();
-	// new SQLErrorException();
-	// }
-	// return false;
-	// }
-
 	@Override
 	public void removeMember(UUID player, boolean owner) throws HeavenException
 	{
@@ -330,4 +354,59 @@ public class SQLRegion implements Region
 		return new HashSet<UUID>(owner ? owners : members);
 	}
 
+	/*
+	 * Flags
+	 */
+
+	@Override
+	public Map<Flag, Boolean> getBooleanFlags()
+	{
+		// Never return the original collection, because plugin could modify it.
+		return new HashMap<Flag, Boolean>(booleanFlags);
+	}
+
+	@Override
+	public Boolean getBooleanFlag(Flag flag)
+	{
+		Boolean value = booleanFlags.get(flag);
+
+		if (value != null)
+			return value;
+
+		Region parent = getParent();
+
+		if (parent != null)
+			return parent.getBooleanFlag(flag);
+
+		return null;
+	}
+
+	@Override
+	public void setBooleanFlag(Flag flag, Boolean value) throws HeavenException
+	{
+		String query = String.format(SET_FLAG, FLAG_PREFIX + flag.getName());
+
+		try (PreparedStatement ps = connectionProvider.getConnection().prepareStatement(query))
+		{
+			if (value != null)
+				ps.setBoolean(1, value);
+			else
+				ps.setNull(1, Types.BIT);
+
+			ps.setString(2, name);
+
+			if (ps.executeUpdate() != 1)
+				throw new HeavenException("Impossible de mettre à jour la région.");
+
+			if (value != null)
+				booleanFlags.put(flag, value);
+			else
+				booleanFlags.remove(flag);
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			new SQLErrorException();
+		}
+	}
 }

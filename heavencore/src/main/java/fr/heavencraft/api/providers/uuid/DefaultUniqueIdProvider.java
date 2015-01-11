@@ -8,8 +8,8 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import fr.heavencraft.api.providers.connection.ConnectionProvider;
+import fr.heavencraft.common.logs.HeavenLog;
 import fr.heavencraft.exceptions.UserNotFoundException;
-import fr.heavencraft.utils.HeavenLog;
 
 public class DefaultUniqueIdProvider implements UniqueIdProvider
 {
