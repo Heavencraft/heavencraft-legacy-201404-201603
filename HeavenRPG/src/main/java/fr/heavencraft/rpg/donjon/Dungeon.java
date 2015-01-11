@@ -346,8 +346,13 @@ public class Dungeon {
 			return;
 		
 		p.setFireTicks(0);
+		p.setFoodLevel(20);
+		p.setHealth(20);
 		for(PotionEffect eff : p.getActivePotionEffects())
 			p.removePotionEffect(eff.getType());
+		
+		// Remove inventory
+		p.getInventory().clear();
 		
 		p.teleport(get_lobby());
 		if(!_deadPlayers.contains(p.getUniqueId()))
@@ -366,6 +371,8 @@ public class Dungeon {
 			return;
 		
 		p.setFireTicks(0);
+		p.setFoodLevel(20);
+		p.setHealth(20);
 		for(PotionEffect eff : p.getActivePotionEffects())
 			p.removePotionEffect(eff.getType());
 		
@@ -373,8 +380,8 @@ public class Dungeon {
 		if(!_deadPlayers.contains(p.getUniqueId()))
 			_deadPlayers.add(p.getUniqueId());
 		
-		if(_deadPlayers.size() < _inDungeon.size())
-			return;
+		//if(_deadPlayers.size() < _inDungeon.size())
+		//	return;
 		// End of game
 		evacDungeon();
 		

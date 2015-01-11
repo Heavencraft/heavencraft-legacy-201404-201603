@@ -37,6 +37,16 @@ public class DungeonCommand extends HeavenCommand{
 	@Override
 	protected void onPlayerCommand(Player player, String[] args) throws HeavenException {
 
+		if(args[0].equalsIgnoreCase("quitter") || args[0].equalsIgnoreCase("q")) {
+			Dungeon dg = DungeonManager.getDungeonByUser(player);
+			if(dg == null)
+				return;
+			if(dg.get_requiredPlayerAmmount() != 0)
+				return;
+			dg.handlePlayerDisconnect(player);
+			return;
+		}
+		
 		if (!player.hasPermission(RPGpermissions.DONJON_ADMIN))
 		{
 			ChatUtil.sendMessage(player, NO_PERMISSION);
@@ -202,6 +212,7 @@ public class DungeonCommand extends HeavenCommand{
 
 	@Override
 	protected void sendUsage(CommandSender sender) {
+		ChatUtil.sendMessage(sender, "/{donjon} quitter | Fait quitter le donjon.");
 		ChatUtil.sendMessage(sender, "/{donjon} create <nom donjon> <joueurs> | Crée un nouveau donjon et définie le nombre de joueurs requis.");
 		ChatUtil.sendMessage(sender, "/{donjon} delete <nom donjon> | Supprime le donjon.");
 		ChatUtil.sendMessage(sender, "/{donjon} list | Affiche une liste des donjons.");
