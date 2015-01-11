@@ -11,21 +11,26 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 
 import fr.heavencraft.api.providers.connection.ConnectionProvider;
+import fr.heavencraft.common.logs.HeavenLog;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.exceptions.SQLErrorException;
+import fr.heavencraft.heavenguard.api.GlobalRegion;
 import fr.heavencraft.heavenguard.api.Region;
 import fr.heavencraft.heavenguard.api.RegionProvider;
 import fr.heavencraft.heavenguard.exceptions.RegionNotFoundException;
-import fr.heavencraft.utils.HeavenLog;
 
 public class SQLRegionProvider implements RegionProvider
 {
 	// SQL Queries
-	private static final String PRELOAD = "SELECT * FROM regions;";
+	private static final String PRELOAD_REGIONS = "SELECT * FROM regions;";
+	private static final String PRELOAD_GLOBAL_REGIONS = "SELECT * FROM worlds;";
+
 	private static final String LOAD_REGION = "SELECT * FROM regions WHERE name = LOWER(?) LIMIT 1;";
 
 	private static final String CREATE_REGION = "INSERT INTO regions (name, world, min_x, min_y, min_z, max_x, max_y, max_z) VALUES (LOWER(?), LOWER(?), ?, ?, ?, ?, ?, ?);";
 	private static final String DELETE_REGION = "DELETE FROM regions WHERE name = LOWER(?) LIMIT 1;";
+
+	private static final String CREATE_GLOBAL_REGION = "INSERT INTO global_regions (name) VALUES (LOWER(?));";
 
 	// Logger
 	private final HeavenLog log = HeavenLog.getLogger(getClass());
@@ -33,6 +38,7 @@ public class SQLRegionProvider implements RegionProvider
 	// Cache
 	private final Map<String, Region> regionsByName = new HashMap<String, Region>();
 	private final Map<String, Collection<Region>> regionsByWorld = new HashMap<String, Collection<Region>>();
+	private final Map<String, GlobalRegion> globalRegionsByWorld = new HashMap<String, GlobalRegion>();
 
 	// Connection to the database
 	private final ConnectionProvider connectionProvider;
@@ -42,6 +48,7 @@ public class SQLRegionProvider implements RegionProvider
 		this.connectionProvider = connectionProvider;
 
 		loadFromDatabase();
+		loadGlobalRegions();
 	}
 
 	/*
@@ -50,7 +57,7 @@ public class SQLRegionProvider implements RegionProvider
 
 	private void loadFromDatabase()
 	{
-		try (PreparedStatement ps = connectionProvider.getConnection().prepareStatement(PRELOAD))
+		try (PreparedStatement ps = connectionProvider.getConnection().prepareStatement(PRELOAD_REGIONS))
 		{
 			try (ResultSet rs = ps.executeQuery())
 			{
@@ -92,6 +99,30 @@ public class SQLRegionProvider implements RegionProvider
 		{
 			ex.printStackTrace();
 			throw new SQLErrorException();
+		}
+	}
+
+	private void loadGlobalRegions()
+	{
+		try (PreparedStatement ps = connectionProvider.getConnection().prepareStatement(PRELOAD_GLOBAL_REGIONS))
+		{
+			try (ResultSet rs = ps.executeQuery())
+			{
+				int count = 0;
+
+				while (rs.next())
+				{
+					SQLGlobalRegion region = new SQLGlobalRegion(rs);
+					globalRegionsByWorld.put(region.getName(), region);
+				}
+
+				log.info("%1$s regions loaded from database.", count);
+			}
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			Bukkit.shutdown(); // Close server if we can't load regions
 		}
 	}
 
@@ -140,6 +171,9 @@ public class SQLRegionProvider implements RegionProvider
 	public Region createRegion(String name, String world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ)
 			throws HeavenException
 	{
+		if (regionsByName.get(name) != null)
+			throw new HeavenException("La protection {%$s} existe déjà.", name);
+
 		try (PreparedStatement ps = connectionProvider.getConnection().prepareStatement(CREATE_REGION))
 		{
 			ps.setString(1, name);
@@ -216,5 +250,17 @@ public class SQLRegionProvider implements RegionProvider
 		}
 
 		return regionsAtLocation;
+	}
+
+	@Override
+	public GlobalRegion getGlobalRegion(String world)
+	{
+		GlobalRegion region = globalRegionsByWorld.get(world);
+
+		if (region != null)
+			return region;
+
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

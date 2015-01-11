@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import fr.heavencraft.exceptions.HeavenException;
 
-public interface Region
+public interface Region extends HasBooleanFlags
 {
 	String getName();
 

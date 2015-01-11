@@ -7,8 +7,9 @@ import fr.heavencraft.api.providers.connection.DefaultConnectionProvider;
 import fr.heavencraft.heavenguard.api.RegionManager;
 import fr.heavencraft.heavenguard.api.RegionProvider;
 import fr.heavencraft.heavenguard.bukkit.commands.RegionCommand;
-import fr.heavencraft.heavenguard.bukkit.listeners.BlockListener;
 import fr.heavencraft.heavenguard.bukkit.listeners.PlayerListener;
+import fr.heavencraft.heavenguard.bukkit.listeners.ProtectionEnvironmentListener;
+import fr.heavencraft.heavenguard.bukkit.listeners.ProtectionPlayerListener;
 import fr.heavencraft.heavenguard.datamodel.SQLRegionProvider;
 
 /*
@@ -36,8 +37,6 @@ public class HeavenGuard extends HeavenPlugin
 	private static RegionProvider regionProvider;
 	private static RegionManager regionManager;
 
-	private static String database;
-
 	private ConnectionProvider connectionProvider;
 
 	@Override
@@ -48,7 +47,9 @@ public class HeavenGuard extends HeavenPlugin
 		super.onEnable();
 
 		new PlayerListener();
-		new BlockListener();
+
+		new ProtectionPlayerListener();
+		new ProtectionEnvironmentListener();
 
 		new RegionCommand();
 

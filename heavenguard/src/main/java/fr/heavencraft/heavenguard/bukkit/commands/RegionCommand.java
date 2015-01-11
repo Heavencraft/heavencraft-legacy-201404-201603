@@ -26,6 +26,7 @@ public class RegionCommand extends HeavenCommand
 		subCommands.put("info", new InfoSubCommand());
 		subCommands.put("setparent", new SetparentSubCommand());
 		subCommands.put("remove", new RemoveSubCommand());
+		subCommands.put("flag", new FlagSubCommand());
 
 		subCommands.put("addmember", new AddMemberSubCommand());
 		subCommands.put("removemember", new RemoveMemberSubCommand());

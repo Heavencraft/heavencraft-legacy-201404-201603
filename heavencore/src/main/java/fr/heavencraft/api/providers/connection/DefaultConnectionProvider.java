@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 import org.bukkit.Bukkit;
 
-import fr.heavencraft.utils.HeavenLog;
+import fr.heavencraft.common.logs.HeavenLog;
 
 public class DefaultConnectionProvider implements ConnectionProvider
 {

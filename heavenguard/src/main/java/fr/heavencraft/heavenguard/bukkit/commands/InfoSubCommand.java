@@ -2,12 +2,14 @@ package fr.heavencraft.heavenguard.bukkit.commands;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.bukkit.command.CommandSender;
 
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.exceptions.UserNotFoundException;
+import fr.heavencraft.heavenguard.api.Flag;
 import fr.heavencraft.heavenguard.api.Region;
 import fr.heavencraft.heavenguard.bukkit.HeavenGuard;
 import fr.heavencraft.utils.ChatUtil;
@@ -47,6 +49,20 @@ public class InfoSubCommand implements SubCommand
 				region.getMinX(), region.getMinY(), region.getMinZ(), //
 				region.getMaxX(), region.getMaxY(), region.getMaxZ(), //
 				region.getWorld());
+
+		/*
+		 * Flags
+		 */
+
+		String flags = "Flags : ";
+
+		for (Entry<Flag, Boolean> flag : region.getBooleanFlags().entrySet())
+		{
+			if (flag.getValue() != null)
+				flags += flag.getKey().getName() + " : " + flag.getValue() + ", ";
+		}
+
+		ChatUtil.sendMessage(sender, flags);
 
 		Region parent = region.getParent();
 		if (parent != null)

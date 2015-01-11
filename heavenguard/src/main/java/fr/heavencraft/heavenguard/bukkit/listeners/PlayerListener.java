@@ -38,27 +38,39 @@ public class PlayerListener implements Listener
 
 	public void displayRegionAt(Player player, Location location)
 	{
-		Collection<Region> regions = HeavenGuard.getRegionProvider().getRegionsAtLocation(location.getWorld().getName(),
-				location.getBlockX(), location.getBlockY(), location.getBlockZ());
+		String world = location.getWorld().getName();
+		int x = location.getBlockX();
+		int y = location.getBlockY();
+		int z = location.getBlockZ();
 
-		// player.sendMessage(ChatColor.YELLOW + "Pouvez-vous construire ? "
-		// + (set.canBuild(localPlayer) ? "Oui" : "Non"));
+		Collection<Region> regions = HeavenGuard.getRegionProvider().getRegionsAtLocation(world, x, y, z);
 
 		if (regions.isEmpty())
 		{
 			ChatUtil.sendMessage(player, "Il n'y a aucune protection ici.");
-			return;
 		}
 
-		StringBuilder str = new StringBuilder();
-		for (Iterator<Region> it = regions.iterator(); it.hasNext();)
+		else
 		{
-			str.append(it.next().getName());
+			StringBuilder str = new StringBuilder("Liste des protections actives ici : ");
 
-			if (it.hasNext())
-				str.append(", ");
+			for (Iterator<Region> it = regions.iterator(); it.hasNext();)
+			{
+				str.append(it.next().getName());
+
+				if (it.hasNext())
+					str.append(", ");
+			}
+
+			ChatUtil.sendMessage(player, str.toString());
 		}
 
-		ChatUtil.sendMessage(player, "Liste des protections actives ici : " + str.toString());
+		StringBuilder canYouBuild = new StringBuilder("Pouvez-vous construire ? ");
+		canYouBuild.append(HeavenGuard.getRegionManager().canBuildAt(player.getUniqueId(), world, x, y, z) ? "Oui." : "Non.");
+		ChatUtil.sendMessage(player, canYouBuild.toString());
+
+		StringBuilder pvpEnabled = new StringBuilder("PVP activé ? ");
+		pvpEnabled.append(HeavenGuard.getRegionManager().isPvp(world, x, y, z) ? "Oui." : "Non.");
+		ChatUtil.sendMessage(player, pvpEnabled.toString());
 	}
 }

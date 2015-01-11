@@ -15,4 +15,6 @@ public interface RegionProvider extends Provider
 	Region getRegionByName(String name) throws HeavenException;
 
 	Collection<Region> getRegionsAtLocation(String world, int x, int y, int z);
+
+	GlobalRegion getGlobalRegion(String world);
 }
