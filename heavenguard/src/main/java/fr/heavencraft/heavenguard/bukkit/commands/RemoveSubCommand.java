@@ -4,38 +4,32 @@ import org.bukkit.command.CommandSender;
 
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenguard.api.HeavenGuardPermissions;
-import fr.heavencraft.heavenguard.bukkit.HeavenGuard;
+import fr.heavencraft.heavenguard.api.RegionProvider;
 import fr.heavencraft.utils.ChatUtil;
 
-public class RemoveSubCommand implements SubCommand
+public class RemoveSubCommand extends AbstractSubCommand
 {
-	@Override
-	public boolean hasPermission(CommandSender sender)
+	public RemoveSubCommand(RegionProvider regionProvider)
 	{
-		return sender.hasPermission(HeavenGuardPermissions.REGION_REMOVE);
+		super(regionProvider, HeavenGuardPermissions.REMOVE_COMMAND);
 	}
 
 	@Override
-	public void execute(CommandSender sender, String[] args) throws HeavenException
+	public void execute(CommandSender sender, String regionName, String[] args) throws HeavenException
 	{
-		if (args.length != 2)
+		if (args.length != 0)
 		{
 			sendUsage(sender);
 			return;
 		}
 
-		remove(sender, args[1].toLowerCase());
+		regionProvider.deleteRegion(regionName);
+		ChatUtil.sendMessage(sender, "La protection {%1$s} a bien été supprimée.", regionName);
 	}
 
 	@Override
 	public void sendUsage(CommandSender sender)
 	{
-		ChatUtil.sendMessage(sender, "/{region} remove <protection>");
-	}
-
-	private static void remove(CommandSender sender, String name) throws HeavenException
-	{
-		HeavenGuard.getRegionProvider().deleteRegion(name);
-		ChatUtil.sendMessage(sender, "La protection {%1$s} a bien été supprimée.", name);
+		ChatUtil.sendMessage(sender, "/rg {remove} <protection>");
 	}
 }

@@ -1,4 +1,4 @@
-package fr.heavencraft.heavenguard.bukkit.commands;
+package fr.heavencraft.heavenguard.bukkit.commands.owner;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -10,39 +10,34 @@ import org.bukkit.command.CommandSender;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.exceptions.UserNotFoundException;
 import fr.heavencraft.heavenguard.api.Flag;
+import fr.heavencraft.heavenguard.api.HeavenGuardPermissions;
 import fr.heavencraft.heavenguard.api.Region;
+import fr.heavencraft.heavenguard.api.RegionProvider;
 import fr.heavencraft.heavenguard.bukkit.HeavenGuard;
 import fr.heavencraft.utils.ChatUtil;
 
-public class InfoSubCommand implements SubCommand
+public class InfoSubCommand extends AbstractOwnerSubCommand
 {
-	@Override
-	public boolean hasPermission(CommandSender sender)
+	public InfoSubCommand(RegionProvider regionProvider)
 	{
-		return true; // Everybody can do /rg info
+		super(regionProvider, HeavenGuardPermissions.INFO_COMMAND);
 	}
 
 	@Override
-	public void execute(CommandSender sender, String[] args) throws HeavenException
+	public void execute(CommandSender sender, String regionName, String[] args) throws HeavenException
 	{
-		if (args.length != 2)
-		{
-			sendUsage(sender);
-			return;
-		}
-
-		info(sender, args[1].toLowerCase());
+		info(sender, regionName);
 	}
 
 	@Override
 	public void sendUsage(CommandSender sender)
 	{
-		ChatUtil.sendMessage(sender, "/{region} info <protection>");
+		ChatUtil.sendMessage(sender, "/rg {info} <protection>");
 	}
 
 	private void info(CommandSender sender, String name) throws HeavenException, UserNotFoundException
 	{
-		Region region = HeavenGuard.getRegionProvider().getRegionByName(name);
+		final Region region = regionProvider.getRegionByName(name);
 
 		ChatUtil.sendMessage(sender, "Protection : %1$s", region.getName());
 		ChatUtil.sendMessage(sender, "Coordonnées : [{%1$s %2$s %3$s}] -> [{%4$s %5$s %6$s}] ({%7$s})", //
@@ -56,7 +51,7 @@ public class InfoSubCommand implements SubCommand
 
 		String flags = "Flags : ";
 
-		for (Entry<Flag, Boolean> flag : region.getBooleanFlags().entrySet())
+		for (final Entry<Flag, Boolean> flag : region.getBooleanFlags().entrySet())
 		{
 			if (flag.getValue() != null)
 				flags += flag.getKey().getName() + " : " + flag.getValue() + ", ";
@@ -64,16 +59,16 @@ public class InfoSubCommand implements SubCommand
 
 		ChatUtil.sendMessage(sender, flags);
 
-		Region parent = region.getParent();
+		final Region parent = region.getParent();
 		if (parent != null)
 			ChatUtil.sendMessage(sender, "Parent : %1$s", parent.getName());
 
-		Collection<UUID> owners = region.getMembers(true);
+		final Collection<UUID> owners = region.getMembers(true);
 		if (!owners.isEmpty())
 		{
-			StringBuilder str = new StringBuilder();
+			final StringBuilder str = new StringBuilder();
 
-			for (Iterator<UUID> it = owners.iterator(); it.hasNext();)
+			for (final Iterator<UUID> it = owners.iterator(); it.hasNext();)
 			{
 				str.append(HeavenGuard.getInstance().getUniqueIdProvider().getNameFromUniqueId(it.next()));
 
@@ -84,12 +79,12 @@ public class InfoSubCommand implements SubCommand
 			ChatUtil.sendMessage(sender, "Propriétaires : %1$s", str.toString());
 		}
 
-		Collection<UUID> members = region.getMembers(false);
+		final Collection<UUID> members = region.getMembers(false);
 		if (!members.isEmpty())
 		{
-			StringBuilder str = new StringBuilder();
+			final StringBuilder str = new StringBuilder();
 
-			for (Iterator<UUID> it = members.iterator(); it.hasNext();)
+			for (final Iterator<UUID> it = members.iterator(); it.hasNext();)
 			{
 				str.append(HeavenGuard.getInstance().getUniqueIdProvider().getNameFromUniqueId(it.next()));
 

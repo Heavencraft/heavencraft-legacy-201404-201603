@@ -6,9 +6,9 @@ import fr.heavencraft.exceptions.HeavenException;
 
 public interface SubCommand
 {
-	boolean hasPermission(CommandSender sender);
+	boolean canExecute(CommandSender sender, String regionName);
 
-	void execute(CommandSender sender, String[] args) throws HeavenException;
+	void execute(CommandSender sender, String regionName, String[] args) throws HeavenException;
 
 	void sendUsage(CommandSender sender);
 }

@@ -14,63 +14,61 @@ import com.sk89q.worldedit.bukkit.selections.Selection;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenguard.api.HeavenGuardPermissions;
 import fr.heavencraft.heavenguard.api.Region;
-import fr.heavencraft.heavenguard.bukkit.HeavenGuard;
+import fr.heavencraft.heavenguard.api.RegionProvider;
 import fr.heavencraft.utils.ChatUtil;
 import fr.heavencraft.utils.DevUtil;
 
-class DefineSubCommand implements SubCommand
+public class DefineSubCommand extends AbstractSubCommand
 {
-	@Override
-	public boolean hasPermission(CommandSender sender)
+	public DefineSubCommand(RegionProvider regionProvider)
 	{
-		return sender.hasPermission(HeavenGuardPermissions.REGION_DEFINE);
+		super(regionProvider, HeavenGuardPermissions.DEFINE_COMMAND);
 	}
 
 	@Override
-	public void execute(CommandSender sender, String[] args) throws HeavenException
+	public void execute(CommandSender sender, String regionName, String[] args) throws HeavenException
 	{
-		if (args.length < 2)
+		final Selection selection = DevUtil.getWESelection((Player) sender);
+		final Collection<OfflinePlayer> owners = new ArrayList<OfflinePlayer>();
+
+		if (args.length != 0)
 		{
-			sendUsage(sender);
-			return;
+			for (final String ownerName : args)
+				owners.add(Bukkit.getOfflinePlayer(ownerName));
 		}
 
-		String name = args[1];
-		Selection selection = DevUtil.getWESelection((Player) sender);
-		Collection<OfflinePlayer> owners = new ArrayList<OfflinePlayer>();
-
-		if (args.length != 2)
-		{
-			for (int i = 2; i != args.length; i++)
-				owners.add(Bukkit.getOfflinePlayer(args[i]));
-		}
-
-		define(name, selection, owners);
-		ChatUtil.sendMessage(sender, "La région {%1$s} a bien été créée.", name);
+		define(sender, regionName, selection, owners);
 	}
 
 	@Override
 	public void sendUsage(CommandSender sender)
 	{
-		ChatUtil.sendMessage(sender, "/{region} define <protection>");
+		ChatUtil.sendMessage(sender, "/rg {define} <protection>");
 	}
 
-	private static void define(String name, Selection selection, Collection<OfflinePlayer> owners) throws HeavenException
+	private void define(CommandSender sender, String name, Selection selection, Collection<OfflinePlayer> owners)
+			throws HeavenException
 	{
-		Location min = selection.getMinimumPoint();
-		Location max = selection.getMaximumPoint();
+		final Location min = selection.getMinimumPoint();
+		final Location max = selection.getMaximumPoint();
 
 		// Create the region
-		HeavenGuard.getRegionProvider().createRegion(name, selection.getWorld().getName(), min.getBlockX(), min.getBlockY(),
-				min.getBlockZ(), max.getBlockX(), max.getBlockY(), max.getBlockZ());
+		regionProvider.createRegion(name, selection.getWorld().getName(), //
+				min.getBlockX(), min.getBlockY(), min.getBlockZ(), //
+				max.getBlockX(), max.getBlockY(), max.getBlockZ());
+
+		ChatUtil.sendMessage(sender, "La région {%1$s} a bien été créée.", name);
 
 		// Add the initial owners
 		if (!owners.isEmpty())
 		{
-			Region region = HeavenGuard.getRegionProvider().getRegionByName(name);
+			final Region region = regionProvider.getRegionByName(name);
 
-			for (OfflinePlayer owner : owners)
+			for (final OfflinePlayer owner : owners)
+			{
 				region.addMember(owner.getUniqueId(), true);
+				ChatUtil.sendMessage(sender, "{%1$s} est maintenant propriétaire de la protection {%2$s}.", owner.getName(), name);
+			}
 		}
 	}
 }

@@ -6,7 +6,6 @@ import fr.heavencraft.api.providers.connection.ConnectionProvider.Database;
 import fr.heavencraft.api.providers.connection.DefaultConnectionProvider;
 import fr.heavencraft.heavenguard.api.RegionManager;
 import fr.heavencraft.heavenguard.api.RegionProvider;
-import fr.heavencraft.heavenguard.bukkit.commands.RegionCommand;
 import fr.heavencraft.heavenguard.bukkit.listeners.PlayerListener;
 import fr.heavencraft.heavenguard.bukkit.listeners.ProtectionEnvironmentListener;
 import fr.heavencraft.heavenguard.bukkit.listeners.ProtectionPlayerListener;
@@ -51,12 +50,12 @@ public class HeavenGuard extends HeavenPlugin
 		new ProtectionPlayerListener();
 		new ProtectionEnvironmentListener();
 
-		new RegionCommand();
-
 		connectionProvider = new DefaultConnectionProvider(Database.TEST);
 
 		regionProvider = new SQLRegionProvider(connectionProvider);
 		regionManager = new RegionManager(regionProvider);
+
+		new RegionCommand(regionProvider);
 	}
 
 	public static RegionProvider getRegionProvider()
