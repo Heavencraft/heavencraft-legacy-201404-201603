@@ -172,7 +172,7 @@ public class SQLRegionProvider implements RegionProvider
 			throws HeavenException
 	{
 		if (regionsByName.get(name) != null)
-			throw new HeavenException("La protection {%$s} existe déjà.", name);
+			throw new HeavenException("La protection {%1$s} existe déjà.", name);
 
 		try (PreparedStatement ps = connectionProvider.getConnection().prepareStatement(CREATE_REGION))
 		{

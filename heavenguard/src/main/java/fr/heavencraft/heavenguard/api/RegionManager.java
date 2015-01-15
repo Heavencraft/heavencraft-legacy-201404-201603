@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
-import fr.heavencraft.utils.DevUtil;
-
 public class RegionManager
 {
 	private final RegionProvider regionProvider;
@@ -17,15 +15,15 @@ public class RegionManager
 
 	private Collection<Region> getRegionsAtLocationWithoutParents(String world, int x, int y, int z)
 	{
-		Collection<Region> regions = regionProvider.getRegionsAtLocation(world, x, y, z);
+		final Collection<Region> regions = regionProvider.getRegionsAtLocation(world, x, y, z);
 
 		if (regions.size() > 1)
 		{
-			Collection<Region> toRemove = new ArrayList<Region>();
+			final Collection<Region> toRemove = new ArrayList<Region>();
 
-			for (Region region : regions)
+			for (final Region region : regions)
 			{
-				for (Region parent : getAllParents(region))
+				for (final Region parent : getAllParents(region))
 				{
 					if (regions.contains(parent))
 					{
@@ -42,40 +40,25 @@ public class RegionManager
 
 	private Collection<Region> getAllParents(Region region)
 	{
-		Region parent = region.getParent();
+		final Region parent = region.getParent();
 
 		if (parent == null)
 			return new ArrayList<Region>();
 
-		Collection<Region> parents = getAllParents(parent);
+		final Collection<Region> parents = getAllParents(parent);
 		parents.add(parent);
 		return parents;
 	}
 
-	// TODO For debug purpose : remove me
 	public boolean canBuildAt(UUID player, String world, int x, int y, int z)
 	{
-		long start = System.nanoTime();
-
-		try
-		{
-			return canBuildAt2(player, world, x, y, z);
-		}
-		finally
-		{
-			DevUtil.logInfo("canBuildAt : %1$s us", (System.nanoTime() - start) / 1000.0);
-		}
-	}
-
-	private boolean canBuildAt2(UUID player, String world, int x, int y, int z)
-	{
-		Collection<Region> regions = getRegionsAtLocationWithoutParents(world, x, y, z);
+		final Collection<Region> regions = getRegionsAtLocationWithoutParents(world, x, y, z);
 
 		// If there are regions here
 		if (regions.size() != 0)
 		{
 			// If a player can't build in one region, it can't build here
-			for (Region region : regions)
+			for (final Region region : regions)
 				if (!region.canBuilt(player))
 					return false;
 
@@ -88,7 +71,7 @@ public class RegionManager
 
 	public boolean isProtectedAgainstEnvironment(String world, int x, int y, int z)
 	{
-		Collection<Region> regions = getRegionsAtLocationWithoutParents(world, x, y, z);
+		final Collection<Region> regions = getRegionsAtLocationWithoutParents(world, x, y, z);
 
 		// If there are regions here
 		if (regions.size() != 0)
@@ -98,24 +81,9 @@ public class RegionManager
 		return !regionProvider.getGlobalRegion(world).getBooleanFlag(Flag.PUBLIC);
 	}
 
-	// TODO For debug purpose : remove me
 	public boolean isPvp(String world, int x, int y, int z)
 	{
-		long start = System.nanoTime();
-
-		try
-		{
-			return isPvp2(world, x, y, z);
-		}
-		finally
-		{
-			DevUtil.logInfo("isPvp : %1$s us", (System.nanoTime() - start) / 1000.0);
-		}
-	}
-
-	private boolean isPvp2(String world, int x, int y, int z)
-	{
-		Collection<Region> regions = getRegionsAtLocationWithoutParents(world, x, y, z);
+		final Collection<Region> regions = getRegionsAtLocationWithoutParents(world, x, y, z);
 
 		// If there are regions here
 		if (regions.size() != 0)
@@ -123,9 +91,9 @@ public class RegionManager
 			boolean pvpEnabled = false;
 			boolean pvpDisabled = false;
 
-			for (Region region : regions)
+			for (final Region region : regions)
 			{
-				Boolean pvp = region.getBooleanFlag(Flag.PVP);
+				final Boolean pvp = region.getBooleanFlag(Flag.PVP);
 
 				if (pvp == null)
 					continue;
@@ -142,4 +110,5 @@ public class RegionManager
 		// No regions here : this block is pvp if the world is pvp
 		return regionProvider.getGlobalRegion(world).getBooleanFlag(Flag.PVP);
 	}
+
 }

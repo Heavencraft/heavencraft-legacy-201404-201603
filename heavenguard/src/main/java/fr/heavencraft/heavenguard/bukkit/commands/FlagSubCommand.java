@@ -6,29 +6,29 @@ import org.bukkit.command.CommandSender;
 
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenguard.api.Flag;
+import fr.heavencraft.heavenguard.api.HeavenGuardPermissions;
 import fr.heavencraft.heavenguard.api.Region;
-import fr.heavencraft.heavenguard.bukkit.HeavenGuard;
+import fr.heavencraft.heavenguard.api.RegionProvider;
 import fr.heavencraft.utils.ChatUtil;
 
-public class FlagSubCommand implements SubCommand
+public class FlagSubCommand extends AbstractSubCommand
 {
-	@Override
-	public boolean hasPermission(CommandSender sender)
+	public FlagSubCommand(RegionProvider regionProvider)
 	{
-		return true;
+		super(regionProvider, HeavenGuardPermissions.FLAG_COMMAND);
 	}
 
 	@Override
-	public void execute(CommandSender sender, String[] args) throws HeavenException
+	public void execute(CommandSender sender, String regionName, String[] args) throws HeavenException
 	{
 		switch (args.length)
 		{
-			case 3: // Remove the flag from the region.
-				flag(sender, args[1], args[2], null);
+			case 1: // Remove the flag from the region.
+				flag(sender, regionName, args[0], null);
 				break;
 
-			case 4: // Set the flag's value.
-				flag(sender, args[1], args[2], args[3]);
+			case 2: // Set the flag's value.
+				flag(sender, regionName, args[0], args[1]);
 				break;
 
 			default:
@@ -40,17 +40,18 @@ public class FlagSubCommand implements SubCommand
 	@Override
 	public void sendUsage(CommandSender sender)
 	{
-		ChatUtil.sendMessage(sender, "/{region} flag <protection> <flag> : pour supprimer un flag");
-		ChatUtil.sendMessage(sender, "/{region} flag <protection> <flag> <valeur> : pour ajouter un flag");
+		ChatUtil.sendMessage(sender, "/rg {flag} <protection> <flag> : pour supprimer un flag");
+		ChatUtil.sendMessage(sender, "/rg {flag} <protection> <flag> <valeur> : pour ajouter un flag");
 	}
 
 	private void flag(CommandSender sender, String regionName, String flagName, String value) throws HeavenException
 	{
-		Flag flag = Flag.getUniqueInstanceByName(flagName);
+		final Flag flag = Flag.getUniqueInstanceByName(flagName);
 
-		if (flag == null) throw new HeavenException("Le flag {%1$s} n'existe pas.", flagName);
+		if (flag == null)
+			throw new HeavenException("Le flag {%1$s} n'existe pas.", flagName);
 
-		Region region = HeavenGuard.getRegionProvider().getRegionByName(regionName);
+		final Region region = regionProvider.getRegionByName(regionName);
 
 		switch (flag.getType())
 		{

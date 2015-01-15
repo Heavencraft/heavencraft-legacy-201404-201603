@@ -10,7 +10,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.EntityInteractEvent;
 
 import fr.heavencraft.common.logs.HeavenLog;
 import fr.heavencraft.heavenguard.bukkit.HeavenGuard;
@@ -59,17 +58,17 @@ public class ProtectionEnvironmentListener implements Listener
 			event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	private void onEntityInteract(EntityInteractEvent event)
-	{
-		log.info(event.getClass().getSimpleName());
-
-		if (event.getEntityType() == EntityType.PLAYER)
-			return;
-
-		if (isProtected(event.getBlock()))
-			event.setCancelled(true);
-	}
+	// @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	// private void onEntityInteract(EntityInteractEvent event)
+	// {
+	// log.info(event.getClass().getSimpleName());
+	//
+	// if (event.getEntityType() == EntityType.PLAYER)
+	// return;
+	//
+	// if (isProtected(event.getBlock()))
+	// event.setCancelled(true);
+	// }
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityExplode(EntityExplodeEvent event)

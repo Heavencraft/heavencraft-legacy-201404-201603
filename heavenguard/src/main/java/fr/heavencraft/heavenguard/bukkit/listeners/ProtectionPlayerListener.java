@@ -6,8 +6,10 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -19,15 +21,13 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
-import org.bukkit.inventory.InventoryHolder;
 
 import com.google.common.collect.Sets;
 
@@ -44,12 +44,6 @@ public class ProtectionPlayerListener implements Listener
 			Material.STORAGE_MINECART, Material.POWERED_MINECART, Material.EXPLOSIVE_MINECART, Material.HOPPER_MINECART,
 			Material.COMMAND_MINECART);
 
-	InventoryHolder holder;
-
-	private static final Collection<Material> INTERACT_BLOCKS = Sets.newHashSet(Material.ANVIL, Material.BEACON,
-			Material.BREWING_STAND, Material.BURNING_FURNACE, Material.CAKE_BLOCK, Material.CHEST, Material.DISPENSER,
-			Material.DROPPER, Material.FURNACE, Material.HOPPER, Material.JUKEBOX, Material.NOTE_BLOCK, Material.TRAPPED_CHEST);
-
 	public ProtectionPlayerListener()
 	{
 		DevUtil.registerListener(this);
@@ -62,7 +56,7 @@ public class ProtectionPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	private void onBlockBreak(BlockBreakEvent event)
 	{
-		log.info(event.getClass().getSimpleName());
+		log.debug(event.getClass().getSimpleName());
 
 		if (!canBuildAt(event.getPlayer(), event.getBlock()))
 			event.setCancelled(true);
@@ -71,7 +65,7 @@ public class ProtectionPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	private void onBlockDamage(BlockDamageEvent event)
 	{
-		log.info(event.getClass().getSimpleName());
+		log.debug(event.getClass().getSimpleName());
 
 		if (!canBuildAt(event.getPlayer(), event.getBlock()))
 			event.setCancelled(true);
@@ -80,7 +74,7 @@ public class ProtectionPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	private void onBlockIgnite(BlockIgniteEvent event)
 	{
-		log.info(event.getClass().getSimpleName());
+		log.debug(event.getClass().getSimpleName());
 
 		if (event.getPlayer() == null)
 			return;
@@ -92,7 +86,7 @@ public class ProtectionPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	private void onBlockPlace(BlockPlaceEvent event)
 	{
-		log.info(event.getClass().getSimpleName());
+		log.debug(event.getClass().getSimpleName());
 
 		if (!canBuildAt(event.getPlayer(), event.getBlock()))
 			event.setCancelled(true);
@@ -101,7 +95,7 @@ public class ProtectionPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	private void onSignChange(SignChangeEvent event)
 	{
-		log.info(event.getClass().getSimpleName());
+		log.debug(event.getClass().getSimpleName());
 
 		if (!canBuildAt(event.getPlayer(), event.getBlock()))
 			event.setCancelled(true);
@@ -114,9 +108,14 @@ public class ProtectionPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	private void onEntityDamageByEntity(EntityDamageByEntityEvent event)
 	{
-		log.info(event.getClass().getSimpleName());
+		final Entity defender = event.getEntity();
 
-		Entity damager = event.getDamager();
+		if (defender instanceof Monster)
+			return;
+
+		log.debug(event.getClass().getSimpleName());
+
+		final Entity damager = event.getDamager();
 		Player player;
 
 		if (damager instanceof Player)
@@ -126,29 +125,39 @@ public class ProtectionPlayerListener implements Listener
 		else
 			return;
 
-		Entity defender = event.getEntity();
-		Block block = defender.getLocation().getBlock();
+		final Block block = defender.getLocation().getBlock();
 
-		if (!canBuildAt(player, block))
-			event.setCancelled(true);
+		// PVP
+		if (defender.getType() == EntityType.PLAYER)
+		{
+			if (!isPvp(player, block))
+				event.setCancelled(true);
+		}
+
+		// PVE
+		else
+		{
+			if (!canBuildAt(player, block))
+				event.setCancelled(true);
+		}
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	private void onHangingPlace(HangingPlaceEvent event)
 	{
-		log.info(event.getClass().getSimpleName());
+		log.debug(event.getClass().getSimpleName());
 
-		if (!canBuildAt(event.getPlayer(), event.getBlock()))
+		if (!canBuildAt(event.getPlayer(), event.getBlock().getRelative(event.getBlockFace())))
 			event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	private void onHangingBreakByEntity(HangingBreakByEntityEvent event)
 	{
-		log.info(event.getClass().getSimpleName());
+		log.debug(event.getClass().getSimpleName());
 
-		Player player = event.getRemover() instanceof Player ? (Player) event.getRemover() : null;
-		Block block = event.getEntity().getLocation().getBlock();
+		final Player player = event.getRemover() instanceof Player ? (Player) event.getRemover() : null;
+		final Block block = event.getEntity().getLocation().getBlock();
 
 		if (!canBuildAt(player, block))
 			event.setCancelled(true);
@@ -161,9 +170,9 @@ public class ProtectionPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	private void onPlayerBucketFill(PlayerBucketFillEvent event)
 	{
-		log.info(event.getClass().getSimpleName());
+		log.debug(event.getClass().getSimpleName());
 
-		Block block = event.getBlockClicked().getRelative(event.getBlockFace());
+		final Block block = event.getBlockClicked().getRelative(event.getBlockFace());
 
 		if (!canBuildAt(event.getPlayer(), block))
 			event.setCancelled(true);
@@ -172,9 +181,9 @@ public class ProtectionPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	private void onPlayerBucketEmpty(PlayerBucketEmptyEvent event)
 	{
-		log.info(event.getClass().getSimpleName());
+		log.debug(event.getClass().getSimpleName());
 
-		Block block = event.getBlockClicked().getRelative(event.getBlockFace());
+		final Block block = event.getBlockClicked().getRelative(event.getBlockFace());
 
 		if (!canBuildAt(event.getPlayer(), block))
 			event.setCancelled(true);
@@ -183,7 +192,7 @@ public class ProtectionPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	private void on(PlayerBedEnterEvent event)
 	{
-		log.info(event.getClass().getSimpleName());
+		log.debug(event.getClass().getSimpleName());
 
 		if (!canBuildAt(event.getPlayer(), event.getBed()))
 			event.setCancelled(true);
@@ -192,7 +201,16 @@ public class ProtectionPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	private void onPlayerInteractEntity(PlayerInteractEntityEvent event)
 	{
-		log.info(event.getClass().getSimpleName() + " " + event.getEventName());
+		log.debug(event.getClass().getSimpleName() + " " + event.getEventName());
+
+		if (!canBuildAt(event.getPlayer(), event.getRightClicked().getLocation().getBlock()))
+			event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	private void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event)
+	{
+		log.debug(event.getClass().getSimpleName() + " " + event.getEventName());
 
 		if (!canBuildAt(event.getPlayer(), event.getRightClicked().getLocation().getBlock()))
 			event.setCancelled(true);
@@ -201,7 +219,6 @@ public class ProtectionPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	private void on(PlayerInteractEvent event)
 	{
-		log.info(event.getClass().getSimpleName());
 
 		switch (event.getAction())
 		{
@@ -212,24 +229,80 @@ public class ProtectionPlayerListener implements Listener
 			default:
 				break;
 		}
+
+		if (event.isCancelled())
+		{
+			event.setUseInteractedBlock(Result.DENY);
+			event.setUseItemInHand(Result.DENY);
+		}
 	}
 
 	private void onPlayerRightClickBlock(PlayerInteractEvent event)
 	{
-		Block clickedBlock = event.getClickedBlock();
+		final Block block = event.getClickedBlock();
+
+		log.debug("onPlayerRightClickBlock %1$s", block.getType().name());
 
 		// Player can't place a Vehicule
 		if (event.hasItem() && VEHICULES.contains(event.getItem().getType()))
 		{
-			if (!canBuildAt(event.getPlayer(), clickedBlock))
+			if (!canBuildAt(event.getPlayer(), block))
 				event.setCancelled(true);
 		}
 
-		// Player can't right-click
-		else if (INTERACT_BLOCKS.contains(clickedBlock.getType()))
+		else
 		{
-			if (!canBuildAt(event.getPlayer(), clickedBlock))
-				event.setCancelled(true);
+			switch (block.getType())
+			{
+				case ANVIL:
+				case BEACON:
+				case BREWING_STAND:
+				case BURNING_FURNACE:
+				case CAKE_BLOCK:
+				case CHEST:
+				case FURNACE:
+				case JUKEBOX:
+				case TRAPPED_CHEST:
+					// Redstone
+				case DISPENSER:
+				case NOTE_BLOCK:
+				case DAYLIGHT_DETECTOR:
+				case DAYLIGHT_DETECTOR_INVERTED:
+				case HOPPER:
+				case DROPPER:
+				case DIODE:
+				case DIODE_BLOCK_OFF:
+				case DIODE_BLOCK_ON:
+				case REDSTONE_COMPARATOR:
+				case REDSTONE_COMPARATOR_OFF:
+				case REDSTONE_COMPARATOR_ON:
+
+					if (!canBuildAt(event.getPlayer(), block))
+						event.setCancelled(true);
+					break;
+
+				default:
+				case WOODEN_DOOR:
+				case SPRUCE_DOOR:
+				case BIRCH_DOOR:
+				case JUNGLE_DOOR:
+				case ACACIA_DOOR:
+				case DARK_OAK_DOOR:
+				case FENCE_GATE:
+				case SPRUCE_FENCE_GATE:
+				case BIRCH_FENCE_GATE:
+				case JUNGLE_FENCE_GATE:
+				case ACACIA_FENCE_GATE:
+				case DARK_OAK_FENCE_GATE:
+				case TRAP_DOOR:
+				case LEVER:
+				case WOOD_BUTTON:
+				case STONE_BUTTON:
+				case WORKBENCH:
+				case ENDER_CHEST:
+				case ENCHANTMENT_TABLE:
+					break; // Right click is allowed
+			}
 		}
 	}
 
@@ -305,48 +378,15 @@ public class ProtectionPlayerListener implements Listener
 	// }
 
 	/*
-	 * InventoryEvent
-	 */
-
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	private void onInventoryOpen(InventoryOpenEvent event)
-	{
-		InventoryType type = event.getInventory().getType();
-
-		switch (type)
-		{
-			case ANVIL:
-			case BEACON:
-			case BREWING:
-			case CHEST:
-			case CRAFTING:
-			case CREATIVE:
-			case DISPENSER:
-			case DROPPER:
-			case ENCHANTING:
-			case ENDER_CHEST:
-			case FURNACE:
-			case HOPPER:
-			case MERCHANT:
-			case PLAYER:
-			case WORKBENCH:
-				break;
-
-			default:
-				break;
-		}
-	}
-
-	/*
 	 * VehiculeEvent
 	 */
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	private void onVehicleDamage(VehicleDamageEvent event)
 	{
-		log.info(event.getClass().getSimpleName());
+		log.debug(event.getClass().getSimpleName());
 
-		if (event.getAttacker().getType() != EntityType.PLAYER)
+		if (event.getAttacker() == null || event.getAttacker().getType() != EntityType.PLAYER)
 			return;
 
 		if (!canBuildAt((Player) event.getAttacker(), event.getVehicle().getLocation().getBlock()))
@@ -355,11 +395,23 @@ public class ProtectionPlayerListener implements Listener
 
 	private static boolean canBuildAt(Player player, Block block)
 	{
-		boolean result = HeavenGuard.getRegionManager().canBuildAt(player.getUniqueId(), //
+		final boolean result = HeavenGuard.getRegionManager().canBuildAt(player.getUniqueId(), //
 				block.getWorld().getName(), block.getX(), block.getY(), block.getZ());
 
 		if (!result)
 			ChatUtil.sendMessage(player, "Cet endroit est protégé.");
+
+		return result;
+	}
+
+	private static boolean isPvp(Player player, Block block)
+	{
+
+		final boolean result = HeavenGuard.getRegionManager().isPvp( //
+				block.getWorld().getName(), block.getX(), block.getY(), block.getZ());
+
+		if (!result)
+			ChatUtil.sendMessage(player, "Cet endroit n'est pas PVP.");
 
 		return result;
 	}
