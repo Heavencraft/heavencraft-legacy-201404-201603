@@ -17,7 +17,7 @@ import fr.heavencraft.utils.DevUtil;
 
 public class ProtectionEnvironmentListener implements Listener
 {
-	private static final HeavenLog log = HeavenLog.getLogger(ProtectionPlayerListener.class);
+	private static final HeavenLog log = HeavenLog.getLogger(ProtectionEnvironmentListener.class);
 
 	public ProtectionEnvironmentListener()
 	{

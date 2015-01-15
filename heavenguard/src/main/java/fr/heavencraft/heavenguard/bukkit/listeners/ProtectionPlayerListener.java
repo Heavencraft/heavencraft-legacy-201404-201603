@@ -47,6 +47,7 @@ public class ProtectionPlayerListener implements Listener
 	public ProtectionPlayerListener()
 	{
 		DevUtil.registerListener(this);
+		log.enableDebug();
 	}
 
 	/*
@@ -190,7 +191,7 @@ public class ProtectionPlayerListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	private void on(PlayerBedEnterEvent event)
+	private void onPlayerBedEnter(PlayerBedEnterEvent event)
 	{
 		log.debug(event.getClass().getSimpleName());
 
@@ -201,16 +202,20 @@ public class ProtectionPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	private void onPlayerInteractEntity(PlayerInteractEntityEvent event)
 	{
-		log.debug(event.getClass().getSimpleName() + " " + event.getEventName());
+		log.debug(event.getClass().getSimpleName() + " " + event.getRightClicked().getType());
 
 		if (!canBuildAt(event.getPlayer(), event.getRightClicked().getLocation().getBlock()))
 			event.setCancelled(true);
 	}
 
+	// Because ARMOR_STAND doesn't fire PlayerInteractEntityEvent
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	private void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event)
 	{
-		log.debug(event.getClass().getSimpleName() + " " + event.getEventName());
+		if (event.getRightClicked().getType() != EntityType.ARMOR_STAND)
+			return;
+		
+		log.debug(event.getClass().getSimpleName() + " " + event.getRightClicked().getType());
 
 		if (!canBuildAt(event.getPlayer(), event.getRightClicked().getLocation().getBlock()))
 			event.setCancelled(true);
@@ -263,6 +268,8 @@ public class ProtectionPlayerListener implements Listener
 				case FURNACE:
 				case JUKEBOX:
 				case TRAPPED_CHEST:
+				case ENDER_PORTAL_FRAME:
+				case FLOWER_POT:
 					// Redstone
 				case DISPENSER:
 				case NOTE_BLOCK:
@@ -282,25 +289,6 @@ public class ProtectionPlayerListener implements Listener
 					break;
 
 				default:
-				case WOODEN_DOOR:
-				case SPRUCE_DOOR:
-				case BIRCH_DOOR:
-				case JUNGLE_DOOR:
-				case ACACIA_DOOR:
-				case DARK_OAK_DOOR:
-				case FENCE_GATE:
-				case SPRUCE_FENCE_GATE:
-				case BIRCH_FENCE_GATE:
-				case JUNGLE_FENCE_GATE:
-				case ACACIA_FENCE_GATE:
-				case DARK_OAK_FENCE_GATE:
-				case TRAP_DOOR:
-				case LEVER:
-				case WOOD_BUTTON:
-				case STONE_BUTTON:
-				case WORKBENCH:
-				case ENDER_CHEST:
-				case ENCHANTMENT_TABLE:
 					break; // Right click is allowed
 			}
 		}
