@@ -27,7 +27,7 @@ public class RemoveOwnerSubCommand extends AbstractSubCommand
 			@SuppressWarnings("deprecation")
 			final OfflinePlayer player = Bukkit.getOfflinePlayer(arg);
 
-			region.removeMember(player.getUniqueId(), false);
+			region.removeMember(player.getUniqueId(), true);
 			ChatUtil.sendMessage(sender, "{%1$s} n'est plus propriétaire de la protection {%2$s}.", player.getName(), regionName);
 		}
 	}
