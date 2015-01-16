@@ -13,6 +13,7 @@ import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenguard.api.HeavenGuardPermissions;
 import fr.heavencraft.heavenguard.api.Region;
 import fr.heavencraft.heavenguard.api.RegionProvider;
+import fr.heavencraft.heavenguard.bukkit.HeavenGuard;
 import fr.heavencraft.utils.ChatUtil;
 import fr.heavencraft.utils.DevUtil;
 
@@ -43,7 +44,7 @@ public class SelectSubCommand extends AbstractSubCommand
 				new Location(world, region.getMaxX(), region.getMaxY(), region.getMaxZ()));
 
 		DevUtil.getWorldEdit().setSelection((Player) sender, selection);
-		ChatUtil.sendMessage(sender, "La protection {%1$s} a (peut-être) été selectionnée.", regionName);
+		HeavenGuard.sendMessage(sender, "La protection {%1$s} a (peut-être) été selectionnée.", regionName);
 	}
 
 	@Override

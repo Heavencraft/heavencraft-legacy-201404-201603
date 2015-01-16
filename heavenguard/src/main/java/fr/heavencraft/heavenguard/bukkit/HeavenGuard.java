@@ -1,5 +1,9 @@
 package fr.heavencraft.heavenguard.bukkit;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+
 import fr.heavencraft.HeavenPlugin;
 import fr.heavencraft.api.providers.connection.ConnectionProvider;
 import fr.heavencraft.api.providers.connection.ConnectionProvider.Database;
@@ -66,5 +70,26 @@ public class HeavenGuard extends HeavenPlugin
 	public static RegionManager getRegionManager()
 	{
 		return regionManager;
+	}
+	
+	/*
+	 * SendMessage Utility
+	 */
+
+	private static final String BEGIN = "{";
+	private static final String END = "}";
+	private static final String COLOR = ChatColor.AQUA.toString();
+	private static final String COLOR_H = ChatColor.GREEN.toString();
+	
+	public static void sendMessage(final CommandSender sender, final String format, final Object... args)
+	{
+		Bukkit.getScheduler().runTask(getInstance(), new Runnable() {
+			@Override
+			public void run() {
+				String message = String.format(format, args);
+				message = COLOR + message.replace(BEGIN, COLOR_H).replace(END, COLOR);
+				sender.sendMessage(message);
+			}
+		});
 	}
 }

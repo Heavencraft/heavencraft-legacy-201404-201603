@@ -27,13 +27,14 @@ import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.vehicle.VehicleCreateEvent;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
+import org.bukkit.event.vehicle.VehicleEnterEvent;
 
 import com.google.common.collect.Sets;
 
 import fr.heavencraft.common.logs.HeavenLog;
 import fr.heavencraft.heavenguard.bukkit.HeavenGuard;
-import fr.heavencraft.utils.ChatUtil;
 import fr.heavencraft.utils.DevUtil;
 
 public class ProtectionPlayerListener implements Listener
@@ -47,7 +48,7 @@ public class ProtectionPlayerListener implements Listener
 	public ProtectionPlayerListener()
 	{
 		DevUtil.registerListener(this);
-		log.enableDebug();
+//		log.enableDebug();
 	}
 
 	/*
@@ -222,7 +223,7 @@ public class ProtectionPlayerListener implements Listener
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	private void on(PlayerInteractEvent event)
+	private void onPlayerInteract(PlayerInteractEvent event)
 	{
 
 		switch (event.getAction())
@@ -372,7 +373,7 @@ public class ProtectionPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	private void onVehicleDamage(VehicleDamageEvent event)
 	{
-		log.debug(event.getClass().getSimpleName());
+		log.debug(event.getClass().getSimpleName() + " " + event.getVehicle().getType());
 
 		if (event.getAttacker() == null || event.getAttacker().getType() != EntityType.PLAYER)
 			return;
@@ -387,7 +388,7 @@ public class ProtectionPlayerListener implements Listener
 				block.getWorld().getName(), block.getX(), block.getY(), block.getZ());
 
 		if (!result)
-			ChatUtil.sendMessage(player, "Cet endroit est protégé.");
+			HeavenGuard.sendMessage(player, "Cet endroit est protégé.");
 
 		return result;
 	}
@@ -399,7 +400,7 @@ public class ProtectionPlayerListener implements Listener
 				block.getWorld().getName(), block.getX(), block.getY(), block.getZ());
 
 		if (!result)
-			ChatUtil.sendMessage(player, "Cet endroit n'est pas PVP.");
+			HeavenGuard.sendMessage(player, "Cet endroit n'est pas PVP.");
 
 		return result;
 	}
