@@ -31,7 +31,7 @@ public class ProtectionEnvironmentListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	private void onBlockBurn(BlockBurnEvent event)
 	{
-		log.info(event.getClass().getSimpleName());
+		log.debug(event.getClass().getSimpleName());
 
 		if (isProtected(event.getBlock()))
 			event.setCancelled(true);
@@ -44,7 +44,7 @@ public class ProtectionEnvironmentListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	private void onEntityChangeBlock(EntityChangeBlockEvent event)
 	{
-		log.info(event.getClass().getSimpleName());
+		log.debug(event.getClass().getSimpleName());
 
 		// BUGFIX : Pour faire tomber le sable, le gravier, etc...
 		if (event.getEntityType() == EntityType.FALLING_BLOCK)
@@ -73,7 +73,7 @@ public class ProtectionEnvironmentListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityExplode(EntityExplodeEvent event)
 	{
-		log.info(event.getClass().getSimpleName());
+		log.debug(event.getClass().getSimpleName());
 
 		for (Iterator<Block> it = event.blockList().iterator(); it.hasNext();)
 		{

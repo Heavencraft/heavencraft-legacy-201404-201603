@@ -47,7 +47,7 @@ public class PlayerListener implements Listener
 
 		if (regions.isEmpty())
 		{
-			ChatUtil.sendMessage(player, "Il n'y a aucune protection ici.");
+			HeavenGuard.sendMessage(player, "Il n'y a aucune protection ici.");
 		}
 
 		else
@@ -62,15 +62,15 @@ public class PlayerListener implements Listener
 					str.append(", ");
 			}
 
-			ChatUtil.sendMessage(player, str.toString());
+			HeavenGuard.sendMessage(player, str.toString());
 		}
 
 		StringBuilder canYouBuild = new StringBuilder("Pouvez-vous construire ? ");
 		canYouBuild.append(HeavenGuard.getRegionManager().canBuildAt(player.getUniqueId(), world, x, y, z) ? "Oui." : "Non.");
-		ChatUtil.sendMessage(player, canYouBuild.toString());
+		HeavenGuard.sendMessage(player, canYouBuild.toString());
 
 		StringBuilder pvpEnabled = new StringBuilder("PVP activé ? ");
 		pvpEnabled.append(HeavenGuard.getRegionManager().isPvp(world, x, y, z) ? "Oui." : "Non.");
-		ChatUtil.sendMessage(player, pvpEnabled.toString());
+		HeavenGuard.sendMessage(player, pvpEnabled.toString());
 	}
 }

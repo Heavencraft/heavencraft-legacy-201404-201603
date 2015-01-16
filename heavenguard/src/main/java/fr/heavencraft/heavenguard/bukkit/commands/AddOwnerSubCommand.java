@@ -8,7 +8,7 @@ import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenguard.api.HeavenGuardPermissions;
 import fr.heavencraft.heavenguard.api.Region;
 import fr.heavencraft.heavenguard.api.RegionProvider;
-import fr.heavencraft.utils.ChatUtil;
+import fr.heavencraft.heavenguard.bukkit.HeavenGuard;
 
 public class AddOwnerSubCommand extends AbstractSubCommand
 {
@@ -28,7 +28,7 @@ public class AddOwnerSubCommand extends AbstractSubCommand
 			final OfflinePlayer player = Bukkit.getOfflinePlayer(arg);
 
 			region.addMember(player.getUniqueId(), false);
-			ChatUtil.sendMessage(sender, "{%1$s} est maintenant propriétaire de la protection {%2$s}.", player.getName(),
+			HeavenGuard.sendMessage(sender, "{%1$s} est maintenant propriétaire de la protection {%2$s}.", player.getName(),
 					regionName);
 		}
 	}
@@ -36,6 +36,6 @@ public class AddOwnerSubCommand extends AbstractSubCommand
 	@Override
 	public void sendUsage(CommandSender sender)
 	{
-		ChatUtil.sendMessage(sender, "/rg {addowner} <protection> <propriétaire(s)>");
+		HeavenGuard.sendMessage(sender, "/rg {addowner} <protection> <propriétaire(s)>");
 	}
 }
