@@ -10,7 +10,7 @@ import fr.heavencraft.common.logs.HeavenLog;
 
 public class DefaultConnectionProvider implements ConnectionProvider
 {
-	private static final String DB_URL = "jdbc:mysql://localhost:3306/%1$s?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull&?autoReconnect=true";
+	private static final String DB_URL = "jdbc:mysql://localhost:3306/%1$s?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull&autoReconnect=true";
 
 	private final HeavenLog log = HeavenLog.getLogger(getClass());
 
