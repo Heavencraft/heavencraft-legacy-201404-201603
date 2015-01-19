@@ -2,6 +2,7 @@ package fr.heavencraft.heavenguard.api;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.UUID;
 
 public class RegionManager
@@ -79,6 +80,13 @@ public class RegionManager
 
 		// No regions here : the block is protected if the world is not public
 		return !regionProvider.getGlobalRegion(world).getBooleanFlag(Flag.PUBLIC);
+	}
+	
+	public boolean areInSameRegion(String world, int x1, int y1, int z1, int x2, int y2, int z2) {
+		final Collection<Region> regions1 = getRegionsAtLocationWithoutParents(world, x1, y1, z1);
+		final Collection<Region> regions2 = getRegionsAtLocationWithoutParents(world, x2, y2, z2);
+		
+		return regions1.equals(regions2);
 	}
 
 	public boolean isPvp(String world, int x, int y, int z)
