@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
@@ -140,6 +141,7 @@ public class SQLRegionProvider implements RegionProvider
 
 		if (regions == null)
 		{
+			// User ArrayList, so we can iterate on it faster
 			regions = new ArrayList<Region>();
 			regionsByWorld.put(region.getWorld(), regions);
 		}
@@ -236,8 +238,10 @@ public class SQLRegionProvider implements RegionProvider
 	@Override
 	public Collection<Region> getRegionsAtLocation(String world, int x, int y, int z)
 	{
-		Collection<Region> regionsAtLocation = new ArrayList<Region>();
 		Collection<Region> regionsInWorld = regionsByWorld.get(world);
+
+		// Use HashSet, so we can do equals without caring about the order.
+		Collection<Region> regionsAtLocation = new HashSet<Region>();
 
 		if (regionsInWorld != null)
 		{
