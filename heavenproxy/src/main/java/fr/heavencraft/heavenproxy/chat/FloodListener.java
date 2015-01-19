@@ -35,10 +35,13 @@ public class FloodListener implements Listener
 
 		toIgnore.add("I'm chatting on my iPhone using Minecraft Connect! Check it out, it's free :)".toLowerCase());
 		toIgnore.add("I'm chatting on my iPhone using Minecraft Connect!  Check it out, it's free :)".toLowerCase());
+		toIgnore.add("I'm chatting on my iPhone using MC Connect for Minecraft! Check it out, it's free :)".toLowerCase());
 		toIgnore.add("I'm chatting on my iPad using Minecraft Connect! Check it out, it's free :)".toLowerCase());
 		toIgnore.add("I'm chatting on my iPad using Minecraft Connect!  Check it out, it's free :)".toLowerCase());
+		toIgnore.add("I'm chatting on my iPad using MC Connect for Minecraft! Check it out, it's free :)".toLowerCase());
 		toIgnore.add("I'm chatting on my iPod touch using Minecraft Connect! Check it out, it's free :)".toLowerCase());
 		toIgnore.add("I'm chatting on my iPod touch using Minecraft Connect!  Check it out, it's free :)".toLowerCase());
+		toIgnore.add("I'm chatting on my iPod touch using MC Connect for Minecraft! Check it out, it's free :)".toLowerCase());
 		toIgnore.add("connected with an iPhone using MineChat".toLowerCase());
 		toIgnore.add("connected with an iPad using MineChat".toLowerCase());
 		toIgnore.add("connected with an iPod touch using MineChat".toLowerCase());
@@ -56,23 +59,23 @@ public class FloodListener implements Listener
 		if (!(event.getSender() instanceof ProxiedPlayer))
 			return;
 
-		String message = event.getMessage().toLowerCase();
+		final String message = event.getMessage().toLowerCase();
 
 		// Si c'est une commande autre que /m, /me ou /send -> on fait rien
-		if (event.isCommand() && !message.startsWith("/m ") && !message.startsWith("/msg ")
-				&& !message.startsWith("/t ") && !message.startsWith("/tell ") && !message.startsWith("/w ")
-				&& !message.startsWith("/me ") && !message.startsWith("/envoyer "))
+		if (event.isCommand() && !message.startsWith("/m ") && !message.startsWith("/msg ") && !message.startsWith("/t ")
+				&& !message.startsWith("/tell ") && !message.startsWith("/w ") && !message.startsWith("/me ")
+				&& !message.startsWith("/envoyer "))
 			return;
 
 		// Si c'est un des messages à filter -> on annule le message
-		if (toIgnore.contains(message))
+		if (toIgnore.contains(message) || message.startsWith("Connected from Hyperchat"))
 		{
 			event.setCancelled(true);
 			return;
 		}
 
-		ProxiedPlayer player = (ProxiedPlayer) event.getSender();
-		String playerName = player.getName();
+		final ProxiedPlayer player = (ProxiedPlayer) event.getSender();
+		final String playerName = player.getName();
 
 		// BUGFIX : Si c'est pour la banque Semi-RP -> on fait rien
 		if (player.getServer().getInfo().getName().equalsIgnoreCase("semirp") && Utils.isInteger(message))
@@ -80,8 +83,8 @@ public class FloodListener implements Listener
 			return;
 		}
 
-		String lastMessage = _history.get(playerName);
-		Calendar lastTimestamp = _timestamps.get(playerName);
+		final String lastMessage = _history.get(playerName);
+		final Calendar lastTimestamp = _timestamps.get(playerName);
 
 		if (lastTimestamp != null)
 			lastTimestamp.add(Calendar.SECOND, 15);
@@ -90,7 +93,7 @@ public class FloodListener implements Listener
 		{
 			event.setCancelled(true);
 
-			Integer counter = _counter.get(playerName) + 1;
+			final Integer counter = _counter.get(playerName) + 1;
 			_counter.put(playerName, counter);
 
 			switch (counter)
@@ -104,10 +107,9 @@ public class FloodListener implements Listener
 				case 3:
 					try
 					{
-						BanCommand.banPlayer(playerName, "le Prof. Chen",
-								String.format("Flood abusif : '%1$s'", message));
+						BanCommand.banPlayer(playerName, "le Prof. Chen", String.format("Flood abusif : '%1$s'", message));
 					}
-					catch (HeavenException e)
+					catch (final HeavenException e)
 					{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
