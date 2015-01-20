@@ -79,6 +79,19 @@ public class DungeonCommand extends HeavenCommand{
 			}
 			return;
 		}
+		else if(args[0].equalsIgnoreCase("kick"))
+		{
+			Player pl = HeavenRPG.getInstance().getServer().getPlayer(args[1]);
+			if(pl == null)
+				return;
+			Dungeon dg = DungeonManager.getDungeonByUser(pl);
+			if(dg == null)
+				return;
+			if(dg.get_requiredPlayerAmmount() != 0)
+				return;
+			dg.handlePlayerDisconnect(pl);
+			return;
+		}
 		else if(args[0].equalsIgnoreCase("create"))
 		{
 			if(args.length!= 3)
@@ -213,10 +226,13 @@ public class DungeonCommand extends HeavenCommand{
 	@Override
 	protected void sendUsage(CommandSender sender) {
 		ChatUtil.sendMessage(sender, "/{donjon} quitter | Fait quitter le donjon.");
+		if (!sender.hasPermission(RPGpermissions.DONJON_ADMIN))
+			return;	
 		ChatUtil.sendMessage(sender, "/{donjon} create <nom donjon> <joueurs> | Crée un nouveau donjon et définie le nombre de joueurs requis.");
 		ChatUtil.sendMessage(sender, "/{donjon} delete <nom donjon> | Supprime le donjon.");
 		ChatUtil.sendMessage(sender, "/{donjon} list | Affiche une liste des donjons.");
 		ChatUtil.sendMessage(sender, "/{donjon} debug | Active le mode débug.");
+		ChatUtil.sendMessage(sender, "/{donjon} kick <joueur> | Force un joueur a quitter le donjon.");
 		ChatUtil.sendMessage(sender, "/{donjon} <nom donjon> lobby | Définie le spawn de la lobby.");
 		ChatUtil.sendMessage(sender, "/{donjon} <nom donjon> room <index 0-99> | Définie le spawn de la salle séléctionée au WE.");
 		ChatUtil.sendMessage(sender, "/{donjon} <nom donjon> room <index 0-99> delete | Supprime la salle.");
