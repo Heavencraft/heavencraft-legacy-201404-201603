@@ -2,27 +2,39 @@ package fr.heavencraft.heavenguard.datamodel;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.UUID;
 
+import fr.heavencraft.api.providers.connection.ConnectionProvider;
+import fr.heavencraft.common.logs.HeavenLog;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.exceptions.SQLErrorException;
+import fr.heavencraft.heavenguard.api.Flag;
 import fr.heavencraft.heavenguard.api.Region;
 import fr.heavencraft.heavenguard.bukkit.HeavenGuard;
 
 public class SQLRegion implements Region
 {
-	private static final String ADD_MEMBER = "REPLACE INTO regions_members (region_name, uuid, owner) VALUES (LOWER(?), ?, ?);";
-	private static final String IS_MEMBER = "SELECT owner FROM regions_members WHERE region_name = LOWER(?) AND uuid = ? LIMIT 1;";
-	private static final String GET_MEMBERS = "SELECT uuid FROM regions_members WHERE region_name = LOWER(?) AND owner = ?;";
+	// Log
+	private static final HeavenLog log = HeavenLog.getLogger(SQLRegion.class);
+
+	// SQL queries
+	private static final String SETPARENT = "UPDATE regions SET parent_name = LOWER(?) WHERE name = LOWER(?) LIMIT 1";
+	private static final String REDEFINE = "UPDATE regions SET world = LOWER(?), min_x = ?, min_y = ?, min_z = ?, max_x = ?, max_y = ?, max_z = ? WHERE name = LOWER(?) LIMIT 1";
+	private static final String LOAD_MEMBERS = "SELECT uuid, owner FROM regions_members WHERE region_name = LOWER(?);";
+	private static final String ADD_MEMBER = "INSERT INTO regions_members (region_name, uuid, owner) VALUES (LOWER(?), ?, ?);";
 	private static final String REMOVE_MEMBER = "DELETE FROM regions_members WHERE region_name = LOWER(?) AND uuid = ? AND owner = ? LIMIT 1;";
 
-	private static final String REDEFINE = "UPDATE regions SET world = LOWER(?), min_x = ?, min_y = ?, min_z = ?, max_x = ?, max_y = ?, max_z = ? WHERE name = LOWER(?) LIMIT 1";
-	private static final String SETPARENT = "UPDATE regions SET parent_name = LOWER(?) WHERE name = LOWER(?) LIMIT 1";
+	private static final String FLAG_PREFIX = "flag_";
+	private static final String SET_FLAG = "UPDATE regions SET %1$s = ? WHERE name = LOWER(?) LIMIT 1;";
 
-	private static final String LOAD_MEMBERS = "SELECT uuid, owner FROM regions_members WHERE region_name = LOWER(?);";
+	private final ConnectionProvider connectionProvider;
 
 	private final String name;
 	private String parentName;
@@ -38,8 +50,13 @@ public class SQLRegion implements Region
 	private final Collection<UUID> members = new HashSet<UUID>();
 	private final Collection<UUID> owners = new HashSet<UUID>();
 
-	SQLRegion(ResultSet rs) throws SQLException
+	// Flags
+	private final Map<Flag, Boolean> booleanFlags = new HashMap<Flag, Boolean>();
+
+	SQLRegion(ConnectionProvider connectionProvider, ResultSet rs) throws SQLException
 	{
+		this.connectionProvider = connectionProvider;
+
 		name = rs.getString("name");
 		parentName = rs.getString("parent_name");
 
@@ -51,12 +68,46 @@ public class SQLRegion implements Region
 		maxY = rs.getInt("max_y");
 		maxZ = rs.getInt("max_z");
 
+		// Load flags
+		ResultSetMetaData metadata = rs.getMetaData();
+		int columnCount = metadata.getColumnCount();
+
+		for (int column = 1; column <= columnCount; column++)
+		{
+			String columnName = metadata.getColumnName(column);
+
+			if (columnName.startsWith(FLAG_PREFIX))
+			{
+				Flag flag = Flag.getUniqueInstanceByName(columnName.substring(FLAG_PREFIX.length()));
+
+				if (flag == null)
+				{
+					log.warn("Unknown flag %1$s", columnName);
+					continue;
+				}
+
+				switch (metadata.getColumnType(column))
+				{
+					case Types.BIT:
+						Boolean booleanValue = rs.getBoolean(columnName);
+
+						if (!rs.wasNull())
+							booleanFlags.put(flag, booleanValue);
+						break;
+
+					default:
+						break;
+				}
+			}
+
+		}
+
 		loadMembers();
 	}
 
 	private void loadMembers() throws SQLException
 	{
-		try (PreparedStatement ps = HeavenGuard.getConnection().prepareStatement(LOAD_MEMBERS))
+		try (PreparedStatement ps = connectionProvider.getConnection().prepareStatement(LOAD_MEMBERS))
 		{
 			ps.setString(1, name);
 
@@ -84,6 +135,10 @@ public class SQLRegion implements Region
 	@Override
 	public boolean canBuilt(UUID player)
 	{
+		// If this region is public
+		if (getBooleanFlag(Flag.PUBLIC) == Boolean.TRUE)
+			return true;
+
 		// Members/Owners of this region can build there
 		if (isMember(player, false))
 			return true;
@@ -120,7 +175,7 @@ public class SQLRegion implements Region
 	public void setParent(String parentName) throws HeavenException
 	{
 		// Update database
-		try (PreparedStatement ps = HeavenGuard.getConnection().prepareStatement(SETPARENT))
+		try (PreparedStatement ps = connectionProvider.getConnection().prepareStatement(SETPARENT))
 		{
 			ps.setString(1, parentName);
 			ps.setString(2, name);
@@ -145,8 +200,14 @@ public class SQLRegion implements Region
 	@Override
 	public boolean contains(String world, int x, int y, int z)
 	{
-		return this.world.equalsIgnoreCase(world) //
-				&& minX <= x && x <= maxX //
+		return this.world.equals(world) //
+				&& containsSameWorld(x, y, z);
+	}
+
+	@Override
+	public boolean containsSameWorld(int x, int y, int z)
+	{
+		return minX <= x && x <= maxX //
 				&& minY <= y && y <= maxY //
 				&& minZ <= z && z <= maxZ;
 	}
@@ -155,7 +216,7 @@ public class SQLRegion implements Region
 	public void redefine(String world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) throws HeavenException
 	{
 		// Update database
-		try (PreparedStatement ps = HeavenGuard.getConnection().prepareStatement(REDEFINE))
+		try (PreparedStatement ps = connectionProvider.getConnection().prepareStatement(REDEFINE))
 		{
 			ps.setString(1, world);
 			ps.setInt(2, minX);
@@ -234,7 +295,7 @@ public class SQLRegion implements Region
 	@Override
 	public void addMember(UUID player, boolean owner) throws HeavenException
 	{
-		try (PreparedStatement ps = HeavenGuard.getConnection().prepareStatement(ADD_MEMBER))
+		try (PreparedStatement ps = connectionProvider.getConnection().prepareStatement(ADD_MEMBER))
 		{
 			ps.setString(1, name);
 			ps.setString(2, player.toString());
@@ -242,6 +303,11 @@ public class SQLRegion implements Region
 
 			if (ps.executeUpdate() != 1)
 				throw new HeavenException("Impossible de mettre à jour la région.");
+
+			if (owner)
+				owners.add(player);
+			else
+				members.add(player);
 		}
 		catch (SQLException ex)
 		{
@@ -256,38 +322,13 @@ public class SQLRegion implements Region
 		if (owner)
 			return owners.contains(player);
 		else
-			return members.contains(player) || owners.contains(player);
+			return owners.contains(player) || members.contains(player);
 	}
-
-	// @Override
-	// public boolean isMember(UUID player, boolean owner)
-	// {
-	// try (PreparedStatement ps =
-	// HeavenGuard.getConnection().prepareStatement(IS_MEMBER))
-	// {
-	// ps.setString(1, name);
-	// ps.setString(2, player.toString());
-	//
-	// try (ResultSet rs = ps.executeQuery())
-	// {
-	// if (!rs.next())
-	// return false;
-	//
-	// return owner ? rs.getBoolean("owner") : true;
-	// }
-	// }
-	// catch (SQLException ex)
-	// {
-	// ex.printStackTrace();
-	// new SQLErrorException();
-	// }
-	// return false;
-	// }
 
 	@Override
 	public void removeMember(UUID player, boolean owner) throws HeavenException
 	{
-		try (PreparedStatement ps = HeavenGuard.getConnection().prepareStatement(REMOVE_MEMBER))
+		try (PreparedStatement ps = connectionProvider.getConnection().prepareStatement(REMOVE_MEMBER))
 		{
 			ps.setString(1, name);
 			ps.setString(2, player.toString());
@@ -295,6 +336,9 @@ public class SQLRegion implements Region
 
 			if (ps.executeUpdate() != 1)
 				throw new HeavenException("Impossible de mettre à jour la région.");
+
+			owners.remove(player);
+			members.remove(player);
 		}
 		catch (SQLException ex)
 		{
@@ -310,31 +354,59 @@ public class SQLRegion implements Region
 		return new HashSet<UUID>(owner ? owners : members);
 	}
 
-	// @Override
-	// public Collection<UUID> getMembers(boolean owner)
-	// {
-	// try (PreparedStatement ps =
-	// HeavenGuard.getConnection().prepareStatement(GET_MEMBERS))
-	// {
-	// ps.setString(1, name);
-	// ps.setBoolean(2, owner);
-	//
-	// try (ResultSet rs = ps.executeQuery())
-	// {
-	// Collection<UUID> members = new HashSet<UUID>();
-	//
-	// while (rs.next())
-	// members.add(UUID.fromString(rs.getString("uuid")));
-	//
-	// return members;
-	// }
-	// }
-	// catch (SQLException ex)
-	// {
-	// ex.printStackTrace();
-	// new SQLErrorException();
-	// }
-	//
-	// return null;
-	// }
+	/*
+	 * Flags
+	 */
+
+	@Override
+	public Map<Flag, Boolean> getBooleanFlags()
+	{
+		// Never return the original collection, because plugin could modify it.
+		return new HashMap<Flag, Boolean>(booleanFlags);
+	}
+
+	@Override
+	public Boolean getBooleanFlag(Flag flag)
+	{
+		Boolean value = booleanFlags.get(flag);
+
+		if (value != null)
+			return value;
+
+		Region parent = getParent();
+
+		if (parent != null)
+			return parent.getBooleanFlag(flag);
+
+		return null;
+	}
+
+	@Override
+	public void setBooleanFlag(Flag flag, Boolean value) throws HeavenException
+	{
+		String query = String.format(SET_FLAG, FLAG_PREFIX + flag.getName());
+
+		try (PreparedStatement ps = connectionProvider.getConnection().prepareStatement(query))
+		{
+			if (value != null)
+				ps.setBoolean(1, value);
+			else
+				ps.setNull(1, Types.BIT);
+
+			ps.setString(2, name);
+
+			if (ps.executeUpdate() != 1)
+				throw new HeavenException("Impossible de mettre à jour la région.");
+
+			if (value != null)
+				booleanFlags.put(flag, value);
+			else
+				booleanFlags.remove(flag);
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			new SQLErrorException();
+		}
+	}
 }

@@ -2,6 +2,7 @@ package fr.heavencraft.heavenproxy.motd;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.event.ProxyPingEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -34,7 +35,9 @@ public class ProxyPingListener implements Listener
 	{
 		for (String server : servers)
 		{
-			if (ProxyServer.getInstance().getServerInfo(server).getPlayers().size() != 0)
+			ServerInfo serverInfo = ProxyServer.getInstance().getServerInfo(server);
+
+			if (serverInfo != null && serverInfo.getPlayers().size() != 0)
 			{
 				return ChatColor.GREEN + name;
 			}

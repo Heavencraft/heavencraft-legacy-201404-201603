@@ -1,5 +1,8 @@
 package fr.tenkei.creaplugin.listeners;
 
+import org.bukkit.Material;
+
+import fr.heavencraft.listeners.ForbiddenBlocksListener;
 import fr.heavencraft.listeners.RedstoneLampListener;
 import fr.heavencraft.listeners.sign.LinkSignListener;
 import fr.tenkei.creaplugin.MyPlugin;
@@ -25,6 +28,7 @@ public class ListenersManager
 		new NightSignListener();
 
 		new UserListener();
+		new ForbiddenBlocksListener(Material.BARRIER);
 
 		new ProtectionBlockListener(plugin);
 		new ProtectionEntityListener(plugin);
