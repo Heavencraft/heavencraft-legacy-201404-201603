@@ -4,42 +4,44 @@ import org.bukkit.command.CommandSender;
 
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenguard.api.HeavenGuardPermissions;
+import fr.heavencraft.heavenguard.api.RegionProvider;
 import fr.heavencraft.heavenguard.bukkit.HeavenGuard;
-import fr.heavencraft.utils.ChatUtil;
 
-public class SetparentSubCommand implements SubCommand
+public class SetparentSubCommand extends AbstractSubCommand
 {
-	@Override
-	public boolean hasPermission(CommandSender sender)
+	public SetparentSubCommand(RegionProvider regionProvider)
 	{
-		return sender.hasPermission(HeavenGuardPermissions.REGION_SETPARENT);
+		super(regionProvider, HeavenGuardPermissions.SETPARENT_COMMAND);
 	}
 
 	@Override
-	public void execute(CommandSender sender, String[] args) throws HeavenException
+	public void execute(CommandSender sender, String regionName, String[] args) throws HeavenException
 	{
-		String child, parent = null;
-
 		switch (args.length)
 		{
-			case 3:
-				parent = args[2];
+			case 0: // Remove parent
+				setparent(sender, regionName, null);
+				break;
 
-			case 2:
-				child = args[1];
+			case 1: // Set parent
+				setparent(sender, regionName, args[0]);
 				break;
 
 			default:
 				sendUsage(sender);
 				return;
 		}
-
-		HeavenGuard.getRegionProvider().getRegionByName(child).setParent(parent);
 	}
 
 	@Override
 	public void sendUsage(CommandSender sender)
 	{
-		ChatUtil.sendMessage(sender, "/{region} setparent <protection> <protection parente>");
+		HeavenGuard.sendMessage(sender, "/rg {setparent} <protection> <protection parente>");
+	}
+
+	private void setparent(CommandSender sender, String regionName, String parentName) throws HeavenException
+	{
+		regionProvider.getRegionByName(regionName).setParent(parentName);
+		HeavenGuard.sendMessage(sender, "La protection {%1$s} a désormais pour parent {%2$s}.", regionName, parentName);
 	}
 }

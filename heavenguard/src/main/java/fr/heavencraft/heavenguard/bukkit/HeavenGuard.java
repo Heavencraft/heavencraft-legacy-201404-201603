@@ -1,14 +1,18 @@
 package fr.heavencraft.heavenguard.bukkit;
 
-import java.sql.Connection;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 
 import fr.heavencraft.HeavenPlugin;
+import fr.heavencraft.api.providers.connection.ConnectionProvider;
 import fr.heavencraft.api.providers.connection.ConnectionProvider.Database;
+import fr.heavencraft.api.providers.connection.DefaultConnectionProvider;
 import fr.heavencraft.heavenguard.api.RegionManager;
 import fr.heavencraft.heavenguard.api.RegionProvider;
-import fr.heavencraft.heavenguard.bukkit.commands.RegionCommand;
-import fr.heavencraft.heavenguard.bukkit.listeners.BlockListener;
 import fr.heavencraft.heavenguard.bukkit.listeners.PlayerListener;
+import fr.heavencraft.heavenguard.bukkit.listeners.ProtectionEnvironmentListener;
+import fr.heavencraft.heavenguard.bukkit.listeners.ProtectionPlayerListener;
 import fr.heavencraft.heavenguard.datamodel.SQLRegionProvider;
 
 /*
@@ -33,10 +37,10 @@ public class HeavenGuard extends HeavenPlugin
 		return instance;
 	}
 
-	private static RegionProvider regionProvider = new SQLRegionProvider();
-	private static RegionManager regionManager = new RegionManager(regionProvider);
+	private static RegionProvider regionProvider;
+	private static RegionManager regionManager;
 
-	private static String database;
+	private ConnectionProvider connectionProvider;
 
 	@Override
 	public void onEnable()
@@ -46,14 +50,16 @@ public class HeavenGuard extends HeavenPlugin
 		super.onEnable();
 
 		new PlayerListener();
-		new BlockListener();
 
-		new RegionCommand();
-	}
+		new ProtectionPlayerListener();
+		new ProtectionEnvironmentListener();
 
-	public static Connection getConnection()
-	{
-		return instance.getConnectionProvider().getConnection(Database.TEST);
+		connectionProvider = new DefaultConnectionProvider(Database.TEST);
+
+		regionProvider = new SQLRegionProvider(connectionProvider);
+		regionManager = new RegionManager(regionProvider);
+
+		new RegionCommand(regionProvider);
 	}
 
 	public static RegionProvider getRegionProvider()
@@ -64,5 +70,26 @@ public class HeavenGuard extends HeavenPlugin
 	public static RegionManager getRegionManager()
 	{
 		return regionManager;
+	}
+	
+	/*
+	 * SendMessage Utility
+	 */
+
+	private static final String BEGIN = "{";
+	private static final String END = "}";
+	private static final String COLOR = ChatColor.AQUA.toString();
+	private static final String COLOR_H = ChatColor.GREEN.toString();
+	
+	public static void sendMessage(final CommandSender sender, final String format, final Object... args)
+	{
+		Bukkit.getScheduler().runTask(getInstance(), new Runnable() {
+			@Override
+			public void run() {
+				String message = String.format(format, args);
+				message = COLOR + message.replace(BEGIN, COLOR_H).replace(END, COLOR);
+				sender.sendMessage(message);
+			}
+		});
 	}
 }

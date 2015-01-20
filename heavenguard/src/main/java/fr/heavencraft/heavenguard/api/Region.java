@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import fr.heavencraft.exceptions.HeavenException;
 
-public interface Region
+public interface Region extends HasBooleanFlags
 {
 	String getName();
 
@@ -24,6 +24,9 @@ public interface Region
 	 */
 
 	boolean contains(String world, int x, int y, int z);
+
+	// For optimization purpose, if we already have checked the world
+	boolean containsSameWorld(int x, int y, int z);
 
 	void redefine(String world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) throws HeavenException;
 

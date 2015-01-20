@@ -17,7 +17,7 @@ public class MyPlugin extends HeavenPlugin
 	public final static String builder = "server.builder";
 	public final static String archiModo = "server.archimodo";
 	public final static String administrator = "server.administrator";
-	public final static int LIMITE_WORLDS = 1700;
+	public final static int LIMITE_WORLDS = 2000;
 
 	private static Logger _log = Logger.getLogger("Minecraft");
 

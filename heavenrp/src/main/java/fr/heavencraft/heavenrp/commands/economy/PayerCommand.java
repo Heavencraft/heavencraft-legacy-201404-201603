@@ -67,6 +67,8 @@ public class PayerCommand extends HeavenCommand
 
 		ChatUtil.sendMessage(dest.getOwners(), MONEY_RECEIVE, delta, sender.getName());
 		ChatUtil.sendMessage(dest.getOwners(), MONEY_BANK_NOW, dest.getBalance());
+
+		DevUtil.logInfo("%1$s sent %2$s po to bank account %3$s.", player.getName(), delta, dest.getName());
 	}
 
 	@Override
