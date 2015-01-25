@@ -3,6 +3,7 @@ package fr.lorgan17.lorganserver.entities;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.exceptions.UserNotFoundException;
@@ -12,12 +13,10 @@ public class User
 {
 
 	private final int _id;
-	private final String _name;
 
-	private User(int id, String name)
+	private User(int id)
 	{
 		_id = id;
-		_name = name;
 	}
 
 	public int getId()
@@ -25,16 +24,33 @@ public class User
 		return _id;
 	}
 
-	public static void createUser(String name)
+	public void updateName(String name)
 	{
 		try (PreparedStatement ps = LorganServer.getConnection().prepareStatement(
-				"INSERT INTO users (name) VALUES (?);"))
+				"UPDATE users SET name = ? WHERE id = ? LIMIT 1;"))
 		{
 			ps.setString(1, name);
+			ps.setInt(2, _id);
 			ps.executeUpdate();
 		}
 
-		catch (SQLException ex)
+		catch (final SQLException ex)
+		{
+			ex.printStackTrace();
+		}
+	}
+
+	public static void createUser(UUID uuid, String name)
+	{
+		try (PreparedStatement ps = LorganServer.getConnection()
+				.prepareStatement("INSERT INTO users (uuid, name) VALUES (?, ?);"))
+		{
+			ps.setString(1, uuid.toString());
+			ps.setString(2, name);
+			ps.executeUpdate();
+		}
+
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 		}
@@ -42,8 +58,7 @@ public class User
 
 	public static User getUserByName(String name) throws HeavenException
 	{
-		try (PreparedStatement ps = LorganServer.getConnection().prepareStatement(
-				"SELECT * FROM users WHERE name = ? LIMIT 1"))
+		try (PreparedStatement ps = LorganServer.getConnection().prepareStatement("SELECT * FROM users WHERE name = ? LIMIT 1"))
 		{
 			ps.setString(1, name);
 
@@ -52,15 +67,36 @@ public class User
 				if (!rs.next())
 					throw new UserNotFoundException(name);
 
-				return new User(rs.getInt(1), name);
+				return new User(rs.getInt("id"));
 			}
 		}
 
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new UserNotFoundException(name);
 		}
 	}
 
+	public static User getUserByUniqueId(UUID uuid) throws HeavenException
+	{
+		try (PreparedStatement ps = LorganServer.getConnection().prepareStatement("SELECT * FROM users WHERE uuid = ? LIMIT 1"))
+		{
+			ps.setString(1, uuid.toString());
+
+			try (ResultSet rs = ps.executeQuery())
+			{
+				if (!rs.next())
+					throw new UserNotFoundException(uuid);
+
+				return new User(rs.getInt("id"));
+			}
+		}
+
+		catch (final SQLException ex)
+		{
+			ex.printStackTrace();
+			throw new UserNotFoundException(uuid);
+		}
+	}
 }

@@ -1,5 +1,7 @@
 package fr.lorgan17.lorganserver.listeners;
 
+import java.util.UUID;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
@@ -27,20 +29,25 @@ public class ServerListener implements Listener
 	@EventHandler
 	public void onPlayerLogin(PlayerLoginEvent event)
 	{
+		final Player player = event.getPlayer();
+		final String name = player.getName();
+		final UUID uuid = player.getUniqueId();
+
 		try
 		{
-			User user = User.getUserByName(event.getPlayer().getName());
+			final User user = User.getUserByUniqueId(uuid);
+			user.updateName(name);
 		}
-		catch (HeavenException ex)
+		catch (final HeavenException ex)
 		{
-			User.createUser(event.getPlayer().getName());
+			User.createUser(uuid, name);
 		}
 	}
 
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
-		Player player = event.getPlayer();
+		final Player player = event.getPlayer();
 
 		if (!player.hasPlayedBefore())
 			PlayerUtil.teleportPlayer(player, WorldsManager.getSpawn());
@@ -57,10 +64,9 @@ public class ServerListener implements Listener
 		if (!(event.getEntity() instanceof Player))
 			return;
 
-		Entity attacker = event.getDamager();
+		final Entity attacker = event.getDamager();
 
-		if (attacker instanceof Player
-				|| (attacker instanceof Arrow && ((Arrow) attacker).getShooter() instanceof Player))
+		if (attacker instanceof Player || (attacker instanceof Arrow && ((Arrow) attacker).getShooter() instanceof Player))
 			event.setCancelled(true);
 	}
 
