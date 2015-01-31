@@ -12,9 +12,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
-import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
@@ -30,14 +28,18 @@ public class DungeonListener implements Listener {
 	{
 		Bukkit.getPluginManager().registerEvents(this, HeavenRPG.getInstance());
 	}
-
-	@EventHandler(priority = EventPriority.MONITOR)
+	
+	/**
+	 * Track mobs spawning into a dungeons.
+	 * @param event
+	 */
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onCreatureSpawn(CreatureSpawnEvent event)
 	{
 		if (!(event.getEntity() instanceof LivingEntity))
 			return;
 
-		//exclusions:
+		// Mobs excluded from track-list.
 		if(event.getEntity().getType() == EntityType.BAT ||
 				event.getEntity().getType() == EntityType.CREEPER ||
 				event.getEntity().getType() == EntityType.ENDERMAN)
@@ -46,66 +48,37 @@ public class DungeonListener implements Listener {
 		DungeonRoom dgr = DungeonManager.getRoomByLocation(event.getEntity().getLocation());
 		if(dgr != null)
 			dgr.add_mob(event.getEntity());
+		return;
 	}
 	
-	@EventHandler
-	public void customDespawn(ItemDespawnEvent event)
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onCreatureDespawn(ItemDespawnEvent event)
 	{
 		if (!(event.getEntity() instanceof LivingEntity)) 
 			return;
-
 		DungeonRoom dgr = DungeonManager.getRoomByEntity(event.getEntity());
-
 		if(dgr != null)
 			dgr.remove_mob(event.getEntity());
+		return;
 	}
 
-	@EventHandler (ignoreCancelled = true, priority = EventPriority.LOW)
+	@EventHandler (ignoreCancelled = true, priority = EventPriority.HIGH)
 	public void onEntityDeath(EntityDeathEvent event) {
 		if (!(event.getEntity() instanceof LivingEntity)) 
 			return;
-
 		DungeonRoom dgr = DungeonManager.getRoomByEntity(event.getEntity());
-
 		if(dgr != null)
 			dgr.remove_mob(event.getEntity());
+		return;
 	}
 	
-	@EventHandler (ignoreCancelled = true, priority = EventPriority.LOW)
+	@EventHandler (ignoreCancelled = true, priority = EventPriority.HIGH)
 	public void onEntityExplode(EntityExplodeEvent event) {
 		if (!(event.getEntity() instanceof LivingEntity)) 
 			return;
-
 		DungeonRoom dgr = DungeonManager.getRoomByEntity(event.getEntity());
-
 		if(dgr != null)
 			dgr.remove_mob(event.getEntity());
-	}
-	
-
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerDamage(EntityDamageEvent e) {
-		
-		return;
-		/*
-		if (!(e.getEntity() instanceof Player))
-			return;	
-		
-		Player victim = (Player) e.getEntity();
-		
-		Dungeon dg = DungeonManager.getDungeonByUser(victim);
-		if(dg == null)
-			return;
-		
-		if(DungeonManager.is_debug())
-			DevUtils.log("~~onPlayerDamage: || Victim Health: {%1$s} || EventCausedDamage: {%2$s} || Is Deadly: {%3$b}", victim.getHealth() + " ",e.getDamage()+ " ", ((victim.getHealth() - e.getDamage()) <= 0) + " " );
-		
-		if ((victim.getHealth() - e.getDamage()) <= 0)
-		{
-			e.setDamage(0);
-			dg.handlePlayerDeath(victim);
-			e.setCancelled(true);
-		} */
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -117,18 +90,16 @@ public class DungeonListener implements Listener {
 		if(dg == null)
 			return;
 		Entity combuster = e.getCombuster();
-		Entity defender = e.getEntity();
 		  if (combuster instanceof Projectile) {
 			  LivingEntity attacker = (LivingEntity) ((Projectile)combuster).getShooter();
 			  if(!(attacker instanceof Player))
 				  return;
+			  e.setDuration(0);
 			  e.setCancelled(true);
 			  return;
 		  }
-
 		if(DungeonManager.is_debug())
-			DevUtils.log("~~onPlayerCombust: || Victim Health: {%1$s} || Duration left: {%2$s}", victim.getHealth() + " ",e.getDuration() + " ");
-		
+			DevUtils.log("~~onPlayerCombust: || Victim Health: {%1$s} || Duration left: {%2$s}", victim.getHealth() + " ",e.getDuration() + " ");		
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -158,7 +129,7 @@ public class DungeonListener implements Listener {
 		}
 				
 		if(DungeonManager.is_debug())
-			DevUtils.log("~~onPlayerDamageByEntity: || Victim Health: {%1$s} || EventCausedDamage: {%2$s} || Is Deadly: {%3$s}",victim.getHealth() + " ",e.getDamage()+ " ", ((victim.getHealth() - e.getDamage()) <= 0) + " " );
+			DevUtils.log("~~onPlayerDamageByEntity: || Victim Health: {%1$s} || EventCausedDamage: {%2$s} || Is Deadly: {%3$s}",victim.getHealth() + " ",e.getDamage() + "(" + e.getDamage() + ") ", ((victim.getHealth() - e.getDamage()) <= 0) + " " );
 		
 		if (victim.getHealth() - e.getDamage() <= 0)
 		{
@@ -169,7 +140,7 @@ public class DungeonListener implements Listener {
 		}
 	}
 	
-	@EventHandler (ignoreCancelled = true, priority = EventPriority.LOW)
+	@EventHandler (priority = EventPriority.MONITOR)
 	public void onPlayerDies(PlayerDeathEvent event) {
 		Dungeon dg = DungeonManager.getDungeonByUser(event.getEntity());
 		if(dg == null)
@@ -177,7 +148,7 @@ public class DungeonListener implements Listener {
 		dg.handlePlayerDeath(event.getEntity());
 	}
 	
-	@EventHandler (ignoreCancelled = true, priority = EventPriority.LOW)
+	@EventHandler (ignoreCancelled = true, priority = EventPriority.MONITOR)
 	public void onPlayerDisconnect(PlayerQuitEvent event) {
 		Dungeon dg = DungeonManager.getDungeonByUser(event.getPlayer());
 		if(dg == null)
