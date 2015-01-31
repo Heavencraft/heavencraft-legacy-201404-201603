@@ -18,19 +18,16 @@ import fr.heavencraft.rpg.RPGFiles;
 import fr.heavencraft.rpg.donjon.Dungeon.DungeonRoom;
 
 public class DungeonManager implements Listener{
-	private static List<Dungeon> _dungeons= new ArrayList<Dungeon>();
+	private static List<Dungeon> _dungeons = new ArrayList<Dungeon>();
 	private static boolean _debug = false;
 
 	public static List<Dungeon> get_dungeons() {
 		return _dungeons;
 	}	
 
-
-
 	public static void loadDungeons()
 	{
 		_dungeons.clear();
-
 		if(RPGFiles.getDungeons().getConfigurationSection("Dungeons") != null)
 		{
 			for(String dname : RPGFiles.getDungeons().getConfigurationSection("Dungeons").getKeys(false))
@@ -41,7 +38,7 @@ public class DungeonManager implements Listener{
 							RPGFiles.getDungeons().getInt("Dungeons." + dname + ".requiredPlayers"),
 							DevUtils.deserializeLoc(RPGFiles.getDungeons().getString("Dungeons." + dname + ".lobby")));
 
-					// Charger les salles
+					// Load all dungeons rooms
 					for(String roomidx : RPGFiles.getDungeons().getConfigurationSection("Dungeons." + dname + ".rooms").getKeys(false))
 					{
 						Location lsp = DevUtils.deserializeLoc(RPGFiles.getDungeons().getString("Dungeons." + dname + ".rooms." + roomidx + ".spawn"));
@@ -54,7 +51,6 @@ public class DungeonManager implements Listener{
 						DungeonRoom dgr = new DungeonRoom(Integer.parseInt(roomidx), lsp, new CuboidSelection(l1.getWorld(), l1, l2), trig);
 						dg.addDungeonRoom(dgr);	
 					}
-
 					DungeonManager.addDungeon(dg);
 				}
 				catch(Exception ex)
@@ -171,13 +167,8 @@ public class DungeonManager implements Listener{
 	public static void evacutateDungeon()
 	{
 		for(Dungeon dg : get_dungeons())
-		{
 			if(dg.is_Running())
-			{
-				// EVAC
 				dg.evacDungeon();
-			}
-		}
 	}
 
 	public static boolean is_debug() {

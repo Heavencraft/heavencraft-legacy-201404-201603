@@ -219,7 +219,24 @@ public class DungeonCommand extends HeavenCommand{
 	}
 
 	@Override
-	protected void onConsoleCommand(CommandSender sender, String[] args) throws HeavenException {
+	protected void onConsoleCommand(CommandSender sender, String[] args) throws HeavenException {	
+		if(args.length == 0)
+			return;
+
+		if(args[0].equalsIgnoreCase("kick"))
+		{
+			Player pl = HeavenRPG.getInstance().getServer().getPlayer(args[1]);
+			if(pl == null)
+				return;
+			Dungeon dg = DungeonManager.getDungeonByUser(pl);
+			if(dg == null)
+				return;
+			if(dg.get_requiredPlayerAmmount() != 0)
+				return;
+			dg.handlePlayerDisconnect(pl);
+			return;
+		}
+		
 		ChatUtil.sendMessage(sender, "Cette commande n'est pas utilisable depuis la console.");
 	}
 

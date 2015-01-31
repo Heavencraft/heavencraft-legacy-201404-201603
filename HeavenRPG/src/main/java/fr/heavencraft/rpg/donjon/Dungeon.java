@@ -12,12 +12,14 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 
 import fr.heavencraft.Utils.ChatUtil;
+import fr.heavencraft.Utils.DevUtils;
 import fr.heavencraft.rpg.HeavenRPG;
 import fr.heavencraft.rpg.RPGFiles;
 
@@ -184,18 +186,19 @@ public class Dungeon {
 
 		// Véifier si le nombre de joueurs est suffisant
 		if(get_inDungeon().size() == get_requiredPlayerAmmount())
-			// Démarrer la lobby
-			startDungeon();		
+			startDungeon();		// Démarrer la lobby
 		else
 			for(UUID uid : get_inDungeon().keySet())
-			{
 				if(Bukkit.getOfflinePlayer(uid) != null && Bukkit.getOfflinePlayer(uid).isOnline())
 					ChatUtil.sendMessage(Bukkit.getPlayer(uid), DUNGEON_NEED_MORE_PLAYER, get_requiredPlayerAmmount() - get_inDungeon().size());
-			}
-
 
 	}
 
+	/**
+	 * Starts the dungeon
+	 * - Sets: running = true, actualRoom = 1
+	 * - Move players to room
+	 */
 	private void startDungeon()
 	{
 		// Marquer le donjon comme en jeu
@@ -210,10 +213,13 @@ public class Dungeon {
 		for(UUID uid : _inDungeon.keySet())
 			if(Bukkit.getOfflinePlayer(uid) != null && Bukkit.getOfflinePlayer(uid).isOnline())
 				Bukkit.getPlayer(uid).teleport(dgr.get_spawn());
-
-
 	}
 
+	/**
+	 * Tries to move player to next room.
+	 * @param p Player who tried.
+	 * @param idx Next room index.
+	 */
 	public void handleChangeRoomAttemp(Player p, int idx)
 	{
 		DungeonRoom dgr = getDungeonRoomByIndex(getActualRoom());
@@ -248,9 +254,12 @@ public class Dungeon {
 		for(UUID uid : _inDungeon.keySet())
 			if(Bukkit.getOfflinePlayer(uid) != null && Bukkit.getOfflinePlayer(uid).isOnline())
 				Bukkit.getPlayer(uid).teleport(next_dgr.get_spawn());
-
 	}
 
+	/**
+	 * Handles the try to end the dungeon.
+	 * @param p Player who tried.
+	 */
 	public void handleEndDungeonAttemp(Player p)
 	{
 		DungeonRoom dgr = getDungeonRoomByIndex(getActualRoom());
@@ -266,33 +275,9 @@ public class Dungeon {
 			ChatUtil.sendMessage(p, DUNGEON_X_MOBS_LEFT, dgr.get_mobs().size());
 			return;
 		}
-		stopDungeon();
+		evacDungeon();
 	}
 
-	private void stopDungeon()
-	{
-		// Téléporter les joueurs a leur point d'entrée
-		for(UUID uid : _inDungeon.keySet())
-			if(Bukkit.getOfflinePlayer(uid) != null && Bukkit.getOfflinePlayer(uid).isOnline())
-				Bukkit.getPlayer(uid).teleport(_inDungeon.get(uid));		
-
-		// Vider la liste des joueurs
-		_inDungeon.clear();
-
-		//Destroy Entities
-				for(DungeonRoom dgr : _rooms)
-				{
-					for(Entity mob : dgr.get_mobs())
-						mob.remove();
-					dgr._mobs.clear();
-				}
-				
-		// Réninitialiser le pointeur
-		setActualRoom(0);
-		// Marquer le donjon comme en jeu
-		set_Running(false);
-	}
-	
 	public void evacDungeon()
 	{
 		// Téléporter les joueurs a leur point d'entrée
@@ -322,7 +307,7 @@ public class Dungeon {
 		DungeonRoom dgr = getDungeonRoomByIndex(idx);
 		if(dgr.get_trigger() == null)
 		{
-			ChatUtil.broadcastMessage(DUNGEON_REQUIRE_TRIGGER);
+			DevUtils.log(DUNGEON_REQUIRE_TRIGGER);
 			return;
 		}
 		for(Entity mob : dgr.get_mobs())
@@ -340,51 +325,61 @@ public class Dungeon {
 		redstoneBlock.setType(Material.REDSTONE_BLOCK);
 	}
 
+	/**
+	 * Handles the death of a player into a dungeon.
+	 * Clears his inventory, armor, food, hunger.
+	 * @param p Player who died.
+	 */
 	public void handlePlayerDeath(Player p)
 	{
-		if(!isPlayerInside(p))
+		// Check if player is inside a dungeon.
+		if(!isPlayerInside(p)) 
 			return;
-		
+		// Reset his life, food & effects
 		p.setFireTicks(0);
 		p.setFoodLevel(20);
 		p.setHealth(20);
 		for(PotionEffect eff : p.getActivePotionEffects())
 			p.removePotionEffect(eff.getType());
-		
 		// Remove inventory
 		p.getInventory().clear();
-		
+		p.getInventory().setHelmet(new ItemStack(Material.AIR));
+		p.getInventory().setChestplate(new ItemStack(Material.AIR));
+		p.getInventory().setLeggings(new ItemStack(Material.AIR));
+		p.getInventory().setBoots(new ItemStack(Material.AIR));
+		// Move him to lobby
 		p.teleport(get_lobby());
+		// Add a reference to dead Players list
 		if(!_deadPlayers.contains(p.getUniqueId()))
 			_deadPlayers.add(p.getUniqueId());
 		
-		if(_deadPlayers.size() < _inDungeon.size())
-			return;
-		// End of game
-		evacDungeon();
-		
+		// If there is no survivor left, stop dungeon.
+		if(_deadPlayers.size() >= _inDungeon.size())
+			evacDungeon();
+		return;
 	}
 	
 	public void handlePlayerDisconnect(Player p)
 	{
+		// Check if player is inside a dungeon.
 		if(!isPlayerInside(p))
 			return;
-		
+		// Reset his life, food & effects
 		p.setFireTicks(0);
 		p.setFoodLevel(20);
 		p.setHealth(20);
 		for(PotionEffect eff : p.getActivePotionEffects())
-			p.removePotionEffect(eff.getType());
-		
-		p.teleport(_inDungeon.get(p.getUniqueId()));
+			p.removePotionEffect(eff.getType());	
+		// Move him to lobby
+		p.teleport(get_lobby());
+		// Add a reference to dead Players list
 		if(!_deadPlayers.contains(p.getUniqueId()))
 			_deadPlayers.add(p.getUniqueId());
 		
-		//if(_deadPlayers.size() < _inDungeon.size())
-		//	return;
-		// End of game
-		evacDungeon();
-		
+		// If there is no survivor left, stop dungeon.
+		if(_deadPlayers.size() >= _inDungeon.size())
+			evacDungeon();
+		return;
 	}
 	
 	
