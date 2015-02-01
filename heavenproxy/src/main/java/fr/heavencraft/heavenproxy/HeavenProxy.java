@@ -134,7 +134,7 @@ public class HeavenProxy extends Plugin
 			convertBanList();
 			convertUserList();
 			convertUserSemirp();
-			convertUserCrea();
+			convertUserCreative();
 			convertUserOrigines();
 		}
 		catch (final Throwable t)
@@ -374,15 +374,16 @@ public class HeavenProxy extends Plugin
 		});
 	}
 
-	public static void convertUserCrea()
+	private static final Pattern UUID_PATTERN = Pattern
+			.compile("([0-9a-fA-F]{8})([0-9a-fA-F]{4})([0-9a-fA-F]{4})([0-9a-fA-F]{4})([0-9a-fA-F]+)");
+
+	public static void convertUserCreative()
 	{
 		ProxyServer.getInstance().getScheduler().runAsync(HeavenProxy.getInstance(), new Runnable()
 		{
 			@Override
 			public void run()
 			{
-				System.out.println("convertUserCrea");
-
 				try
 				{
 					final PreparedStatement ps = getCreaConnection().prepareStatement("SELECT name FROM users WHERE uuid = ''");
@@ -408,7 +409,7 @@ public class HeavenProxy extends Plugin
 							{
 
 								final String name = profile.getName();
-								final String uuid = profile.getId();
+								final String uuid = UUID_PATTERN.matcher(profile.getId()).replaceFirst("$1-$2-$3-$4-$5");
 
 								if (name == null || uuid == null)
 									throw new UUIDNotFoundException(name);
@@ -439,9 +440,6 @@ public class HeavenProxy extends Plugin
 
 		});
 	}
-
-	private static final Pattern UUID_PATTERN = Pattern
-			.compile("([0-9a-fA-F]{8})([0-9a-fA-F]{4})([0-9a-fA-F]{4})([0-9a-fA-F]{4})([0-9a-fA-F]+)");
 
 	public static void convertUserOrigines()
 	{
