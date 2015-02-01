@@ -19,7 +19,7 @@ public class PlayerUtil
 	public static Player getPlayer(String playerName) throws PlayerNotConnectedException
 	{
 		@SuppressWarnings("deprecation")
-		Player player = Bukkit.getPlayer(playerName);
+		final Player player = Bukkit.getPlayer(playerName);
 
 		if (player == null)
 			throw new PlayerNotConnectedException(playerName);
@@ -33,7 +33,7 @@ public class PlayerUtil
 		{
 			return getPlayer(playerName).getName();
 		}
-		catch (PlayerNotConnectedException ex)
+		catch (final PlayerNotConnectedException ex)
 		{
 			return playerName;
 		}
@@ -54,10 +54,10 @@ public class PlayerUtil
 		{
 			return getUUID(getPlayer(playerName));
 		}
-		catch (PlayerNotConnectedException ex)
+		catch (final PlayerNotConnectedException ex)
 		{
-			ProfileRepository repository = new HttpProfileRepository("minecraft");
-			Profile[] profiles = repository.findProfilesByNames(playerName);
+			final ProfileRepository repository = new HttpProfileRepository("minecraft");
+			final Profile[] profiles = repository.findProfilesByNames(playerName);
 
 			if (profiles.length == 1)
 				return profiles[0].getId();
