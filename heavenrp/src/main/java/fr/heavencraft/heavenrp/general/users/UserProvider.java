@@ -76,10 +76,11 @@ public class UserProvider
 			throw new SQLErrorException();
 		}
 	}
-	
+
 	/**
-	 * Returns an User using his uuid.
-	 * Remark: This function does not add the user to the cache.
+	 * Returns an User using his uuid. Remark: This function does not add the
+	 * user to the cache.
+	 * 
 	 * @param uuid
 	 * @return
 	 * @throws HeavenException
@@ -109,19 +110,30 @@ public class UserProvider
 		}
 	}
 
+	private static final String UPDATE_NAME_BANK = "UPDATE bank_account b, users u " //
+			+ "SET b.owner = ? " //
+			+ "WHERE b.owner = u.name " //
+			+ "AND u.uuid = ? ";
+	private static final String UPDATE_NAME_USERS = "UPDATE users SET name = ? WHERE uuid = ? LIMIT 1";
+
 	public static void updateName(String uuid, String name) throws HeavenException
 	{
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(UPDATE_NAME_BANK))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"UPDATE users SET name = ? WHERE uuid = ? LIMIT 1");
 			ps.setString(1, name);
 			ps.setString(2, uuid);
 
 			if (ps.executeUpdate() != 1)
 				throw new UserNotFoundException(name);
 
-			ps.close();
+			try (PreparedStatement ps2 = HeavenRP.getConnection().prepareStatement(UPDATE_NAME_USERS))
+			{
+				ps.setString(1, name);
+				ps.setString(2, uuid);
+
+				if (ps.executeUpdate() != 1)
+					throw new UserNotFoundException(name);
+			}
 		}
 		catch (SQLException ex)
 		{
