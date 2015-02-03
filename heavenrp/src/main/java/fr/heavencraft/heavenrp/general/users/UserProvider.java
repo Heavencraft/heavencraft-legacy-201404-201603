@@ -129,10 +129,10 @@ public class UserProvider
 
 			try (PreparedStatement ps2 = HeavenRP.getConnection().prepareStatement(UPDATE_NAME_USERS))
 			{
-				ps.setString(1, name);
-				ps.setString(2, uuid);
+				ps2.setString(1, name);
+				ps2.setString(2, uuid);
 
-				if (ps.executeUpdate() != 1)
+				if (ps2.executeUpdate() != 1)
 					throw new UserNotFoundException(name);
 			}
 		}
