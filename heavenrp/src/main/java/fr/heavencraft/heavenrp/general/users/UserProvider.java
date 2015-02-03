@@ -113,7 +113,8 @@ public class UserProvider
 	private static final String UPDATE_NAME_BANK = "UPDATE bank_account b, users u " //
 			+ "SET b.owner = ? " //
 			+ "WHERE b.owner = u.name " //
-			+ "AND u.uuid = ? ";
+			+ "AND u.uuid = ? " //
+			+ "AND b.type = 'U'";
 	private static final String UPDATE_NAME_USERS = "UPDATE users SET name = ? WHERE uuid = ? LIMIT 1";
 
 	public static void updateName(String uuid, String name) throws HeavenException
