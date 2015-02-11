@@ -11,6 +11,7 @@ public interface ConnectionProvider extends Provider
 		WEB("mc-db"), //
 		PROXY("proxy"), //
 		SEMIRP("minecraft-semirp"), //
+		UAT_SEMIRP("minecraft-semirp-test"), //
 		TEST("test");
 
 		private final String database;

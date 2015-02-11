@@ -5,23 +5,23 @@ import java.util.Collection;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.bukkit.selections.Selection;
 
+import fr.heavencraft.HeavenPlugin;
 import fr.heavencraft.exceptions.HeavenException;
 
 public class DevUtil
 {
-	private static JavaPlugin plugin;
+	private static HeavenPlugin plugin;
 
-	public static JavaPlugin getPlugin()
+	public static HeavenPlugin getPlugin()
 	{
 		return plugin;
 	}
 
-	public static void setPlugin(JavaPlugin plugin)
+	public static void setPlugin(HeavenPlugin plugin)
 	{
 		DevUtil.plugin = plugin;
 	}
@@ -49,7 +49,7 @@ public class DevUtil
 
 	public static Selection getWESelection(Player player) throws HeavenException
 	{
-		Selection selection = getWorldEdit().getSelection(player);
+		final Selection selection = getWorldEdit().getSelection(player);
 
 		if (selection == null)
 			throw new HeavenException("Vous devez sélectionner une zone avec le bâton.");
@@ -67,7 +67,7 @@ public class DevUtil
 		{
 			return Integer.parseInt(s);
 		}
-		catch (NumberFormatException ex)
+		catch (final NumberFormatException ex)
 		{
 			throw new HeavenException("Le nombre {%1$s} est incorrect.", s);
 		}
@@ -75,7 +75,7 @@ public class DevUtil
 
 	public static int toUint(String s) throws HeavenException
 	{
-		int i = toInt(s);
+		final int i = toInt(s);
 
 		if (i < 0)
 			throw new HeavenException("Le nombre {%1$s} est incorrect.", s);
