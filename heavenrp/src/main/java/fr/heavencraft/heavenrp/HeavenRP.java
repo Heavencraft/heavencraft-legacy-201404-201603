@@ -53,7 +53,6 @@ public class HeavenRP extends HeavenPlugin
 
 	}
 
-	@Deprecated
 	public static Connection getConnection()
 	{
 		return srpConnection.getConnection();
