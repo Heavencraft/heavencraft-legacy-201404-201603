@@ -33,19 +33,39 @@ public class FloodListener implements Listener
 	{
 		Utils.registerListener(this);
 
-		toIgnore.add("I'm chatting on my iPhone using Minecraft Connect! Check it out, it's free :)".toLowerCase());
-		toIgnore.add("I'm chatting on my iPhone using Minecraft Connect!  Check it out, it's free :)".toLowerCase());
-		toIgnore.add("I'm chatting on my iPhone using MC Connect for Minecraft! Check it out, it's free :)".toLowerCase());
-		toIgnore.add("I'm chatting on my iPad using Minecraft Connect! Check it out, it's free :)".toLowerCase());
-		toIgnore.add("I'm chatting on my iPad using Minecraft Connect!  Check it out, it's free :)".toLowerCase());
-		toIgnore.add("I'm chatting on my iPad using MC Connect for Minecraft! Check it out, it's free :)".toLowerCase());
-		toIgnore.add("I'm chatting on my iPod touch using Minecraft Connect! Check it out, it's free :)".toLowerCase());
-		toIgnore.add("I'm chatting on my iPod touch using Minecraft Connect!  Check it out, it's free :)".toLowerCase());
-		toIgnore.add("I'm chatting on my iPod touch using MC Connect for Minecraft! Check it out, it's free :)".toLowerCase());
-		toIgnore.add("connected with an iPhone using MineChat".toLowerCase());
-		toIgnore.add("connected with an iPad using MineChat".toLowerCase());
-		toIgnore.add("connected with an iPod touch using MineChat".toLowerCase());
-		toIgnore.add("Connected via \"MC Chat\" for Android!".toLowerCase());
+		// I'm chatting on my iPhone using Minecraft Connect! Check it out, it's
+		// free :)
+		// I'm chatting on my iPhone using Minecraft Connect! Check it out, it's
+		// free :)
+		// I'm chatting on my iPad using Minecraft Connect! Check it out, it's
+		// free :)
+		// I'm chatting on my iPad using Minecraft Connect! Check it out, it's
+		// free :)
+		// I'm chatting on my iPod touch using Minecraft Connect! Check it out,
+		// it's free :)
+		// I'm chatting on my iPod touch using Minecraft Connect! Check it out,
+		// it's free :)
+		toIgnore.add("minecraft connect");
+
+		// I'm chatting on my iPhone using MC Connect for Minecraft! Check it
+		// out, it's free :)
+		// I'm chatting on my iPad using MC Connect for Minecraft! Check it out,
+		// it's free :)
+		// I'm chatting on my iPod touch using MC Connect for Minecraft! Check
+		// it out, it's free :)
+		toIgnore.add("mc connect");
+
+		// connected with an iPhone using MineChat
+		// connected with an iPad using MineChat
+		// connected with an iPod touch using MineChat
+		toIgnore.add("minechat");
+
+		// Connected via "MC Chat" for Android!
+		toIgnore.add("mc chat");
+
+		// Connected from Hyperchat v2.6.04 on a Samsung GT-I9505
+		// Connected from Hyperchat v2.6.07 on a HTC One S
+		toIgnore.add("hyperchat");
 
 		log.info(TAG + "Initialized");
 	}
@@ -68,10 +88,13 @@ public class FloodListener implements Listener
 			return;
 
 		// Si c'est un des messages à filter -> on annule le message
-		if (toIgnore.contains(message) || message.startsWith("Connected from Hyperchat"))
+		for (final String keyword : toIgnore)
 		{
-			event.setCancelled(true);
-			return;
+			if (message.contains(keyword))
+			{
+				event.setCancelled(true);
+				return;
+			}
 		}
 
 		final ProxiedPlayer player = (ProxiedPlayer) event.getSender();

@@ -16,7 +16,7 @@ public class TellCommand extends HeavenCommand
 
 	public TellCommand()
 	{
-		super("tell", null, new String[] { "m", "msg", "t", "w", "whisper" });
+		super("tell", null, new String[] { "m", "msg", "t", "w", "whisper", "minecraft:tell" });
 	}
 
 	@Override
@@ -28,8 +28,8 @@ public class TellCommand extends HeavenCommand
 			return;
 		}
 
-		ProxiedPlayer target = Utils.getPlayer(args[0]);
-		String message = Utils.ArrayToString(args, 1, " ");
+		final ProxiedPlayer target = Utils.getPlayer(args[0]);
+		final String message = Utils.ArrayToString(args, 1, " ");
 
 		sendPrivateMessage(sender, target, message);
 	}
@@ -51,7 +51,7 @@ public class TellCommand extends HeavenCommand
 
 	public static void reply(CommandSender sender, String message) throws HeavenException
 	{
-		CommandSender target = Utils.getPlayer(lastFrom.get(sender.getName()));
+		final CommandSender target = Utils.getPlayer(lastFrom.get(sender.getName()));
 
 		sendPrivateMessage(sender, target, message);
 	}

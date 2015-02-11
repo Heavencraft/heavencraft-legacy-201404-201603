@@ -44,7 +44,7 @@ import fr.heavencraft.heavenrp.horses.HorsesListener;
 import fr.heavencraft.heavenrp.key.DonjonSignListener;
 import fr.heavencraft.heavenrp.provinces.ProvinceListener;
 import fr.heavencraft.heavenrp.provinces.ProvinceSignListener;
-import fr.heavencraft.heavenrp.scoreboards.ProvinceScoreboards;
+import fr.heavencraft.heavenrp.scoreboards.ProvinceScoreboard;
 import fr.heavencraft.heavenrp.shops.Stock2SignListener;
 import fr.heavencraft.heavenrp.warps.WarpSignListener;
 import fr.heavencraft.heavenrp.worlds.WorldsListener;
@@ -81,8 +81,8 @@ import fr.manu67100.heavenrp.laposte.handlers.PopupMenuAPI;
 import fr.manu67100.heavenrp.laposte.handlers.PostOfficeManager;
 import fr.manu67100.heavenrp.laposte.listeners.InventoryListener;
 import fr.manu67100.heavenrp.laposte.listeners.PostOfficeListener;
-import fr.manu67100.heavenrp.laposte.listeners.PostePlayerListener;
 import fr.manu67100.heavenrp.laposte.listeners.PostOfficeSignListener;
+import fr.manu67100.heavenrp.laposte.listeners.PostePlayerListener;
 
 public class InitManager
 {
@@ -214,6 +214,7 @@ public class InitManager
 		new DonjonSignListener();
 
 		// Provinces
+		ProvinceScoreboard.initialize();
 		new ProvinceListener();
 		new ProvinceSignListener();
 
@@ -250,8 +251,7 @@ public class InitManager
 
 		// Coffre2
 		new Stock2SignListener();
-		
+
 		// Teams
-		new ProvinceScoreboards();
 	}
 }

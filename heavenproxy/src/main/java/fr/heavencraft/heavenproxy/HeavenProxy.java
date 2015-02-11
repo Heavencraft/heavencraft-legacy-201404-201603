@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -56,11 +57,13 @@ public class HeavenProxy extends Plugin
 	private final static String MAIN_DB_URL = "jdbc:mysql://localhost:3306/mc-db?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull";
 	private final static String SRP_DB_URL = "jdbc:mysql://localhost:3306/minecraft-semirp?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull";
 	private final static String CREA_DB_URL = "jdbc:mysql://localhost:3306/minecraft-creative?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull";
+	private final static String ORIGINES_DB_URL = "jdbc:mysql://localhost:3306/minecraft-survie?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull";
 
 	private static Connection _connection;
 	private static Connection _mainConnection;
 	private static Connection _srpConnection;
 	private static Connection _creaConnection;
+	private static Connection _originesConnection;
 
 	private static HeavenProxy _instance;
 
@@ -131,9 +134,10 @@ public class HeavenProxy extends Plugin
 			convertBanList();
 			convertUserList();
 			convertUserSemirp();
-			convertUserCrea();
+			convertUserCreative();
+			convertUserOrigines();
 		}
-		catch (Throwable t)
+		catch (final Throwable t)
 		{
 			t.printStackTrace();
 			ProxyServer.getInstance().stop();
@@ -162,7 +166,7 @@ public class HeavenProxy extends Plugin
 				_connection = DriverManager.getConnection(DB_URL);
 			}
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			ProxyServer.getInstance().stop();
@@ -180,7 +184,7 @@ public class HeavenProxy extends Plugin
 				_mainConnection = DriverManager.getConnection(MAIN_DB_URL);
 			}
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			ProxyServer.getInstance().stop();
@@ -198,7 +202,7 @@ public class HeavenProxy extends Plugin
 				_srpConnection = DriverManager.getConnection(SRP_DB_URL);
 			}
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			ProxyServer.getInstance().stop();
@@ -216,13 +220,31 @@ public class HeavenProxy extends Plugin
 				_creaConnection = DriverManager.getConnection(CREA_DB_URL);
 			}
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			ProxyServer.getInstance().stop();
 		}
 
 		return _creaConnection;
+	}
+
+	public static Connection getOriginesConnection()
+	{
+		try
+		{
+			if (_originesConnection == null || _originesConnection.isClosed())
+			{
+				_originesConnection = DriverManager.getConnection(ORIGINES_DB_URL);
+			}
+		}
+		catch (final SQLException ex)
+		{
+			ex.printStackTrace();
+			ProxyServer.getInstance().stop();
+		}
+
+		return _originesConnection;
 	}
 
 	public static HeavenProxy getInstance()
@@ -234,31 +256,31 @@ public class HeavenProxy extends Plugin
 	{
 		try
 		{
-			PreparedStatement ps = getConnection().prepareStatement("SELECT name FROM banlist WHERE uuid = ''");
-			ResultSet rs = ps.executeQuery();
+			final PreparedStatement ps = getConnection().prepareStatement("SELECT name FROM banlist WHERE uuid = ''");
+			final ResultSet rs = ps.executeQuery();
 
 			while (rs.next())
 			{
 				try
 				{
-					String name = rs.getString("name");
-					String uuid = Utils.getUUID(name);
+					final String name = rs.getString("name");
+					final String uuid = Utils.getUUID(name);
 
-					PreparedStatement ps2 = getConnection().prepareStatement("UPDATE banlist SET uuid = ? WHERE name = ?");
+					final PreparedStatement ps2 = getConnection().prepareStatement("UPDATE banlist SET uuid = ? WHERE name = ?");
 					ps2.setString(1, uuid);
 					ps2.setString(2, name);
 
 					ps2.executeUpdate();
 					System.out.println(name + " -> " + uuid);
 				}
-				catch (HeavenException ex)
+				catch (final HeavenException ex)
 				{
 					System.out.println(ex.getMessage());
 				}
 			}
 
 		}
-		catch (SQLException e)
+		catch (final SQLException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -274,31 +296,32 @@ public class HeavenProxy extends Plugin
 			{
 				try
 				{
-					PreparedStatement ps = getConnection().prepareStatement("SELECT name FROM users WHERE uuid = ''");
-					ResultSet rs = ps.executeQuery();
+					final PreparedStatement ps = getConnection().prepareStatement("SELECT name FROM users WHERE uuid = ''");
+					final ResultSet rs = ps.executeQuery();
 
 					while (rs.next())
 					{
 						try
 						{
-							String name = rs.getString("name");
-							String uuid = Utils.getUUID(name);
+							final String name = rs.getString("name");
+							final String uuid = Utils.getUUID(name);
 
-							PreparedStatement ps2 = getConnection().prepareStatement("UPDATE users SET uuid = ? WHERE name = ?");
+							final PreparedStatement ps2 = getConnection().prepareStatement(
+									"UPDATE users SET uuid = ? WHERE name = ?");
 							ps2.setString(1, uuid);
 							ps2.setString(2, name);
 
 							ps2.executeUpdate();
-							System.out.println(name + " -> " + uuid);
+							System.out.println("Proxy" + name + " -> " + uuid);
 						}
-						catch (HeavenException ex)
+						catch (final HeavenException ex)
 						{
 							System.out.println(ex.getMessage());
 						}
 					}
 
 				}
-				catch (SQLException e)
+				catch (final SQLException e)
 				{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -316,32 +339,32 @@ public class HeavenProxy extends Plugin
 			{
 				try
 				{
-					PreparedStatement ps = getSrpConnection().prepareStatement("SELECT name FROM users WHERE uuid = ''");
-					ResultSet rs = ps.executeQuery();
+					final PreparedStatement ps = getSrpConnection().prepareStatement("SELECT name FROM users WHERE uuid = ''");
+					final ResultSet rs = ps.executeQuery();
 
 					while (rs.next())
 					{
 						try
 						{
-							String name = rs.getString("name");
-							String uuid = Utils.getUUID(name);
+							final String name = rs.getString("name");
+							final String uuid = Utils.getUUID(name);
 
-							PreparedStatement ps2 = getSrpConnection().prepareStatement(
+							final PreparedStatement ps2 = getSrpConnection().prepareStatement(
 									"UPDATE users SET uuid = ? WHERE name = ?");
 							ps2.setString(1, uuid);
 							ps2.setString(2, name);
 
 							ps2.executeUpdate();
-							System.out.println(name + " -> " + uuid);
+							System.out.println("SemiRP" + name + " -> " + uuid);
 						}
-						catch (HeavenException ex)
+						catch (final HeavenException ex)
 						{
 							System.out.println(ex.getMessage());
 						}
 					}
 
 				}
-				catch (SQLException e)
+				catch (final SQLException e)
 				{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -351,7 +374,10 @@ public class HeavenProxy extends Plugin
 		});
 	}
 
-	public static void convertUserCrea()
+	private static final Pattern UUID_PATTERN = Pattern
+			.compile("([0-9a-fA-F]{8})([0-9a-fA-F]{4})([0-9a-fA-F]{4})([0-9a-fA-F]{4})([0-9a-fA-F]+)");
+
+	public static void convertUserCreative()
 	{
 		ProxyServer.getInstance().getScheduler().runAsync(HeavenProxy.getInstance(), new Runnable()
 		{
@@ -360,12 +386,12 @@ public class HeavenProxy extends Plugin
 			{
 				try
 				{
-					PreparedStatement ps = getCreaConnection().prepareStatement("SELECT name FROM users WHERE uuid = ''");
-					ResultSet rs = ps.executeQuery();
+					final PreparedStatement ps = getCreaConnection().prepareStatement("SELECT name FROM users WHERE uuid = ''");
+					final ResultSet rs = ps.executeQuery();
 
 					while (true)
 					{
-						ArrayList<String> names = new ArrayList<String>();
+						final ArrayList<String> names = new ArrayList<String>();
 
 						for (int i = 0; i != 100; i++)
 							if (rs.next())
@@ -374,29 +400,29 @@ public class HeavenProxy extends Plugin
 						if (names.size() == 0)
 							return;
 
-						ProfileRepository repository = new HttpProfileRepository("minecraft");
-						Profile[] profiles = repository.findProfilesByNames(names.toArray(new String[names.size()]));
+						final ProfileRepository repository = new HttpProfileRepository("minecraft");
+						final Profile[] profiles = repository.findProfilesByNames(names.toArray(new String[names.size()]));
 
-						for (Profile profile : profiles)
+						for (final Profile profile : profiles)
 						{
 							try
 							{
 
-								String name = profile.getName();
-								String uuid = profile.getId();
+								final String name = profile.getName();
+								final String uuid = UUID_PATTERN.matcher(profile.getId()).replaceFirst("$1-$2-$3-$4-$5");
 
 								if (name == null || uuid == null)
 									throw new UUIDNotFoundException(name);
 
-								PreparedStatement ps2 = getCreaConnection().prepareStatement(
+								final PreparedStatement ps2 = getCreaConnection().prepareStatement(
 										"UPDATE users SET uuid = ? WHERE name = ?");
 								ps2.setString(1, uuid);
 								ps2.setString(2, name);
 
 								ps2.executeUpdate();
-								System.out.println(name + " -> " + uuid);
+								System.out.println("Creative " + name + " -> " + uuid);
 							}
-							catch (HeavenException ex)
+							catch (final HeavenException ex)
 							{
 								System.out.println(ex.getMessage());
 								ex.printStackTrace();
@@ -405,7 +431,72 @@ public class HeavenProxy extends Plugin
 					}
 
 				}
-				catch (SQLException e)
+				catch (final SQLException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		});
+	}
+
+	public static void convertUserOrigines()
+	{
+		ProxyServer.getInstance().getScheduler().runAsync(HeavenProxy.getInstance(), new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				try
+				{
+					final PreparedStatement ps = getOriginesConnection().prepareStatement(
+							"SELECT name FROM users WHERE uuid = ''");
+					final ResultSet rs = ps.executeQuery();
+
+					while (true)
+					{
+						final ArrayList<String> names = new ArrayList<String>();
+
+						for (int i = 0; i != 100; i++)
+							if (rs.next())
+								names.add(rs.getString("name"));
+
+						if (names.size() == 0)
+							return;
+
+						final ProfileRepository repository = new HttpProfileRepository("minecraft");
+						final Profile[] profiles = repository.findProfilesByNames(names.toArray(new String[names.size()]));
+
+						for (final Profile profile : profiles)
+						{
+							try
+							{
+
+								final String name = profile.getName();
+								final String uuid = UUID_PATTERN.matcher(profile.getId()).replaceFirst("$1-$2-$3-$4-$5");
+
+								if (name == null || uuid == null)
+									throw new UUIDNotFoundException(name);
+
+								final PreparedStatement ps2 = getOriginesConnection().prepareStatement(
+										"UPDATE users SET uuid = ? WHERE name = ?");
+								ps2.setString(1, uuid);
+								ps2.setString(2, name);
+
+								ps2.executeUpdate();
+								System.out.println("Origines " + name + " -> " + uuid);
+							}
+							catch (final HeavenException ex)
+							{
+								System.out.println(ex.getMessage());
+								ex.printStackTrace();
+							}
+						}
+					}
+
+				}
+				catch (final SQLException e)
 				{
 					// TODO Auto-generated catch block
 					e.printStackTrace();

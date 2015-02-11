@@ -23,10 +23,10 @@ public class UserListener implements Listener
 	@EventHandler(priority = EventPriority.LOWEST)
 	private void onPlayerLogin(PlayerLoginEvent event) throws HeavenException
 	{
-		Player player = event.getPlayer();
+		final Player player = event.getPlayer();
 
-		String name = player.getName();
-		String uuid = PlayerUtil.getUUID(name);
+		final String name = player.getName();
+		final String uuid = PlayerUtil.getUUID(player);
 
 		DevUtil.logInfo("UsersListener.onPlayerLogin : %1$s = %2$s", uuid, name);
 
@@ -34,11 +34,11 @@ public class UserListener implements Listener
 		{
 			UserProvider.updateName(uuid, name);
 		}
-		catch (UserNotFoundException ex)
+		catch (final UserNotFoundException ex)
 		{
 			UserProvider.createUser(uuid, name);
 		}
-		catch (HeavenException ex)
+		catch (final HeavenException ex)
 		{
 			ex.printStackTrace();
 		}
