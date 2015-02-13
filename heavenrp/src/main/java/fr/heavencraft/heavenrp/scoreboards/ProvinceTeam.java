@@ -10,6 +10,8 @@ import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+import fr.heavencraft.heavenrp.HeavenRP;
+
 public class ProvinceTeam
 {
 	private static final Map<Integer, ProvinceTeam> provincesById = new HashMap<Integer, ProvinceTeam>();
@@ -46,14 +48,20 @@ public class ProvinceTeam
 	{
 		team = scoreboard.registerNewTeam(name);
 		team.setNameTagVisibility(NameTagVisibility.ALWAYS);
+		Bukkit.getScheduler().runTask(HeavenRP.getInstance(), new Runnable()
+		{
+
+			@Override
+			public void run()
+			{
+				Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), command);
+			}
+		});
 	}
 
 	public void addPlayer(OfflinePlayer player)
 	{
 		team.addPlayer(player);
-
-		// TODO : check with Manu if this command is mandatory.
-		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), command);
 	}
 
 	public void removePlayer(OfflinePlayer player)
