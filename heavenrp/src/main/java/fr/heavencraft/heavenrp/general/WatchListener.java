@@ -1,5 +1,7 @@
 package fr.heavencraft.heavenrp.general;
 
+import java.util.Set;
+
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -21,26 +23,26 @@ public class WatchListener implements Listener
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
-		Player player = event.getPlayer();
+		final Player player = event.getPlayer();
 
 		if (!player.hasPermission(RPPermissions.WATCH))
 			return;
 
-		ItemStack item = event.getItem();
+		final ItemStack item = event.getItem();
 
 		if (item != null && item.getType() == Material.WATCH)
 		{
-			World world = player.getWorld();
+			final World world = player.getWorld();
 
 			switch (event.getAction())
 			{
 				case LEFT_CLICK_AIR:
-					world.strikeLightningEffect(player.getTargetBlock(null, 120).getLocation());
+					world.strikeLightningEffect(player.getTargetBlock((Set<Material>) null, 120).getLocation());
 					event.setCancelled(true);
 					break;
 
 				case RIGHT_CLICK_AIR:
-					world.strikeLightning(player.getTargetBlock(null, 120).getLocation());
+					world.strikeLightning(player.getTargetBlock((Set<Material>) null, 120).getLocation());
 					event.setCancelled(true);
 					break;
 
