@@ -19,23 +19,10 @@ public class SpectatorCommand extends HeavenCommand
 	@Override
 	protected void onPlayerCommand(Player player, String[] args) throws HeavenException
 	{
-		switch (player.getGameMode())
-		{
-			case SURVIVAL:
-				player.setGameMode(GameMode.SPECTATOR);
-				break;
-
-			case CREATIVE:
-				player.setGameMode(GameMode.SPECTATOR);
-				break;
-
-			case SPECTATOR:
-				player.setGameMode(GameMode.SURVIVAL);
-				break;
-
-			default:
-				break;
-		}
+		if (player.getGameMode() == GameMode.SPECTATOR)
+			player.setGameMode(GameMode.SURVIVAL);
+		else
+			player.setGameMode(GameMode.SPECTATOR);
 	}
 
 	@Override
