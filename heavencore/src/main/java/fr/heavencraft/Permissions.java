@@ -8,6 +8,7 @@ public class Permissions
 
 	public static final String CREACHEAT = "heavencraft.commands.creacheat";
 	public static final String ENDERCHEAT = "heavencraft.commands.endercheat";
+	public static final String SPECTATOR = "heavencraft.commands.spectator";
 	public static final String FILL = "heavencraft.commands.fill";
 	public static final String GC = "heavencraft.commands.gc";
 	public static final String HEAD = "heavencraft.commands.head";

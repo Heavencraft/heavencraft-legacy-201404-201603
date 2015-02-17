@@ -9,11 +9,11 @@ import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.utils.ChatUtil;
 import fr.heavencraft.utils.PlayerUtil;
 
-public class CreacheatCommand extends HeavenCommand
+public class SpectatorCommand extends HeavenCommand
 {
-	public CreacheatCommand()
+	public SpectatorCommand()
 	{
-		super("creacheat", Permissions.CREACHEAT);
+		super("spectator", Permissions.SPECTATOR);
 	}
 
 	@Override
@@ -22,14 +22,17 @@ public class CreacheatCommand extends HeavenCommand
 		switch (player.getGameMode())
 		{
 			case SURVIVAL:
-				player.setGameMode(GameMode.CREATIVE);
+				player.setGameMode(GameMode.SPECTATOR);
 				break;
-			case SPECTATOR:
-				player.setGameMode(GameMode.CREATIVE);
-				break;
+
 			case CREATIVE:
+				player.setGameMode(GameMode.SPECTATOR);
+				break;
+
+			case SPECTATOR:
 				player.setGameMode(GameMode.SURVIVAL);
 				break;
+
 			default:
 				break;
 		}
