@@ -11,6 +11,7 @@ import fr.heavencraft.commands.PoofCommand;
 import fr.heavencraft.commands.RejoindreCommand;
 import fr.heavencraft.commands.RoucoupsCommand;
 import fr.heavencraft.commands.SpawnmobCommand;
+import fr.heavencraft.commands.SpectatorCommand;
 import fr.heavencraft.commands.TpCommand;
 import fr.heavencraft.commands.TphereCommand;
 import fr.heavencraft.commands.TpposCommand;
@@ -111,6 +112,7 @@ public class InitManager
 		new RejoindreCommand();
 		new RoucoupsCommand();
 		new SpawnmobCommand();
+		new SpectatorCommand();
 		new TpCommand();
 		new TphereCommand();
 		new TpposCommand();
