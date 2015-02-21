@@ -42,12 +42,12 @@ public class User
 	{
 		return _id;
 	}
-	
+
 	public String getUUID()
 	{
 		return _uuid;
 	}
-	
+
 	public String getName()
 	{
 		return _name;
@@ -60,17 +60,16 @@ public class User
 
 	public void setProvince(Integer provinceId)
 	{
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"INSERT INTO mayor_people (user_id, city_id) VALUES (?, ?)"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"INSERT INTO mayor_people (user_id, city_id) VALUES (?, ?)");
 			ps.setInt(1, _id);
 			ps.setInt(2, provinceId);
 
 			ps.executeUpdate();
 		}
 
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 		}
@@ -78,16 +77,14 @@ public class User
 
 	public void removeProvince()
 	{
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement("DELETE FROM mayor_people WHERE user_id = ?"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"DELETE FROM mayor_people WHERE user_id = ?");
 			ps.setInt(1, _id);
 
 			ps.executeUpdate();
 		}
 
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 		}
@@ -108,7 +105,8 @@ public class User
 			throw new HeavenException("Vous avez moins de 0 pièces d'or sur vous. O_o");
 
 		if (_balance + delta < 0)
-			// throw new LorganException("Vous n'avez pas assez de pièces d'or sur vous.");
+			// throw new
+			// LorganException("Vous n'avez pas assez de pièces d'or sur vous.");
 			throw new HeavenException("Vous fouillez dans votre bourse... Vous n'avez pas assez.");
 
 		_balance += delta;
@@ -126,16 +124,15 @@ public class User
 
 	public void incrementHomeNumber() throws HeavenException
 	{
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"UPDATE users SET homeNumber = homeNumber + 1 WHERE id = ?"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"UPDATE users SET homeNumber = homeNumber + 1 WHERE id = ?");
 			ps.setInt(1, _id);
 			ps.executeUpdate();
 
 			_homeNumber++;
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new UnknownErrorException();
@@ -147,22 +144,21 @@ public class User
 		if (nb < 1 || nb > _homeNumber)
 			throw new HeavenException("Vous n'avez pas acheté le {home %1$d}.", nb);
 
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"SELECT world, x, y, z, yaw, pitch FROM homes WHERE user_id = ? AND home_nb = ? LIMIT 1"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"SELECT world, x, y, z, yaw, pitch FROM homes WHERE user_id = ? AND home_nb = ? LIMIT 1");
 			ps.setInt(1, _id);
 			ps.setInt(2, nb);
 
-			ResultSet rs = ps.executeQuery();
+			final ResultSet rs = ps.executeQuery();
 
 			if (!rs.next())
 				throw new HeavenException("Vous n'avez pas configuré votre {home %1$d}.", nb);
 
-			return new Location(Bukkit.getWorld(rs.getString("world")), rs.getDouble("x"), rs.getDouble("y"),
-					rs.getDouble("z"), rs.getFloat("yaw"), rs.getFloat("pitch"));
+			return new Location(Bukkit.getWorld(rs.getString("world")), rs.getDouble("x"), rs.getDouble("y"), rs.getDouble("z"),
+					rs.getFloat("yaw"), rs.getFloat("pitch"));
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new HeavenException("Cette erreur n'est pas sensée se produire.");
@@ -174,12 +170,9 @@ public class User
 		if (nb < 1 || nb > _homeNumber)
 			throw new HeavenException("Vous n'avez pas acheté le {home %1$d}.", nb);
 
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"REPLACE INTO homes SET world = ?, x = ?, y = ?, z = ?, yaw = ?, pitch = ?, user_id = ?, home_nb = ?"))
 		{
-			PreparedStatement ps = HeavenRP
-					.getConnection()
-					.prepareStatement(
-							"REPLACE INTO homes SET world = ?, x = ?, y = ?, z = ?, yaw = ?, pitch = ?, user_id = ?, home_nb = ?");
 			ps.setString(1, home.getWorld().getName());
 			ps.setDouble(2, home.getX());
 			ps.setDouble(3, home.getY());
@@ -192,7 +185,7 @@ public class User
 
 			ps.executeUpdate();
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new HeavenException("Cette erreur n'est pas sensée se produire.");
@@ -205,10 +198,9 @@ public class User
 
 	private void update()
 	{
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"UPDATE users SET balance = ?, last_login = ? WHERE id = ?;"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"UPDATE users SET balance = ?, last_login = ? WHERE id = ?;");
 			ps.setInt(1, _balance);
 			ps.setTimestamp(2, _lastLogin);
 			ps.setInt(3, _id);
@@ -216,7 +208,7 @@ public class User
 			ps.executeUpdate();
 			ps.close();
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 		}
@@ -244,7 +236,7 @@ public class User
 	{
 		if (hasDealerLicense())
 		{
-			Calendar calendar = Calendar.getInstance();
+			final Calendar calendar = Calendar.getInstance();
 			calendar.setTime(_dealerLicense);
 			calendar.add(Calendar.MONTH, 1);
 
@@ -252,23 +244,22 @@ public class User
 		}
 		else
 		{
-			Calendar calendar = Calendar.getInstance();
+			final Calendar calendar = Calendar.getInstance();
 			calendar.add(Calendar.MONTH, 1);
 
 			_dealerLicense = new Timestamp(calendar.getTimeInMillis());
 		}
 
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection()
+				.prepareStatement("UPDATE users SET dealer_license = ? WHERE id = ?;"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"UPDATE users SET dealer_license = ? WHERE id = ?;");
 			ps.setTimestamp(1, _dealerLicense);
 			ps.setInt(2, _id);
 
 			ps.executeUpdate();
 			ps.close();
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 		}

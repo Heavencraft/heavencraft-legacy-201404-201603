@@ -21,9 +21,7 @@ public class BankAccountsManager
 {
 	public enum BankAccountType
 	{
-		USER("U"),
-		TOWN("T"),
-		ENTERPRISE("E");
+		USER("U"), TOWN("T"), ENTERPRISE("E");
 
 		public static BankAccountType getByCode(String code) throws HeavenException
 		{
@@ -59,7 +57,8 @@ public class BankAccountsManager
 		private BankAccount(ResultSet rs) throws HeavenException, SQLException
 		{
 			_id = rs.getInt("id");
-			_name = rs.getString("owner"); // TODO : mettre name dans la base de données
+			_name = rs.getString("owner"); // TODO : mettre name dans la base de
+											// données
 			_type = BankAccountType.getByCode(rs.getString("type"));
 		}
 
@@ -75,7 +74,7 @@ public class BankAccountsManager
 
 		public List<String> getOwnersNames() throws HeavenException
 		{
-			List<String> owners = new ArrayList<String>();
+			final List<String> owners = new ArrayList<String>();
 
 			switch (_type)
 			{
@@ -83,17 +82,16 @@ public class BankAccountsManager
 					owners.add(_name);
 					break;
 				case TOWN:
-					try
+					try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+							"SELECT u.name FROM users u, mayors m WHERE u.id = m.user_id AND region_name = ?"))
 					{
-						PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-								"SELECT u.name FROM users u, mayors m WHERE u.id = m.user_id AND region_name = ?");
 						ps.setString(1, _name);
-						ResultSet rs = ps.executeQuery();
+						final ResultSet rs = ps.executeQuery();
 
 						while (rs.next())
 							owners.add(rs.getString("name"));
 					}
-					catch (SQLException ex)
+					catch (final SQLException ex)
 					{
 						ex.printStackTrace();
 					}
@@ -110,11 +108,11 @@ public class BankAccountsManager
 
 		public List<CommandSender> getOwners() throws HeavenException
 		{
-			List<CommandSender> owners = new ArrayList<CommandSender>();
+			final List<CommandSender> owners = new ArrayList<CommandSender>();
 
-			for (String name : getOwnersNames())
+			for (final String name : getOwnersNames())
 			{
-				Player player = Bukkit.getPlayer(name);
+				final Player player = Bukkit.getPlayer(name);
 
 				if (player != null)
 					owners.add(player);
@@ -125,20 +123,19 @@ public class BankAccountsManager
 
 		public int getBalance() throws HeavenException
 		{
-			try
+			try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+					"SELECT ba.balance FROM bank_account ba WHERE ba.id = ? LIMIT 1"))
 			{
-				PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-						"SELECT ba.balance FROM bank_account ba WHERE ba.id = ? LIMIT 1");
 				ps.setInt(1, _id);
 
-				ResultSet rs = ps.executeQuery();
+				final ResultSet rs = ps.executeQuery();
 
 				if (!rs.next())
 					throw new HeavenException("Le livret {%1$s} n'existe pas.", _id);
 
 				return rs.getInt("balance");
 			}
-			catch (SQLException ex)
+			catch (final SQLException ex)
 			{
 				ex.printStackTrace();
 				throw new HeavenException("Le livret {%1$s} n'existe pas.", _id);
@@ -147,12 +144,9 @@ public class BankAccountsManager
 
 		public void updateBalance(int delta) throws HeavenException
 		{
-			try
+			try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+					"UPDATE bank_account SET balance = balance + ? WHERE type = ? AND owner = ? AND balance + ? >= 0"))
 			{
-				PreparedStatement ps = HeavenRP
-						.getConnection()
-						.prepareStatement(
-								"UPDATE bank_account SET balance = balance + ? WHERE type = ? AND owner = ? AND balance + ? >= 0");
 				ps.setInt(1, delta);
 				ps.setString(2, _type.getCode());
 				ps.setString(3, _name);
@@ -163,7 +157,7 @@ public class BankAccountsManager
 
 				ps.close();
 			}
-			catch (SQLException e)
+			catch (final SQLException e)
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -173,21 +167,20 @@ public class BankAccountsManager
 
 	public static void createBankAccount(String owner, BankAccountType type) throws HeavenException
 	{
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"INSERT INTO bank_account (owner, type) VALUE (?, ?);"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"INSERT INTO bank_account (owner, type) VALUE (?, ?);");
 			ps.setString(1, owner);
 			ps.setString(2, type.getCode());
 
 			ps.executeUpdate();
 		}
-		catch (MySQLIntegrityConstraintViolationException ex)
+		catch (final MySQLIntegrityConstraintViolationException ex)
 		{
 			ex.printStackTrace();
 			throw new HeavenException("Le compte en banque {%1$s} existe déjà.", owner);
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new SQLErrorException();
@@ -196,16 +189,15 @@ public class BankAccountsManager
 
 	public static void deleteBankAccount(String name, BankAccountType type) throws HeavenException
 	{
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"DELETE FROM bank_account WHERE owner = ? AND type = ? LIMIT 1;"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"DELETE FROM bank_account WHERE owner = ? AND type = ? LIMIT 1;");
 			ps.setString(1, name);
 			ps.setString(2, type.getCode());
 
 			ps.executeUpdate();
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new SQLErrorException();
@@ -214,21 +206,20 @@ public class BankAccountsManager
 
 	public static BankAccount getBankAccount(String name, BankAccountType type) throws HeavenException
 	{
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"SELECT * FROM bank_account WHERE owner = ? AND type = ? LIMIT 1"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"SELECT * FROM bank_account WHERE owner = ? AND type = ? LIMIT 1");
 			ps.setString(1, name);
 			ps.setString(2, type.getCode());
 
-			ResultSet rs = ps.executeQuery();
+			final ResultSet rs = ps.executeQuery();
 
 			if (!rs.next())
 				throw new HeavenException("Le compte en banque {%1$s} n'existe pas.", name);
 
 			return new BankAccount(rs);
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new SQLErrorException();
@@ -237,19 +228,18 @@ public class BankAccountsManager
 
 	public static BankAccount getBankAccountById(int id) throws HeavenException
 	{
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"SELECT ba.id, ba.owner, ba.type FROM bank_account ba WHERE ba.id = ? LIMIT 1"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"SELECT ba.id, ba.owner, ba.type FROM bank_account ba WHERE ba.id = ? LIMIT 1");
 			ps.setInt(1, id);
-			ResultSet rs = ps.executeQuery();
+			final ResultSet rs = ps.executeQuery();
 
 			if (!rs.next())
 				throw new HeavenException("Le compte en banque {%1$s} n'existe pas.", id);
 
 			return new BankAccount(rs);
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new HeavenException("Le compte en banque {%1$s} n'existe pas.", id);
@@ -258,30 +248,27 @@ public class BankAccountsManager
 
 	public static List<BankAccount> getAccountByOwner(String owner) throws HeavenException
 	{
-		List<BankAccount> result = new ArrayList<BankAccount>();
+		final List<BankAccount> result = new ArrayList<BankAccount>();
 
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"(SELECT ba.id, ba.owner, ba.type "
+						+ // Sélection des comptes de villes
+						"FROM bank_account ba, mayors m, users u " + "WHERE ba.type = 'T' " + "AND ba.owner = m.region_name "
+						+ "AND m.user_id = u.id " + "AND u.name = ?) " + "UNION "
+						+ "(SELECT ba.id, ba.owner, ba.type "
+						+ // Sélection des comptes d'entreprises
+						"FROM bank_account ba, enterprises e, enterprises_members em, users u " + "WHERE ba.type ='E' "
+						+ "AND ba.owner = e.name " + "AND e.id = em.enterprise_id " + "AND em.user_id = u.id "
+						+ "AND u.name = ?);"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"(SELECT ba.id, ba.owner, ba.type "
-							+ // Sélection des comptes de villes
-							"FROM bank_account ba, mayors m, users u " + "WHERE ba.type = 'T' "
-							+ "AND ba.owner = m.region_name " + "AND m.user_id = u.id " + "AND u.name = ?) "
-							+ "UNION "
-							+ "(SELECT ba.id, ba.owner, ba.type "
-							+ // Sélection des comptes d'entreprises
-							"FROM bank_account ba, enterprises e, enterprises_members em, users u "
-							+ "WHERE ba.type ='E' " + "AND ba.owner = e.name " + "AND e.id = em.enterprise_id "
-							+ "AND em.user_id = u.id " + "AND u.name = ?);");
-
 			ps.setString(1, owner);
 			ps.setString(2, owner);
-			ResultSet rs = ps.executeQuery();
+			final ResultSet rs = ps.executeQuery();
 
 			while (rs.next())
 				result.add(new BankAccount(rs));
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			new SQLErrorException();

@@ -19,10 +19,8 @@ public class UserProvider
 
 	public static void createUser(String uuid, String name)
 	{
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement("INSERT INTO users (uuid, name) VALUES (?, ?);"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"INSERT INTO users (uuid, name) VALUES (?, ?);");
 			ps.setString(1, uuid);
 			ps.setString(2, name);
 
@@ -32,11 +30,11 @@ public class UserProvider
 			BankAccountsManager.createBankAccount(name, BankAccountType.USER);
 		}
 
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 		}
-		catch (HeavenException ex)
+		catch (final HeavenException ex)
 		{
 		}
 	}
@@ -53,13 +51,11 @@ public class UserProvider
 		if (user != null)
 			return user;
 
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement("SELECT * FROM users WHERE name = ? LIMIT 1;"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"SELECT * FROM users WHERE name = ? LIMIT 1;");
 			ps.setString(1, name);
 
-			ResultSet rs = ps.executeQuery();
+			final ResultSet rs = ps.executeQuery();
 
 			if (!rs.next())
 				throw new UserNotFoundException(name);
@@ -70,7 +66,7 @@ public class UserProvider
 			return user;
 		}
 
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new SQLErrorException();
@@ -88,13 +84,11 @@ public class UserProvider
 	public static User getUserByUUID(String uuid) throws HeavenException
 	{
 		User user = null;
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement("SELECT * FROM users WHERE uuid = ? LIMIT 1;"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"SELECT * FROM users WHERE uuid = ? LIMIT 1;");
 			ps.setString(1, uuid);
 
-			ResultSet rs = ps.executeQuery();
+			final ResultSet rs = ps.executeQuery();
 
 			if (!rs.next())
 				throw new UserNotFoundException(uuid);
@@ -103,7 +97,7 @@ public class UserProvider
 			return user;
 		}
 
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new SQLErrorException();
@@ -136,7 +130,7 @@ public class UserProvider
 					throw new UserNotFoundException(name);
 			}
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new SQLErrorException();
