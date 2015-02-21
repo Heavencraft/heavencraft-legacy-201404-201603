@@ -30,13 +30,12 @@ public class MairesCommand extends HeavenCommand
 	@Override
 	protected void onConsoleCommand(CommandSender sender, String[] args) throws HeavenException
 	{
-		try
+		try (PreparedStatement ps = HeavenRP
+				.getConnection()
+				.prepareStatement(
+						"SELECT u.name, GROUP_CONCAT(DISTINCT m.region_name ORDER BY m.region_name DESC SEPARATOR ', ') AS villes FROM mayors m, users u WHERE u.id = m.user_id GROUP BY m.user_id"))
 		{
-			PreparedStatement ps = HeavenRP
-					.getConnection()
-					.prepareStatement(
-							"SELECT u.name, GROUP_CONCAT(DISTINCT m.region_name ORDER BY m.region_name DESC SEPARATOR ', ') AS villes FROM mayors m, users u WHERE u.id = m.user_id GROUP BY m.user_id");
-			ResultSet rs = ps.executeQuery();
+			final ResultSet rs = ps.executeQuery();
 
 			if (rs.first())
 			{
@@ -55,7 +54,7 @@ public class MairesCommand extends HeavenCommand
 			}
 
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 		}

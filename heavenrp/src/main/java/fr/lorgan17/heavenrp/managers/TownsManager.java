@@ -33,15 +33,14 @@ public class TownsManager
 
 	public static List<String> getMayors(String name)
 	{
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"SELECT u.name FROM users u, mayors m WHERE m.region_name = ? AND m.user_id = u.id"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"SELECT u.name FROM users u, mayors m WHERE m.region_name = ? AND m.user_id = u.id");
 			ps.setString(1, name);
 
-			ResultSet rs = ps.executeQuery();
+			final ResultSet rs = ps.executeQuery();
 
-			List<String> result = new ArrayList<String>();
+			final List<String> result = new ArrayList<String>();
 
 			while (rs.next())
 			{
@@ -49,7 +48,7 @@ public class TownsManager
 			}
 			return result;
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 		}
@@ -59,63 +58,60 @@ public class TownsManager
 	public static void addMayor(String town, User mayor) throws HeavenException
 	{
 		town = town.toLowerCase();
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"INSERT INTO mayors (user_id, region_name) VALUES (?, ?);"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"INSERT INTO mayors (user_id, region_name) VALUES (?, ?);");
 			ps.setInt(1, mayor.getId());
 			ps.setString(2, town);
 
 			ps.executeUpdate();
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
-			throw new HeavenException("Le joueur {%1$s} est déjà maire de la ville {%2$s}.", new Object[] {
-					mayor.getName(), town });
+			throw new HeavenException("Le joueur {%1$s} est déjà maire de la ville {%2$s}.",
+					new Object[] { mayor.getName(), town });
 		}
 	}
 
 	public static void removeMayor(String town, User mayor) throws HeavenException
 	{
 		town = town.toLowerCase();
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"DELETE FROM mayors WHERE user_id = ? AND region_name = ?;"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"DELETE FROM mayors WHERE user_id = ? AND region_name = ?;");
 			ps.setInt(1, mayor.getId());
 			ps.setString(2, town);
 
 			ps.executeUpdate();
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new HeavenException("Ceci n'est pas sensé se produire :O");
 		}
 	}
 
-	public static void createSubRegion(String townName, User owner, Selection selection, int up, int down)
-			throws HeavenException
+	public static void createSubRegion(String townName, User owner, Selection selection, int up, int down) throws HeavenException
 	{
-		Vector[] expand = new Vector[2];
+		final Vector[] expand = new Vector[2];
 		expand[0] = new Vector(0, -down, 0);
 		expand[1] = new Vector(0, up, 0);
 		try
 		{
 			selection.getRegionSelector().getRegion().expand(expand);
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
 			ex.printStackTrace();
 		}
 
-		World world = selection.getWorld();
-		BlockVector pt1 = BukkitUtil.toVector(selection.getMinimumPoint()).toBlockVector();
-		BlockVector pt2 = BukkitUtil.toVector(selection.getMaximumPoint()).toBlockVector();
+		final World world = selection.getWorld();
+		final BlockVector pt1 = BukkitUtil.toVector(selection.getMinimumPoint()).toBlockVector();
+		final BlockVector pt2 = BukkitUtil.toVector(selection.getMaximumPoint()).toBlockVector();
 
-		RegionManager rm = WorldGuardUtil.getWorldGuard().getRegionManager(world);
+		final RegionManager rm = WorldGuardUtil.getWorldGuard().getRegionManager(world);
 
-		ProtectedRegion town = rm.getRegionExact(townName);
+		final ProtectedRegion town = rm.getRegionExact(townName);
 
 		if (town == null)
 		{
@@ -125,9 +121,9 @@ public class TownsManager
 		{
 			throw new HeavenException("La parcelle doit être dans ta ville.");
 		}
-		String id = createRegionName(rm, townName, owner.getName());
+		final String id = createRegionName(rm, townName, owner.getName());
 
-		ProtectedRegion region = new ProtectedCuboidRegion(id, pt1, pt2);
+		final ProtectedRegion region = new ProtectedCuboidRegion(id, pt1, pt2);
 
 		rm.addRegion(region);
 		region.getOwners().addPlayer(owner.getName());
@@ -136,7 +132,7 @@ public class TownsManager
 		{
 			region.setParent(town);
 		}
-		catch (CircularInheritanceException e)
+		catch (final CircularInheritanceException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -145,7 +141,7 @@ public class TownsManager
 		{
 			rm.save();
 		}
-		catch (ProtectionDatabaseException e)
+		catch (final ProtectionDatabaseException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -154,9 +150,9 @@ public class TownsManager
 
 	public static void removeSubRegion(String townName, String regionName) throws HeavenException
 	{
-		RegionManager rm = WorldGuardUtil.getWorldGuard().getRegionManager(WorldsManager.getWorld());
+		final RegionManager rm = WorldGuardUtil.getWorldGuard().getRegionManager(WorldsManager.getWorld());
 
-		ProtectedRegion region = rm.getRegionExact(regionName);
+		final ProtectedRegion region = rm.getRegionExact(regionName);
 
 		if (region == null)
 		{
@@ -185,17 +181,16 @@ public class TownsManager
 
 	public static boolean isMayor(User mayor, String townName)
 	{
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"SELECT m.user_id FROM mayors m WHERE m.user_id = ? AND m.region_name = ?"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"SELECT m.user_id FROM mayors m WHERE m.user_id = ? AND m.region_name = ?");
 			ps.setInt(1, mayor.getId());
 			ps.setString(2, townName);
 
-			ResultSet rs = ps.executeQuery();
+			final ResultSet rs = ps.executeQuery();
 			return rs.next();
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 		}
