@@ -4,13 +4,20 @@ import java.util.ArrayList;
 
 import org.bukkit.entity.Player;
 
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+
+import fr.heavencraft.heavenrp.HeavenRP;
 import fr.manu67100.heavenrp.laposte.Files;
 
 public class PostOfficeManager {
 	
+	static WorldGuardPlugin wg;
 	
 	public static void LoadOffices()
 	{
+		wg = HeavenRP.getWorldGuard();
 		//################ Chargement des regions ################
 		for (String a : PostOfficeManager.getPostOffices())
 			PostOfficeManager.delOffice(a);	
@@ -20,12 +27,15 @@ public class PostOfficeManager {
 				PostOfficeManager.addOffice(a);
 		//############## FIN Chargement des regions ###############		
 	}
-
-	
 	
 	// Les PostOffices
 	private static ArrayList<String> PostOffices = new ArrayList<String>();
 	
+	/**
+	 * Returns if the passed string correspond with a region registered as post office.
+	 * @param p
+	 * @return
+	 */
 	public static boolean isOffice(String p) {
 		return PostOffices.contains(p.toLowerCase());
 	}
@@ -42,25 +52,17 @@ public class PostOfficeManager {
 		return PostOffices;
 	}
 	
-	
-	
-	// Les joueurs dans des PostOffices
-	private static ArrayList<Player> inPostOffice = new ArrayList<Player>();
-	
+	/**
+	 * Checks if user is inside a region corresponding to a registered Post region.
+	 * @param p
+	 * @return
+	 */
 	public static boolean isInOffice(Player p) {
-		return inPostOffice.contains(p);
-	}
-
-	public static void addPlayerInOffice(Player p) {
-		inPostOffice.add(p);
-	}
-
-	public static void delPlayerInOffice(Player p) {
-		inPostOffice.remove(p);
-	}
-	
-	public static ArrayList<Player> getPlayersInOffice() {
-		return inPostOffice;
+		ApplicableRegionSet aps = wg.getRegionManager(p.getWorld()).getApplicableRegions(p.getLocation());
+		for (ProtectedRegion region : aps) 
+		    if(isOffice(region.getId()))
+		    	return true;
+		return false;
 	}
 	
 }

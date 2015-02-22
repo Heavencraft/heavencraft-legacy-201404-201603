@@ -22,7 +22,7 @@ public class PostePlayerListener implements Listener{
 	{
 		if(PosteUtils.getColisRecus(event.getPlayer().getUniqueId().toString()).size() != 0)
 		{
-			event.getPlayer().sendMessage(String.format(FORMAT_POSTE, "Vous avez un colis en attente, vous pouvez le récuperer a la poste!"));;
+			event.getPlayer().sendMessage(String.format(FORMAT_POSTE, "Vous avez un colis en attente, vous pouvez le récuperer a la poste!"));
 		}
 	}
 }

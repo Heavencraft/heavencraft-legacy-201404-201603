@@ -72,7 +72,6 @@ import fr.lorgan17.heavenrp.listeners.LampadaireListener;
 import fr.lorgan17.heavenrp.listeners.PVP4Manager;
 import fr.lorgan17.heavenrp.listeners.PVPManager;
 import fr.lorgan17.heavenrp.listeners.SnowballListener;
-import fr.manu67100.heavenrp.laposte.WGHandler.WGRegionEventsListener;
 import fr.manu67100.heavenrp.laposte.commands.admin.addOfficeCommand;
 import fr.manu67100.heavenrp.laposte.commands.admin.listPosteCommand;
 import fr.manu67100.heavenrp.laposte.commands.admin.reloadRegion;
@@ -81,7 +80,6 @@ import fr.manu67100.heavenrp.laposte.commands.user.colisCommand;
 import fr.manu67100.heavenrp.laposte.handlers.PopupMenuAPI;
 import fr.manu67100.heavenrp.laposte.handlers.PostOfficeManager;
 import fr.manu67100.heavenrp.laposte.listeners.InventoryListener;
-import fr.manu67100.heavenrp.laposte.listeners.PostOfficeListener;
 import fr.manu67100.heavenrp.laposte.listeners.PostOfficeSignListener;
 import fr.manu67100.heavenrp.laposte.listeners.PostePlayerListener;
 
@@ -242,9 +240,6 @@ public class InitManager
 		// new AdminShop();
 
 		// La Poste
-
-		new PostOfficeListener();
-		new WGRegionEventsListener();
 		new PostOfficeSignListener();
 		new InventoryListener();
 		new PopupMenuAPI();
