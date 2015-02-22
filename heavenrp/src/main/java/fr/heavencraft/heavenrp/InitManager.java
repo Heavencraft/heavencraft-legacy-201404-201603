@@ -76,7 +76,7 @@ import fr.manu67100.heavenrp.laposte.commands.admin.addOfficeCommand;
 import fr.manu67100.heavenrp.laposte.commands.admin.listPosteCommand;
 import fr.manu67100.heavenrp.laposte.commands.admin.reloadRegion;
 import fr.manu67100.heavenrp.laposte.commands.admin.removeOfficeCommand;
-import fr.manu67100.heavenrp.laposte.commands.user.colisCommand;
+import fr.manu67100.heavenrp.laposte.commands.user.ColisCommand;
 import fr.manu67100.heavenrp.laposte.handlers.PopupMenuAPI;
 import fr.manu67100.heavenrp.laposte.handlers.PostOfficeManager;
 import fr.manu67100.heavenrp.laposte.listeners.InventoryListener;
@@ -167,7 +167,7 @@ public class InitManager
 		new ParcelleCommand();
 
 		// Commandes Poste
-		new colisCommand();
+		new ColisCommand();
 		new reloadRegion();
 		new addOfficeCommand();
 		new removeOfficeCommand();
