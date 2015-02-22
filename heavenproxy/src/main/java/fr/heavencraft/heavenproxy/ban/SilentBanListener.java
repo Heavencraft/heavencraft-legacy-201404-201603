@@ -1,5 +1,7 @@
 package fr.heavencraft.heavenproxy.ban;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -10,6 +12,7 @@ import net.md_5.bungee.api.event.ProxyPingEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
+import fr.heavencraft.heavenproxy.HeavenProxy;
 import fr.heavencraft.heavenproxy.Utils;
 
 public class SilentBanListener implements Listener
@@ -40,6 +43,8 @@ public class SilentBanListener implements Listener
 		{
 			bannedAddresses.add(address);
 
+			saveIntoDatabase(uuid, event.getConnection().getName(), address);
+
 			event.setCancelReason("java.net.ConnectException: Connection refused:");
 			event.setCancelled(true);
 		}
@@ -53,6 +58,25 @@ public class SilentBanListener implements Listener
 		if (bannedAddresses.contains(address))
 		{
 			event.setResponse(new ServerPing());
+		}
+	}
+
+	private static String REPLACE = "REPLACE INTO silent_ban SET uuid = ?, name = ?, address = ?";
+
+	private void saveIntoDatabase(String uuid, String name, String address)
+	{
+		try (PreparedStatement ps = HeavenProxy.getConnection().prepareStatement(REPLACE))
+		{
+			ps.setString(1, uuid);
+			ps.setString(2, name);
+			ps.setString(3, address);
+
+			ps.executeUpdate();
+		}
+
+		catch (final SQLException ex)
+		{
+			ex.printStackTrace();
 		}
 	}
 }
