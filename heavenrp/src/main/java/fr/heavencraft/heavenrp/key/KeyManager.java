@@ -33,10 +33,10 @@ public class KeyManager
 
 	public static void giveKey(Player player, String key) throws HeavenException
 	{
-		String playerName = player.getName();
-		String uuid = getUUID(player);
+		final String playerName = player.getName();
+		final String uuid = getUUID(player);
 
-		int nbKeys = getNbKeysToday(uuid);
+		final int nbKeys = getNbKeysToday(uuid);
 
 		if (nbKeys >= MAX_KEYS_PER_DAY)
 			throw new HeavenException("Le joueur {%1$s} a déjà reçu {%2$s} clés aujourd'hui.", playerName, nbKeys);
@@ -47,8 +47,8 @@ public class KeyManager
 
 	private static void giveBook(Player player, String key)
 	{
-		ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
-		BookMeta meta = (BookMeta) book.getItemMeta();
+		final ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
+		final BookMeta meta = (BookMeta) book.getItemMeta();
 
 		meta.setTitle(key);
 		meta.setAuthor(HEAVENCRAFT);
@@ -60,12 +60,10 @@ public class KeyManager
 
 	private static int getNbKeysToday(String uuid) throws HeavenException
 	{
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement("SELECT date, nb FROM dungeon_keys WHERE uuid = ?"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"SELECT date, nb FROM dungeon_keys WHERE uuid = ?");
 			ps.setString(1, uuid);
-			ResultSet rs = ps.executeQuery();
+			final ResultSet rs = ps.executeQuery();
 
 			if (!rs.next())
 			{
@@ -73,14 +71,14 @@ public class KeyManager
 				return 0;
 			}
 
-			Timestamp date = rs.getTimestamp("date");
+			final Timestamp date = rs.getTimestamp("date");
 
 			if (isToday(date))
 				return rs.getInt("nb");
 			else
 				return 0;
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new SQLErrorException();
@@ -89,14 +87,12 @@ public class KeyManager
 
 	private static void createKeys(String uuid) throws HeavenException
 	{
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement("INSERT INTO dungeon_keys (uuid) VALUES (?);"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"INSERT INTO dungeon_keys (uuid) VALUES (?);");
 			ps.setString(1, uuid);
 			ps.executeUpdate();
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new SQLErrorException();
@@ -105,14 +101,13 @@ public class KeyManager
 
 	private static void incrementKeys(String uuid) throws SQLErrorException
 	{
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"UPDATE dungeon_keys SET nb = nb + 1 WHERE uuid = ?"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"UPDATE dungeon_keys SET nb = nb + 1 WHERE uuid = ?");
 			ps.setString(1, uuid);
 			ps.executeUpdate();
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new SQLErrorException();

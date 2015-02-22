@@ -24,12 +24,12 @@ public class WarpsManager
 
 		private Warp(ResultSet rs) throws SQLException
 		{
-			World world = Bukkit.getWorld(rs.getString("world"));
-			double x = rs.getDouble("x");
-			double y = rs.getDouble("y");
-			double z = rs.getDouble("z");
-			float yaw = rs.getFloat("yaw");
-			float pitch = rs.getFloat("pitch");
+			final World world = Bukkit.getWorld(rs.getString("world"));
+			final double x = rs.getDouble("x");
+			final double y = rs.getDouble("y");
+			final double z = rs.getDouble("z");
+			final float yaw = rs.getFloat("yaw");
+			final float pitch = rs.getFloat("pitch");
 
 			_name = rs.getString("name");
 			_location = new Location(world, x, y, z, yaw, pitch);
@@ -42,15 +42,13 @@ public class WarpsManager
 
 		public void remove() throws HeavenException
 		{
-			try
+			try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement("DELETE FROM warps WHERE name = ? LIMIT 1"))
 			{
-				PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-						"DELETE FROM warps WHERE name = ? LIMIT 1");
 				ps.setString(1, _name);
 
 				ps.executeUpdate();
 			}
-			catch (SQLException ex)
+			catch (final SQLException ex)
 			{
 				ex.printStackTrace();
 				throw new UnknownErrorException();
@@ -60,20 +58,18 @@ public class WarpsManager
 
 	public static Warp getWarp(String name) throws HeavenException
 	{
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement("SELECT * FROM warps WHERE name = ? LIMIT 1"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"SELECT * FROM warps WHERE name = ? LIMIT 1");
 			ps.setString(1, name);
 
-			ResultSet rs = ps.executeQuery();
+			final ResultSet rs = ps.executeQuery();
 
 			if (!rs.next())
 				throw new WarpNotFoundException(name);
 
 			return new Warp(rs);
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new WarpNotFoundException(name);
@@ -82,20 +78,18 @@ public class WarpsManager
 
 	public static List<String> listWarps() throws HeavenException
 	{
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement("SELECT name FROM warps"))
 		{
-			List<String> warps = new ArrayList<String>();
+			final List<String> warps = new ArrayList<String>();
 
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement("SELECT name FROM warps");
-
-			ResultSet rs = ps.executeQuery();
+			final ResultSet rs = ps.executeQuery();
 
 			while (rs.next())
 				warps.add(rs.getString("name"));
 
 			return warps;
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new UnknownErrorException();
@@ -104,10 +98,9 @@ public class WarpsManager
 
 	public static void createWarp(String name, Location location) throws HeavenException
 	{
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"REPLACE INTO warps SET name = ?, world = ?, x = ?, y = ?, z = ?, yaw = ?, pitch = ?"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-					"REPLACE INTO warps SET name = ?, world = ?, x = ?, y = ?, z = ?, yaw = ?, pitch = ?");
 			ps.setString(1, name);
 			ps.setString(2, location.getWorld().getName());
 			ps.setDouble(3, location.getX());
@@ -118,7 +111,7 @@ public class WarpsManager
 
 			ps.executeUpdate();
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new HeavenException("Cette erreur n'est pas sensée se produire.");

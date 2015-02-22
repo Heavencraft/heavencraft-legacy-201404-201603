@@ -1,12 +1,12 @@
 package fr.heavencraft.heavenrp.hps;
 
-import fr.heavencraft.exceptions.HeavenException;
-import fr.heavencraft.heavenrp.HeavenRP;
-import fr.heavencraft.heavenrp.exceptions.UnknownErrorException;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.heavenrp.HeavenRP;
+import fr.heavencraft.heavenrp.exceptions.UnknownErrorException;
 
 public class HpsManager
 {
@@ -16,16 +16,15 @@ public class HpsManager
 		{
 			throw new HeavenException("Vous n'avez pas assez d'argent sur mon compte.");
 		}
-		try
+		try (PreparedStatement ps = HeavenRP.getMainConnection().prepareStatement(
+				"UPDATE heavencraft_users SET balance = balance - ? WHERE username = ?"))
 		{
-			PreparedStatement ps = HeavenRP.getMainConnection().prepareStatement(
-					"UPDATE heavencraft_users SET balance = balance - ? WHERE username = ?");
 			ps.setInt(1, hps);
 			ps.setString(2, name);
 
 			ps.executeUpdate();
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new UnknownErrorException();
@@ -34,13 +33,12 @@ public class HpsManager
 
 	public static int getBalance(String name) throws HeavenException
 	{
-		try
+		try (PreparedStatement ps = HeavenRP.getMainConnection().prepareStatement(
+				"SELECT balance FROM heavencraft_users WHERE username = ?"))
 		{
-			PreparedStatement ps = HeavenRP.getMainConnection().prepareStatement(
-					"SELECT balance FROM heavencraft_users WHERE username = ?");
 			ps.setString(1, name);
 
-			ResultSet rs = ps.executeQuery();
+			final ResultSet rs = ps.executeQuery();
 
 			if (!rs.next())
 			{
@@ -48,7 +46,7 @@ public class HpsManager
 			}
 			return rs.getInt("balance");
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 		}

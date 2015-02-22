@@ -31,13 +31,12 @@ public class Stock2
 
 	public void remove() throws SQLErrorException
 	{
-		try
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement("DELETE FROM stocks WHERE id = ? LIMIT 1"))
 		{
-			PreparedStatement ps = HeavenRP.getConnection().prepareStatement("DELETE FROM stocks WHERE id = ? LIMIT 1");
 			ps.setInt(1, id);
 			ps.executeUpdate();
 		}
-		catch (SQLException ex)
+		catch (final SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new SQLErrorException();
