@@ -49,7 +49,7 @@ public class ColisCommand extends HeavenCommand {
 		if (destinataire == player) {
 			player.sendMessage(String
 					.format(FORMAT_POSTE,
-							"Les lettres solo n'ont pas de valeur juridique sur Heavencraft."));
+							"Les colis solo n'ont aucune valeur juridique sur Heavencraft."));
 			return;
 		}
 		
@@ -72,7 +72,7 @@ public class ColisCommand extends HeavenCommand {
 	protected void onConsoleCommand(CommandSender sender, String[] args)
 			throws HeavenException {
 		ChatUtil.sendMessage(sender,
-				"Cette commande ne peut pas être utilisée depuis la {console}.");
+				"Cette commande ne peut être utilisée depuis la {console}.");
 	}
 
 	@Override
