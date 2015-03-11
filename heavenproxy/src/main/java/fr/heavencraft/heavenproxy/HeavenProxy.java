@@ -47,6 +47,7 @@ import fr.heavencraft.heavenproxy.managers.RequestsManager;
 import fr.heavencraft.heavenproxy.motd.ProxyPingListener;
 import fr.heavencraft.heavenproxy.mute.MuteCommand;
 import fr.heavencraft.heavenproxy.mute.MuteListener;
+import fr.heavencraft.heavenproxy.radio.RadioCommand;
 import fr.heavencraft.heavenproxy.users.TabListener;
 import fr.heavencraft.heavenproxy.users.UsersListener;
 import fr.heavencraft.heavenproxy.warn.WarnCommand;
@@ -118,6 +119,9 @@ public class HeavenProxy extends Plugin
 			// Mute
 			new MuteCommand();
 			new MuteListener();
+
+			// Radio
+			new RadioCommand();
 
 			// Users
 			new TabListener();
