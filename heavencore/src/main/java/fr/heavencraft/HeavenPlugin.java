@@ -4,8 +4,8 @@ import static fr.heavencraft.utils.DevUtil.setPlugin;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import fr.heavencraft.api.providers.connection.ConnectionProvider.Database;
-import fr.heavencraft.api.providers.connection.DefaultConnectionProvider;
+import fr.heavencraft.api.providers.connection.ConnectionHandlerFactory;
+import fr.heavencraft.api.providers.connection.Database;
 import fr.heavencraft.api.providers.uuid.BukkitUniqueIdProvider;
 import fr.heavencraft.api.providers.uuid.UniqueIdProvider;
 
@@ -19,7 +19,8 @@ public class HeavenPlugin extends JavaPlugin
 		setPlugin(this);
 	}
 
-	private final UniqueIdProvider uniqueIdProvider = new BukkitUniqueIdProvider(new DefaultConnectionProvider(Database.PROXY));
+	private final UniqueIdProvider uniqueIdProvider = new BukkitUniqueIdProvider(
+			ConnectionHandlerFactory.getConnectionHandler(Database.PROXY));
 
 	public UniqueIdProvider getUniqueIdProvider()
 	{
