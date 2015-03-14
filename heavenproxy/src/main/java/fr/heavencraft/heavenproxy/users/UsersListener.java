@@ -12,6 +12,7 @@ import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
+import net.md_5.bungee.protocol.ProtocolConstants;
 import fr.heavencraft.heavenproxy.Utils;
 import fr.heavencraft.heavenproxy.chat.ChatManager;
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
@@ -20,7 +21,6 @@ public class UsersListener implements Listener
 {
 	private static final String TAG = "[UsersListener] ";
 	private static final Logger log = Utils.getLogger();
-	public static final int MINECRAFT_1_8 = 47;
 
 	public UsersListener()
 	{
@@ -35,7 +35,7 @@ public class UsersListener implements Listener
 		if (event.isCancelled())
 			return;
 
-		if (event.getConnection().getVersion() != MINECRAFT_1_8)
+		if (event.getConnection().getVersion() != ProtocolConstants.MINECRAFT_1_8)
 		{
 			event.setCancelled(true);
 			event.setCancelReason("§fHeaven§bcraft§r est en 1.8.3.\n\nMerci de vous connecter avec cette version.");
