@@ -3,6 +3,7 @@ package fr.heavencraft.heavenrp;
 import java.sql.Connection;
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
@@ -32,24 +33,32 @@ public class HeavenRP extends HeavenPlugin
 	@Override
 	public void onEnable()
 	{
-		super.onEnable();
+		try
+		{
+			super.onEnable();
 
-		_instance = this;
-		srpConnection = ConnectionHandlerFactory.getConnectionHandler(Database.SEMIRP);
-		mainConnection = ConnectionHandlerFactory.getConnectionHandler(Database.WEB);
+			_instance = this;
+			srpConnection = ConnectionHandlerFactory.getConnectionHandler(getConfig().getString("database"));
+			mainConnection = ConnectionHandlerFactory.getConnectionHandler(Database.WEB);
 
-		InitManager.init();
+			InitManager.init();
 
-		_auctionManager = new AuctionManager();
+			_auctionManager = new AuctionManager();
 
-		// Stores
-		new StoresListener(this);
-		_storesManager = new StoresManager(this);
-		_storesManager.init();
+			// Stores
+			new StoresListener(this);
+			_storesManager = new StoresManager(this);
+			_storesManager.init();
 
-		// La Poste
-		Files.getRegions().options().copyDefaults(true);
-		Files.saveRegions();
+			// La Poste
+			Files.getRegions().options().copyDefaults(true);
+			Files.saveRegions();
+		}
+		catch (final Exception ex)
+		{
+			ex.printStackTrace();
+			Bukkit.shutdown();
+		}
 
 	}
 
