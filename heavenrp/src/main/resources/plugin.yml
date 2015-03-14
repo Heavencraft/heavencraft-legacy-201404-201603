@@ -56,3 +56,4 @@ commands:
   colis:
   addPoste:
   removePoste:
+  noentities:
