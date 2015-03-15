@@ -12,6 +12,7 @@ import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
+import net.md_5.bungee.protocol.ProtocolConstants;
 import fr.heavencraft.heavenproxy.Utils;
 import fr.heavencraft.heavenproxy.chat.ChatManager;
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
@@ -20,7 +21,6 @@ public class UsersListener implements Listener
 {
 	private static final String TAG = "[UsersListener] ";
 	private static final Logger log = Utils.getLogger();
-	public static final int MINECRAFT_1_8 = 47;
 
 	public UsersListener()
 	{
@@ -35,26 +35,26 @@ public class UsersListener implements Listener
 		if (event.isCancelled())
 			return;
 
-		if (event.getConnection().getVersion() != MINECRAFT_1_8)
+		if (event.getConnection().getVersion() != ProtocolConstants.MINECRAFT_1_8)
 		{
 			event.setCancelled(true);
-			event.setCancelReason("§fHeaven§bcraft§r est en 1.8.1.\n\nMerci de vous connecter avec cette version.");
+			event.setCancelReason("§fHeaven§bcraft§r est en 1.8.3.\n\nMerci de vous connecter avec cette version.");
 
-			log.info(TAG + "[onLogin] " + event.getConnection().getName() + " is not in 1.8.1.");
+			log.info(TAG + "[onLogin] " + event.getConnection().getName() + " is not in 1.8.3.");
 		}
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPostLogin(PostLoginEvent event)
 	{
-		ProxiedPlayer player = event.getPlayer();
+		final ProxiedPlayer player = event.getPlayer();
 
-		String uuid = Utils.getUUID(player);
-		String name = player.getName();
+		final String uuid = Utils.getUUID(player);
+		final String name = player.getName();
 
 		try
 		{
-			User user = UserProvider.getUserByUuid(uuid);
+			final User user = UserProvider.getUserByUuid(uuid);
 			user.setName(name);
 			user.setLastLogin(new Timestamp(new Date().getTime()));
 
@@ -67,7 +67,7 @@ public class UsersListener implements Listener
 				Utils.sendMessage(player, ChatColor.GREEN + "http://mc-topserv.net/top/serveur.php?serv=46");
 			}
 		}
-		catch (HeavenException ex)
+		catch (final HeavenException ex)
 		{
 			UserProvider.createUser(uuid, name);
 
@@ -82,7 +82,7 @@ public class UsersListener implements Listener
 		{
 			UserProvider.removeFromCache(UserProvider.getUserByName(event.getPlayer().getName()));
 		}
-		catch (HeavenException ex)
+		catch (final HeavenException ex)
 		{
 			ex.printStackTrace();
 		}

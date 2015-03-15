@@ -7,6 +7,7 @@ import fr.heavencraft.commands.FillCommand;
 import fr.heavencraft.commands.GcCommand;
 import fr.heavencraft.commands.HeadCommand;
 import fr.heavencraft.commands.InventoryCommand;
+import fr.heavencraft.commands.NoentitiesCommand;
 import fr.heavencraft.commands.PoofCommand;
 import fr.heavencraft.commands.RejoindreCommand;
 import fr.heavencraft.commands.RoucoupsCommand;
@@ -106,6 +107,7 @@ public class InitManager
 		new GcCommand();
 		new HeadCommand();
 		new InventoryCommand();
+		new NoentitiesCommand();
 		new PoofCommand();
 		new RejoindreCommand();
 		new RoucoupsCommand();
