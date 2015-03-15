@@ -54,7 +54,13 @@ public class WorldsManager
 			creator.environment(World.Environment.NORMAL);
 			creator.createWorld();
 		}
-
+		if (!isLoaded("world_event"))
+		{
+			WorldCreator creator = new WorldCreator("world_event");
+			creator.generator(new EmptyChunkGenerator());
+			creator.environment(World.Environment.NORMAL);
+			creator.createWorld();
+		}
 		_spawn = new Location(getWorld(), 145.5D, 67D, 130.5D, 270F, 0F);
 		_spawnNether = new Location(getNether(), 96, 46, 176, 0, 0);
 		_spawnTheEnd = new Location(getTheEnd(), 4.5D, 61D, 23.5D, 0F, 0F);
@@ -90,7 +96,8 @@ public class WorldsManager
 			x = rnd.nextInt(5000) - 2500;
 			z = rnd.nextInt(5000) - 2500;
 		}
-		while ((getResources().getBiome(x, z) == Biome.OCEAN) || (getResources().getBiome(x, z) == Biome.DEEP_OCEAN));
+		while ((getResources().getBiome(x, z) == Biome.OCEAN)
+				|| (getResources().getBiome(x, z) == Biome.DEEP_OCEAN));
 
 		return Utils.getSafeDestination(new Location(getResources(), x, 100.0D, z));
 	}
