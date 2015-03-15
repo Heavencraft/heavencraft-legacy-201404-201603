@@ -3,14 +3,15 @@ package fr.heavencraft.heavenrp;
 import java.sql.Connection;
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import fr.heavencraft.HeavenPlugin;
-import fr.heavencraft.api.providers.connection.ConnectionProvider;
-import fr.heavencraft.api.providers.connection.ConnectionProvider.Database;
-import fr.heavencraft.api.providers.connection.DefaultConnectionProvider;
+import fr.heavencraft.api.providers.connection.ConnectionHandler;
+import fr.heavencraft.api.providers.connection.ConnectionHandlerFactory;
+import fr.heavencraft.api.providers.connection.Database;
 import fr.heavencraft.heavenrp.stores.StoresListener;
 import fr.heavencraft.heavenrp.stores.StoresManager;
 import fr.lorgan17.heavenrp.managers.AuctionManager;
@@ -21,8 +22,8 @@ public class HeavenRP extends HeavenPlugin
 	private static WorldGuardPlugin _WGP;
 	private static HeavenRP _instance;
 
-	private static ConnectionProvider srpConnection;
-	private static ConnectionProvider mainConnection;
+	private static ConnectionHandler srpConnection;
+	private static ConnectionHandler mainConnection;
 
 	private static StoresManager _storesManager;
 	private static AuctionManager _auctionManager;
@@ -32,24 +33,32 @@ public class HeavenRP extends HeavenPlugin
 	@Override
 	public void onEnable()
 	{
-		super.onEnable();
+		try
+		{
+			super.onEnable();
 
-		_instance = this;
-		srpConnection = new DefaultConnectionProvider(Database.SEMIRP);
-		mainConnection = new DefaultConnectionProvider(Database.WEB);
+			_instance = this;
+			srpConnection = ConnectionHandlerFactory.getConnectionHandler(getConfig().getString("database"));
+			mainConnection = ConnectionHandlerFactory.getConnectionHandler(Database.WEB);
 
-		InitManager.init();
+			InitManager.init();
 
-		_auctionManager = new AuctionManager();
+			_auctionManager = new AuctionManager();
 
-		// Stores
-		new StoresListener(this);
-		_storesManager = new StoresManager(this);
-		_storesManager.init();
+			// Stores
+			new StoresListener(this);
+			_storesManager = new StoresManager(this);
+			_storesManager.init();
 
-		// La Poste
-		Files.getRegions().options().copyDefaults(true);
-		Files.saveRegions();
+			// La Poste
+			Files.getRegions().options().copyDefaults(true);
+			Files.saveRegions();
+		}
+		catch (final Exception ex)
+		{
+			ex.printStackTrace();
+			Bukkit.shutdown();
+		}
 
 	}
 
@@ -84,7 +93,7 @@ public class HeavenRP extends HeavenPlugin
 
 		if (_WGP == null)
 		{
-			Plugin plugin = getInstance().getServer().getPluginManager().getPlugin("WorldGuard");
+			final Plugin plugin = getInstance().getServer().getPluginManager().getPlugin("WorldGuard");
 			if (plugin == null || !(plugin instanceof WorldGuardPlugin))
 			{
 				_WGP = null;

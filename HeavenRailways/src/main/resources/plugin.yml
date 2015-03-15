@@ -1,0 +1,5 @@
+name: HeavenRailways
+version: 1.0
+main: fr.heavencraft.railways.HeavenRailway
+commands:
+    station:

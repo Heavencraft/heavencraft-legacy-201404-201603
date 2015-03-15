@@ -10,7 +10,7 @@ import fr.heavencraft.heavenproxy.Utils;
 
 public class ProxyPingListener implements Listener
 {
-	private static final String FIRST_LINE = "§l§fHeaven§bcraft§r [1.8.1]\n";
+	private static final String FIRST_LINE = "§l§fHeaven§bcraft§r [1.8.3]\n";
 
 	public ProxyPingListener()
 	{
@@ -33,9 +33,9 @@ public class ProxyPingListener implements Listener
 
 	private static String getServerString(String name, String... servers)
 	{
-		for (String server : servers)
+		for (final String server : servers)
 		{
-			ServerInfo serverInfo = ProxyServer.getInstance().getServerInfo(server);
+			final ServerInfo serverInfo = ProxyServer.getInstance().getServerInfo(server);
 
 			if (serverInfo != null && serverInfo.getPlayers().size() != 0)
 			{
