@@ -39,7 +39,7 @@ public class NoentitiesCommand extends HeavenCommand
 				{
 					for (final Chunk chunk : world.getLoadedChunks())
 					{
-						if (chunk.getEntities().length > 10000 || chunk.getTileEntities().length > 10000)
+						if (chunk.getEntities().length > 200)
 						{
 							printWarning(chunk, sender);
 						}
@@ -55,7 +55,7 @@ public class NoentitiesCommand extends HeavenCommand
 				final EntityType type = EntityType.fromName(args[3]);
 
 				if (type == null)
-					throw new HeavenException("Invalid entity type : %1$s", type);
+					throw new HeavenException("Invalid entity type : %1$s", args[3]);
 
 				int i = 0;
 
