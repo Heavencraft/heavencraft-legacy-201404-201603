@@ -27,7 +27,7 @@ public class WorldsListener implements Listener
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent event)
 	{
-		Location l = event.getTo();
+		final Location l = event.getTo();
 
 		// Monde semi-RP
 		if (l.getWorld().equals(WorldsManager.getWorld()))
@@ -43,7 +43,7 @@ public class WorldsListener implements Listener
 		// Monde ressources
 		else if (l.getWorld().equals(WorldsManager.getResources()))
 		{
-			int limit = WorldsManager.RESOURCES_SIZE / 2;
+			final int limit = WorldsManager.RESOURCES_SIZE / 2;
 
 			if (Math.abs(l.getX()) > limit || Math.abs(l.getZ()) > limit)
 			{
@@ -53,7 +53,8 @@ public class WorldsListener implements Listener
 			}
 		}
 
-		else if (l.getWorld().getName().equals("world_old") || l.getWorld().getName().equals("world_origine"))
+		else if (l.getWorld().getName().equals("world_old") || l.getWorld().getName().equals("world_origine")
+				|| l.getWorld().getName().equals("world_dungeon") || l.getWorld().getName().equals("world_event"))
 		{
 			if (!event.getPlayer().hasPermission(Permissions.TPWORLD))
 				event.getPlayer().teleport(WorldsManager.getSpawn());
@@ -67,7 +68,7 @@ public class WorldsListener implements Listener
 		if (event.getEntityType() != EntityType.PLAYER)
 			return;
 
-		Block block = event.getLocation().getBlock();
+		final Block block = event.getLocation().getBlock();
 
 		if (block.getType() != Material.PORTAL)
 			return;
