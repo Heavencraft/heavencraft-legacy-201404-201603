@@ -95,9 +95,7 @@ public class CartIntersection implements RailwayFunction{
 					// Update rails orientation
 					passager.sendMessage("to:" + token[2] + " ");
 					r.setDirection(getBlockFacing(token[2]), r.isOnSlope());
-					
 					cart.setVelocity(updateMovementVector(getBlockFacing(token[2]), cart.getVelocity()));
-					
 					byte newdata = r.getData();
 					rail.setData(newdata);
 				}
@@ -119,6 +117,7 @@ public class CartIntersection implements RailwayFunction{
 					// Update rails orientation
 					passager.sendMessage("to:" + token[2] + " ");
 					r.setDirection(getBlockFacing(token[2]), r.isOnSlope());
+					cart.setVelocity(updateMovementVector(getBlockFacing(token[2]), cart.getVelocity()));
 					byte newdata = r.getData();
 					rail.setData(newdata);
 				}
@@ -137,6 +136,7 @@ public class CartIntersection implements RailwayFunction{
 				}			
 				// Update rails orientation
 				r.setDirection(getBlockFacing(token[1]), r.isOnSlope());
+				cart.setVelocity(updateMovementVector(getBlockFacing(token[1]), cart.getVelocity()));
 				byte newdata = r.getData();
 				rail.setData(newdata);
 			default:
