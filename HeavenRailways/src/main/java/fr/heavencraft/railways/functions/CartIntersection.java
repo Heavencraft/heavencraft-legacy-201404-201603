@@ -11,6 +11,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.material.Rails;
+import org.bukkit.util.Vector;
 
 import fr.heavencraft.Utils.ChatUtil;
 import fr.heavencraft.railways.PlayerStationManager;
@@ -94,6 +95,9 @@ public class CartIntersection implements RailwayFunction{
 					// Update rails orientation
 					passager.sendMessage("to:" + token[2] + " ");
 					r.setDirection(getBlockFacing(token[2]), r.isOnSlope());
+					
+					cart.setVelocity(updateMovementVector(getBlockFacing(token[2]), cart.getVelocity()));
+					
 					byte newdata = r.getData();
 					rail.setData(newdata);
 				}
@@ -186,6 +190,24 @@ public class CartIntersection implements RailwayFunction{
 		}
 		return targetDirection;
 	}
+	
+	public static Vector updateMovementVector(BlockFace direction, Vector oldVelocity)
+	  {
+	    double speed = Math.abs(oldVelocity.getX()) > Math.abs(oldVelocity.getZ()) ? Math.abs(oldVelocity.getX()) : Math.abs(oldVelocity.getZ());
+	    if (direction.equals(BlockFace.WEST)) {
+	      return new Vector(-speed, 0.0D, 0.0D);
+	    }
+	    if (direction.equals(BlockFace.EAST)) {
+	      return new Vector(speed, 0.0D, 0.0D);
+	    }
+	    if (direction.equals(BlockFace.NORTH)) {
+	      return new Vector(0.0D, 0.0D, -speed);
+	    }
+	    if (direction.equals(BlockFace.SOUTH)) {
+	      return new Vector(0.0D, 0.0D, speed);
+	    }
+	    return null;
+	  }
 
 
 }
