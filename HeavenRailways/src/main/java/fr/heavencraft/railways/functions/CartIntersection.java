@@ -93,7 +93,10 @@ public class CartIntersection implements RailwayFunction{
 					continue;// No destination found
 				if(token[1].equalsIgnoreCase(destination)){
 					// Update rails orientation
-					passager.sendMessage("to:" + token[2] + " ");
+					if(!isDirection(token[2])) {
+						ChatUtil.sendMessage(passager, STATION_FORMAT_ERR);
+						return;
+					}
 					r.setDirection(getBlockFacing(token[2]), r.isOnSlope());
 					cart.setVelocity(updateMovementVector(getBlockFacing(token[2]), cart.getVelocity()));
 					byte newdata = r.getData();
@@ -115,7 +118,14 @@ public class CartIntersection implements RailwayFunction{
 				}
 				if(token[1].equalsIgnoreCase(cartDirection)){
 					// Update rails orientation
-					passager.sendMessage("to:" + token[2] + " ");
+					if(!isDirection(token[1])) {
+						ChatUtil.sendMessage(passager, STATION_FORMAT_ERR);
+						return;
+					}
+					if(!isDirection(token[2])) {
+						ChatUtil.sendMessage(passager, STATION_FORMAT_ERR);
+						return;
+					}
 					r.setDirection(getBlockFacing(token[2]), r.isOnSlope());
 					cart.setVelocity(updateMovementVector(getBlockFacing(token[2]), cart.getVelocity()));
 					byte newdata = r.getData();
@@ -135,6 +145,10 @@ public class CartIntersection implements RailwayFunction{
 					continue;
 				}			
 				// Update rails orientation
+				if(!isDirection(token[1])) {
+					ChatUtil.sendMessage(passager, STATION_FORMAT_ERR);
+					return;
+				}
 				r.setDirection(getBlockFacing(token[1]), r.isOnSlope());
 				cart.setVelocity(updateMovementVector(getBlockFacing(token[1]), cart.getVelocity()));
 				byte newdata = r.getData();
@@ -208,6 +222,17 @@ public class CartIntersection implements RailwayFunction{
 	    }
 	    return null;
 	  }
+	
+	/**
+	 * Returns if the passed string is N S E W
+	 * @param str
+	 * @return
+	 */
+	public boolean isDirection(String str) {
+		if(str.equalsIgnoreCase("N") || str.equalsIgnoreCase("E") || str.equalsIgnoreCase("S") || str.equalsIgnoreCase("W"))
+			return true;
+		return false;
+	}
 
 
 }

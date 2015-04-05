@@ -2,6 +2,8 @@ package fr.heavencraft.railways;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import fr.heavencraft.InitManager;
+
 public class HeavenRailway extends JavaPlugin {
 	private static HeavenRailway _instance;
 
