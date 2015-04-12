@@ -19,7 +19,7 @@ public enum Server
 	UltraHardcore("ultrahard", "UH", "Monde Ultra-Hardcore"),
 	Paintball("paintball", "PB", "Paintball"),
 	HungerGames("hungergames", "HG", "Hunger Games"),
-	UnknownServer("", "Monde ???", "???");
+	UnknownServer("", "???", "Monde ???");
 
 	private final String name;
 	private final String prefix;
