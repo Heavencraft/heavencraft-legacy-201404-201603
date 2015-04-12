@@ -17,8 +17,6 @@ import fr.heavencraft.railways.functions.RailwayFunction;
 public class RailwayFunctionHandler implements Listener{
 
 	private List<RailwayFunction> _functions = new ArrayList<RailwayFunction>(); // List that holds our functions.
-	
-	// https://github.com/FlyingPikachu/SimpleCarts/blob/master/SimpleCarts/src/me/happypikachu/SimpleCarts/listeners/SimpleCartsVehicleListener.java
 	public RailwayFunctionHandler()
 	{
 		loadFunction();
