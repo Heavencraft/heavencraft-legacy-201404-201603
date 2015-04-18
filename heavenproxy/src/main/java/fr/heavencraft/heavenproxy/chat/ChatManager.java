@@ -33,7 +33,7 @@ public class ChatManager
 			@Override
 			public void run()
 			{
-				String location = Utils.getCountry(address);
+				final String location = Utils.getCountry(address);
 
 				if (welcome)
 					Utils.broadcastMessage(WELCOME_MESSAGE, playerName, location);
@@ -68,21 +68,21 @@ public class ChatManager
 		else
 			Utils.broadcastMessage(BAN_MESSAGE_WITH_REASON, playerName, bannedBy, reason);
 	}
-	
+
 	public static void sendChatMessage(final ProxiedPlayer player, final String message)
 	{
 		try
 		{
-			User user = UserProvider.getUserByName(player.getName());
-	
-			String color = user.getColor();
-			String prefix = Utils.getPrefix(player);
-	
-			String chatMessage = String.format(CHAT_MESSAGE, prefix, color, player.getName(), message);
-	
+			final User user = UserProvider.getUserByName(player.getName());
+
+			final String color = user.getColor();
+			final String prefix = Utils.getPrefix(player);
+
+			final String chatMessage = String.format(CHAT_MESSAGE, prefix, color, player.getName(), message);
+
 			ProxyServer.getInstance().broadcast(TextComponent.fromLegacyText(chatMessage));
 		}
-		catch (HeavenException ex)
+		catch (final HeavenException ex)
 		{
 			ex.printStackTrace();
 			Utils.sendMessage(player, ex.getMessage());
