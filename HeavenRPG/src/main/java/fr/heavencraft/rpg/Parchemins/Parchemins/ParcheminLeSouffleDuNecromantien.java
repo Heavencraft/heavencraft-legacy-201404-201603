@@ -32,7 +32,7 @@ public class ParcheminLeSouffleDuNecromantien implements IParchemin{
 	public ItemStack getItem() {
 		ItemStack parchemin = new ItemStack(Material.PAPER);
 		ItemMeta met = parchemin.getItemMeta();
-		met.setDisplayName(ChatColor.BLUE + "Souffle du nécromancien");
+		met.setDisplayName(ChatColor.RED + "Souffle du nécromancien");
 		parchemin.setItemMeta(met);
 		return parchemin;
 	}

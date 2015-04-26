@@ -37,7 +37,7 @@ public class ParcheminTonnereDivin implements IParchemin{
 	public ItemStack getItem() {
 		ItemStack parchemin = new ItemStack(Material.PAPER);
 		ItemMeta met = parchemin.getItemMeta();
-		met.setDisplayName(ChatColor.LIGHT_PURPLE + "Tonnerre Divin");
+		met.setDisplayName(ChatColor.RED + "Tonnerre Divin");
 		parchemin.setItemMeta(met);
 		return parchemin;
 	}

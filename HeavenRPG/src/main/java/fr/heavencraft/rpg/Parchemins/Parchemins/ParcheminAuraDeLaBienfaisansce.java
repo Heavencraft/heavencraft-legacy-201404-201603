@@ -32,7 +32,7 @@ public class ParcheminAuraDeLaBienfaisansce implements IParchemin{
 	public ItemStack getItem() {
 		ItemStack parchemin = new ItemStack(Material.PAPER);
 		ItemMeta met = parchemin.getItemMeta();
-		met.setDisplayName(ChatColor.BLUE + "Aura de la Bienfaisance");
+		met.setDisplayName(ChatColor.RED + "Aura de la Bienfaisance");
 		parchemin.setItemMeta(met);
 		return parchemin;
 	}
