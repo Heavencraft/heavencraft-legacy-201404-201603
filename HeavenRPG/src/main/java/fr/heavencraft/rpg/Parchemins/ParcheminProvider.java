@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminAuraDeLaBienfaisansce;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminAntreDesPoissions;
+import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminDuChampignionium;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminExtractionPoste2;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminLePetitPetDuNord;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminLeSouffleDuNecromantien;
@@ -36,6 +37,7 @@ public class ParcheminProvider {
 		addParchemin(new ParcheminExtractionPoste2());
 		addParchemin(new ParcheminAntreDesPoissions());
 		addParchemin(new ParcheminMineDeCharbon());
+		addParchemin(new ParcheminDuChampignionium());
 	}
 	
 	
