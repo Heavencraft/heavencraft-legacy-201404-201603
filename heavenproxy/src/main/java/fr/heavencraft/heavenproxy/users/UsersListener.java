@@ -38,9 +38,9 @@ public class UsersListener implements Listener
 		if (event.getConnection().getVersion() != ProtocolConstants.MINECRAFT_1_8)
 		{
 			event.setCancelled(true);
-			event.setCancelReason("§fHeaven§bcraft§r est en 1.8.3.\n\nMerci de vous connecter avec cette version.");
+			event.setCancelReason("§fHeaven§bcraft§r est en 1.8.4.\n\nMerci de vous connecter avec cette version.");
 
-			log.info(TAG + "[onLogin] " + event.getConnection().getName() + " is not in 1.8.3.");
+			log.info(TAG + "[onLogin] " + event.getConnection().getName() + " is not in 1.8.4.");
 		}
 	}
 
