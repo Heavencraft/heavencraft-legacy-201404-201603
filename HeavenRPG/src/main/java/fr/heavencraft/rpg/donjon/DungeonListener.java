@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
@@ -127,11 +128,17 @@ public class DungeonListener implements Listener {
 			e.setCancelled(true);
 			return;
 		}
-				
-		if(DungeonManager.is_debug())
-			DevUtils.log("~~onPlayerDamageByEntity: || Victim Health: {%1$s} || EventCausedDamage: {%2$s} || Is Deadly: {%3$s}",victim.getHealth() + " ",e.getDamage() + "(" + e.getDamage() + ") ", ((victim.getHealth() - e.getDamage()) <= 0) + " " );
 		
-		if (victim.getHealth() - e.getDamage() <= 0)
+		double caused = e.getDamage() + e.getDamage(DamageModifier.ABSORPTION) + e.getDamage(DamageModifier.ARMOR) 
+				+ e.getDamage(DamageModifier.BLOCKING) + e.getDamage(DamageModifier.MAGIC) + e.getDamage(DamageModifier.RESISTANCE);
+				
+		if(DungeonManager.is_debug()) {
+			DevUtils.log("~~onPlayerDamageByEntity: || Victim Health: {%1$s} || EventCausedDamage: {%2$s} || Is Deadly: {%3$s}",victim.getHealth() + " ",e.getDamage() + "(" + e.getDamage(DamageModifier.ARMOR) + ") ", ((victim.getHealth() - e.getDamage()) <= 0) + " " );
+			DevUtils.log("Health {%1$s} | totaldamage: {%2$s} | subi: {%3$s} | lethal: {%4$s} ", victim.getHealth(), e.getDamage(), caused, victim.getHealth() - caused);
+			
+		}
+			
+		if (victim.getHealth() - caused <= 0)
 		{
 			e.setDamage(0);
 			dg.handlePlayerDeath(victim);

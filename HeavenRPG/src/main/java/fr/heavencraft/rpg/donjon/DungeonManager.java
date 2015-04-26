@@ -168,7 +168,7 @@ public class DungeonManager implements Listener{
 	{
 		for(Dungeon dg : get_dungeons())
 			if(dg.is_Running())
-				dg.evacDungeon();
+				dg.stopDungeon();
 	}
 
 	public static boolean is_debug() {
