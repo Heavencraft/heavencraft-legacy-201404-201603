@@ -23,6 +23,7 @@ import com.mojang.api.profiles.ProfileRepository;
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
 import fr.heavencraft.heavenproxy.exceptions.PlayerNotConnectedException;
 import fr.heavencraft.heavenproxy.exceptions.UUIDNotFoundException;
+import fr.heavencraft.heavenproxy.servers.Server;
 
 public class Utils
 {
@@ -34,7 +35,7 @@ public class Utils
 
 	public static ProxiedPlayer getPlayer(String name) throws PlayerNotConnectedException
 	{
-		for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers())
+		for (final ProxiedPlayer player : ProxyServer.getInstance().getPlayers())
 			if (player.getName().toLowerCase().startsWith(name.toLowerCase()))
 				return player;
 
@@ -48,7 +49,7 @@ public class Utils
 			getPlayer(name);
 			return true;
 		}
-		catch (PlayerNotConnectedException e)
+		catch (final PlayerNotConnectedException e)
 		{
 			return false;
 		}
@@ -60,7 +61,7 @@ public class Utils
 		{
 			return getPlayer(name).getName();
 		}
-		catch (PlayerNotConnectedException ex)
+		catch (final PlayerNotConnectedException ex)
 		{
 			return name;
 		}
@@ -72,7 +73,7 @@ public class Utils
 		{
 			return Integer.parseInt(s);
 		}
-		catch (NumberFormatException ex)
+		catch (final NumberFormatException ex)
 		{
 			throw new HeavenException("Le nombre {%1$s} est incorrect.", s);
 		}
@@ -80,7 +81,7 @@ public class Utils
 
 	public static int toUint(String s) throws HeavenException
 	{
-		int i = toInt(s);
+		final int i = toInt(s);
 
 		if (i < 0)
 			throw new HeavenException("Le nombre {%1$s} est incorrect.", s);
@@ -117,10 +118,10 @@ public class Utils
 		{
 			return getUUID(getPlayer(playerName));
 		}
-		catch (PlayerNotConnectedException ex)
+		catch (final PlayerNotConnectedException ex)
 		{
-			ProfileRepository repository = new HttpProfileRepository("minecraft");
-			Profile[] profiles = repository.findProfilesByNames(playerName);
+			final ProfileRepository repository = new HttpProfileRepository("minecraft");
+			final Profile[] profiles = repository.findProfilesByNames(playerName);
 
 			if (profiles.length == 1)
 				return profiles[0].getId();
@@ -151,10 +152,10 @@ public class Utils
 			if (_databaseReader == null)
 				_databaseReader = new DatabaseReader.Builder(new File("GeoLite2-City.mmdb")).build();
 
-			CountryResponse response = _databaseReader.country(address);
+			final CountryResponse response = _databaseReader.country(address);
 			return response.getCountry().getNames().get("fr");
 		}
-		catch (Throwable t)
+		catch (final Throwable t)
 		{
 			t.printStackTrace();
 			return "France";
@@ -168,7 +169,7 @@ public class Utils
 			if (_databaseReader == null)
 				_databaseReader = new DatabaseReader.Builder(new File("GeoLite2-City.mmdb")).build();
 
-			CityResponse response = _databaseReader.city(address);
+			final CityResponse response = _databaseReader.city(address);
 
 			String location = "";
 			String tmp;
@@ -178,7 +179,7 @@ public class Utils
 				location += tmp;
 
 			// Département, région
-			for (Subdivision subdivision : response.getSubdivisions())
+			for (final Subdivision subdivision : response.getSubdivisions())
 				if ((tmp = subdivision.getName()) != null)
 					location += (location == "" ? "" : " ") + tmp;
 
@@ -188,7 +189,7 @@ public class Utils
 
 			return location;
 		}
-		catch (Throwable t)
+		catch (final Throwable t)
 		{
 			t.printStackTrace();
 			return "";
@@ -214,7 +215,7 @@ public class Utils
 		{
 			message = GOLD + message.replace(BEGIN, RED).replace(END, GOLD);
 
-			for (String line : message.split("\n"))
+			for (final String line : message.split("\n"))
 				sender.sendMessage(TextComponent.fromLegacyText(line));
 		}
 	}
@@ -232,7 +233,7 @@ public class Utils
 	{
 		message = GOLD + message.replace(BEGIN, RED).replace(END, GOLD);
 
-		for (String line : message.split("\n"))
+		for (final String line : message.split("\n"))
 			ProxyServer.getInstance().broadcast(TextComponent.fromLegacyText(line));
 	}
 
@@ -243,7 +244,7 @@ public class Utils
 
 	public static void broadcast(String message, String permission)
 	{
-		for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers())
+		for (final ProxiedPlayer player : ProxyServer.getInstance().getPlayers())
 			if (player.hasPermission(permission))
 				sendMessage(player, message);
 	}
@@ -260,16 +261,9 @@ public class Utils
 
 	public static String getPrefix(ProxiedPlayer player)
 	{
-		String serverName = player.getServer().getInfo().getName();
+		final String serverName = player.getServer().getInfo().getName();
 
 		return Server.getUniqueInstanceByName(serverName).getPrefix();
-	}
-
-	public static String getServerDisplayName(ProxiedPlayer player)
-	{
-		String serverName = player.getServer().getInfo().getName();
-
-		return Server.getUniqueInstanceByName(serverName).getDisplayName();
 	}
 
 	public static boolean isInteger(String s)
@@ -279,7 +273,7 @@ public class Utils
 			Integer.parseInt(s);
 			return true;
 		}
-		catch (NumberFormatException ex)
+		catch (final NumberFormatException ex)
 		{
 			return false;
 		}

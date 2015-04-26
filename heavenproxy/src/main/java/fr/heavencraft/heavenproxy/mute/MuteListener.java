@@ -2,7 +2,6 @@ package fr.heavencraft.heavenproxy.mute;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.logging.Logger;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -16,7 +15,6 @@ public class MuteListener implements Listener
 	private static final String TAG = "[MuteListener] ";
 
 	private final Logger log = Utils.getLogger();
-	private final Random rnd = new Random();
 	private final List<String> bannedWords = new ArrayList<String>();
 	private final List<String> replaceWords = new ArrayList<String>();
 
@@ -100,16 +98,17 @@ public class MuteListener implements Listener
 		if (!(event.getSender() instanceof ProxiedPlayer))
 			return;
 
-		String message = event.getMessage().toLowerCase();
-		boolean isPrivateMessage = message.startsWith("/m ") || message.startsWith("/msg ")
+		final String message = event.getMessage().toLowerCase();
+		final boolean isPrivateMessage = message.startsWith("/m ") || message.startsWith("/msg ")
 				|| message.startsWith("/t ") || message.startsWith("/tell ") || message.startsWith("/w ");
 
 		// Si c'est une commande autre que /m, /me ou /send -> on fait rien
-		if (event.isCommand() && !isPrivateMessage && !message.startsWith("/me ") && !message.startsWith("/envoyer "))
+		if (event.isCommand() && !isPrivateMessage && !message.startsWith("/me ")
+				&& !message.startsWith("/envoyer "))
 			return;
 
-		ProxiedPlayer player = (ProxiedPlayer) event.getSender();
-		String playerName = player.getName();
+		final ProxiedPlayer player = (ProxiedPlayer) event.getSender();
+		final String playerName = player.getName();
 
 		// Si le joueur est mute
 		if (MuteManager.isMuted(playerName))
@@ -119,7 +118,7 @@ public class MuteListener implements Listener
 		}
 
 		// Mots interdits
-		for (String word : removePunctuation(message).split(" "))
+		for (final String word : removePunctuation(message).split(" "))
 		{
 			if (bannedWords.contains(word))
 			{
