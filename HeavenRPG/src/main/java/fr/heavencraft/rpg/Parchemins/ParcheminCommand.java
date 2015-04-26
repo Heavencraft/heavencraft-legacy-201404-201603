@@ -9,6 +9,7 @@ import fr.heavencraft.rpg.HeavenCommand;
 import fr.heavencraft.rpg.RPGpermissions;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminAuraDeLaBienfaisansce;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminAntreDesPoissions;
+import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminDuChampignionium;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminExtractionPoste2;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminLePetitPetDuNord;
 import fr.heavencraft.rpg.Parchemins.Parchemins.ParcheminLeSouffleDuNecromantien;
@@ -64,6 +65,8 @@ public class ParcheminCommand extends HeavenCommand {
 				player.getInventory().addItem(new ParcheminAntreDesPoissions().getItem());
 			else if(args[0].equalsIgnoreCase("13"))
 				player.getInventory().addItem(new ParcheminMineDeCharbon().getItem());
+			else if(args[0].equalsIgnoreCase("14"))
+				player.getInventory().addItem(new ParcheminDuChampignionium().getItem());
 			return;	
 		}
 		
