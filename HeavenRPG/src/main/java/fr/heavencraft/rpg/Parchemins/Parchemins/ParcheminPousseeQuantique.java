@@ -32,7 +32,7 @@ public class ParcheminPousseeQuantique implements IParchemin{
 	public ItemStack getItem() {
 		ItemStack parchemin = new ItemStack(Material.PAPER);
 		ItemMeta met = parchemin.getItemMeta();
-		met.setDisplayName(ChatColor.RED + "Pousée Quantique");
+		met.setDisplayName(ChatColor.RED + "Poussée Quantique");
 		parchemin.setItemMeta(met);
 		return parchemin;
 	}
