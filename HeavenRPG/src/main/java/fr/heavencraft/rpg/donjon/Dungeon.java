@@ -121,8 +121,6 @@ public class Dungeon {
 
 	}
 
-
-
 	public Dungeon(String name, int reqUser)
 	{
 		set_name(name);
@@ -136,20 +134,6 @@ public class Dungeon {
 		set_name(name);
 		set_requiredPlayerAmmount(reqUser);
 		set_lobby(lobby);
-	}
-
-
-
-	/**
-	 * Ajoute un joueur a la lobby/matchmaking du donjon
-	 * @param p le joueur a ajouter
-	 */
-	public void addPlayer(Player p)
-	{
-		// Ajouter le joueur a la liste d'attente
-		get_inDungeon().put(p.getUniqueId(), p.getLocation());
-		// Téléporter le joueur dans la lobby
-		p.teleport(get_lobby());
 	}
 
 	public void addDungeonRoom(DungeonRoom dgr)
@@ -174,15 +158,17 @@ public class Dungeon {
 			ChatUtil.sendMessage(p, DUNGEON_ALREADY_IN_USE);
 			return;
 		}
-		else
+		
+		if(isPlayerInside(p))
 		{
-			if(isPlayerInside(p))
-			{
-				ChatUtil.sendMessage(p, DUNGEON_PLAYER_ALREADY_INSIDE);
-				return;
-			}
-			addPlayer(p);
+			ChatUtil.sendMessage(p, DUNGEON_PLAYER_ALREADY_INSIDE);
+			return;
 		}
+			
+		// Ajouter le joueur a la liste d'attente
+		get_inDungeon().put(p.getUniqueId(), p.getLocation());
+		// Téléporter le joueur dans la lobby
+		p.teleport(get_lobby());
 
 		// Véifier si le nombre de joueurs est suffisant
 		if(get_inDungeon().size() == get_requiredPlayerAmmount())
@@ -201,6 +187,7 @@ public class Dungeon {
 	 */
 	private void startDungeon()
 	{
+		_deadPlayers.clear();
 		// Marquer le donjon comme en jeu
 		set_Running(true);
 		// Faire pointer le pointeur du room sur le premier room
@@ -256,52 +243,6 @@ public class Dungeon {
 				Bukkit.getPlayer(uid).teleport(next_dgr.get_spawn());
 	}
 
-	/**
-	 * Handles the try to end the dungeon.
-	 * @param p Player who tried.
-	 */
-	public void handleEndDungeonAttemp(Player p)
-	{
-		DungeonRoom dgr = getDungeonRoomByIndex(getActualRoom());
-		if(dgr == null)
-		{
-			ChatUtil.sendMessage(p, DUNGEON_DOES_NOT_EXIST);
-			return;
-		}
-
-		// Check if all mobs are dead
-		if(dgr.get_mobs().size() != 0)
-		{
-			ChatUtil.sendMessage(p, DUNGEON_X_MOBS_LEFT, dgr.get_mobs().size());
-			return;
-		}
-		evacDungeon();
-	}
-
-	public void evacDungeon()
-	{
-		// Téléporter les joueurs a leur point d'entrée
-		for(UUID uid : _inDungeon.keySet())
-			if(Bukkit.getOfflinePlayer(uid) != null && Bukkit.getOfflinePlayer(uid).isOnline())
-				Bukkit.getPlayer(uid).teleport(_inDungeon.get(uid));		
-
-		// Vider la liste des joueurs
-		_inDungeon.clear();
-		
-		//Destroy Entities
-		for(DungeonRoom dgr : _rooms)
-		{
-			for(Entity mob : dgr.get_mobs())
-				mob.remove();
-			dgr._mobs.clear();
-		}
-
-		// Réninitialiser le pointeur
-		setActualRoom(0);
-		// Marquer le donjon comme en jeu
-		set_Running(false);
-	}
-
 	public void handleTrigger(int idx)
 	{
 		DungeonRoom dgr = getDungeonRoomByIndex(idx);
@@ -325,6 +266,53 @@ public class Dungeon {
 		redstoneBlock.setType(Material.REDSTONE_BLOCK);
 	}
 
+	/**
+	 * Handles the try to end the dungeon.
+	 * @param p Player who tried.
+	 */
+	public void handleEndDungeonAttemp(Player p)
+	{
+		DungeonRoom dgr = getDungeonRoomByIndex(getActualRoom());
+		if(dgr == null)
+		{
+			ChatUtil.sendMessage(p, DUNGEON_DOES_NOT_EXIST);
+			return;
+		}
+
+		// Check if all mobs are dead
+		if(dgr.get_mobs().size() != 0)
+		{
+			ChatUtil.sendMessage(p, DUNGEON_X_MOBS_LEFT, dgr.get_mobs().size());
+			return;
+		}
+		stopDungeon();
+	}
+
+	public void stopDungeon()
+	{
+		// Téléporter les joueurs a leur point d'entrée
+		for(UUID uid : _inDungeon.keySet())
+			if(Bukkit.getOfflinePlayer(uid) != null && Bukkit.getOfflinePlayer(uid).isOnline())
+				Bukkit.getPlayer(uid).teleport(_inDungeon.get(uid));		
+
+		// Vider la liste des joueurs
+		_inDungeon.clear();
+		
+		//Destroy Entities
+		for(DungeonRoom dgr : _rooms)
+		{
+			for(Entity mob : dgr.get_mobs())
+				mob.remove();
+			dgr._mobs.clear();
+		}
+
+		// Réninitialiser le pointeur
+		setActualRoom(0);
+		// Marquer le donjon comme en jeu
+		set_Running(false);
+	}
+
+	
 	/**
 	 * Handles the death of a player into a dungeon.
 	 * Clears his inventory, armor, food, hunger.
@@ -355,7 +343,7 @@ public class Dungeon {
 		
 		// If there is no survivor left, stop dungeon.
 		if(_deadPlayers.size() >= _inDungeon.size())
-			evacDungeon();
+			stopDungeon();
 		return;
 	}
 	
@@ -370,15 +358,24 @@ public class Dungeon {
 		p.setHealth(20);
 		for(PotionEffect eff : p.getActivePotionEffects())
 			p.removePotionEffect(eff.getType());	
-		// Move him to lobby
-		p.teleport(get_lobby());
-		// Add a reference to dead Players list
-		if(!_deadPlayers.contains(p.getUniqueId()))
-			_deadPlayers.add(p.getUniqueId());
 		
-		// If there is no survivor left, stop dungeon.
-		if(_deadPlayers.size() >= _inDungeon.size())
-			evacDungeon();
+		if(is_Running())
+		{
+			// Move him to lobby
+			p.teleport(get_lobby());
+			
+			// Add a reference to dead Players list
+			if(!_deadPlayers.contains(p.getUniqueId()))
+				_deadPlayers.add(p.getUniqueId());
+			if(_deadPlayers.size() >= _inDungeon.size())
+				stopDungeon();
+		}
+		else 
+		{
+			// Move him out
+			p.teleport(_inDungeon.get(p.getUniqueId()));
+			_inDungeon.remove(p.getUniqueId());
+		}
 		return;
 	}
 	
@@ -403,7 +400,7 @@ public class Dungeon {
 	public boolean isPlayerInside(Player p)
 	{
 		if(_inDungeon.containsKey(p.getUniqueId()))
-			return true;	
+			return true;
 		return false;
 	}
 
