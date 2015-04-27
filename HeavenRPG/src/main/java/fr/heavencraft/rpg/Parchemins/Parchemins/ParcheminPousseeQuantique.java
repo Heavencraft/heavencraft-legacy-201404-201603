@@ -17,53 +17,63 @@ import fr.heavencraft.rpg.HeavenRPG;
 import fr.heavencraft.rpg.Parchemins.IParchemin;
 import fr.heavencraft.rpg.player.RPGPlayer;
 
-public class ParcheminPousseeQuantique implements IParchemin{
+public class ParcheminPousseeQuantique implements IParchemin
+{
 
-	public int RPGexpieirence() {
+	@Override
+	public int RPGexpieirence()
+	{
 		return 0;
 	}
 
-	public boolean canDo(RPGPlayer player) {
-		if(player.getRPGXp() >= RPGexpieirence())
+	@Override
+	public boolean canDo(RPGPlayer player)
+	{
+		if (player.getRPGXp() >= RPGexpieirence())
 			return false;
 		return true;
 	}
 
-	public ItemStack getItem() {
+	@Override
+	public ItemStack getItem()
+	{
 		ItemStack parchemin = new ItemStack(Material.PAPER);
 		ItemMeta met = parchemin.getItemMeta();
-		met.setDisplayName(ChatColor.RED + "Pousée Quantique");
+		met.setDisplayName(ChatColor.RED + "Poussée Quantique");
 		parchemin.setItemMeta(met);
 		return parchemin;
 	}
 
-	public void executeParchemin(final RPGPlayer player) {
-		
+	@Override
+	public void executeParchemin(final RPGPlayer player)
+	{
+
 		player.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 255, 255));
 		player.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 255, 255));
 		player.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 255, 255));
-		
-		new BukkitRunnable() {
+
+		new BukkitRunnable()
+		{
 			@Override
-			public void run() {
-				
-				ParticleEffect.CLOUD.display((float)10, (float)0, (float)0, (float)0, 10,player.getPlayer().getLocation(), 1000);
-				
-				
+			public void run()
+			{
+
+				ParticleEffect.CLOUD.display(10, 0, 0, 0, 10, player.getPlayer().getLocation(), 1000);
+
 				List<Entity> entities = player.getPlayer().getNearbyEntities(6, 6, 6);
-				for(Entity e : entities)
+				for (Entity e : entities)
 				{
-					Vector unitVector = e.getLocation().toVector().subtract(player.getPlayer().getLocation().toVector()).normalize();
+					Vector unitVector = e.getLocation().toVector()
+							.subtract(player.getPlayer().getLocation().toVector()).normalize();
 					// Set speed and push entity:
 					e.setVelocity(unitVector.multiply(4.0));
 				}
-				
-				
+
 				player.getPlayer().removePotionEffect(PotionEffectType.SLOW);
 				player.getPlayer().removePotionEffect(PotionEffectType.SLOW_DIGGING);
 				player.getPlayer().removePotionEffect(PotionEffectType.BLINDNESS);
-			}	
-		}.runTaskLater(HeavenRPG.getInstance(), 20);	
+			}
+		}.runTaskLater(HeavenRPG.getInstance(), 20);
 	}
 
 }
