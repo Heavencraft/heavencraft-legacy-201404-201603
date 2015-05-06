@@ -361,8 +361,8 @@ public class Dungeon {
 		
 		if(is_Running())
 		{
-			// Move him to lobby
-			p.teleport(get_lobby());
+			// Move him to entry point
+			p.teleport(_inDungeon.get(p.getUniqueId()));
 			
 			// Add a reference to dead Players list
 			if(!_deadPlayers.contains(p.getUniqueId()))
