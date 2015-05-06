@@ -21,7 +21,7 @@ public class ParcheminTchernocraft implements IParchemin{
 	}
 
 	public boolean canDo(RPGPlayer player) {
-		if(player.getRPGXp() >= RPGexpieirence())
+		if(player.getRPGXp() < RPGexpieirence())
 			return false;
 		return true;
 	}

@@ -33,7 +33,7 @@ public class ParcheminsListener implements Listener {
 		if(DungeonManager.getRoomByLocation(event.getPlayer().getLocation()) != null)
 			return;
 
-		if(!p.canDo(RPGPlayerManager.getRPGPlayer(event.getPlayer())))
+		if(p.canDo(RPGPlayerManager.getRPGPlayer(event.getPlayer())))
 		{
 			p.executeParchemin(RPGPlayerManager.getRPGPlayer(event.getPlayer()));
 
