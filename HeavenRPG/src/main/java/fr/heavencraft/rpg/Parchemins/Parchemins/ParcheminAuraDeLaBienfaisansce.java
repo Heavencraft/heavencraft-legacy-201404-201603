@@ -24,7 +24,7 @@ public class ParcheminAuraDeLaBienfaisansce implements IParchemin{
 	}
 
 	public boolean canDo(RPGPlayer player) {
-		if(player.getRPGXp() >= RPGexpieirence())
+		if(player.getRPGXp() < RPGexpieirence())
 			return false;
 		return true;
 	}
@@ -32,7 +32,7 @@ public class ParcheminAuraDeLaBienfaisansce implements IParchemin{
 	public ItemStack getItem() {
 		ItemStack parchemin = new ItemStack(Material.PAPER);
 		ItemMeta met = parchemin.getItemMeta();
-		met.setDisplayName(ChatColor.BLUE + "Aura de la Bienfaisance");
+		met.setDisplayName(ChatColor.RED + "Aura de la Bienfaisance");
 		parchemin.setItemMeta(met);
 		return parchemin;
 	}

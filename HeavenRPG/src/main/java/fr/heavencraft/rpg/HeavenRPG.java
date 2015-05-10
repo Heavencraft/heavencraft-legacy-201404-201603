@@ -9,6 +9,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import fr.heavencraft.rpg.donjon.DungeonManager;
 import fr.heavencraft.rpg.mobs.MobManager;
@@ -17,6 +18,7 @@ public class HeavenRPG extends JavaPlugin {
 	private final static String RP_DB_URL = "jdbc:mysql://localhost:3306/minecraft-semirp?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull&?autoReconnect=true";
 	private final static String MAIN_DB_URL = "jdbc:mysql://localhost:3306/mc-db?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull&?autoReconnect=true";
 	private static WorldEditPlugin _WEP;
+	private static WorldGuardPlugin _WGP;
 	private static HeavenRPG _instance;
 
 	private static Connection _connection;
@@ -102,6 +104,24 @@ public class HeavenRPG extends JavaPlugin {
 			}
 		}
 		return _WEP;
+	}
+	
+	public static WorldGuardPlugin getWorldGuard()
+	{
+
+		if (_WGP == null)
+		{
+			Plugin plugin = getInstance().getServer().getPluginManager().getPlugin("WorldGuard");
+			if (plugin == null || !(plugin instanceof WorldGuardPlugin))
+			{
+				_WGP = null;
+			}
+			else
+			{
+				_WGP = (WorldGuardPlugin) plugin;
+			}
+		}
+		return _WGP;
 	}
 	
 }
