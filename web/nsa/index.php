@@ -78,7 +78,7 @@ error_reporting(E_ALL);
 			</tr>
 <?php
 
-	$mysqli = new mysqli("localhost", "mc-sql", "MfGJQMBzmAS5xYhH", "proxy");
+	$mysqli = new mysqli("localhost", "mc-sql", "9e781e41f865901850d5c3060063c8ca", "proxy");
 
 	if ($mysqli->connect_errno)
 	{
@@ -123,6 +123,7 @@ error_reporting(E_ALL);
 			case 1: $action = "CHAT"; break;
 			case 2: $action = "COMMAND"; break;
 			case 3: $action = "MOD_HISTORY"; break;
+			case 4: $action = "LOGOUT"; break;
 			default: $action = "???"; break;
 		}
 				
