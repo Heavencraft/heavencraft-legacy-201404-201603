@@ -24,7 +24,7 @@ public class ParcheminLeSouffleDuNecromantien implements IParchemin{
 	}
 
 	public boolean canDo(RPGPlayer player) {
-		if(player.getRPGXp() >= RPGexpieirence())
+		if(player.getRPGXp() < RPGexpieirence())
 			return false;
 		return true;
 	}
@@ -32,7 +32,7 @@ public class ParcheminLeSouffleDuNecromantien implements IParchemin{
 	public ItemStack getItem() {
 		ItemStack parchemin = new ItemStack(Material.PAPER);
 		ItemMeta met = parchemin.getItemMeta();
-		met.setDisplayName(ChatColor.BLUE + "Souffle du nécromancien");
+		met.setDisplayName(ChatColor.RED + "Souffle du nécromancien");
 		parchemin.setItemMeta(met);
 		return parchemin;
 	}

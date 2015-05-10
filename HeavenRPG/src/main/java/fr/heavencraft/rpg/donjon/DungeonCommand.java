@@ -28,6 +28,10 @@ public class DungeonCommand extends HeavenCommand{
 	private final static String NO_SELECTION = "Vous devez d'abord faire une selection avec World Edit.";
 	private final static String DEBUG_MODE_ACTIVE = "Le mode débug est activé.";
 	private final static String DEBUG_MODE_INACTIVE = "Le mode débug est désactivé.";
+	private final static String KICKED_PLAYER = "Le joueur a été renvoyé du donjon.";
+	private final static String DUNGEON_LEAVED = "Vous avez quitté le donjon.";
+	private final static String DUNGEON_CANNOT_LEAVE_WHILE_RUNNING = "Vous ne pouvez pas quitter tant que le donjon est en cours.";
+
 	
 	public DungeonCommand()
 	{
@@ -37,13 +41,26 @@ public class DungeonCommand extends HeavenCommand{
 	@Override
 	protected void onPlayerCommand(Player player, String[] args) throws HeavenException {
 
+		if(args.length == 0)
+		{
+			sendUsage(player);
+			return;
+		}
+		
 		if(args[0].equalsIgnoreCase("quitter") || args[0].equalsIgnoreCase("q")) {
 			Dungeon dg = DungeonManager.getDungeonByUser(player);
 			if(dg == null)
 				return;
-			if(dg.get_requiredPlayerAmmount() != 0)
-				return;
-			dg.handlePlayerDisconnect(player);
+			if(dg.is_Running()) {
+				ChatUtil.sendMessage(player,  DUNGEON_CANNOT_LEAVE_WHILE_RUNNING);
+			}
+			else
+			{
+				dg.handlePlayerDisconnect(player);
+				ChatUtil.sendMessage(player,  DUNGEON_LEAVED);
+			}
+				
+			
 			return;
 		}
 		
@@ -53,12 +70,6 @@ public class DungeonCommand extends HeavenCommand{
 			return;
 		}
 		
-		if(args.length == 0)
-		{
-			sendUsage(player);
-			return;
-		}
-
 		if(args[0].equalsIgnoreCase("list"))
 		{
 			ChatUtil.sendMessage(player, "Donjons: ");
@@ -81,15 +92,16 @@ public class DungeonCommand extends HeavenCommand{
 		}
 		else if(args[0].equalsIgnoreCase("kick"))
 		{
+			if(args.length < 2)
+				return;
 			Player pl = HeavenRPG.getInstance().getServer().getPlayer(args[1]);
 			if(pl == null)
 				return;
 			Dungeon dg = DungeonManager.getDungeonByUser(pl);
 			if(dg == null)
 				return;
-			if(dg.get_requiredPlayerAmmount() != 0)
-				return;
 			dg.handlePlayerDisconnect(pl);
+			ChatUtil.sendMessage(player, KICKED_PLAYER);
 			return;
 		}
 		else if(args[0].equalsIgnoreCase("create"))
@@ -234,6 +246,7 @@ public class DungeonCommand extends HeavenCommand{
 			if(dg.get_requiredPlayerAmmount() != 0)
 				return;
 			dg.handlePlayerDisconnect(pl);
+			ChatUtil.sendMessage(sender, KICKED_PLAYER);
 			return;
 		}
 		
