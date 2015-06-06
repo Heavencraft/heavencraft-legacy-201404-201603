@@ -19,6 +19,7 @@ public enum Server
 	UltraHardcore("ultrahard", "UH", "Monde Ultra-Hardcore"),
 	Paintball("paintball", "PB", "Paintball"),
 	HungerGames("hungergames", "HG", "Hunger Games"),
+	Skyblock("skyblock", "Sky", "Skyblock"),
 	UnknownServer("", "???", "Monde ???");
 
 	private final String name;
