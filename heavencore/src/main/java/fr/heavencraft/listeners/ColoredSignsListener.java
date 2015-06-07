@@ -28,7 +28,7 @@ public class ColoredSignsListener implements Listener
 	{
 		if (event.getPlayer().hasPermission(Permissions.COLORED_SIGNS))
 		{
-			Pattern pattern = Pattern.compile("\\&([0-9A-Fa-f])");
+			final Pattern pattern = Pattern.compile("\\&([0-9A-Za-z])");
 
 			for (int i = 0; i != 4; i++)
 				event.setLine(i, pattern.matcher(event.getLine(i)).replaceAll("§$1"));
