@@ -38,6 +38,7 @@ import fr.heavencraft.heavenproxy.commands.TextCommand;
 import fr.heavencraft.heavenproxy.commands.VoterCommand;
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
 import fr.heavencraft.heavenproxy.exceptions.UUIDNotFoundException;
+import fr.heavencraft.heavenproxy.jit.ServerProcessManager;
 import fr.heavencraft.heavenproxy.kick.KickCommand;
 import fr.heavencraft.heavenproxy.kick.RagequitCommand;
 import fr.heavencraft.heavenproxy.listeners.LogListener;
@@ -133,6 +134,8 @@ public class HeavenProxy extends Plugin
 
 			// Warn
 			new WarnCommand();
+
+			new ServerProcessManager();
 
 			new AutoMessageTask();
 			new MemoryWatcherTask();
@@ -264,7 +267,8 @@ public class HeavenProxy extends Plugin
 	{
 		try
 		{
-			final PreparedStatement ps = getConnection().prepareStatement("SELECT name FROM banlist WHERE uuid = ''");
+			final PreparedStatement ps = getConnection().prepareStatement(
+					"SELECT name FROM banlist WHERE uuid = ''");
 			final ResultSet rs = ps.executeQuery();
 
 			while (rs.next())
@@ -274,7 +278,8 @@ public class HeavenProxy extends Plugin
 					final String name = rs.getString("name");
 					final String uuid = Utils.getUUID(name);
 
-					final PreparedStatement ps2 = getConnection().prepareStatement("UPDATE banlist SET uuid = ? WHERE name = ?");
+					final PreparedStatement ps2 = getConnection().prepareStatement(
+							"UPDATE banlist SET uuid = ? WHERE name = ?");
 					ps2.setString(1, uuid);
 					ps2.setString(2, name);
 
@@ -304,7 +309,8 @@ public class HeavenProxy extends Plugin
 			{
 				try
 				{
-					final PreparedStatement ps = getConnection().prepareStatement("SELECT name FROM users WHERE uuid = ''");
+					final PreparedStatement ps = getConnection().prepareStatement(
+							"SELECT name FROM users WHERE uuid = ''");
 					final ResultSet rs = ps.executeQuery();
 
 					while (rs.next())
@@ -347,7 +353,8 @@ public class HeavenProxy extends Plugin
 			{
 				try
 				{
-					final PreparedStatement ps = getSrpConnection().prepareStatement("SELECT name FROM users WHERE uuid = ''");
+					final PreparedStatement ps = getSrpConnection().prepareStatement(
+							"SELECT name FROM users WHERE uuid = ''");
 					final ResultSet rs = ps.executeQuery();
 
 					while (rs.next())
@@ -394,7 +401,8 @@ public class HeavenProxy extends Plugin
 			{
 				try
 				{
-					final PreparedStatement ps = getCreaConnection().prepareStatement("SELECT name FROM users WHERE uuid = ''");
+					final PreparedStatement ps = getCreaConnection().prepareStatement(
+							"SELECT name FROM users WHERE uuid = ''");
 					final ResultSet rs = ps.executeQuery();
 
 					while (true)
@@ -409,7 +417,8 @@ public class HeavenProxy extends Plugin
 							return;
 
 						final ProfileRepository repository = new HttpProfileRepository("minecraft");
-						final Profile[] profiles = repository.findProfilesByNames(names.toArray(new String[names.size()]));
+						final Profile[] profiles = repository.findProfilesByNames(names.toArray(new String[names
+								.size()]));
 
 						for (final Profile profile : profiles)
 						{
@@ -417,7 +426,8 @@ public class HeavenProxy extends Plugin
 							{
 
 								final String name = profile.getName();
-								final String uuid = UUID_PATTERN.matcher(profile.getId()).replaceFirst("$1-$2-$3-$4-$5");
+								final String uuid = UUID_PATTERN.matcher(profile.getId()).replaceFirst(
+										"$1-$2-$3-$4-$5");
 
 								if (name == null || uuid == null)
 									throw new UUIDNotFoundException(name);
@@ -474,7 +484,8 @@ public class HeavenProxy extends Plugin
 							return;
 
 						final ProfileRepository repository = new HttpProfileRepository("minecraft");
-						final Profile[] profiles = repository.findProfilesByNames(names.toArray(new String[names.size()]));
+						final Profile[] profiles = repository.findProfilesByNames(names.toArray(new String[names
+								.size()]));
 
 						for (final Profile profile : profiles)
 						{
@@ -482,7 +493,8 @@ public class HeavenProxy extends Plugin
 							{
 
 								final String name = profile.getName();
-								final String uuid = UUID_PATTERN.matcher(profile.getId()).replaceFirst("$1-$2-$3-$4-$5");
+								final String uuid = UUID_PATTERN.matcher(profile.getId()).replaceFirst(
+										"$1-$2-$3-$4-$5");
 
 								if (name == null || uuid == null)
 									throw new UUIDNotFoundException(name);
