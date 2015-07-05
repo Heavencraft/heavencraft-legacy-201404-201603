@@ -7,8 +7,19 @@ import fr.heavencraft.heavenproxy.ProxyLogger;
 
 public enum ServerProcess
 {
+	// Prod
+	// Fun("fun", ServerProcessManager._2G, "/home/minecraft/prod/servers/fun"),
+	UltraHard("ultrahard", ServerProcessManager._1G, "/home/minecraft/prod/servers/ultrahard"),
+	Musee("musee", ServerProcessManager._512M, "/home/minecraft/prod/servers/musee"),
+	// Mini-jeux
+	Infected("infected", ServerProcessManager._1G, "/home/minecraft/prod/minigames/infected"),
+	MarioKart("mariokart", ServerProcessManager._1G, "/home/minecraft/prod/minigames/mariokart"),
+	Paintball("paintball", ServerProcessManager._3G, "/home/minecraft/prod/minigames/paintball"),
+	TNTRun("tntrun", ServerProcessManager._1G, "/home/minecraft/prod/minigames/tntrun"),
+	// UAT
 	UAT_SemiRP("uat-semirp", ServerProcessManager._2G, "/home/minecraft/uat/servers/semirp"),
-	UAT_Creative("uat-creative", ServerProcessManager._2G, "/home/minecraft/uat/servers/creative");
+	UAT_Creative("uat-creative", ServerProcessManager._2G, "/home/minecraft/uat/servers/creative"),
+	Build("build", ServerProcessManager._2G, "/home/minecraft/uat/servers/build");
 
 	public static ServerProcess getUniqueInstanceByName(String name)
 	{
@@ -36,6 +47,7 @@ public enum ServerProcess
 	private final String name;
 	private final int memory;
 	private final File path;
+	private long lastStart = 0;
 
 	private ServerProcess(String name, int memory, String path)
 	{
@@ -46,12 +58,20 @@ public enum ServerProcess
 
 	public boolean start()
 	{
+		// Last start is not 30s ago ! do nothing
+		if (System.currentTimeMillis() - lastStart < 30000)
+		{
+			log.info("Server %1$s already started recently.", name);
+			return true;
+		}
+
 		log.info(STARTING_SERVER, name, memory, path);
 
 		try
 		{
 			new ProcessBuilder(START_SERVER, name, memory + "M").directory(path).start();
 			log.info(SERVER_STARTED, name);
+			lastStart = System.currentTimeMillis();
 			return true;
 		}
 		catch (final IOException ex)

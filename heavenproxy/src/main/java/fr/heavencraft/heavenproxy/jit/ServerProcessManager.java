@@ -10,7 +10,10 @@ import fr.heavencraft.heavenproxy.Utils;
 public class ServerProcessManager implements Listener
 {
 	// Memory (in MB)
+	public static int _512M = 512;
+	public static int _1G = 1024;
 	public static int _2G = 2048;
+	public static int _3G = 3072;
 	public static int _4G = 4096;
 	// Messages d'erreur
 	private static final String NOT_ENOUGHT_MEMORY = "Ce monde n'est pas disponible (pas assez de mémoire).";
@@ -61,7 +64,7 @@ public class ServerProcessManager implements Listener
 		}
 
 		Utils.sendMessage(player, SERVER_STARTING);
-		new ConnectPlayerTask(player, serverInfo);
+		new ConnectPlayerTask(player.getName(), serverInfo);
 	}
 
 }
