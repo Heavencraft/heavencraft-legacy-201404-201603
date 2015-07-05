@@ -1,5 +1,7 @@
 package fr.heavencraft.heavenproxy.jit;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.api.ProxyServer;
@@ -8,6 +10,8 @@ import fr.heavencraft.heavenproxy.HeavenProxy;
 
 public class StopServerTask implements Runnable
 {
+	Collection<String> serversToStop = new HashSet<String>();
+
 	public StopServerTask()
 	{
 		ProxyServer.getInstance().getScheduler()
@@ -33,7 +37,14 @@ public class StopServerTask implements Runnable
 			if (SystemHelper.isPortAvailable(server.getAddress().getPort()))
 				continue;
 
-			serverProcess.stop();
+			if (serversToStop.contains(server.getName()))
+			{
+				serverProcess.stop();
+			}
+			else
+			{
+				serversToStop.add(server.getName());
+			}
 		}
 	}
 }
