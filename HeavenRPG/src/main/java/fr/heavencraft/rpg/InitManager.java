@@ -1,5 +1,8 @@
 package fr.heavencraft.rpg;
 
+import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitRunnable;
+
 import fr.heavencraft.Utils.ChatUtil;
 import fr.heavencraft.Utils.DevUtils;
 import fr.heavencraft.rpg.Parchemins.ParcheminCommand;
@@ -35,9 +38,18 @@ public class InitManager {
 		new ZoneCommand();
 		new ParcheminCommand();
 		new DungeonCommand();
-		ZoneManager.loadAllZones();
-		ParcheminProvider.LoadParchemins();
-		DungeonManager.loadDungeons();
+		
+		// Task is runned after done loading
+		Bukkit.getScheduler().runTaskLater(HeavenRPG.getInstance(), new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				ZoneManager.loadAllZones();
+				ParcheminProvider.LoadParchemins();
+				DungeonManager.loadDungeons();
+			}
+		}, 0);	
 		
 	}
 
