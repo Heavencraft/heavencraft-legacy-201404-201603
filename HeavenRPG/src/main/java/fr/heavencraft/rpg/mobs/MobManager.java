@@ -7,7 +7,6 @@ import org.bukkit.entity.LivingEntity;
 
 import fr.heavencraft.rpg.HeavenRPG;
 import fr.heavencraft.rpg.zones.Zone;
-import fr.heavencraft.rpg.zones.ZoneManager;
 
 public class MobManager {
 
@@ -75,16 +74,16 @@ public class MobManager {
 				double health = mob.getMob().getHealth();
 				double max = mob.getMob().getMaxHealth();
 
-
 				//if the health is 0
 				if (health <= 0.0) 
 					return;
 
-				if(health >= 18.0)
-					if(ZoneManager.getZoneByName(mob.getSpawnZone()).getMobCustomName(mob.getMob()) == null)
-						mob.getMob().setCustomName("§r§6[Lv." + mob.getLevel() + "] §r");
+				if(health >= max - 2.0) {
+					if(mob.getSpawningName() == null || mob.getSpawningName().equalsIgnoreCase(""))
+						mob.getMob().setCustomName("§r§6[Lv." + mob.getLevel() + "]");
 					else
-						mob.getMob().setCustomName("§r§6[Lv." + mob.getLevel() + "] §r" + ZoneManager.getZoneByName(mob.getSpawnZone()).getMobCustomName(mob.getMob()));		
+						mob.getMob().setCustomName("§r§6[Lv." + mob.getLevel() + "] §r" + mob.getSpawningName());
+				}
 				else
 				{
 					barArray = MobManager.getDefaultsBars();		
