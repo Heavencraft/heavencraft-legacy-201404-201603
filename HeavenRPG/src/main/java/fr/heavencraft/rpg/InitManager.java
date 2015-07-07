@@ -1,7 +1,6 @@
 package fr.heavencraft.rpg;
 
 import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.heavencraft.Utils.ChatUtil;
 import fr.heavencraft.Utils.DevUtils;
@@ -12,7 +11,6 @@ import fr.heavencraft.rpg.donjon.DungeonCommand;
 import fr.heavencraft.rpg.donjon.DungeonListener;
 import fr.heavencraft.rpg.donjon.DungeonManager;
 import fr.heavencraft.rpg.donjon.DungeonSignListener;
-import fr.heavencraft.rpg.mobs.MobListener;
 import fr.heavencraft.rpg.mobs.MobManager;
 import fr.heavencraft.rpg.player.RPGPlayerListener;
 import fr.heavencraft.rpg.zones.ZoneCommand;
@@ -57,7 +55,6 @@ public class InitManager {
 	{
 		new RPGPlayerListener();
 		new ZoneListener();
-		new MobListener();
 		new ParcheminsListener();
 		new DungeonSignListener();
 		new DungeonListener();
