@@ -15,6 +15,7 @@ import net.md_5.bungee.event.EventPriority;
 import fr.heavencraft.heavenproxy.Utils;
 import fr.heavencraft.heavenproxy.ban.BanCommand;
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
+import fr.heavencraft.heavenproxy.mute.MuteManager;
 
 public class FloodListener implements Listener
 {
@@ -128,6 +129,16 @@ public class FloodListener implements Listener
 					Utils.sendMessage(player, WARNING);
 					break;
 				case 3:
+					MuteManager.mutePlayer(playerName, 3);
+					Utils.sendMessage(player,
+						"Vous avez été mute pour {3} minutes par {le Prof. Chen}.");
+					break;
+				case 4:
+					Utils.sendMessage(player, WARNING);
+					Utils.sendMessage(player,
+							"Ceci est le 4e avertissement pour flood, au prochain, ce sera un ban. Merci d'arrêter.");
+					break;
+				case 5:
 					try
 					{
 						BanCommand.banPlayer(playerName, "le Prof. Chen", String.format("Flood abusif : '%1$s'", message));
