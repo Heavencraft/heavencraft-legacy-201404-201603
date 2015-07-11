@@ -1,5 +1,7 @@
 package fr.heavencraft.rpg;
 
+import org.bukkit.Bukkit;
+
 import fr.heavencraft.Utils.ChatUtil;
 import fr.heavencraft.Utils.DevUtils;
 import fr.heavencraft.rpg.Parchemins.ParcheminCommand;
@@ -9,7 +11,6 @@ import fr.heavencraft.rpg.donjon.DungeonCommand;
 import fr.heavencraft.rpg.donjon.DungeonListener;
 import fr.heavencraft.rpg.donjon.DungeonManager;
 import fr.heavencraft.rpg.donjon.DungeonSignListener;
-import fr.heavencraft.rpg.mobs.MobListener;
 import fr.heavencraft.rpg.mobs.MobManager;
 import fr.heavencraft.rpg.player.RPGPlayerListener;
 import fr.heavencraft.rpg.zones.ZoneCommand;
@@ -35,9 +36,18 @@ public class InitManager {
 		new ZoneCommand();
 		new ParcheminCommand();
 		new DungeonCommand();
-		ZoneManager.loadAllZones();
-		ParcheminProvider.LoadParchemins();
-		DungeonManager.loadDungeons();
+		
+		// Task is runned after done loading
+		Bukkit.getScheduler().runTaskLater(HeavenRPG.getInstance(), new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				ZoneManager.loadAllZones();
+				ParcheminProvider.LoadParchemins();
+				DungeonManager.loadDungeons();
+			}
+		}, 0);	
 		
 	}
 
@@ -45,7 +55,6 @@ public class InitManager {
 	{
 		new RPGPlayerListener();
 		new ZoneListener();
-		new MobListener();
 		new ParcheminsListener();
 		new DungeonSignListener();
 		new DungeonListener();
