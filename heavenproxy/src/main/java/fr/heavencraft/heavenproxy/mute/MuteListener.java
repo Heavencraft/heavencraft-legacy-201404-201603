@@ -126,9 +126,9 @@ public class MuteListener implements Listener
 				if (isPrivateMessage && word.equals("merde"))
 					continue;
 
-				MuteManager.mutePlayer(playerName, 5);
+				MuteManager.mutePlayer(playerName, 3);
 				Utils.sendMessage(player,
-						"Vous avez été mute pour {5} minutes par {le Prof. Chen} pour avoir dit {%1$s}.", word);
+						"Vous avez été mute pour {3} minutes par {le Prof. Chen} pour avoir dit {%1$s}.", word);
 
 				event.setCancelled(true);
 				return;
