@@ -26,7 +26,7 @@ public class ProxyPingListener implements Listener
 		description += getServerString("Créatif", "creative", "fun", "musee", "build") + " ";
 		description += getServerString("Skyblock", "skyblock") + " ";
 		description += getServerString("Survie", "origines", "ultrahard") + " ";
-		description += getServerString("Jeux", "infected", "tntrun", "mariokart", "paintball");
+		description += getServerString("Jeux", "infected", "tntrun", "mariokart", "paintball", "event");
 
 		event.getResponse().setDescription(description);
 	}
