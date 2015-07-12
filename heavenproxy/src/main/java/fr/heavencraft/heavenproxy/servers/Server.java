@@ -20,6 +20,7 @@ public enum Server
 	Paintball("paintball", "PB", "Paintball"),
 	HungerGames("hungergames", "HG", "Hunger Games"),
 	Skyblock("skyblock", "Sky", "Skyblock"),
+	Event("event", "EJ", "Event Juillet"),
 	UnknownServer("", "???", "Monde ???");
 
 	private final String name;
