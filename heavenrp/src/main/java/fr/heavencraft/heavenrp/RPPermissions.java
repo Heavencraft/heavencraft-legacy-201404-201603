@@ -9,6 +9,7 @@ public class RPPermissions
 	public static final String ENCHERES = "heavencraft.commands.encheres";
 	public static final String ENTREPRISE = "heavencraft.commands.entreprise";
 	public static final String EVENT = "heavencraft.commands.event";
+	public static final String HURT = "heavencraft.commands.hurt";
 	public static final String LIVRETPRO = "heavencraft.commands.livretpro";
 	public static final String MAIRE = "heavencraft.commands.maire";
 	public static final String MODPACK = "heavencraft.commands.modpack";

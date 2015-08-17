@@ -37,6 +37,7 @@ import fr.heavencraft.heavenrp.economy.LivretProSignListener;
 import fr.heavencraft.heavenrp.economy.LivretSignListener;
 import fr.heavencraft.heavenrp.economy.MoneyTask;
 import fr.heavencraft.heavenrp.general.BourseListener;
+import fr.heavencraft.heavenrp.general.HurtCommand;
 import fr.heavencraft.heavenrp.general.PumpkinLampListener;
 import fr.heavencraft.heavenrp.general.RecipeManager;
 import fr.heavencraft.heavenrp.general.ServerListener;
@@ -125,6 +126,7 @@ public class InitManager
 		// Economy
 		new BourseCommand();
 		new EntrepriseCommand();
+		new HurtCommand();
 		new LivretproCommand();
 		new PayerCommand();
 		new MoneyTask();
