@@ -16,7 +16,7 @@ public class ProvinceTeam
 {
 	private static final Map<Integer, ProvinceTeam> provincesById = new HashMap<Integer, ProvinceTeam>();
 
-	public static final ProvinceTeam Zephir = new ProvinceTeam(1, "Zephir", "light_purple");
+	public static final ProvinceTeam Zephir = new ProvinceTeam(1, "Zephir", "dark_aqua");
 	public static final ProvinceTeam Chansor = new ProvinceTeam(3, "Chansor", "dark_green");
 	public static final ProvinceTeam Azur = new ProvinceTeam(4, "Azur", "red");
 	public static final ProvinceTeam Heavenland = new ProvinceTeam(5, "Heavenland", "gray");
