@@ -3,6 +3,9 @@ package fr.heavencraft.heavenrp.general;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
+
 import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.RPPermissions;
@@ -34,7 +37,12 @@ public class HurtCommand extends HeavenCommand
 
 		final Player player = PlayerUtil.getPlayer(args[0]);
 		final int amount = DevUtil.toUint(args[1]);
-		player.damage(amount);
+
+		if (WorldGuardPlugin.inst().getRegionManager(player.getWorld())
+				.getApplicableRegions(player.getLocation()).allows(DefaultFlag.PVP))
+		{
+			player.damage(amount);
+		}
 	}
 
 	@Override
