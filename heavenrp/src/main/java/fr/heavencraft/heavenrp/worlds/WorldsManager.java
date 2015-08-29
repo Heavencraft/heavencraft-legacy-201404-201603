@@ -26,22 +26,22 @@ public class WorldsManager
 	{
 		if (!isLoaded("world_nether"))
 		{
-			WorldCreator creator = new WorldCreator("world_nether");
+			final WorldCreator creator = new WorldCreator("world_nether");
 			creator.environment(World.Environment.NETHER);
 			creator.createWorld();
 		}
 
 		if (!isLoaded("world_resources"))
 		{
-			WorldCreator creator = new WorldCreator("world_resources");
+			final WorldCreator creator = new WorldCreator("world_resources");
 			creator.environment(World.Environment.NORMAL);
-			// creator.seed(9139863690993604117l);
+			creator.seed(1423174317);
 			creator.createWorld();
 		}
 
 		if (!isLoaded("world_dungeon"))
 		{
-			WorldCreator creator = new WorldCreator("world_dungeon");
+			final WorldCreator creator = new WorldCreator("world_dungeon");
 			creator.generator(new EmptyChunkGenerator());
 			creator.environment(World.Environment.NORMAL);
 			creator.createWorld();
@@ -49,14 +49,14 @@ public class WorldsManager
 
 		if (!isLoaded("world_origine"))
 		{
-			WorldCreator creator = new WorldCreator("world_origine");
+			final WorldCreator creator = new WorldCreator("world_origine");
 			creator.generator(new EmptyChunkGenerator());
 			creator.environment(World.Environment.NORMAL);
 			creator.createWorld();
 		}
 		if (!isLoaded("world_event"))
 		{
-			WorldCreator creator = new WorldCreator("world_event");
+			final WorldCreator creator = new WorldCreator("world_event");
 			creator.generator(new EmptyChunkGenerator());
 			creator.environment(World.Environment.NORMAL);
 			creator.createWorld();
