@@ -26,13 +26,40 @@ public class Database
 		return database;
 	}
 
+	private final String host;
+	private final String user;
+	private final String password;
 	private final String databaseName;
 
 	private Database(String databaseName)
 	{
+		this("localhost", "mc-sql", "9e781e41f865901850d5c3060063c8ca", databaseName);
+	}
+
+	private Database(String host, String user, String password, String databaseName)
+	{
+		this.host = host;
+		this.user = user;
+		this.password = password;
 		this.databaseName = databaseName;
 
-		databasesByName.put(databaseName, this);
+		if ("localhost".equals(host))
+			databasesByName.put(databaseName, this);
+	}
+
+	public String getHost()
+	{
+		return host;
+	}
+
+	public String getUser()
+	{
+		return user;
+	}
+
+	public String getPassword()
+	{
+		return password;
 	}
 
 	public String getDatabaseName()
