@@ -15,7 +15,6 @@ import fr.heavencraft.api.providers.connection.Database;
 import fr.heavencraft.heavenrp.stores.StoresListener;
 import fr.heavencraft.heavenrp.stores.StoresManager;
 import fr.lorgan17.heavenrp.managers.AuctionManager;
-import fr.manu67100.heavenrp.laposte.Files;
 
 public class HeavenRP extends HeavenPlugin
 {
@@ -49,10 +48,6 @@ public class HeavenRP extends HeavenPlugin
 			new StoresListener(this);
 			_storesManager = new StoresManager(this);
 			_storesManager.init();
-
-			// La Poste
-			Files.getRegions().options().copyDefaults(true);
-			Files.saveRegions();
 		}
 		catch (final Exception ex)
 		{
