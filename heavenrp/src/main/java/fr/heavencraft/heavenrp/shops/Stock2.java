@@ -31,7 +31,8 @@ public class Stock2
 
 	public void remove() throws SQLErrorException
 	{
-		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement("DELETE FROM stocks WHERE id = ? LIMIT 1"))
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"DELETE FROM stocks WHERE id = ? LIMIT 1"))
 		{
 			ps.setInt(1, id);
 			ps.executeUpdate();

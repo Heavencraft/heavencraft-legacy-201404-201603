@@ -40,9 +40,12 @@ public class AuctionManager
 		previousLocations.clear();
 		previousLocations.put(modo.getName(), modo.getLocation());
 
-		ChatUtil.broadcastMessage("Les enchères pour {%1$s} viennent de commencer !", new Object[] { objectName });
-		ChatUtil.broadcastMessage("La mise à prix est de {%1$d} po ! Faites /enchere entrer pour rejoindre l'enchère.",
-				new Object[] { Integer.valueOf(startPrice) });
+		ChatUtil.broadcastMessage("Les enchères pour {%1$s} viennent de commencer !", new Object[]
+		{ objectName });
+		ChatUtil.broadcastMessage(
+				"La mise à prix est de {%1$d} po ! Faites /enchere entrer pour rejoindre l'enchère.",
+				new Object[]
+				{ Integer.valueOf(startPrice) });
 	}
 
 	public void bid(String playerName, int newPrice) throws HeavenException
@@ -54,8 +57,8 @@ public class AuctionManager
 			throw new HeavenException("Vous n'êtes pas dans la salle d'enchères !");
 
 		if (newPrice <= currentPrice)
-			throw new HeavenException("Vous devez miser plus d'argent ! L'enchère est pour le moment à {%1$s} po.",
-					currentPrice);
+			throw new HeavenException(
+					"Vous devez miser plus d'argent ! L'enchère est pour le moment à {%1$s} po.", currentPrice);
 
 		if (playerName == buyerName)
 			throw new HeavenException("Vous êtes déjà en tête des enchères !");
@@ -99,8 +102,8 @@ public class AuctionManager
 		previousLocations.clear();
 		isStarted = false;
 
-		broadcast("L'enchère vient de se terminer, {" + buyerName + "} a acheté {" + name + "} pour {" + currentPrice
-				+ "} po ! Faites /enchere sortir pour sortir de la salle d'enchères.");
+		broadcast("L'enchère vient de se terminer, {" + buyerName + "} a acheté {" + name + "} pour {"
+				+ currentPrice + "} po ! Faites /enchere sortir pour sortir de la salle d'enchères.");
 	}
 
 	public void enterRoom(Player player) throws HeavenException
@@ -139,13 +142,17 @@ public class AuctionManager
 			Player p = Bukkit.getPlayer(playerName);
 
 			if (p != null)
-				p.sendMessage(ChatColor.AQUA + "[Enchères] " + ChatColor.WHITE
-						+ message.replace("{", ChatColor.AQUA.toString()).replace("}", ChatColor.WHITE.toString()));
+				p.sendMessage(ChatColor.AQUA
+						+ "[Enchères] "
+						+ ChatColor.WHITE
+						+ message.replace("{", ChatColor.AQUA.toString())
+								.replace("}", ChatColor.WHITE.toString()));
 		}
 	}
 }
 
 /*
- * Location: /Users/nao/workspace/heavenrp/target/heavenrp-0.0.1-SNAPSHOT.jar Qualified Name:
- * fr.lorgan17.heavenrp.managers.AuctionManager JD-Core Version: 0.6.2
+ * Location: /Users/nao/workspace/heavenrp/target/heavenrp-0.0.1-SNAPSHOT.jar
+ * Qualified Name: fr.lorgan17.heavenrp.managers.AuctionManager JD-Core Version:
+ * 0.6.2
  */

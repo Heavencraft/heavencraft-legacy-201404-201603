@@ -16,7 +16,8 @@ public class Stock2Provider
 	public static void createChest(String name, BankAccount account, Location chestLocation, Location signLocation)
 			throws HeavenException
 	{
-		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement("INSERT INTO shop2_chest VALUES (?, ?, ?, ?, ?"))
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"INSERT INTO shop2_chest VALUES (?, ?, ?, ?, ?"))
 		{
 			ps.setInt(1, chestLocation.getBlockX());
 			ps.setInt(2, chestLocation.getBlockY());

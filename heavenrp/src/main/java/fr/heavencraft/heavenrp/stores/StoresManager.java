@@ -54,8 +54,8 @@ public class StoresManager
 		_plugin = plugin;
 		_stocks = new HashSet<Stock>();
 		_stores = new HashSet<Store>();
-		_FACES = new BlockFace[] { BlockFace.NORTH, BlockFace.SOUTH, BlockFace.WEST, BlockFace.EAST, BlockFace.UP,
-				BlockFace.DOWN };
+		_FACES = new BlockFace[]
+		{ BlockFace.NORTH, BlockFace.SOUTH, BlockFace.WEST, BlockFace.EAST, BlockFace.UP, BlockFace.DOWN };
 	}
 
 	public void init()
@@ -207,7 +207,8 @@ public class StoresManager
 
 		for (Stock stock : _stocks)
 		{
-			if (stock.getOwnerName().equalsIgnoreCase(playerName) && stock.getStoreName().equalsIgnoreCase(chestName))
+			if (stock.getOwnerName().equalsIgnoreCase(playerName)
+					&& stock.getStoreName().equalsIgnoreCase(chestName))
 			{
 				event.setLine(2, ChatColor.DARK_RED + "Nom déjà");
 				event.setLine(3, ChatColor.DARK_RED + "utilisé");
@@ -528,11 +529,13 @@ public class StoresManager
 		if (ownerPlayer != null)
 		{
 			sendMessage(ownerPlayer,
-					"{" + player.getName() + "} vient d'acheter dans votre magasin {" + store.getStoreName() + "}.");
+					"{" + player.getName() + "} vient d'acheter dans votre magasin {" + store.getStoreName()
+							+ "}.");
 			sendMessage(ownerPlayer, "Vous avez maintenant {" + ownerUserMoney + "} pièces d'or en banque.");
 		}
 
-		sendMessage(player, "Vous avez bien acheté {" + store.getQuantity() + " " + store.getMaterial().name() + "}.");
+		sendMessage(player, "Vous avez bien acheté {" + store.getQuantity() + " " + store.getMaterial().name()
+				+ "}.");
 		sendMessage(player, "Vous avez maintenant {" + userMoney + "} pièces d'or.");
 	}
 
@@ -604,11 +607,13 @@ public class StoresManager
 		if (ownerPlayer != null)
 		{
 			sendMessage(ownerPlayer,
-					"{" + player.getName() + "} vient de vendre dans votre magasin {" + store.getStoreName() + "}.");
+					"{" + player.getName() + "} vient de vendre dans votre magasin {" + store.getStoreName()
+							+ "}.");
 			sendMessage(ownerPlayer, "Vous avez maintenant {" + ownerUserMoney + "} pièces d'or en banque.");
 		}
 
-		sendMessage(player, "Vous avez bien vendu {" + store.getQuantity() + " " + store.getMaterial().name() + "}.");
+		sendMessage(player, "Vous avez bien vendu {" + store.getQuantity() + " " + store.getMaterial().name()
+				+ "}.");
 		sendMessage(player, "Vous avez maintenant {" + userMoney + "} pièces d'or.");
 	}
 

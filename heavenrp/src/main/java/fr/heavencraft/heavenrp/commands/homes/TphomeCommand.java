@@ -3,6 +3,8 @@ package fr.heavencraft.heavenrp.commands.homes;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import fr.heavencraft.async.actions.ActionsHandler;
+import fr.heavencraft.async.actions.TeleportPlayerAction;
 import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.RPPermissions;
@@ -10,7 +12,6 @@ import fr.heavencraft.heavenrp.general.users.User;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.heavencraft.utils.ChatUtil;
 import fr.heavencraft.utils.DevUtil;
-import fr.heavencraft.utils.PlayerUtil;
 
 public class TphomeCommand extends HeavenCommand
 {
@@ -37,7 +38,7 @@ public class TphomeCommand extends HeavenCommand
 				return;
 		}
 
-		PlayerUtil.teleportPlayer(player, user.getHome(nb));
+		ActionsHandler.addAction(new TeleportPlayerAction(player, user.getHome(nb)));
 	}
 
 	@Override
