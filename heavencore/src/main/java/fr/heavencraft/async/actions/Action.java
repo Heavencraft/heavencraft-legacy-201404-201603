@@ -2,7 +2,7 @@ package fr.heavencraft.async.actions;
 
 public interface Action
 {
-	void executeAction();
+	void executeAction() throws Exception;
 
 	void onSuccess();
 

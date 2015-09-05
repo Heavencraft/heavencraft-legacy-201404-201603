@@ -24,7 +24,17 @@ public class ActionsHandler extends BukkitRunnable
 			Action action;
 
 			while ((action = actions.poll()) != null)
-				action.executeAction();
+			{
+				try
+				{
+					action.executeAction();
+					action.onSuccess();
+				}
+				catch (Exception ex)
+				{
+					action.onFailure();
+				}
+			}
 		}
 	}
 
