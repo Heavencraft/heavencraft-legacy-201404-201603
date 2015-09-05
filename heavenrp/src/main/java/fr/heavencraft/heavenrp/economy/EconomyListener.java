@@ -38,7 +38,8 @@ public class EconomyListener implements Listener
 		if (!Utils.isToday(user.getLastLogin()))
 		{
 			user.updateBalance(5);
-			ChatUtil.sendMessage(player, ChatColor.AQUA + "Vous venez d'obtenir 5 pièces d'or en vous connectant !");
+			ChatUtil.sendMessage(player, ChatColor.AQUA
+					+ "Vous venez d'obtenir 5 pièces d'or en vous connectant !");
 
 			int benefit = (int) (account.getBalance() * 0.001D);
 
@@ -48,7 +49,8 @@ public class EconomyListener implements Listener
 			if (benefit > 0)
 			{
 				account.updateBalance(benefit);
-				ChatUtil.sendMessage(player, ChatColor.AQUA + "Votre livret vous a rapporté %1$s pièces d'or.", benefit);
+				ChatUtil.sendMessage(player, ChatColor.AQUA + "Votre livret vous a rapporté %1$s pièces d'or.",
+						benefit);
 			}
 		}
 

@@ -1,5 +1,7 @@
 package fr.heavencraft.heavenrp;
 
+import fr.heavencraft.async.actions.ActionsHandler;
+import fr.heavencraft.async.queries.QueriesHandler;
 import fr.heavencraft.commands.AccepterCommand;
 import fr.heavencraft.commands.CreacheatCommand;
 import fr.heavencraft.commands.EndercheatCommand;
@@ -60,7 +62,6 @@ import fr.heavencraft.listeners.NoChatListener;
 import fr.heavencraft.listeners.RedstoneLampListener;
 import fr.heavencraft.listeners.sign.CookieSignListener;
 import fr.heavencraft.listeners.sign.LinkSignListener;
-import fr.heavencraft.tasks.SaveTask;
 import fr.lorgan17.heavenrp.commands.mod.EventCommand;
 import fr.lorgan17.heavenrp.commands.mod.ModpackCommand;
 import fr.lorgan17.heavenrp.commands.mod.Pvp4Command;
@@ -82,7 +83,8 @@ public class InitManager
 		initCommands();
 		initListeners();
 
-		new SaveTask();
+		new ActionsHandler();
+		new QueriesHandler();
 	}
 
 	private static void initCommands()

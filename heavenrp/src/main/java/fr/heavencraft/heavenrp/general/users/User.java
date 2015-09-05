@@ -10,8 +10,11 @@ import java.util.Date;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
+import fr.heavencraft.async.queries.QueriesHandler;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.HeavenRP;
+import fr.heavencraft.heavenrp.database.users.UpdateBalanceQuery;
+import fr.heavencraft.heavenrp.database.users.UpdateLastLoginQuery;
 import fr.heavencraft.heavenrp.exceptions.UnknownErrorException;
 import fr.heavencraft.heavenrp.provinces.ProvincesManager;
 import fr.heavencraft.heavenrp.provinces.ProvincesManager.Province;
@@ -77,7 +80,8 @@ public class User
 
 	public void removeProvince()
 	{
-		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement("DELETE FROM mayor_people WHERE user_id = ?"))
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"DELETE FROM mayor_people WHERE user_id = ?"))
 		{
 			ps.setInt(1, _id);
 
@@ -110,7 +114,8 @@ public class User
 			throw new HeavenException("Vous fouillez dans votre bourse... Vous n'avez pas assez.");
 
 		_balance += delta;
-		update();
+
+		QueriesHandler.addQuery(new UpdateBalanceQuery(_id, _balance));
 	}
 
 	/*
@@ -155,8 +160,8 @@ public class User
 			if (!rs.next())
 				throw new HeavenException("Vous n'avez pas configuré votre {home %1$d}.", nb);
 
-			return new Location(Bukkit.getWorld(rs.getString("world")), rs.getDouble("x"), rs.getDouble("y"), rs.getDouble("z"),
-					rs.getFloat("yaw"), rs.getFloat("pitch"));
+			return new Location(Bukkit.getWorld(rs.getString("world")), rs.getDouble("x"), rs.getDouble("y"),
+					rs.getDouble("z"), rs.getFloat("yaw"), rs.getFloat("pitch"));
 		}
 		catch (final SQLException ex)
 		{
@@ -170,8 +175,10 @@ public class User
 		if (nb < 1 || nb > _homeNumber)
 			throw new HeavenException("Vous n'avez pas acheté le {home %1$d}.", nb);
 
-		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-				"REPLACE INTO homes SET world = ?, x = ?, y = ?, z = ?, yaw = ?, pitch = ?, user_id = ?, home_nb = ?"))
+		try (PreparedStatement ps = HeavenRP
+				.getConnection()
+				.prepareStatement(
+						"REPLACE INTO homes SET world = ?, x = ?, y = ?, z = ?, yaw = ?, pitch = ?, user_id = ?, home_nb = ?"))
 		{
 			ps.setString(1, home.getWorld().getName());
 			ps.setDouble(2, home.getX());
@@ -195,24 +202,6 @@ public class User
 	/*
 	 * Mise à jour de la base de données
 	 */
-
-	private void update()
-	{
-		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-				"UPDATE users SET balance = ?, last_login = ? WHERE id = ?;"))
-		{
-			ps.setInt(1, _balance);
-			ps.setTimestamp(2, _lastLogin);
-			ps.setInt(3, _id);
-
-			ps.executeUpdate();
-			ps.close();
-		}
-		catch (final SQLException ex)
-		{
-			ex.printStackTrace();
-		}
-	}
 
 	public boolean hasDealerLicense()
 	{
@@ -250,8 +239,8 @@ public class User
 			_dealerLicense = new Timestamp(calendar.getTimeInMillis());
 		}
 
-		try (PreparedStatement ps = HeavenRP.getConnection()
-				.prepareStatement("UPDATE users SET dealer_license = ? WHERE id = ?;"))
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"UPDATE users SET dealer_license = ? WHERE id = ?;"))
 		{
 			ps.setTimestamp(1, _dealerLicense);
 			ps.setInt(2, _id);
@@ -278,7 +267,7 @@ public class User
 	{
 		_lastLogin = new Timestamp(date.getTime());
 
-		update();
+		QueriesHandler.addQuery(new UpdateLastLoginQuery(_id, _lastLogin));
 	}
 
 }

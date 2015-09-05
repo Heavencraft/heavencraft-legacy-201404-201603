@@ -19,7 +19,8 @@ public class UserProvider
 
 	public static void createUser(String uuid, String name)
 	{
-		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement("INSERT INTO users (uuid, name) VALUES (?, ?);"))
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"INSERT INTO users (uuid, name) VALUES (?, ?);"))
 		{
 			ps.setString(1, uuid);
 			ps.setString(2, name);
@@ -51,7 +52,8 @@ public class UserProvider
 		if (user != null)
 			return user;
 
-		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement("SELECT * FROM users WHERE name = ? LIMIT 1;"))
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"SELECT * FROM users WHERE name = ? LIMIT 1;"))
 		{
 			ps.setString(1, name);
 
@@ -84,7 +86,8 @@ public class UserProvider
 	public static User getUserByUUID(String uuid) throws HeavenException
 	{
 		User user = null;
-		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement("SELECT * FROM users WHERE uuid = ? LIMIT 1;"))
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"SELECT * FROM users WHERE uuid = ? LIMIT 1;"))
 		{
 			ps.setString(1, uuid);
 

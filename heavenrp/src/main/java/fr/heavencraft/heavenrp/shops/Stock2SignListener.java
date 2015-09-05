@@ -25,8 +25,8 @@ import fr.heavencraft.utils.DevUtil;
 
 public class Stock2SignListener extends SignListener
 {
-	private static final BlockFace[] FACES = { BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST,
-			BlockFace.DOWN };
+	private static final BlockFace[] FACES =
+	{ BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.DOWN };
 
 	public Stock2SignListener()
 	{
