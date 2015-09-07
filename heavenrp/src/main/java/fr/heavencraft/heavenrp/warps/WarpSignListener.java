@@ -34,9 +34,9 @@ public class WarpSignListener extends SignListener
 	}
 
 	@Override
-	protected void onSignClick(Player player, Sign sign) throws HeavenException
+	protected void onSignClick(final Player player, Sign sign) throws HeavenException
 	{
-		String name = sign.getLine(1);
+		final String name = sign.getLine(1);
 
 		ActionsHandler.addAction(new TeleportPlayerAction(player, WarpsManager.getWarp(name).getLocation())
 		{
