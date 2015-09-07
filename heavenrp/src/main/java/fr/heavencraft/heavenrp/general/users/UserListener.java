@@ -32,15 +32,16 @@ public class UserListener implements Listener
 
 		try
 		{
-			UserProvider.updateName(uuid, name);
+			User user = UserProvider.getUserByUUID(uuid);
+
+			if (!name.equals(user.getName()))
+			{
+				UserProvider.updateName(uuid, name);
+			}
 		}
-		catch (final UserNotFoundException ex)
+		catch (UserNotFoundException ex)
 		{
 			UserProvider.createUser(uuid, name);
-		}
-		catch (final HeavenException ex)
-		{
-			ex.printStackTrace();
 		}
 	}
 
