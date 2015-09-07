@@ -18,7 +18,7 @@ public class TphereCommand extends HeavenCommand
 	}
 
 	@Override
-	protected void onPlayerCommand(Player player, String[] args) throws HeavenException
+	protected void onPlayerCommand(final Player player, String[] args) throws HeavenException
 	{
 		if (args.length != 1)
 		{
@@ -26,7 +26,7 @@ public class TphereCommand extends HeavenCommand
 			return;
 		}
 
-		Player toTeleport = PlayerUtil.getPlayer(args[0]);
+		final Player toTeleport = PlayerUtil.getPlayer(args[0]);
 
 		ActionsHandler.addAction(new TeleportPlayerAction(toTeleport, player)
 		{

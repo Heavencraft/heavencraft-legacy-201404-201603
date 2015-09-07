@@ -19,14 +19,14 @@ public class AccepterCommand extends HeavenCommand
 	}
 
 	@Override
-	protected void onPlayerCommand(Player player, String[] args) throws HeavenException
+	protected void onPlayerCommand(final Player player, String[] args) throws HeavenException
 	{
 		if (args.length != 1)
 		{
 			sendUsage(player);
 			return;
 		}
-		Player toTeleport = PlayerUtil.getPlayer(args[0]);
+		final Player toTeleport = PlayerUtil.getPlayer(args[0]);
 
 		if (!player.hasPermission(Permissions.REJOINDRE))
 			throw new HeavenException("Vous n'êtes pas actuellement dans le monde ressources.");

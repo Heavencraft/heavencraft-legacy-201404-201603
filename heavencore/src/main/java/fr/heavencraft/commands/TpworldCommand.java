@@ -21,7 +21,7 @@ public class TpworldCommand extends HeavenCommand
 	}
 
 	@Override
-	protected void onPlayerCommand(Player player, String[] args) throws HeavenException
+	protected void onPlayerCommand(final Player player, String[] args) throws HeavenException
 	{
 		if (args.length != 1)
 		{
@@ -29,7 +29,7 @@ public class TpworldCommand extends HeavenCommand
 			return;
 		}
 
-		World world = Bukkit.getWorld(args[0]);
+		final World world = Bukkit.getWorld(args[0]);
 
 		if (world == null)
 			throw new HeavenException("Le monde {%1$s} n'existe pas.", args[0]);

@@ -18,7 +18,7 @@ public class SpawnCommand extends HeavenCommand
 	}
 
 	@Override
-	protected void onPlayerCommand(Player player, String[] args) throws HeavenException
+	protected void onPlayerCommand(final Player player, String[] args) throws HeavenException
 	{
 		ActionsHandler.addAction(new TeleportPlayerAction(player, WorldsManager.getSpawn())
 		{
