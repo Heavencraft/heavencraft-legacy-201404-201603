@@ -2,32 +2,32 @@ package fr.heavencraft.heavenrp.database.users;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Date;
 
 import fr.heavencraft.async.queries.AbstractQuery;
+import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.HeavenRP;
 import fr.heavencraft.heavenrp.general.users.User;
 
-public class UpdateLastLoginQuery extends AbstractQuery
+public class IncrementHomeNumberQuery extends AbstractQuery
 {
-	private static final String QUERY = "UPDATE users SET last_login = ? WHERE id = ? LIMIT 1;";
+	private static final String QUERY = "UPDATE users SET homeNumber = homeNumber + 1 WHERE id = ? LIMIT 1";
 
 	private final User user;
 
-	public UpdateLastLoginQuery(User user)
+	public IncrementHomeNumberQuery(User user)
 	{
 		this.user = user;
 	}
 
 	@Override
-	public void executeQuery() throws SQLException
+	public void executeQuery() throws HeavenException, SQLException
 	{
 		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(QUERY))
 		{
-			ps.setTimestamp(1, new Timestamp(new Date().getTime()));
-			ps.setInt(2, user.getId());
+			ps.setInt(1, user.getId());
+
 			System.out.println("Executing query " + ps);
+
 			ps.executeUpdate();
 		}
 	}

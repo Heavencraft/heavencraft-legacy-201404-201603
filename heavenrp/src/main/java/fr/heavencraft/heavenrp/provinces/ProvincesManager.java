@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.HeavenRP;
 import fr.heavencraft.heavenrp.exceptions.ProvinceNotFoundException;
+import fr.heavencraft.heavenrp.general.users.User;
 
 public class ProvincesManager
 {
@@ -36,7 +37,8 @@ public class ProvincesManager
 			_warp = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
 		}
 
-		private Province(int id, String login, String color, String world, double x, double y, double z, float yaw, float pitch)
+		private Province(int id, String login, String color, String world, double x, double y, double z,
+				float yaw, float pitch)
 		{
 			_id = id;
 			_login = login;
@@ -86,7 +88,8 @@ public class ProvincesManager
 
 	public static Province getProvinceById(int id) throws HeavenException
 	{
-		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement("SELECT * FROM mayor_cities WHERE id = ? LIMIT 1"))
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"SELECT * FROM mayor_cities WHERE id = ? LIMIT 1"))
 		{
 			ps.setInt(1, id);
 
@@ -125,14 +128,14 @@ public class ProvincesManager
 		}
 	}
 
-	public static Province getProvinceByUser(int id)
+	public static Province getProvinceByUser(User user)
 	{
 		try (PreparedStatement ps = HeavenRP
 				.getConnection()
 				.prepareStatement(
 						"SELECT mc.id, mc.login, mc.color, mc.world, mc.x, mc.y, mc.z, mc.yaw, mc.pitch FROM mayor_cities mc, mayor_people mp WHERE mc.id = mp.city_id AND mp.user_id = ? LIMIT 1"))
 		{
-			ps.setInt(1, id);
+			ps.setInt(1, user.getId());
 
 			final ResultSet rs = ps.executeQuery();
 

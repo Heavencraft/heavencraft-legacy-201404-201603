@@ -4,8 +4,10 @@ import java.sql.SQLException;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.utils.DevUtil;
 
 public class QueriesHandler extends BukkitRunnable
@@ -22,18 +24,48 @@ public class QueriesHandler extends BukkitRunnable
 	{
 		if (!queries.isEmpty())
 		{
-			Query query;
+			Query tmp;
 
-			while ((query = queries.poll()) != null)
+			while ((tmp = queries.poll()) != null)
 			{
+				final Query query = tmp; // Gruge final
+
 				try
 				{
 					query.executeQuery();
+
+					Bukkit.getScheduler().runTask(DevUtil.getPlugin(), new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							query.onSuccess();
+						}
+					});
+				}
+				catch (final HeavenException ex)
+				{
+					Bukkit.getScheduler().runTask(DevUtil.getPlugin(), new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							query.onHeavenException(ex);
+						}
+					});
 				}
 				catch (final SQLException ex)
 				{
 					ex.printStackTrace();
-					query.onSQLException(ex);
+
+					Bukkit.getScheduler().runTask(DevUtil.getPlugin(), new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							query.onSQLException(ex);
+						}
+					});
 				}
 			}
 		}

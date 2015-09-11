@@ -16,7 +16,9 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import fr.heavencraft.async.queries.QueriesHandler;
 import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.heavenrp.database.users.UpdateUserBalanceQuery;
 import fr.heavencraft.heavenrp.general.users.User;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.heavencraft.utils.ChatUtil;
@@ -33,9 +35,9 @@ public class GoldDropListener implements Listener
 	}
 
 	@EventHandler(ignoreCancelled = true)
-	private void onPlayerPickupItem(PlayerPickupItemEvent event)
+	private void onPlayerPickupItem(final PlayerPickupItemEvent event)
 	{
-		Player player = event.getPlayer();
+		final Player player = event.getPlayer();
 
 		try
 		{
@@ -44,13 +46,21 @@ public class GoldDropListener implements Listener
 			if (!isGold(item))
 				return;
 
-			int amount = DevUtil.toUint(item.getItemMeta().getLore().get(0));
+			final int amount = DevUtil.toUint(item.getItemMeta().getLore().get(0));
 			event.getItem().remove();
 			event.setCancelled(true);
 
-			UserProvider.getUserByName(player.getName()).updateBalance(amount);
-			ChatUtil.sendMessage(player, "Vous venez de trouver {%1$s} pièces d'or par terre. ({%2$s})", amount,
-					event.getRemaining());
+			User user = UserProvider.getUserByName(player.getName());
+
+			QueriesHandler.addQuery(new UpdateUserBalanceQuery(user, amount)
+			{
+				@Override
+				public void onSuccess()
+				{
+					ChatUtil.sendMessage(player, "Vous venez de trouver {%1$s} pièces d'or par terre. ({%2$s})",
+							amount, event.getRemaining());
+				}
+			});
 		}
 		catch (HeavenException ex)
 		{
@@ -85,19 +95,26 @@ public class GoldDropListener implements Listener
 	@EventHandler
 	private void onPlayerDeath(PlayerDeathEvent event) throws HeavenException
 	{
-		Player player = event.getEntity();
+		final Player player = event.getEntity();
 		User user = UserProvider.getUserByName(player.getName());
 
-		int amount = user.getBalance();
+		final int amount = user.getBalance();
 
-		if (amount != 0)
+		if (amount == 0)
+			return;
+
+		QueriesHandler.addQuery(new UpdateUserBalanceQuery(user, -amount)
 		{
-			user.updateBalance(-amount);
-			ChatUtil.sendMessage(player, "Vous avez perdu {%1$s} pièces d'or que vous aviez dans votre bourse.", amount);
-			ChatUtil.sendMessage(player, "Pensez à déposer votre argent à la banque la prochaine fois.");
+			@Override
+			public void onSuccess()
+			{
+				ChatUtil.sendMessage(player,
+						"Vous avez perdu {%1$s} pièces d'or que vous aviez dans votre bourse.", amount);
+				ChatUtil.sendMessage(player, "Pensez à déposer votre argent à la banque la prochaine fois.");
 
-			dropGold(player.getLocation(), amount);
-		}
+				dropGold(player.getLocation(), amount);
+			}
+		});
 	}
 
 	private void dropGold(Location location, int qty)

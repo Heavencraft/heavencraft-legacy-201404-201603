@@ -12,10 +12,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import fr.heavencraft.async.queries.QueriesHandler;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.RPPermissions;
+import fr.heavencraft.heavenrp.database.MoneyTransfertQuery;
+import fr.heavencraft.heavenrp.economy.bankaccount.BankAccount;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
-import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccount;
 import fr.heavencraft.heavenrp.general.users.User;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.heavencraft.listeners.sign.SignListener;
@@ -113,7 +115,7 @@ public class LivretProSignListener extends SignListener implements Listener
 	@EventHandler(ignoreCancelled = true)
 	public void onAsyncPlayerChat(AsyncPlayerChatEvent event)
 	{
-		Player player = event.getPlayer();
+		final Player player = event.getPlayer();
 		String playerName = player.getName();
 
 		int accountId;
@@ -146,23 +148,26 @@ public class LivretProSignListener extends SignListener implements Listener
 				return;
 			}
 
+			deposants.remove(playerName);
+			retirants.remove(playerName);
+
 			User user = UserProvider.getUserByName(playerName);
 			BankAccount bank = BankAccountsManager.getBankAccountById(accountId);
 
-			if (isDepot)
+			QueriesHandler.addQuery(new MoneyTransfertQuery(isDepot ? user : bank, isDepot ? bank : user, delta)
 			{
-				user.updateBalance(-delta);
-				bank.updateBalance(delta);
-				deposants.remove(playerName);
-			}
-			else
-			{
-				bank.updateBalance(-delta);
-				user.updateBalance(delta);
-				retirants.remove(playerName);
-			}
+				@Override
+				public void onSuccess()
+				{
+					ChatUtil.sendMessage(player, "{Trésorier} : L'opération a été effectuée avec succès.");
+				}
 
-			ChatUtil.sendMessage(player, "{Trésorier} : L'opération a été effectuée avec succès.");
+				@Override
+				public void onHeavenException(HeavenException ex)
+				{
+					ChatUtil.sendMessage(player, ex.getMessage());
+				}
+			});
 		}
 		catch (HeavenException ex)
 		{

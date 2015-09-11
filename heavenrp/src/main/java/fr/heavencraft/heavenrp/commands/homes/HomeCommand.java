@@ -1,5 +1,6 @@
 package fr.heavencraft.heavenrp.commands.homes;
 
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -7,6 +8,7 @@ import fr.heavencraft.async.actions.ActionsHandler;
 import fr.heavencraft.async.actions.TeleportPlayerAction;
 import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.heavenrp.database.homes.HomeProvider;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.heavencraft.utils.ChatUtil;
 import fr.heavencraft.utils.DevUtil;
@@ -33,8 +35,9 @@ public class HomeCommand extends HeavenCommand
 			return;
 		}
 
-		ActionsHandler.addAction(new TeleportPlayerAction(player, UserProvider.getUserByName(player.getName())
-				.getHome(nb)));
+		Location home = HomeProvider.getHome(UserProvider.getUserByName(player.getName()), nb);
+
+		ActionsHandler.addAction(new TeleportPlayerAction(player, home));
 	}
 
 	@Override

@@ -7,15 +7,8 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-
-import fr.heavencraft.async.queries.QueriesHandler;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.HeavenRP;
-import fr.heavencraft.heavenrp.database.users.UpdateBalanceQuery;
-import fr.heavencraft.heavenrp.database.users.UpdateLastLoginQuery;
-import fr.heavencraft.heavenrp.exceptions.UnknownErrorException;
 import fr.heavencraft.heavenrp.provinces.ProvincesManager;
 import fr.heavencraft.heavenrp.provinces.ProvincesManager.Province;
 
@@ -58,7 +51,7 @@ public class User
 
 	public Province getProvince() throws HeavenException
 	{
-		return ProvincesManager.getProvinceByUser(_id);
+		return ProvincesManager.getProvinceByUser(this);
 	}
 
 	public void setProvince(Integer provinceId)
@@ -78,22 +71,6 @@ public class User
 		}
 	}
 
-	public void removeProvince()
-	{
-		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-				"DELETE FROM mayor_people WHERE user_id = ?"))
-		{
-			ps.setInt(1, _id);
-
-			ps.executeUpdate();
-		}
-
-		catch (final SQLException ex)
-		{
-			ex.printStackTrace();
-		}
-	}
-
 	/*
 	 * Pièces d'or
 	 */
@@ -103,21 +80,6 @@ public class User
 		return _balance;
 	}
 
-	public void updateBalance(int delta) throws HeavenException
-	{
-		if (_balance < 0)
-			throw new HeavenException("Vous avez moins de 0 pièces d'or sur vous. O_o");
-
-		if (_balance + delta < 0)
-			// throw new
-			// LorganException("Vous n'avez pas assez de pièces d'or sur vous.");
-			throw new HeavenException("Vous fouillez dans votre bourse... Vous n'avez pas assez.");
-
-		_balance += delta;
-
-		QueriesHandler.addQuery(new UpdateBalanceQuery(_id, _balance));
-	}
-
 	/*
 	 * Homes
 	 */
@@ -125,78 +87,6 @@ public class User
 	public int getHomeNumber()
 	{
 		return _homeNumber;
-	}
-
-	public void incrementHomeNumber() throws HeavenException
-	{
-		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-				"UPDATE users SET homeNumber = homeNumber + 1 WHERE id = ?"))
-		{
-			ps.setInt(1, _id);
-			ps.executeUpdate();
-
-			_homeNumber++;
-		}
-		catch (final SQLException ex)
-		{
-			ex.printStackTrace();
-			throw new UnknownErrorException();
-		}
-	}
-
-	public Location getHome(int nb) throws HeavenException
-	{
-		if (nb < 1 || nb > _homeNumber)
-			throw new HeavenException("Vous n'avez pas acheté le {home %1$d}.", nb);
-
-		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-				"SELECT world, x, y, z, yaw, pitch FROM homes WHERE user_id = ? AND home_nb = ? LIMIT 1"))
-		{
-			ps.setInt(1, _id);
-			ps.setInt(2, nb);
-
-			final ResultSet rs = ps.executeQuery();
-
-			if (!rs.next())
-				throw new HeavenException("Vous n'avez pas configuré votre {home %1$d}.", nb);
-
-			return new Location(Bukkit.getWorld(rs.getString("world")), rs.getDouble("x"), rs.getDouble("y"),
-					rs.getDouble("z"), rs.getFloat("yaw"), rs.getFloat("pitch"));
-		}
-		catch (final SQLException ex)
-		{
-			ex.printStackTrace();
-			throw new HeavenException("Cette erreur n'est pas sensée se produire.");
-		}
-	}
-
-	public void setHome(int nb, Location home) throws HeavenException
-	{
-		if (nb < 1 || nb > _homeNumber)
-			throw new HeavenException("Vous n'avez pas acheté le {home %1$d}.", nb);
-
-		try (PreparedStatement ps = HeavenRP
-				.getConnection()
-				.prepareStatement(
-						"REPLACE INTO homes SET world = ?, x = ?, y = ?, z = ?, yaw = ?, pitch = ?, user_id = ?, home_nb = ?"))
-		{
-			ps.setString(1, home.getWorld().getName());
-			ps.setDouble(2, home.getX());
-			ps.setDouble(3, home.getY());
-			ps.setDouble(4, home.getZ());
-			ps.setFloat(5, home.getYaw());
-			ps.setFloat(6, home.getPitch());
-
-			ps.setInt(7, _id);
-			ps.setInt(8, nb);
-
-			ps.executeUpdate();
-		}
-		catch (final SQLException ex)
-		{
-			ex.printStackTrace();
-			throw new HeavenException("Cette erreur n'est pas sensée se produire.");
-		}
 	}
 
 	/*
@@ -262,12 +152,4 @@ public class User
 	{
 		return _lastLogin;
 	}
-
-	public void updateLastLogin(Date date)
-	{
-		_lastLogin = new Timestamp(date.getTime());
-
-		QueriesHandler.addQuery(new UpdateLastLoginQuery(_id, _lastLogin));
-	}
-
 }

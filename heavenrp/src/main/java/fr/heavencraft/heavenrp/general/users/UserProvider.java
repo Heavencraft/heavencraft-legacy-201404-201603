@@ -3,20 +3,16 @@ package fr.heavencraft.heavenrp.general.users;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.exceptions.SQLErrorException;
 import fr.heavencraft.exceptions.UserNotFoundException;
 import fr.heavencraft.heavenrp.HeavenRP;
+import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountType;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
-import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccountType;
 
 public class UserProvider
 {
-	private static Map<String, User> usersByName = new HashMap<String, User>();
-
 	public static void createUser(String uuid, String name)
 	{
 		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
@@ -40,18 +36,8 @@ public class UserProvider
 		}
 	}
 
-	public static void removeFromCache(String name)
-	{
-		usersByName.remove(name);
-	}
-
 	public static User getUserByName(String name) throws HeavenException
 	{
-		User user = usersByName.get(name);
-
-		if (user != null)
-			return user;
-
 		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
 				"SELECT * FROM users WHERE name = ? LIMIT 1;"))
 		{
@@ -62,10 +48,7 @@ public class UserProvider
 			if (!rs.next())
 				throw new UserNotFoundException(name);
 
-			user = new User(rs);
-
-			usersByName.put(name, user);
-			return user;
+			return new User(rs);
 		}
 
 		catch (final SQLException ex)
@@ -85,7 +68,6 @@ public class UserProvider
 	 */
 	public static User getUserByUUID(String uuid) throws HeavenException
 	{
-		User user = null;
 		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
 				"SELECT * FROM users WHERE uuid = ? LIMIT 1;"))
 		{
@@ -96,8 +78,7 @@ public class UserProvider
 			if (!rs.next())
 				throw new UserNotFoundException(uuid);
 
-			user = new User(rs);
-			return user;
+			return new User(rs);
 		}
 
 		catch (final SQLException ex)

@@ -3,8 +3,11 @@ package fr.heavencraft.heavenrp.commands.homes;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import fr.heavencraft.async.queries.QueriesHandler;
 import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.heavenrp.database.homes.SetHomeQuery;
+import fr.heavencraft.heavenrp.general.users.User;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.heavencraft.utils.ChatUtil;
 import fr.heavencraft.utils.DevUtil;
@@ -17,15 +20,15 @@ public class SethomeCommand extends HeavenCommand
 	}
 
 	@Override
-	protected void onPlayerCommand(Player player, String[] args) throws HeavenException
+	protected void onPlayerCommand(final Player player, String[] args) throws HeavenException
 	{
-		int nb;
+		final int homeNumber;
 
 		if (args.length == 0)
-			nb = 1;
+			homeNumber = 1;
 
 		else if (args.length == 1)
-			nb = DevUtil.toUint(args[0]);
+			homeNumber = DevUtil.toUint(args[0]);
 
 		else
 		{
@@ -33,9 +36,25 @@ public class SethomeCommand extends HeavenCommand
 			return;
 		}
 
-		UserProvider.getUserByName(player.getName()).setHome(nb, player.getLocation());
+		User user = UserProvider.getUserByName(player.getName());
 
-		ChatUtil.sendMessage(player, "Votre {home %1$d} a bien été configuré.", nb);
+		if (homeNumber < 1 || homeNumber > user.getHomeNumber())
+			throw new HeavenException("Vous n'avez pas acheté le {home %1$d}.", homeNumber);
+
+		QueriesHandler.addQuery(new SetHomeQuery(user, homeNumber, player.getLocation())
+		{
+			@Override
+			public void onSuccess()
+			{
+				ChatUtil.sendMessage(player, "Votre {home %1$d} a bien été configuré.", homeNumber);
+			}
+
+			@Override
+			public void onHeavenException(HeavenException ex)
+			{
+				ChatUtil.sendMessage(player, ex.getMessage());
+			}
+		});
 	}
 
 	@Override

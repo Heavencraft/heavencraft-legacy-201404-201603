@@ -1,12 +1,20 @@
 package fr.heavencraft.heavenrp.provinces;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
 
+import fr.heavencraft.async.queries.BatchQuery;
+import fr.heavencraft.async.queries.QueriesHandler;
+import fr.heavencraft.async.queries.Query;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.RPPermissions;
+import fr.heavencraft.heavenrp.database.users.RemoveProvinceQuery;
+import fr.heavencraft.heavenrp.database.users.UpdateUserBalanceQuery;
 import fr.heavencraft.heavenrp.general.users.User;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.heavencraft.heavenrp.provinces.ProvincesManager.Province;
@@ -72,20 +80,27 @@ public class ProvinceSignListener extends SignListener
 		ChatUtil.sendMessage(player, "Vous venez de rejoindre la province de {%1$s}.", province.getName());
 	}
 
-	private void onLeaveSignClick(Player player) throws HeavenException
+	private void onLeaveSignClick(final Player player) throws HeavenException
 	{
 		User user = UserProvider.getUserByName(player.getName());
 
 		if (user.getProvince() == null)
 			throw new HeavenException("Vous n'êtes habitant d'aucune province.");
 
-		user.updateBalance(-50);
-		user.removeProvince();
+		List<Query> queries = new ArrayList<Query>();
+		queries.add(new UpdateUserBalanceQuery(user, -50));
+		queries.add(new RemoveProvinceQuery(user));
+		QueriesHandler.addQuery(new BatchQuery(queries)
+		{
+			@Override
+			public void onSuccess()
+			{
+				// Apply province colors
+				ProvinceScoreboard.applyTeamColor(player, null);
 
-		// Apply province colors
-		ProvinceScoreboard.applyTeamColor(player, null);
-
-		ChatUtil.sendMessage(player, "Vous ne faîtes plus partie d'aucune province.");
-		ChatUtil.sendMessage(player, "Les frais de dossier vous ont coûté {50} pièces d'or.");
+				ChatUtil.sendMessage(player, "Vous ne faîtes plus partie d'aucune province.");
+				ChatUtil.sendMessage(player, "Les frais de dossier vous ont coûté {50} pièces d'or.");
+			}
+		});
 	}
 }

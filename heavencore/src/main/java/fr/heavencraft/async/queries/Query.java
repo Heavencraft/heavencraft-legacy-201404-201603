@@ -2,9 +2,15 @@ package fr.heavencraft.async.queries;
 
 import java.sql.SQLException;
 
+import fr.heavencraft.exceptions.HeavenException;
+
 public interface Query
 {
-	void executeQuery() throws SQLException;
+	void executeQuery() throws HeavenException, SQLException;
+
+	void onSuccess();
+
+	void onHeavenException(HeavenException ex);
 
 	void onSQLException(SQLException ex);
 }
