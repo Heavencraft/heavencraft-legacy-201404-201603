@@ -48,6 +48,9 @@ public class UsersListener implements Listener
 	public void onPostLogin(PostLoginEvent event)
 	{
 		final ProxiedPlayer player = event.getPlayer();
+		
+		Utils.sendMessage(player, "§0§2§0§0§e§f"); // Disable schematica printer functionality.
+		Utils.sendMessage(player, "§0§2§1§0§e§f"); // Disable schematica save schematic functionality.
 
 		final String uuid = Utils.getUUID(player);
 		final String name = player.getName();
