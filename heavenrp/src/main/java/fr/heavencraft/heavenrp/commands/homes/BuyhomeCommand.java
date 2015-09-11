@@ -1,10 +1,18 @@
 package fr.heavencraft.heavenrp.commands.homes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import fr.heavencraft.async.queries.BatchQuery;
+import fr.heavencraft.async.queries.QueriesHandler;
+import fr.heavencraft.async.queries.Query;
 import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.heavenrp.database.users.IncrementHomeNumberQuery;
+import fr.heavencraft.heavenrp.database.users.UpdateUserBalanceQuery;
 import fr.heavencraft.heavenrp.general.users.User;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.heavencraft.utils.ChatUtil;
@@ -18,12 +26,12 @@ public class BuyhomeCommand extends HeavenCommand
 	}
 
 	@Override
-	protected void onPlayerCommand(Player player, String[] args) throws HeavenException
+	protected void onPlayerCommand(final Player player, String[] args) throws HeavenException
 	{
 		User user = UserProvider.getUserByName(player.getName());
 
-		int homeNumber = user.getHomeNumber() + 1;
-		int price = getPrice(homeNumber);
+		final int homeNumber = user.getHomeNumber() + 1;
+		final int price = getPrice(homeNumber);
 
 		switch (args.length)
 		{
@@ -39,11 +47,25 @@ public class BuyhomeCommand extends HeavenCommand
 					return;
 				}
 
-				user.updateBalance(-price);
-				user.incrementHomeNumber();
+				List<Query> queries = new ArrayList<Query>();
+				queries.add(new UpdateUserBalanceQuery(user, -price));
+				queries.add(new IncrementHomeNumberQuery(user));
+				QueriesHandler.addQuery(new BatchQuery(queries)
+				{
+					@Override
+					public void onSuccess()
+					{
+						ChatUtil.sendMessage(player,
+								"Votre {home %1$d} a bien été acheté pour {%2$d} pièces d'or.", homeNumber, price);
+					}
 
-				ChatUtil.sendMessage(player, "Votre {home %1$d} a bien été acheté pour {%2$d} pièces d'or.",
-						homeNumber, price);
+					@Override
+					public void onHeavenException(HeavenException ex)
+					{
+						ChatUtil.sendMessage(player, ex.getMessage());
+					}
+				});
+
 				break;
 			default:
 				sendUsage(player);

@@ -10,26 +10,6 @@ import fr.heavencraft.heavenrp.exceptions.UnknownErrorException;
 
 public class HpsManager
 {
-	public static void removeBalance(String name, int hps) throws HeavenException
-	{
-		if (getBalance(name) < hps)
-		{
-			throw new HeavenException("Vous n'avez pas assez d'argent sur mon compte.");
-		}
-		try (PreparedStatement ps = HeavenRP.getMainConnection().prepareStatement(
-				"UPDATE heavencraft_users SET balance = balance - ? WHERE username = ?"))
-		{
-			ps.setInt(1, hps);
-			ps.setString(2, name);
-
-			ps.executeUpdate();
-		}
-		catch (final SQLException ex)
-		{
-			ex.printStackTrace();
-			throw new UnknownErrorException();
-		}
-	}
 
 	public static int getBalance(String name) throws HeavenException
 	{

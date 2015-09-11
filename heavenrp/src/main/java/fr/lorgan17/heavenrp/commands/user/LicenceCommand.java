@@ -5,8 +5,10 @@ import java.text.SimpleDateFormat;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import fr.heavencraft.async.queries.QueriesHandler;
 import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.heavenrp.database.users.UpdateUserBalanceQuery;
 import fr.heavencraft.heavenrp.general.users.User;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.heavencraft.utils.ChatUtil;
@@ -21,9 +23,9 @@ public class LicenceCommand extends HeavenCommand
 	}
 
 	@Override
-	protected void onPlayerCommand(Player player, String[] args) throws HeavenException
+	protected void onPlayerCommand(final Player player, String[] args) throws HeavenException
 	{
-		User user = UserProvider.getUserByName(player.getName());
+		final User user = UserProvider.getUserByName(player.getName());
 
 		switch (args.length)
 		{
@@ -47,9 +49,10 @@ public class LicenceCommand extends HeavenCommand
 								"La licence de marchand vous coûtera 400 pièces d'or. Faites {/licence marchand valider} pour valider");
 				}
 				/*
-				 * else if (args[0].equalsIgnoreCase("ressources")) { if (user.hasSurvivalLicense())
-				 * ChatUtil.sendMessage(player, "Vous possédez déjà la licence d'accès au monde ressources."); else
-				 * ChatUtil.sendMessage(player,
+				 * else if (args[0].equalsIgnoreCase("ressources")) { if
+				 * (user.hasSurvivalLicense()) ChatUtil.sendMessage(player,
+				 * "Vous possédez déjà la licence d'accès au monde ressources."
+				 * ); else ChatUtil.sendMessage(player,
 				 * "La licence d'accès au monde ressources vous coûtera 500 pièces d'or. Faites {/licence ressources valider} pour valier"
 				 * ); }
 				 */
@@ -60,24 +63,32 @@ public class LicenceCommand extends HeavenCommand
 				{
 					if (args[0].equalsIgnoreCase("marchand"))
 					{
-						if (user.alreadyHasDealerLicense())
+						QueriesHandler.addQuery(new UpdateUserBalanceQuery(user,
+								user.alreadyHasDealerLicense() ? -750 : -400)
 						{
-							user.updateBalance(-750);
-							user.buyDealerLicense();
-							ChatUtil.sendMessage(player, "Vous venez d'acquérir la licence de marchand pour 1 mois.");
-						}
-						else
-						{
-							user.updateBalance(-400);
-							user.buyDealerLicense();
-							ChatUtil.sendMessage(player, "Vous venez d'acquérir la licence de marchand pour 1 mois.");
-						}
+							@Override
+							public void onSuccess()
+							{
+								user.buyDealerLicense();
+								ChatUtil.sendMessage(player,
+										"Vous venez d'acquérir la licence de marchand pour 1 mois.");
+							}
+
+							@Override
+							public void onHeavenException(HeavenException ex)
+							{
+								ChatUtil.sendMessage(player, ex.getMessage());
+							}
+						});
 					}
 					/*
-					 * else if (args[0].equalsIgnoreCase("ressources")) { if (user.hasSurvivalLicense())
-					 * ChatUtil.sendMessage(player, "Vous possédez déjà la licence d'accès au monde ressources."); else
-					 * { user.updateBalance(-500); user.buySurvivalLicense(); ChatUtil.sendMessage(player,
-					 * "Vous venez d'acquérir la licence d'accès au monde ressources."); } }
+					 * else if (args[0].equalsIgnoreCase("ressources")) { if
+					 * (user.hasSurvivalLicense()) ChatUtil.sendMessage(player,
+					 * "Vous possédez déjà la licence d'accès au monde ressources."
+					 * ); else { user.updateBalance(-500);
+					 * user.buySurvivalLicense(); ChatUtil.sendMessage(player,
+					 * "Vous venez d'acquérir la licence d'accès au monde ressources."
+					 * ); } }
 					 */
 				}
 
@@ -100,6 +111,7 @@ public class LicenceCommand extends HeavenCommand
 	protected void sendUsage(CommandSender sender)
 	{
 		ChatUtil.sendMessage(sender, "/{licence} marchand : pour acheter la licence de marchand");
-		// ChatUtil.sendMessage(sender, "/{licence} ressources : pour acheter la licence d'accès au monde ressources");
+		// ChatUtil.sendMessage(sender,
+		// "/{licence} ressources : pour acheter la licence d'accès au monde ressources");
 	}
 }

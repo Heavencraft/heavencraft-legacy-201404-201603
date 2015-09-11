@@ -4,9 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.exceptions.UserNotFoundException;
@@ -43,17 +41,5 @@ public class UserListener implements Listener
 		{
 			UserProvider.createUser(uuid, name);
 		}
-	}
-
-	@EventHandler(priority = EventPriority.MONITOR)
-	private void onPlayerQuit(PlayerQuitEvent event)
-	{
-		UserProvider.removeFromCache(event.getPlayer().getName());
-	}
-
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	private void onPlayerKick(PlayerKickEvent event)
-	{
-		UserProvider.removeFromCache(event.getPlayer().getName());
 	}
 }

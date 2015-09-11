@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
-import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccountType;
+import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountType;
 import fr.heavencraft.heavenrp.general.users.User;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.heavencraft.utils.ChatUtil;

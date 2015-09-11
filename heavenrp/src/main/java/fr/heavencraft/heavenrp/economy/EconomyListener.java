@@ -1,6 +1,7 @@
 package fr.heavencraft.heavenrp.economy;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -10,11 +11,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import fr.heavencraft.Utils;
+import fr.heavencraft.async.queries.BatchQuery;
+import fr.heavencraft.async.queries.QueriesHandler;
+import fr.heavencraft.async.queries.Query;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.HeavenRP;
+import fr.heavencraft.heavenrp.database.bankaccounts.UpdateBankAccountBalanceQuery;
+import fr.heavencraft.heavenrp.database.users.UpdateLastLoginQuery;
+import fr.heavencraft.heavenrp.database.users.UpdateUserBalanceQuery;
+import fr.heavencraft.heavenrp.economy.bankaccount.BankAccount;
+import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountType;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
-import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccount;
-import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccountType;
 import fr.heavencraft.heavenrp.general.users.User;
 import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.heavencraft.utils.ChatUtil;
@@ -29,32 +36,41 @@ public class EconomyListener implements Listener
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) throws HeavenException
 	{
-		Player player = event.getPlayer();
+		final Player player = event.getPlayer();
 		String playerName = player.getName();
 
 		User user = UserProvider.getUserByName(playerName);
-		BankAccount account = BankAccountsManager.getBankAccount(playerName, BankAccountType.USER);
 
 		if (!Utils.isToday(user.getLastLogin()))
 		{
-			user.updateBalance(5);
-			ChatUtil.sendMessage(player, ChatColor.AQUA
-					+ "Vous venez d'obtenir 5 pièces d'or en vous connectant !");
+			BankAccount account = BankAccountsManager.getBankAccount(playerName, BankAccountType.USER);
+			final int benefit;
 
-			int benefit = (int) (account.getBalance() * 0.001D);
-
-			if (benefit > 25)
+			if (account.getBalance() >= 25000)
 				benefit = 25;
+			else
+				benefit = (int) (account.getBalance() * 0.001D);
 
-			if (benefit > 0)
+			List<Query> queries = new ArrayList<Query>();
+			queries.add(new UpdateUserBalanceQuery(user, 5));
+			queries.add(new UpdateBankAccountBalanceQuery(account, benefit));
+			queries.add(new UpdateLastLoginQuery(user));
+			QueriesHandler.addQuery(new BatchQuery(queries)
 			{
-				account.updateBalance(benefit);
-				ChatUtil.sendMessage(player, ChatColor.AQUA + "Votre livret vous a rapporté %1$s pièces d'or.",
-						benefit);
-			}
+				@Override
+				public void onSuccess()
+				{
+					ChatUtil.sendMessage(player, ChatColor.AQUA
+							+ "Vous venez d'obtenir 5 pièces d'or en vous connectant !");
+					ChatUtil.sendMessage(player, ChatColor.AQUA
+							+ "Votre livret vous a rapporté %1$s pièces d'or.", benefit);
+				}
+			});
 		}
-
-		user.updateLastLogin(new Date());
+		else
+		{
+			QueriesHandler.addQuery(new UpdateLastLoginQuery(user));
+		}
 	}
 
 }
