@@ -3,14 +3,15 @@ package fr.heavencraft.heavenrp.economy.enterprise;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.exceptions.SQLErrorException;
 import fr.heavencraft.heavenrp.HeavenRP;
-import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountType;
+import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
 import fr.heavencraft.heavenrp.exceptions.EnterpriseNotFoundException;
 import fr.heavencraft.heavenrp.general.users.User;
 
@@ -153,6 +154,10 @@ public class EnterprisesManager
 				throw new HeavenException("Une entreprise existe déjà avec le nom {%1$s}.", name);
 
 			BankAccountsManager.createBankAccount(name, BankAccountType.ENTERPRISE);
+		}
+		catch (SQLIntegrityConstraintViolationException ex)
+		{
+			throw new HeavenException("Une entreprise existe déjà avec le nom {%1$s}.", name);
 		}
 		catch (final SQLException ex)
 		{
