@@ -39,7 +39,6 @@ public class PayerCommand extends HeavenCommand
 
 		final BankAccount dest;
 
-		long start = System.nanoTime();
 		if (args[0].equalsIgnoreCase("joueur"))
 			dest = BankAccountsManager.getBankAccount(PlayerUtil.getExactName(args[1]), BankAccountType.USER);
 		else if (args[0].equalsIgnoreCase("ville"))
@@ -51,21 +50,18 @@ public class PayerCommand extends HeavenCommand
 			sendUsage(player);
 			return;
 		}
-		System.out.println("Getting Account : " + (System.nanoTime() - start) / 1000 + " us");
 
-		start = System.nanoTime();
 		if (dest.getOwnersNames().contains(player.getName()))
 			throw new HeavenException(
 					"Vous devez utiliser le guichet afin de faire des opérations sur votre compte");
-		System.out.println("Checking ownership : " + (System.nanoTime() - start) / 1000 + " us");
 
 		final int delta = DevUtil.toUint(args[2]);
 
-		start = System.nanoTime();
-		final User sender = UserProvider.getUserByName(player.getName());
-		System.out.println("Getting User : " + (System.nanoTime() - start) / 1000 + " us");
+		if (delta <= 0)
+			throw new HeavenException("Le nombre {%1$s} est incorrect.", delta);
 
-		start = System.nanoTime();
+		final User sender = UserProvider.getUserByName(player.getName());
+
 		QueriesHandler.addQuery(new MoneyTransfertQuery(sender, dest, delta)
 		{
 			@Override
@@ -87,7 +83,6 @@ public class PayerCommand extends HeavenCommand
 				ChatUtil.sendMessage(player, ex.getMessage());
 			}
 		});
-		System.out.println("Adding task : " + (System.nanoTime() - start) / 1000 + " us");
 	}
 
 	@Override
