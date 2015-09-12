@@ -79,7 +79,7 @@ public class BankAccountsManager
 	public static BankAccount getBankAccountById(int id) throws HeavenException
 	{
 		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-				"SELECT ba.id, ba.owner, ba.type FROM bank_account ba WHERE ba.id = ? LIMIT 1"))
+				"SELECT ba.id, ba.owner, ba.type, ba.balance FROM bank_account ba WHERE ba.id = ? LIMIT 1"))
 		{
 			ps.setInt(1, id);
 			final ResultSet rs = ps.executeQuery();
@@ -101,12 +101,12 @@ public class BankAccountsManager
 		final List<BankAccount> result = new ArrayList<BankAccount>();
 
 		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
-				"(SELECT ba.id, ba.owner, ba.type "
+				"(SELECT ba.id, ba.owner, ba.type, ba.balance "
 						+ // Sélection des comptes de villes
 						"FROM bank_account ba, mayors m, users u " + "WHERE ba.type = 'T' "
 						+ "AND ba.owner = m.region_name " + "AND m.user_id = u.id " + "AND u.name = ?) "
 						+ "UNION "
-						+ "(SELECT ba.id, ba.owner, ba.type "
+						+ "(SELECT ba.id, ba.owner, ba.type, ba.balance "
 						+ // Sélection des comptes d'entreprises
 						"FROM bank_account ba, enterprises e, enterprises_members em, users u "
 						+ "WHERE ba.type ='E' " + "AND ba.owner = e.name " + "AND e.id = em.enterprise_id "
