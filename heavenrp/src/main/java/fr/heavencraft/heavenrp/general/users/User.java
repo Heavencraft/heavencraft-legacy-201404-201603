@@ -8,7 +8,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 import fr.heavencraft.exceptions.HeavenException;
+import fr.heavencraft.exceptions.SQLErrorException;
 import fr.heavencraft.heavenrp.HeavenRP;
+import fr.heavencraft.heavenrp.database.users.UpdateUserBalanceQuery;
 import fr.heavencraft.heavenrp.provinces.ProvincesManager;
 import fr.heavencraft.heavenrp.provinces.ProvincesManager.Province;
 
@@ -151,5 +153,19 @@ public class User
 	public Date getLastLogin()
 	{
 		return _lastLogin;
+	}
+
+	// For vault :(
+	public void updateBalance(int delta) throws HeavenException
+	{
+		try
+		{
+			new UpdateUserBalanceQuery(this, delta).executeQuery();
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			throw new SQLErrorException();
+		}
 	}
 }
