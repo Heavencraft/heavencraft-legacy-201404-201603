@@ -108,8 +108,8 @@ public class LivretProSignListener extends SignListener implements Listener
 		ChatUtil.sendMessage(player, "{Trésorier} : Voici la liste de vos livrets :");
 
 		for (BankAccount account : accounts)
-			ChatUtil.sendMessage(player, "{%1$s} (%2$s) : %3$s pièces d'or", account.getId(), account.getName(),
-					account.getBalance());
+			ChatUtil.sendMessage(player, "{%1$s} (%2$s) : {%3$s} pièces d'or", account.getId(),
+					account.getName(), account.getBalance());
 	}
 
 	@EventHandler(ignoreCancelled = true)
