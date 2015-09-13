@@ -17,13 +17,13 @@ import fr.heavencraft.async.queries.Query;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.HeavenRP;
 import fr.heavencraft.heavenrp.database.bankaccounts.UpdateBankAccountBalanceQuery;
-import fr.heavencraft.heavenrp.database.users.UpdateLastLoginQuery;
+import fr.heavencraft.heavenrp.database.users.UpdateUserLastLoginQuery;
 import fr.heavencraft.heavenrp.database.users.UpdateUserBalanceQuery;
+import fr.heavencraft.heavenrp.database.users.User;
+import fr.heavencraft.heavenrp.database.users.UserProvider;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccount;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountType;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
-import fr.heavencraft.heavenrp.general.users.User;
-import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.heavencraft.utils.ChatUtil;
 
 public class EconomyListener implements Listener
@@ -54,7 +54,7 @@ public class EconomyListener implements Listener
 			List<Query> queries = new ArrayList<Query>();
 			queries.add(new UpdateUserBalanceQuery(user, 5));
 			queries.add(new UpdateBankAccountBalanceQuery(account, benefit));
-			queries.add(new UpdateLastLoginQuery(user));
+			queries.add(new UpdateUserLastLoginQuery(user));
 			QueriesHandler.addQuery(new BatchQuery(queries)
 			{
 				@Override
@@ -69,7 +69,7 @@ public class EconomyListener implements Listener
 		}
 		else
 		{
-			QueriesHandler.addQuery(new UpdateLastLoginQuery(user));
+			QueriesHandler.addQuery(new UpdateUserLastLoginQuery(user));
 		}
 	}
 

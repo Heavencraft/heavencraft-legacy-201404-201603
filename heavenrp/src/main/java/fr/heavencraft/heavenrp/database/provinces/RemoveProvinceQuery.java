@@ -1,4 +1,4 @@
-package fr.heavencraft.heavenrp.database.users;
+package fr.heavencraft.heavenrp.database.provinces;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -6,14 +6,15 @@ import java.sql.SQLException;
 import fr.heavencraft.async.queries.AbstractQuery;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.HeavenRP;
+import fr.heavencraft.heavenrp.database.users.User;
 
-public class IncrementHomeNumberQuery extends AbstractQuery
+public class RemoveProvinceQuery extends AbstractQuery
 {
-	private static final String QUERY = "UPDATE users SET homeNumber = homeNumber + 1 WHERE id = ? LIMIT 1";
+	private static final String QUERY = "DELETE FROM mayor_people WHERE user_id = ?";
 
 	private final User user;
 
-	public IncrementHomeNumberQuery(User user)
+	public RemoveProvinceQuery(User user)
 	{
 		this.user = user;
 	}
@@ -27,8 +28,6 @@ public class IncrementHomeNumberQuery extends AbstractQuery
 
 			System.out.println("Executing query " + ps);
 			ps.executeUpdate();
-
-			UsersCache.invalidateCache(user);
 		}
 	}
 }

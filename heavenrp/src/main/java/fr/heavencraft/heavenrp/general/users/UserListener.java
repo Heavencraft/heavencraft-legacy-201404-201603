@@ -8,6 +8,13 @@ import org.bukkit.event.player.PlayerLoginEvent;
 
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.exceptions.UserNotFoundException;
+import fr.heavencraft.heavenrp.database.bankaccounts.UpdateBankAccountNameQuery;
+import fr.heavencraft.heavenrp.database.users.UpdateUserNameQuery;
+import fr.heavencraft.heavenrp.database.users.User;
+import fr.heavencraft.heavenrp.database.users.UserProvider;
+import fr.heavencraft.heavenrp.economy.bankaccount.BankAccount;
+import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountType;
+import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
 import fr.heavencraft.utils.DevUtil;
 import fr.heavencraft.utils.PlayerUtil;
 
@@ -34,7 +41,11 @@ public class UserListener implements Listener
 
 			if (!name.equals(user.getName()))
 			{
-				UserProvider.updateName(uuid, name);
+				new UpdateUserNameQuery(user, name);
+
+				BankAccount bankAccount = BankAccountsManager
+						.getBankAccount(user.getName(), BankAccountType.USER);
+				new UpdateBankAccountNameQuery(bankAccount, name);
 			}
 		}
 		catch (UserNotFoundException ex)

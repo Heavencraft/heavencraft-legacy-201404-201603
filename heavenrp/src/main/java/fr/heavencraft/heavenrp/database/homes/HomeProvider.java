@@ -9,7 +9,7 @@ import org.bukkit.Location;
 
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.HeavenRP;
-import fr.heavencraft.heavenrp.general.users.User;
+import fr.heavencraft.heavenrp.database.users.User;
 
 public class HomeProvider
 {
@@ -17,6 +17,11 @@ public class HomeProvider
 	{
 		if (nb < 1 || nb > user.getHomeNumber())
 			throw new HeavenException("Vous n'avez pas acheté le {home %1$d}.", nb);
+
+		// Try to get it from cache
+		Location home = HomeCache.getHome(user, nb);
+		if (home != null)
+			return home;
 
 		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
 				"SELECT world, x, y, z, yaw, pitch FROM homes WHERE user_id = ? AND home_nb = ? LIMIT 1"))
@@ -29,8 +34,10 @@ public class HomeProvider
 			if (!rs.next())
 				throw new HeavenException("Vous n'avez pas configuré votre {home %1$d}.", nb);
 
-			return new Location(Bukkit.getWorld(rs.getString("world")), rs.getDouble("x"), rs.getDouble("y"),
+			home = new Location(Bukkit.getWorld(rs.getString("world")), rs.getDouble("x"), rs.getDouble("y"),
 					rs.getDouble("z"), rs.getFloat("yaw"), rs.getFloat("pitch"));
+			HomeCache.addToCache(user, nb, home);
+			return home;
 		}
 		catch (final SQLException ex)
 		{

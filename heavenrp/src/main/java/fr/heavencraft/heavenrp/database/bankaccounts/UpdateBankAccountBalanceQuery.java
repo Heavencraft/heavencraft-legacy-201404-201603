@@ -24,6 +24,9 @@ public class UpdateBankAccountBalanceQuery extends AbstractQuery
 	@Override
 	public void executeQuery() throws HeavenException, SQLException
 	{
+		if (delta == 0)
+			return; // Nothing to do
+
 		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(QUERY))
 		{
 			ps.setInt(1, delta);
