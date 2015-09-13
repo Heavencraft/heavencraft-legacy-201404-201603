@@ -6,10 +6,10 @@ import org.bukkit.entity.Player;
 import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.RPPermissions;
+import fr.heavencraft.heavenrp.database.users.UserProvider;
 import fr.heavencraft.heavenrp.economy.enterprise.EnterprisesManager;
 import fr.heavencraft.heavenrp.economy.enterprise.EnterprisesManager.Enterprise;
 import fr.heavencraft.heavenrp.exceptions.NotEnterpriseOwnerException;
-import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.heavencraft.utils.ChatUtil;
 import fr.heavencraft.utils.PlayerUtil;
 

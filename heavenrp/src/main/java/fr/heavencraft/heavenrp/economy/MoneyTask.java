@@ -12,8 +12,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import fr.heavencraft.async.queries.QueriesHandler;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.database.users.UpdateUserBalanceQuery;
-import fr.heavencraft.heavenrp.general.users.User;
-import fr.heavencraft.heavenrp.general.users.UserProvider;
+import fr.heavencraft.heavenrp.database.users.User;
+import fr.heavencraft.heavenrp.database.users.UserProvider;
 import fr.heavencraft.utils.DevUtil;
 
 public class MoneyTask extends BukkitRunnable

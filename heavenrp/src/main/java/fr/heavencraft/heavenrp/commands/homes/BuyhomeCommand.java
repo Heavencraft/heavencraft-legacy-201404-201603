@@ -13,8 +13,8 @@ import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.database.users.IncrementHomeNumberQuery;
 import fr.heavencraft.heavenrp.database.users.UpdateUserBalanceQuery;
-import fr.heavencraft.heavenrp.general.users.User;
-import fr.heavencraft.heavenrp.general.users.UserProvider;
+import fr.heavencraft.heavenrp.database.users.User;
+import fr.heavencraft.heavenrp.database.users.UserProvider;
 import fr.heavencraft.utils.ChatUtil;
 
 public class BuyhomeCommand extends HeavenCommand

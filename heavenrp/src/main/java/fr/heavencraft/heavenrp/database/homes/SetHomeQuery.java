@@ -8,7 +8,7 @@ import org.bukkit.Location;
 import fr.heavencraft.async.queries.AbstractQuery;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.HeavenRP;
-import fr.heavencraft.heavenrp.general.users.User;
+import fr.heavencraft.heavenrp.database.users.User;
 
 public class SetHomeQuery extends AbstractQuery
 {
@@ -52,6 +52,9 @@ public class SetHomeQuery extends AbstractQuery
 			System.out.println("Executing query " + ps);
 
 			ps.executeUpdate();
+
+			// Clear the cache
+			HomeCache.invalidateCache(user, homeNumber);
 		}
 	}
 }

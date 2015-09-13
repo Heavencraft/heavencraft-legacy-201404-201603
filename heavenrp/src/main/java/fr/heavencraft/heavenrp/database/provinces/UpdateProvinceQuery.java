@@ -1,4 +1,4 @@
-package fr.heavencraft.heavenrp.database.users;
+package fr.heavencraft.heavenrp.database.provinces;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -6,17 +6,20 @@ import java.sql.SQLException;
 import fr.heavencraft.async.queries.AbstractQuery;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.HeavenRP;
-import fr.heavencraft.heavenrp.general.users.User;
+import fr.heavencraft.heavenrp.database.users.User;
+import fr.heavencraft.heavenrp.provinces.ProvincesManager.Province;
 
-public class RemoveProvinceQuery extends AbstractQuery
+public class UpdateProvinceQuery extends AbstractQuery
 {
-	private static final String QUERY = "DELETE FROM mayor_people WHERE user_id = ?";
+	private static final String QUERY = "INSERT INTO mayor_people (user_id, city_id) VALUES (?, ?)";
 
 	private final User user;
+	private final Province province;
 
-	public RemoveProvinceQuery(User user)
+	public UpdateProvinceQuery(User user, Province province)
 	{
 		this.user = user;
+		this.province = province;
 	}
 
 	@Override
@@ -25,6 +28,8 @@ public class RemoveProvinceQuery extends AbstractQuery
 		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(QUERY))
 		{
 			ps.setInt(1, user.getId());
+			ps.setInt(2, province.getId());
+
 			System.out.println("Executing query " + ps);
 			ps.executeUpdate();
 		}

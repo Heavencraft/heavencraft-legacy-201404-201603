@@ -3,38 +3,41 @@ package fr.heavencraft.heavenrp.database.users;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import org.bukkit.Bukkit;
+
 import fr.heavencraft.async.queries.AbstractQuery;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.HeavenRP;
 
-public class UpdateUserBalanceQuery extends AbstractQuery
+public class UpdateUserNameQuery extends AbstractQuery
 {
-	private static final String QUERY = "UPDATE users SET balance = balance + ? WHERE id = ? AND balance + ? >= 0 LIMIT 1;";
+	private static final String QUERY = "UPDATE users SET name = ? WHERE id = ? LIMIT 1;";
 
 	private final User user;
-	private final int delta;
+	private final String name;
 
-	public UpdateUserBalanceQuery(User user, int delta)
+	public UpdateUserNameQuery(User user, String name)
 	{
 		this.user = user;
-		this.delta = delta;
+		this.name = name;
 	}
 
 	@Override
 	public void executeQuery() throws HeavenException, SQLException
 	{
-		if (delta == 0)
+		if (!Bukkit.isPrimaryThread())
+			throw new HeavenException("UpdateUserNameQuery should not be executed asynchronously.");
+
+		if (name.equals(user.getName()))
 			return; // Nothing to do
 
 		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(QUERY))
 		{
-			ps.setInt(1, delta);
+			ps.setString(1, name);
 			ps.setInt(2, user.getId());
-			ps.setInt(3, delta);
 
 			System.out.println("Executing query " + ps);
-			if (ps.executeUpdate() == 0)
-				throw new HeavenException("Vous fouillez dans votre bourse... Vous n'avez pas assez.");
+			ps.executeUpdate();
 
 			UsersCache.invalidateCache(user);
 		}

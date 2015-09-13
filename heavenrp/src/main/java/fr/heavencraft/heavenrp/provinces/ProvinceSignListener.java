@@ -13,10 +13,11 @@ import fr.heavencraft.async.queries.QueriesHandler;
 import fr.heavencraft.async.queries.Query;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.RPPermissions;
-import fr.heavencraft.heavenrp.database.users.RemoveProvinceQuery;
+import fr.heavencraft.heavenrp.database.provinces.RemoveProvinceQuery;
+import fr.heavencraft.heavenrp.database.provinces.UpdateProvinceQuery;
 import fr.heavencraft.heavenrp.database.users.UpdateUserBalanceQuery;
-import fr.heavencraft.heavenrp.general.users.User;
-import fr.heavencraft.heavenrp.general.users.UserProvider;
+import fr.heavencraft.heavenrp.database.users.User;
+import fr.heavencraft.heavenrp.database.users.UserProvider;
 import fr.heavencraft.heavenrp.provinces.ProvincesManager.Province;
 import fr.heavencraft.heavenrp.scoreboards.ProvinceScoreboard;
 import fr.heavencraft.listeners.sign.SignListener;
@@ -64,27 +65,39 @@ public class ProvinceSignListener extends SignListener
 			onLeaveSignClick(player);
 	}
 
-	private void onJoinSignClick(Player player, String provinceName) throws HeavenException
+	private void onJoinSignClick(final Player player, String provinceName) throws HeavenException
 	{
 		User user = UserProvider.getUserByName(player.getName());
 
-		if (user.getProvince() != null)
+		if (ProvincesManager.getProvinceByUser(user) != null)
 			throw new HeavenException("Vous êtes déjà habitant d'une province");
 
-		Province province = ProvincesManager.getProvinceByName(provinceName);
-		user.setProvince(province.getId());
+		final Province province = ProvincesManager.getProvinceByName(provinceName);
 
-		// Apply province colors
-		ProvinceScoreboard.applyTeamColor(player, province);
+		QueriesHandler.addQuery(new UpdateProvinceQuery(user, province)
+		{
+			@Override
+			public void onSuccess()
+			{
+				// Apply province colors
+				ProvinceScoreboard.applyTeamColor(player, province);
 
-		ChatUtil.sendMessage(player, "Vous venez de rejoindre la province de {%1$s}.", province.getName());
+				ChatUtil.sendMessage(player, "Vous venez de rejoindre la province de {%1$s}.", province.getName());
+			}
+
+			@Override
+			public void onHeavenException(HeavenException ex)
+			{
+				ChatUtil.sendMessage(player, ex.getMessage());
+			}
+		});
 	}
 
 	private void onLeaveSignClick(final Player player) throws HeavenException
 	{
 		User user = UserProvider.getUserByName(player.getName());
 
-		if (user.getProvince() == null)
+		if (ProvincesManager.getProvinceByUser(user) == null)
 			throw new HeavenException("Vous n'êtes habitant d'aucune province.");
 
 		List<Query> queries = new ArrayList<Query>();
@@ -100,6 +113,12 @@ public class ProvinceSignListener extends SignListener
 
 				ChatUtil.sendMessage(player, "Vous ne faîtes plus partie d'aucune province.");
 				ChatUtil.sendMessage(player, "Les frais de dossier vous ont coûté {50} pièces d'or.");
+			}
+
+			@Override
+			public void onHeavenException(HeavenException ex)
+			{
+				ChatUtil.sendMessage(player, ex.getMessage());
 			}
 		});
 	}

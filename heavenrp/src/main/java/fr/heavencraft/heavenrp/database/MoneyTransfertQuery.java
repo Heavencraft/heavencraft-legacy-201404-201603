@@ -7,8 +7,8 @@ import fr.heavencraft.async.queries.BatchQuery;
 import fr.heavencraft.async.queries.Query;
 import fr.heavencraft.heavenrp.database.bankaccounts.UpdateBankAccountBalanceQuery;
 import fr.heavencraft.heavenrp.database.users.UpdateUserBalanceQuery;
+import fr.heavencraft.heavenrp.database.users.User;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccount;
-import fr.heavencraft.heavenrp.general.users.User;
 
 public class MoneyTransfertQuery extends BatchQuery
 {

@@ -26,11 +26,11 @@ import fr.heavencraft.async.queries.QueriesHandler;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.HeavenRP;
 import fr.heavencraft.heavenrp.database.MoneyTransfertQuery;
+import fr.heavencraft.heavenrp.database.users.User;
+import fr.heavencraft.heavenrp.database.users.UserProvider;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccount;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountType;
 import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
-import fr.heavencraft.heavenrp.general.users.User;
-import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.heavencraft.utils.ChatUtil;
 
 public class StoresManager
