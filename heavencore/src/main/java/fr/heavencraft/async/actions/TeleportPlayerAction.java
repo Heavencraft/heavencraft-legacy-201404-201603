@@ -18,6 +18,9 @@ public class TeleportPlayerAction extends AbstractAction
 	{
 		this.player = player;
 		this.location = location;
+
+		if (!location.getChunk().isLoaded())
+			location.getChunk().load();
 	}
 
 	public TeleportPlayerAction(Player player, Entity destination)
