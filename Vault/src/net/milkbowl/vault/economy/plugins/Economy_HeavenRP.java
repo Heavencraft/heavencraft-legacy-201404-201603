@@ -17,7 +17,7 @@ import org.bukkit.plugin.Plugin;
 
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.HeavenRP;
-import fr.heavencraft.heavenrp.general.users.UserProvider;
+import fr.heavencraft.heavenrp.database.users.UserProvider;
 
 public class Economy_HeavenRP extends AbstractEconomy
 {
