@@ -16,14 +16,14 @@ import fr.heavencraft.async.queries.QueriesHandler;
 import fr.heavencraft.async.queries.Query;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.HeavenRP;
+import fr.heavencraft.heavenrp.database.bankaccounts.BankAccount;
+import fr.heavencraft.heavenrp.database.bankaccounts.BankAccountType;
+import fr.heavencraft.heavenrp.database.bankaccounts.BankAccountsManager;
 import fr.heavencraft.heavenrp.database.bankaccounts.UpdateBankAccountBalanceQuery;
 import fr.heavencraft.heavenrp.database.users.UpdateUserLastLoginQuery;
 import fr.heavencraft.heavenrp.database.users.UpdateUserBalanceQuery;
 import fr.heavencraft.heavenrp.database.users.User;
 import fr.heavencraft.heavenrp.database.users.UserProvider;
-import fr.heavencraft.heavenrp.economy.bankaccount.BankAccount;
-import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountType;
-import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
 import fr.heavencraft.utils.ChatUtil;
 
 public class EconomyListener implements Listener

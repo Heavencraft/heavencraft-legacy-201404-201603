@@ -5,10 +5,10 @@ import java.util.List;
 
 import fr.heavencraft.async.queries.BatchQuery;
 import fr.heavencraft.async.queries.Query;
+import fr.heavencraft.heavenrp.database.bankaccounts.BankAccount;
 import fr.heavencraft.heavenrp.database.bankaccounts.UpdateBankAccountBalanceQuery;
 import fr.heavencraft.heavenrp.database.users.UpdateUserBalanceQuery;
 import fr.heavencraft.heavenrp.database.users.User;
-import fr.heavencraft.heavenrp.economy.bankaccount.BankAccount;
 
 public class MoneyTransfertQuery extends BatchQuery
 {

@@ -1,4 +1,4 @@
-package fr.heavencraft.heavenrp.economy.bankaccount;
+package fr.heavencraft.heavenrp.database.bankaccounts;
 
 import fr.heavencraft.exceptions.HeavenException;
 

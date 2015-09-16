@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import fr.heavencraft.async.queries.AbstractQuery;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.HeavenRP;
-import fr.heavencraft.heavenrp.economy.bankaccount.BankAccount;
 
 public class UpdateBankAccountBalanceQuery extends AbstractQuery
 {

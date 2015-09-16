@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.exceptions.SQLErrorException;
 import fr.heavencraft.heavenrp.HeavenRP;
-import fr.heavencraft.heavenrp.economy.bankaccount.BankAccount;
-import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
+import fr.heavencraft.heavenrp.database.bankaccounts.BankAccount;
+import fr.heavencraft.heavenrp.database.bankaccounts.BankAccountsManager;
 
 public class Stock2
 {
