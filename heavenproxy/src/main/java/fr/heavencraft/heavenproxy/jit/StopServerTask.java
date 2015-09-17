@@ -25,7 +25,10 @@ public class StopServerTask implements Runnable
 		{
 			// This server is not empty
 			if (!server.getPlayers().isEmpty())
+			{
+				serversToStop.remove(server.getName());
 				continue;
+			}
 
 			final ServerProcess serverProcess = ServerProcess.getUniqueInstanceByName(server.getName());
 
