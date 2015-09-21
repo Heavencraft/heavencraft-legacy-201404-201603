@@ -24,6 +24,7 @@ import fr.heavencraft.heavenproxy.chat.FloodListener;
 import fr.heavencraft.heavenproxy.chat.ModoListener;
 import fr.heavencraft.heavenproxy.chat.TabCompleteListener;
 import fr.heavencraft.heavenproxy.commands.ActifCommand;
+import fr.heavencraft.heavenproxy.commands.DonCommand;
 import fr.heavencraft.heavenproxy.commands.ListCommand;
 import fr.heavencraft.heavenproxy.commands.MeCommand;
 import fr.heavencraft.heavenproxy.commands.ModoCommand;
@@ -36,6 +37,7 @@ import fr.heavencraft.heavenproxy.commands.SpyCommand;
 import fr.heavencraft.heavenproxy.commands.TellCommand;
 import fr.heavencraft.heavenproxy.commands.TextCommand;
 import fr.heavencraft.heavenproxy.commands.VoterCommand;
+import fr.heavencraft.heavenproxy.commands.WikiCommand;
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
 import fr.heavencraft.heavenproxy.exceptions.UUIDNotFoundException;
 import fr.heavencraft.heavenproxy.jit.ServerProcessManager;
@@ -87,6 +89,7 @@ public class HeavenProxy extends Plugin
 			new SpyListener();
 
 			new ActifCommand();
+			new DonCommand();
 			new ListCommand();
 			new MeCommand();
 			new ModoCommand();
@@ -99,6 +102,7 @@ public class HeavenProxy extends Plugin
 			new TellCommand();
 			new TextCommand();
 			new VoterCommand();
+			new WikiCommand();
 
 			// Ban
 			new BanCommand();
