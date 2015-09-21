@@ -80,3 +80,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 NavalConflicts/.gitignore
+*.MF
+*/target/classes/*
+
