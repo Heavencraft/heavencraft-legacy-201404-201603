@@ -16,11 +16,13 @@ import net.md_5.bungee.protocol.ProtocolConstants;
 import fr.heavencraft.heavenproxy.Utils;
 import fr.heavencraft.heavenproxy.chat.ChatManager;
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
+import fr.heavencraft.heavenproxy.kick.KickCommand;
 
 public class UsersListener implements Listener
 {
 	private static final String TAG = "[UsersListener] ";
 	private static final Logger log = Utils.getLogger();
+	private static final String MOD_ADDRESS = "licorne.heavencraft.fr";
 
 	public UsersListener()
 	{
@@ -48,9 +50,11 @@ public class UsersListener implements Listener
 	public void onPostLogin(PostLoginEvent event)
 	{
 		final ProxiedPlayer player = event.getPlayer();
-		
-		Utils.sendMessage(player, "§0§2§0§0§e§f"); // Disable schematica printer functionality.
-		Utils.sendMessage(player, "§0§2§1§0§e§f"); // Disable schematica save schematic functionality.
+
+		Utils.sendMessage(player, "§0§2§0§0§e§f"); // Disable schematica printer
+													// functionality.
+		Utils.sendMessage(player, "§0§2§1§0§e§f"); // Disable schematica save
+													// schematic functionality.
 
 		final String uuid = Utils.getUUID(player);
 		final String name = player.getName();
@@ -65,6 +69,14 @@ public class UsersListener implements Listener
 
 			if (player.hasPermission("heavencraft.commands.modo"))
 			{
+				String hostName = event.getPlayer().getPendingConnection().getVirtualHost().getHostName();
+
+				if (!MOD_ADDRESS.equals(hostName))
+				{
+					KickCommand.kickPlayer(player, "Heavencraft", "Authentification invalide");
+					return;
+				}
+
 				Utils.sendMessage(player, ChatColor.GREEN + "Vous êtes membre du staff, VOTEZ !");
 				Utils.sendMessage(player, ChatColor.GREEN + "http://www.mcserv.org/Heavencraftfr_3002.html");
 				Utils.sendMessage(player, ChatColor.GREEN + "http://mc-topserv.net/top/serveur.php?serv=46");
