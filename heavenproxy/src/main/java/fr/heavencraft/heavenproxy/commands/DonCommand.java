@@ -16,6 +16,7 @@ public class DonCommand extends HeavenCommand
 	protected void onCommand(CommandSender sender, String[] args) throws HeavenException
 	{
 		Utils.sendMessage(sender, ChatColor.GREEN + "Vous pouvez nous faire un don sur notre site, en bas de la page.");
+		Utils.sendMessage(sender, ChatColor.GOLD + "http://heavencraft.fr/");
 		Utils.sendMessage(sender, ChatColor.GREEN + "Nous supportons les moyens suivants:");
 		Utils.sendMessage(sender, ChatColor.RED + "Carte Bancaire " + ChatColor.GREEN + "Utilisez le boutton: " + ChatColor.GOLD + "Faire un don");
 		Utils.sendMessage(sender, ChatColor.RED + "Paypal " + ChatColor.GREEN + "Utilisez le boutton: " + ChatColor.GOLD + "Faire un don");
