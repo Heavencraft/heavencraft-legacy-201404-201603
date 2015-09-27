@@ -3,13 +3,15 @@ package fr.heavencraft.heavenrp.commands.economy;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import fr.heavencraft.async.queries.QueriesHandler;
 import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
-import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
-import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccount;
-import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccountType;
-import fr.heavencraft.heavenrp.general.users.User;
-import fr.heavencraft.heavenrp.general.users.UserProvider;
+import fr.heavencraft.heavenrp.database.MoneyTransfertQuery;
+import fr.heavencraft.heavenrp.database.bankaccounts.BankAccount;
+import fr.heavencraft.heavenrp.database.bankaccounts.BankAccountType;
+import fr.heavencraft.heavenrp.database.bankaccounts.BankAccountsManager;
+import fr.heavencraft.heavenrp.database.users.User;
+import fr.heavencraft.heavenrp.database.users.UserProvider;
 import fr.heavencraft.utils.ChatUtil;
 import fr.heavencraft.utils.DevUtil;
 import fr.heavencraft.utils.PlayerUtil;
@@ -27,7 +29,7 @@ public class PayerCommand extends HeavenCommand
 	}
 
 	@Override
-	protected void onPlayerCommand(Player player, String[] args) throws HeavenException
+	protected void onPlayerCommand(final Player player, String[] args) throws HeavenException
 	{
 		if (args.length != 3)
 		{
@@ -35,17 +37,14 @@ public class PayerCommand extends HeavenCommand
 			return;
 		}
 
-		BankAccount dest;
+		final BankAccount dest;
 
 		if (args[0].equalsIgnoreCase("joueur"))
 			dest = BankAccountsManager.getBankAccount(PlayerUtil.getExactName(args[1]), BankAccountType.USER);
-
 		else if (args[0].equalsIgnoreCase("ville"))
 			dest = BankAccountsManager.getBankAccount(args[1], BankAccountType.TOWN);
-
 		else if (args[0].equalsIgnoreCase("entreprise"))
 			dest = BankAccountsManager.getBankAccount(args[1], BankAccountType.ENTERPRISE);
-
 		else
 		{
 			sendUsage(player);
@@ -58,18 +57,32 @@ public class PayerCommand extends HeavenCommand
 
 		final int delta = DevUtil.toUint(args[2]);
 
+		if (delta <= 0)
+			throw new HeavenException("Le nombre {%1$s} est incorrect.", delta);
+
 		final User sender = UserProvider.getUserByName(player.getName());
 
-		sender.updateBalance(-delta);
-		dest.updateBalance(delta);
+		QueriesHandler.addQuery(new MoneyTransfertQuery(sender, dest, delta)
+		{
+			@Override
+			public void onSuccess()
+			{
+				ChatUtil.sendMessage(player, MONEY_GIVE, delta, dest.getName());
+				ChatUtil.sendMessage(player, MONEY_NOW, sender.getBalance() - delta);
 
-		ChatUtil.sendMessage(player, MONEY_GIVE, delta, dest.getName());
-		ChatUtil.sendMessage(player, MONEY_NOW, sender.getBalance());
+				ChatUtil.sendMessage(dest.getOwners(), MONEY_RECEIVE, delta, sender.getName());
+				ChatUtil.sendMessage(dest.getOwners(), MONEY_BANK_NOW, dest.getBalance() + delta, dest.getName());
 
-		ChatUtil.sendMessage(dest.getOwners(), MONEY_RECEIVE, delta, sender.getName());
-		ChatUtil.sendMessage(dest.getOwners(), MONEY_BANK_NOW, dest.getBalance(), dest.getName());
+				DevUtil.logInfo("%1$s sent %2$s po to bank account %3$s.", player.getName(), delta,
+						dest.getName());
+			}
 
-		DevUtil.logInfo("%1$s sent %2$s po to bank account %3$s.", player.getName(), delta, dest.getName());
+			@Override
+			public void onHeavenException(HeavenException ex)
+			{
+				ChatUtil.sendMessage(player, ex.getMessage());
+			}
+		});
 	}
 
 	@Override

@@ -4,6 +4,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.heavencraft.Permissions;
+import fr.heavencraft.async.actions.ActionsHandler;
+import fr.heavencraft.async.actions.TeleportPlayerAction;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.utils.ChatUtil;
 import fr.heavencraft.utils.PlayerUtil;
@@ -16,7 +18,7 @@ public class TphereCommand extends HeavenCommand
 	}
 
 	@Override
-	protected void onPlayerCommand(Player player, String[] args) throws HeavenException
+	protected void onPlayerCommand(final Player player, String[] args) throws HeavenException
 	{
 		if (args.length != 1)
 		{
@@ -24,11 +26,17 @@ public class TphereCommand extends HeavenCommand
 			return;
 		}
 
-		Player toTeleport = PlayerUtil.getPlayer(args[0]);
+		final Player toTeleport = PlayerUtil.getPlayer(args[0]);
 
-		PlayerUtil.teleportPlayer(toTeleport, player);
-		ChatUtil.sendMessage(toTeleport, "Vous avez été téléporté par {%1$s}.", player.getName());
-		ChatUtil.sendMessage(player, "Téléportation de {%1$s}.", toTeleport.getName());
+		ActionsHandler.addAction(new TeleportPlayerAction(toTeleport, player)
+		{
+			@Override
+			public void onSuccess()
+			{
+				ChatUtil.sendMessage(toTeleport, "Vous avez été téléporté par {%1$s}.", player.getName());
+				ChatUtil.sendMessage(player, "Téléportation de {%1$s}.", toTeleport.getName());
+			}
+		});
 	}
 
 	@Override

@@ -6,10 +6,10 @@ import org.bukkit.entity.Player;
 import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.RPPermissions;
+import fr.heavencraft.heavenrp.database.users.UserProvider;
 import fr.heavencraft.heavenrp.economy.enterprise.EnterprisesManager;
 import fr.heavencraft.heavenrp.economy.enterprise.EnterprisesManager.Enterprise;
 import fr.heavencraft.heavenrp.exceptions.NotEnterpriseOwnerException;
-import fr.heavencraft.heavenrp.general.users.UserProvider;
 import fr.heavencraft.utils.ChatUtil;
 import fr.heavencraft.utils.PlayerUtil;
 
@@ -29,12 +29,6 @@ public class EntrepriseCommand extends HeavenCommand
 	@Override
 	protected void onConsoleCommand(CommandSender sender, String[] args) throws HeavenException
 	{
-		if (args.length == 0)
-		{
-			sendUsage(sender);
-			return;
-		}
-
 		switch (args.length)
 		{
 			case 2:
@@ -45,18 +39,23 @@ public class EntrepriseCommand extends HeavenCommand
 				// /entreprise <nom de l'entreprise> supprimer
 				else if (args[1].equalsIgnoreCase("supprimer") && sender.hasPermission(RPPermissions.ENTREPRISE))
 					delete(sender, args[0]);
+
+				else
+					sendUsage(sender);
 				break;
 			case 3:
 				// /entreprise <nom de l'entreprise> créer <nom du joueur>
-				if (args[1].equalsIgnoreCase("créer") && sender.hasPermission(RPPermissions.ENTREPRISE))
+				if (args[1].equalsIgnoreCase("creer") && sender.hasPermission(RPPermissions.ENTREPRISE))
 					create(sender, args[0], PlayerUtil.getExactName(args[2]));
 
-				// /entreprise <nom de l'entreprise> +propriétaire <nom du joueur>
-				else if (args[1].equalsIgnoreCase("+propriétaire"))
+				// /entreprise <nom de l'entreprise> +propriétaire <nom du
+				// joueur>
+				else if (args[1].equalsIgnoreCase("+proprietaire"))
 					addOwner(sender, args[0], PlayerUtil.getExactName(args[2]));
 
-				// /entreprise <nom de l'entreprise> -propriétaire <nom du joueur>
-				else if (args[1].equalsIgnoreCase("-propriétaire"))
+				// /entreprise <nom de l'entreprise> -propriétaire <nom du
+				// joueur>
+				else if (args[1].equalsIgnoreCase("-proprietaire"))
 					removeOwner(sender, args[0], PlayerUtil.getExactName(args[2]));
 
 				// /entreprise <nom de l'entreprise> +membre <nom du joueur>
@@ -66,7 +65,14 @@ public class EntrepriseCommand extends HeavenCommand
 				// /entreprise <nom de l'entreprise> -membre <nom du joueur>
 				else if (args[1].equalsIgnoreCase("-membre"))
 					removeMember(sender, args[0], PlayerUtil.getExactName(args[2]));
+				else
+					sendUsage(sender);
 				break;
+
+			default:
+				sendUsage(sender);
+				break;
+
 		}
 	}
 
@@ -75,13 +81,13 @@ public class EntrepriseCommand extends HeavenCommand
 	{
 		if (sender.hasPermission(RPPermissions.ENTREPRISE))
 		{
-			ChatUtil.sendMessage(sender, "/{entreprise} <nom de l'entreprise> créer <nom du propriétaire>");
+			ChatUtil.sendMessage(sender, "/{entreprise} <nom de l'entreprise> creer <nom du propriétaire>");
 			ChatUtil.sendMessage(sender, "/{entreprise} <nom de l'entreprise> supprimer");
 		}
 
 		ChatUtil.sendMessage(sender, "/{entreprise} <nom de l'entreprise> info");
-		ChatUtil.sendMessage(sender, "/{entreprise} <nom de l'entreprise> +propriétaire <nom du membre>");
-		ChatUtil.sendMessage(sender, "/{entreprise} <nom de l'entreprise> -propriétaire <nom du membre>");
+		ChatUtil.sendMessage(sender, "/{entreprise} <nom de l'entreprise> +proprietaire <nom du membre>");
+		ChatUtil.sendMessage(sender, "/{entreprise} <nom de l'entreprise> -proprietaire <nom du membre>");
 		ChatUtil.sendMessage(sender, "/{entreprise} <nom de l'entreprise> +membre <nom du membre>");
 		ChatUtil.sendMessage(sender, "/{entreprise} <nom de l'entreprise> -membre <nom du membre>");
 	}
@@ -143,7 +149,8 @@ public class EntrepriseCommand extends HeavenCommand
 			throw new NotEnterpriseOwnerException(name);
 
 		enterprise.removeMember(UserProvider.getUserByName(owner));
-		ChatUtil.sendMessage(sender, "{%1$s} n'est désormais plus propriétaire de l'entreprise {%2$s}.", owner, name);
+		ChatUtil.sendMessage(sender, "{%1$s} n'est désormais plus propriétaire de l'entreprise {%2$s}.", owner,
+				name);
 	}
 
 	private static void addMember(CommandSender sender, String name, String member) throws HeavenException

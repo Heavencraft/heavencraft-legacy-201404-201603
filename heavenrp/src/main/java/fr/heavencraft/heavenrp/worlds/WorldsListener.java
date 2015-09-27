@@ -12,9 +12,10 @@ import org.bukkit.event.entity.EntityPortalEnterEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import fr.heavencraft.Permissions;
+import fr.heavencraft.async.actions.ActionsHandler;
+import fr.heavencraft.async.actions.TeleportPlayerAction;
 import fr.heavencraft.utils.ChatUtil;
 import fr.heavencraft.utils.DevUtil;
-import fr.heavencraft.utils.PlayerUtil;
 
 public class WorldsListener implements Listener
 {
@@ -77,23 +78,23 @@ public class WorldsListener implements Listener
 			return;
 
 		final Player player = (Player) event.getEntity();
+		Location destination;
 
 		switch (block.getRelative(BlockFace.DOWN).getType())
 		{
 			case NETHERRACK:
-				PlayerUtil.teleportPlayer(player, WorldsManager.getSpawnNether());
+				destination = WorldsManager.getSpawnNether();
 				break;
-
 			case ENDER_STONE:
-				PlayerUtil.teleportPlayer(player, WorldsManager.getSpawnTheEnd());
+				destination = WorldsManager.getSpawnTheEnd();
 				break;
-
 			case SAND:
-				PlayerUtil.teleportPlayer(player, WorldsManager.getResourcesSpawn());
+				destination = WorldsManager.getResourcesSpawn();
 				break;
-
 			default:
-				break;
+				return;
 		}
+
+		ActionsHandler.addAction(new TeleportPlayerAction(player, destination));
 	}
 }

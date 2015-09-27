@@ -3,16 +3,17 @@ package fr.heavencraft.heavenrp.economy.enterprise;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.exceptions.SQLErrorException;
 import fr.heavencraft.heavenrp.HeavenRP;
-import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
-import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccountType;
+import fr.heavencraft.heavenrp.database.bankaccounts.BankAccountType;
+import fr.heavencraft.heavenrp.database.bankaccounts.BankAccountsManager;
+import fr.heavencraft.heavenrp.database.users.User;
 import fr.heavencraft.heavenrp.exceptions.EnterpriseNotFoundException;
-import fr.heavencraft.heavenrp.general.users.User;
 
 public class EnterprisesManager
 {
@@ -124,7 +125,8 @@ public class EnterprisesManager
 
 	public static Enterprise getEnterpriseByName(String name) throws HeavenException
 	{
-		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement("SELECT * FROM enterprises WHERE name = ? LIMIT 1"))
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"SELECT * FROM enterprises WHERE name = ? LIMIT 1"))
 		{
 			ps.setString(1, name);
 			final ResultSet rs = ps.executeQuery();
@@ -143,7 +145,8 @@ public class EnterprisesManager
 
 	public static void createEnterprise(String name) throws HeavenException
 	{
-		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement("INSERT INTO enterprises (name) VALUES (?);"))
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"INSERT INTO enterprises (name) VALUES (?);"))
 		{
 			ps.setString(1, name);
 
@@ -151,6 +154,10 @@ public class EnterprisesManager
 				throw new HeavenException("Une entreprise existe déjà avec le nom {%1$s}.", name);
 
 			BankAccountsManager.createBankAccount(name, BankAccountType.ENTERPRISE);
+		}
+		catch (SQLIntegrityConstraintViolationException ex)
+		{
+			throw new HeavenException("Une entreprise existe déjà avec le nom {%1$s}.", name);
 		}
 		catch (final SQLException ex)
 		{
@@ -161,7 +168,8 @@ public class EnterprisesManager
 
 	public static void deleteEnterprise(String name) throws HeavenException
 	{
-		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement("DELETE FROM enterprises WHERE name = ? LIMIT 1;"))
+		try (PreparedStatement ps = HeavenRP.getConnection().prepareStatement(
+				"DELETE FROM enterprises WHERE name = ? LIMIT 1;"))
 		{
 			ps.setString(1, name);
 

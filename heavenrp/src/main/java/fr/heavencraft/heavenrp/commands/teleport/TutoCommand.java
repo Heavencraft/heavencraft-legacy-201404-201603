@@ -3,11 +3,12 @@ package fr.heavencraft.heavenrp.commands.teleport;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import fr.heavencraft.async.actions.ActionsHandler;
+import fr.heavencraft.async.actions.TeleportPlayerAction;
 import fr.heavencraft.commands.HeavenCommand;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.worlds.WorldsManager;
 import fr.heavencraft.utils.ChatUtil;
-import fr.heavencraft.utils.PlayerUtil;
 
 public class TutoCommand extends HeavenCommand
 {
@@ -18,11 +19,16 @@ public class TutoCommand extends HeavenCommand
 	}
 
 	@Override
-	protected void onPlayerCommand(Player player, String[] args) throws HeavenException
+	protected void onPlayerCommand(final Player player, String[] args) throws HeavenException
 	{
-		// player.teleport(WorldsManager.getTutoLocation());
-		PlayerUtil.teleportPlayer(player, WorldsManager.getTutoLocation());
-		ChatUtil.sendMessage(player, "Vous avez été téléporté au tutoriel.");
+		ActionsHandler.addAction(new TeleportPlayerAction(player, WorldsManager.getTutoLocation())
+		{
+			@Override
+			public void onSuccess()
+			{
+				ChatUtil.sendMessage(player, "Vous avez été téléporté au tutoriel.");
+			}
+		});
 	}
 
 	@Override
