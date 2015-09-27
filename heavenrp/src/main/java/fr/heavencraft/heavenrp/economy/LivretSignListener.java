@@ -11,13 +11,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import fr.heavencraft.async.queries.QueriesHandler;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.RPPermissions;
-import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager;
-import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccount;
-import fr.heavencraft.heavenrp.economy.bankaccount.BankAccountsManager.BankAccountType;
-import fr.heavencraft.heavenrp.general.users.User;
-import fr.heavencraft.heavenrp.general.users.UserProvider;
+import fr.heavencraft.heavenrp.database.MoneyTransfertQuery;
+import fr.heavencraft.heavenrp.database.bankaccounts.BankAccount;
+import fr.heavencraft.heavenrp.database.bankaccounts.BankAccountType;
+import fr.heavencraft.heavenrp.database.bankaccounts.BankAccountsManager;
+import fr.heavencraft.heavenrp.database.users.User;
+import fr.heavencraft.heavenrp.database.users.UserProvider;
 import fr.heavencraft.listeners.sign.SignListener;
 import fr.heavencraft.utils.ChatUtil;
 import fr.heavencraft.utils.DevUtil;
@@ -94,7 +96,7 @@ public class LivretSignListener extends SignListener implements Listener
 	@EventHandler(ignoreCancelled = true)
 	public void onAsyncPlayerChat(AsyncPlayerChatEvent event)
 	{
-		Player player = event.getPlayer();
+		final Player player = event.getPlayer();
 		String playerName = player.getName();
 		boolean isDepot = false;
 
@@ -122,18 +124,20 @@ public class LivretSignListener extends SignListener implements Listener
 			User user = UserProvider.getUserByName(playerName);
 			BankAccount bank = BankAccountsManager.getBankAccount(playerName, BankAccountType.USER);
 
-			if (isDepot)
+			QueriesHandler.addQuery(new MoneyTransfertQuery(isDepot ? user : bank, isDepot ? bank : user, delta)
 			{
-				user.updateBalance(-delta);
-				bank.updateBalance(delta);
-			}
-			else
-			{
-				bank.updateBalance(-delta);
-				user.updateBalance(delta);
-			}
+				@Override
+				public void onSuccess()
+				{
+					ChatUtil.sendMessage(player, "{Trésorier} : L'opération a bien été effectuée.");
+				}
 
-			ChatUtil.sendMessage(player, "{Trésorier} : L'opération a bien été effectuée.");
+				@Override
+				public void onHeavenException(HeavenException ex)
+				{
+					ChatUtil.sendMessage(player, ex.getMessage());
+				}
+			});
 		}
 		catch (HeavenException ex)
 		{

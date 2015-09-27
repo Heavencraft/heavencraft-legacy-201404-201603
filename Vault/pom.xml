@@ -53,33 +53,33 @@ Vault currently supports the following: Permissions 3, PEX, GroupManager, bPerms
 
 	<repositories>
 		<repository>
+			<id>pub-repo</id>
+			<name>Public Releases</name>
+			<url>http://nexus.theyeticave.net/content/repositories/pub_releases/</url>
+		</repository>
+		<repository>
+			<id>spigot-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
+		</repository>
+		<repository>
+			<id>greatman-repo</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+		</repository>
+		<repository>
 			<id>bukkit-repo</id>
 			<url>http://repo.bukkit.org/content/groups/public/</url>
 		</repository>
 		<repository>
-			<id>greatman-repo</id>
-			<url>http://repo.greatmancode.com/content/groups/public/</url>
-		</repository>
-		<repository>
 			<id>krinsoft</id>
-			<url>http://files.krinsoft.net:8085/nexus/content/groups/public</url>
+			<url>http://ci.krincraft.net/plugin/repository/everything/</url>
 		</repository>
 		<repository>
 			<id>escapecraft-repo</id>
 			<url>http://dev.escapecraft.com/maven</url>
 		</repository>
-		<repository>
-			<id>theyeticave-repo</id>
-			<url>http://nexus.theyeticave.net/content/repositories/pub_releases/</url>
-		</repository>
 	</repositories>
 
 	<dependencies>
-		<dependency>
-			<groupId>fr.heavencraft</groupId>
-			<artifactId>heavenrp</artifactId>
-			<version>1.0</version>
-		</dependency>
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
@@ -89,6 +89,18 @@ Vault currently supports the following: Permissions 3, PEX, GroupManager, bPerms
 			<groupId>net.milkbowl.vault</groupId>
 			<artifactId>VaultAPI</artifactId>
 			<version>${api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>de.hydrox.bukkit</groupId>
+			<artifactId>DroxPerms</artifactId>
+			<version>0.5.0</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>net.krinsoft</groupId>
+			<artifactId>Privileges</artifactId>
+			<version>1.8.1</version>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.platymuus.bukkit.permissions.PermissionsPlugin</groupId>
@@ -105,6 +117,17 @@ Vault currently supports the following: Permissions 3, PEX, GroupManager, bPerms
 			<optional>true</optional>
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/Register.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.greatmancode</groupId>
+			<artifactId>craftconomy3</artifactId>
+			<version>3.2.2-SNAPSHOT</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>fr.heavencraft</groupId>
+			<artifactId>heavenrp</artifactId>
+			<version>1.0</version>
 		</dependency>
 	</dependencies>
 

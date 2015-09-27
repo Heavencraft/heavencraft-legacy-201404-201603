@@ -1,5 +1,7 @@
 package fr.heavencraft.heavenrp;
 
+import fr.heavencraft.async.actions.ActionsHandler;
+import fr.heavencraft.async.queries.QueriesHandler;
 import fr.heavencraft.commands.AccepterCommand;
 import fr.heavencraft.commands.CreacheatCommand;
 import fr.heavencraft.commands.EndercheatCommand;
@@ -60,7 +62,6 @@ import fr.heavencraft.listeners.NoChatListener;
 import fr.heavencraft.listeners.RedstoneLampListener;
 import fr.heavencraft.listeners.sign.CookieSignListener;
 import fr.heavencraft.listeners.sign.LinkSignListener;
-import fr.heavencraft.tasks.SaveTask;
 import fr.lorgan17.heavenrp.commands.mod.EventCommand;
 import fr.lorgan17.heavenrp.commands.mod.ModpackCommand;
 import fr.lorgan17.heavenrp.commands.mod.Pvp4Command;
@@ -74,16 +75,6 @@ import fr.lorgan17.heavenrp.listeners.LampadaireListener;
 import fr.lorgan17.heavenrp.listeners.PVP4Manager;
 import fr.lorgan17.heavenrp.listeners.PVPManager;
 import fr.lorgan17.heavenrp.listeners.SnowballListener;
-import fr.manu67100.heavenrp.laposte.commands.admin.addOfficeCommand;
-import fr.manu67100.heavenrp.laposte.commands.admin.listPosteCommand;
-import fr.manu67100.heavenrp.laposte.commands.admin.reloadRegion;
-import fr.manu67100.heavenrp.laposte.commands.admin.removeOfficeCommand;
-import fr.manu67100.heavenrp.laposte.commands.user.ColisCommand;
-import fr.manu67100.heavenrp.laposte.handlers.PopupMenuAPI;
-import fr.manu67100.heavenrp.laposte.handlers.PostOfficeManager;
-import fr.manu67100.heavenrp.laposte.listeners.InventoryListener;
-import fr.manu67100.heavenrp.laposte.listeners.PostOfficeSignListener;
-import fr.manu67100.heavenrp.laposte.listeners.PostePlayerListener;
 
 public class InitManager
 {
@@ -92,7 +83,8 @@ public class InitManager
 		initCommands();
 		initListeners();
 
-		new SaveTask();
+		new ActionsHandler();
+		new QueriesHandler();
 	}
 
 	private static void initCommands()
@@ -169,13 +161,6 @@ public class InitManager
 		new MaireCommand();
 		new MairesCommand();
 		new ParcelleCommand();
-
-		// Commandes Poste
-		new ColisCommand();
-		new reloadRegion();
-		new addOfficeCommand();
-		new removeOfficeCommand();
-		new listPosteCommand();
 	}
 
 	private static void initListeners()
@@ -242,13 +227,6 @@ public class InitManager
 		new SnowballListener();
 
 		// new AdminShop();
-
-		// La Poste
-		new PostOfficeSignListener();
-		new InventoryListener();
-		new PopupMenuAPI();
-		new PostePlayerListener();
-		PostOfficeManager.LoadOffices();
 
 		// Coffre2
 		new Stock2SignListener();

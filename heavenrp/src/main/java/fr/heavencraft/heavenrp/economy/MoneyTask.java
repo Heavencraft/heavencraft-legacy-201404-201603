@@ -9,8 +9,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import fr.heavencraft.async.queries.QueriesHandler;
 import fr.heavencraft.exceptions.HeavenException;
-import fr.heavencraft.heavenrp.general.users.UserProvider;
+import fr.heavencraft.heavenrp.database.users.UpdateUserBalanceQuery;
+import fr.heavencraft.heavenrp.database.users.User;
+import fr.heavencraft.heavenrp.database.users.UserProvider;
 import fr.heavencraft.utils.DevUtil;
 
 public class MoneyTask extends BukkitRunnable
@@ -34,7 +37,8 @@ public class MoneyTask extends BukkitRunnable
 
 			for (Player player : players)
 			{
-				UserProvider.getUserByName(player.getName()).updateBalance(amount);
+				User user = UserProvider.getUserByName(player.getName());
+				QueriesHandler.addQuery(new UpdateUserBalanceQuery(user, amount));
 			}
 		}
 		catch (HeavenException ex)

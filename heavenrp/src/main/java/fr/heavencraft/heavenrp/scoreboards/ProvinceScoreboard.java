@@ -5,7 +5,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.provinces.ProvincesManager.Province;
 
 public class ProvinceScoreboard
@@ -27,7 +26,7 @@ public class ProvinceScoreboard
 		}
 	}
 
-	public static void applyTeamColor(OfflinePlayer player, Province province) throws HeavenException
+	public static void applyTeamColor(OfflinePlayer player, Province province)
 	{
 		// Remove player from all teams
 		for (ProvinceTeam team : ProvinceTeam.getAllTeams())

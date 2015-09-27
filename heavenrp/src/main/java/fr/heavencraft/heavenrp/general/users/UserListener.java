@@ -4,12 +4,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.exceptions.UserNotFoundException;
+import fr.heavencraft.heavenrp.database.bankaccounts.BankAccount;
+import fr.heavencraft.heavenrp.database.bankaccounts.BankAccountType;
+import fr.heavencraft.heavenrp.database.bankaccounts.BankAccountsManager;
+import fr.heavencraft.heavenrp.database.bankaccounts.UpdateBankAccountNameQuery;
+import fr.heavencraft.heavenrp.database.users.UpdateUserNameQuery;
+import fr.heavencraft.heavenrp.database.users.User;
+import fr.heavencraft.heavenrp.database.users.UserProvider;
 import fr.heavencraft.utils.DevUtil;
 import fr.heavencraft.utils.PlayerUtil;
 
@@ -32,27 +37,20 @@ public class UserListener implements Listener
 
 		try
 		{
-			UserProvider.updateName(uuid, name);
+			User user = UserProvider.getUserByUUID(uuid);
+
+			if (!name.equals(user.getName()))
+			{
+				new UpdateUserNameQuery(user, name);
+
+				BankAccount bankAccount = BankAccountsManager
+						.getBankAccount(user.getName(), BankAccountType.USER);
+				new UpdateBankAccountNameQuery(bankAccount, name);
+			}
 		}
-		catch (final UserNotFoundException ex)
+		catch (UserNotFoundException ex)
 		{
 			UserProvider.createUser(uuid, name);
 		}
-		catch (final HeavenException ex)
-		{
-			ex.printStackTrace();
-		}
-	}
-
-	@EventHandler(priority = EventPriority.MONITOR)
-	private void onPlayerQuit(PlayerQuitEvent event)
-	{
-		UserProvider.removeFromCache(event.getPlayer().getName());
-	}
-
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	private void onPlayerKick(PlayerKickEvent event)
-	{
-		UserProvider.removeFromCache(event.getPlayer().getName());
 	}
 }

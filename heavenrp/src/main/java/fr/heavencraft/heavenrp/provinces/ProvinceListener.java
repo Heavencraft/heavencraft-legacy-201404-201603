@@ -6,7 +6,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import fr.heavencraft.exceptions.HeavenException;
-import fr.heavencraft.heavenrp.general.users.UserProvider;
+import fr.heavencraft.heavenrp.database.users.User;
+import fr.heavencraft.heavenrp.database.users.UserProvider;
 import fr.heavencraft.heavenrp.provinces.ProvincesManager.Province;
 import fr.heavencraft.heavenrp.scoreboards.ProvinceScoreboard;
 import fr.heavencraft.utils.ChatUtil;
@@ -24,7 +25,8 @@ public class ProvinceListener implements Listener
 	{
 		Player player = event.getPlayer();
 
-		Province province = UserProvider.getUserByName(player.getName()).getProvince();
+		User user = UserProvider.getUserByName(player.getName());
+		Province province = ProvincesManager.getProvinceByUser(user);
 
 		// Apply province colors
 		ProvinceScoreboard.applyTeamColor(player, province);

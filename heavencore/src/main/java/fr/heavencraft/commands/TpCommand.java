@@ -4,6 +4,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.heavencraft.Permissions;
+import fr.heavencraft.async.actions.ActionsHandler;
+import fr.heavencraft.async.actions.TeleportPlayerAction;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.utils.ChatUtil;
 import fr.heavencraft.utils.PlayerUtil;
@@ -39,7 +41,7 @@ public class TpCommand extends HeavenCommand
 				return;
 		}
 
-		PlayerUtil.teleportPlayer(toTeleport, destination);
+		ActionsHandler.addAction(new TeleportPlayerAction(toTeleport, destination));
 	}
 
 	@Override

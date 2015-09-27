@@ -20,7 +20,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion.CircularInheritan
 
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.HeavenRP;
-import fr.heavencraft.heavenrp.general.users.User;
+import fr.heavencraft.heavenrp.database.users.User;
 import fr.heavencraft.heavenrp.worlds.WorldsManager;
 import fr.heavencraft.utils.WorldGuardUtil;
 
