@@ -35,7 +35,7 @@ public class WorldsManager
 		{
 			final WorldCreator creator = new WorldCreator("world_resources");
 			creator.environment(World.Environment.NORMAL);
-			creator.seed(1423174317);
+			// creator.seed(1423174317);
 			creator.createWorld();
 		}
 
