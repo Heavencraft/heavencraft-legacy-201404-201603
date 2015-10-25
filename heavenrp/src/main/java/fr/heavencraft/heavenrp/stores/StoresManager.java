@@ -78,7 +78,7 @@ public class StoresManager
 					if (line.trim().isEmpty())
 						continue;
 
-					Stock stock = new Stock(line);
+					final Stock stock = new Stock(line);
 					if (stock.isValid())
 						_stocks.add(stock);
 				}
@@ -97,7 +97,7 @@ public class StoresManager
 					if (line.trim().isEmpty())
 						continue;
 
-					Store store = new Store(_plugin, line);
+					final Store store = new Store(_plugin, line);
 					if (store.isValid())
 						_stores.add(store);
 				}
@@ -105,7 +105,7 @@ public class StoresManager
 				reader.close();
 			}
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			System.out.println("Can't load shops data :");
 			e.printStackTrace();
@@ -116,14 +116,14 @@ public class StoresManager
 	{
 		try
 		{
-			BufferedWriter writer = new BufferedWriter(new FileWriter(getStocksFile()));
-			for (Stock stock : _stocks)
+			final BufferedWriter writer = new BufferedWriter(new FileWriter(getStocksFile()));
+			for (final Stock stock : _stocks)
 			{
 				writer.write(stock.getSaveString() + "\n");
 			}
 			writer.close();
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			System.out.println("Can't save stocks data :");
 			e.printStackTrace();
@@ -134,14 +134,14 @@ public class StoresManager
 	{
 		try
 		{
-			BufferedWriter writer = new BufferedWriter(new FileWriter(getStoresFile()));
-			for (Store store : _stores)
+			final BufferedWriter writer = new BufferedWriter(new FileWriter(getStoresFile()));
+			for (final Store store : _stores)
 			{
 				writer.write(store.getSaveString() + "\n");
 			}
 			writer.close();
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 			System.out.println("Can't save stores data :");
 			e.printStackTrace();
@@ -150,7 +150,7 @@ public class StoresManager
 
 	public Stock getStock(String playerName, String storeName)
 	{
-		for (Stock stock : _stocks)
+		for (final Stock stock : _stocks)
 		{
 			if (stock.getOwnerName().equalsIgnoreCase(playerName))
 			{
@@ -165,7 +165,7 @@ public class StoresManager
 
 	private Store getStore(Block block)
 	{
-		for (Store store : _stores)
+		for (final Store store : _stores)
 		{
 			if (Utils.blocksEquals(block, store.getSign().getBlock()))
 				return store;
@@ -175,24 +175,30 @@ public class StoresManager
 
 	private Chest getRelativeChest(Block block)
 	{
-		for (BlockFace face : _FACES)
+		for (final BlockFace face : _FACES)
 		{
-			Block relativeBlock = block.getRelative(face);
-			if (relativeBlock.getTypeId() != Material.CHEST.getId())
-				continue;
-			if (relativeBlock.getState() instanceof Chest)
-				return (Chest) relativeBlock.getState();
+			final Block relativeBlock = block.getRelative(face);
+			switch (relativeBlock.getType())
+			{
+				case CHEST:
+				case TRAPPED_CHEST:
+					if (relativeBlock.getState() instanceof Chest)
+						return (Chest) relativeBlock.getState();
+					break;
+				default:
+					break;
+			}
 		}
 		return null;
 	}
 
 	public void onCreateStock(SignChangeEvent event)
 	{
-		Player player = event.getPlayer();
-		String playerName = player.getName();
-		Sign sign = (Sign) event.getBlock().getState();
+		final Player player = event.getPlayer();
+		final String playerName = player.getName();
+		final Sign sign = (Sign) event.getBlock().getState();
 
-		String chestName = event.getLine(1).toLowerCase().trim();
+		final String chestName = event.getLine(1).toLowerCase().trim();
 		if (chestName.length() < 3)
 		{
 			event.setLine(2, ChatColor.DARK_RED + "Nom invalide");
@@ -200,7 +206,7 @@ public class StoresManager
 			return;
 		}
 
-		Chest chest = getRelativeChest(sign.getBlock());
+		final Chest chest = getRelativeChest(sign.getBlock());
 		if (chest == null)
 		{
 			event.setLine(2, ChatColor.DARK_RED + "Coffre");
@@ -208,7 +214,7 @@ public class StoresManager
 			return;
 		}
 
-		for (Stock stock : _stocks)
+		for (final Stock stock : _stocks)
 		{
 			if (stock.getOwnerName().equalsIgnoreCase(playerName)
 					&& stock.getStoreName().equalsIgnoreCase(chestName))
@@ -231,7 +237,7 @@ public class StoresManager
 			}
 		}
 
-		Stock stock = new Stock(player.getName(), chestName, chest, sign);
+		final Stock stock = new Stock(player.getName(), chestName, chest, sign);
 		_stocks.add(stock);
 		saveStocks();
 
@@ -243,7 +249,7 @@ public class StoresManager
 
 	private ItemStack getItemFromInventory(Inventory inventory)
 	{
-		ItemStack items[] = inventory.getContents();
+		final ItemStack items[] = inventory.getContents();
 		ItemStack item = null;
 
 		for (int i = 0; i < inventory.getSize(); i++)
@@ -268,12 +274,12 @@ public class StoresManager
 
 	public void onCreateStore(SignChangeEvent event, boolean buying) throws HeavenException
 	{
-		Player player = event.getPlayer();
-		String playerName = player.getName();
-		Sign sign = (Sign) event.getBlock().getState();
+		final Player player = event.getPlayer();
+		final String playerName = player.getName();
+		final Sign sign = (Sign) event.getBlock().getState();
 
-		String chestName = event.getLine(1).toLowerCase().trim();
-		String priceStr = event.getLine(2).trim();
+		final String chestName = event.getLine(1).toLowerCase().trim();
+		final String priceStr = event.getLine(2).trim();
 
 		if (chestName.length() < 3)
 		{
@@ -282,7 +288,7 @@ public class StoresManager
 			return;
 		}
 
-		String[] priceData = priceStr.split("/");
+		final String[] priceData = priceStr.split("/");
 
 		if (priceData.length != 2)
 		{
@@ -296,8 +302,8 @@ public class StoresManager
 			return;
 		}
 
-		int price = Integer.parseInt(priceData[0]);
-		int quantity = Integer.parseInt(priceData[1]);
+		final int price = Integer.parseInt(priceData[0]);
+		final int quantity = Integer.parseInt(priceData[1]);
 
 		if (price < 1 || price > 9999 || quantity < 1 || quantity > 65)
 		{
@@ -306,7 +312,7 @@ public class StoresManager
 			return;
 		}
 
-		User user = UserProvider.getUserByName(player.getName());
+		final User user = UserProvider.getUserByName(player.getName());
 		if (!user.hasDealerLicense())
 		{
 			event.setLine(2, ChatColor.DARK_RED + "Impossible !");
@@ -314,7 +320,7 @@ public class StoresManager
 			return;
 		}
 
-		Stock linkedStock = getStock(playerName, chestName);
+		final Stock linkedStock = getStock(playerName, chestName);
 		if (linkedStock == null)
 		{
 			event.setLine(2, ChatColor.DARK_RED + "Nom de coffre");
@@ -322,7 +328,7 @@ public class StoresManager
 			return;
 		}
 
-		ItemStack item = getItemFromInventory(linkedStock.getChest().getInventory());
+		final ItemStack item = getItemFromInventory(linkedStock.getChest().getInventory());
 		if (item == null)
 		{
 			event.setLine(2, ChatColor.DARK_RED + "Coffre vide");
@@ -330,7 +336,7 @@ public class StoresManager
 			return;
 		}
 
-		Material material = item.getType();
+		final Material material = item.getType();
 		int materialData = -1;
 		if (item.getData() != null)
 			materialData = item.getDurability();
@@ -342,8 +348,8 @@ public class StoresManager
 			return;
 		}
 
-		Store newStore = new Store(player.getName(), chestName, sign, linkedStock, price, quantity, material,
-				materialData, buying);
+		final Store newStore = new Store(player.getName(), chestName, sign, linkedStock, price, quantity,
+				material, materialData, buying);
 		_stores.add(newStore);
 		saveStores();
 		event.setLine(0, ChatColor.GREEN + (buying ? "[Achat]" : "[Magasin]"));
@@ -356,8 +362,8 @@ public class StoresManager
 
 	private void onStockDestroyed(Stock stock, Player player)
 	{
-		HashSet<Store> trashList = new HashSet<Store>();
-		for (Store store : _stores)
+		final HashSet<Store> trashList = new HashSet<Store>();
+		for (final Store store : _stores)
 		{
 			if (store.getOwnerName().equalsIgnoreCase(stock.getOwnerName())
 					&& store.getStoreName().equalsIgnoreCase(stock.getStoreName()))
@@ -375,9 +381,9 @@ public class StoresManager
 			else
 				sendMessage(player, "Un magasin a donc été supprimé.");
 		}
-		for (Store store : trashList)
+		for (final Store store : trashList)
 		{
-			Sign sign = store.getSign();
+			final Sign sign = store.getSign();
 			sign.setLine(0, "[Magasin]");
 			sign.setLine(1, "Fermé");
 			sign.setLine(2, "");
@@ -392,14 +398,14 @@ public class StoresManager
 
 	public void onBlockDestroyed(Block block)
 	{
-		BlockState blockState = block.getState();
+		final BlockState blockState = block.getState();
 		if (blockState instanceof Chest)
 		{
-			for (Stock stock : _stocks)
+			for (final Stock stock : _stocks)
 			{
 				if (Utils.blocksEquals(block, stock.getChest().getBlock()))
 				{
-					Player player = _plugin.getServer().getPlayer(stock.getOwnerName());
+					final Player player = _plugin.getServer().getPlayer(stock.getOwnerName());
 					if (player != null)
 					{
 						sendMessage(player, "Le coffre {" + stock.getStoreName() + "} a été détruit.");
@@ -417,11 +423,11 @@ public class StoresManager
 		}
 		if (blockState instanceof Sign)
 		{
-			for (Stock stock : _stocks)
+			for (final Stock stock : _stocks)
 			{
 				if (Utils.blocksEquals(block, stock.getLinkedSign().getBlock()))
 				{
-					Player player = _plugin.getServer().getPlayer(stock.getOwnerName());
+					final Player player = _plugin.getServer().getPlayer(stock.getOwnerName());
 					if (player != null)
 					{
 						sendMessage(player, "Le panneau du coffre {" + stock.getStoreName() + "} a été détruit.");
@@ -434,11 +440,11 @@ public class StoresManager
 				}
 			}
 
-			for (Store store : _stores)
+			for (final Store store : _stores)
 			{
 				if (Utils.blocksEquals(block, store.getSign().getBlock()))
 				{
-					Player player = _plugin.getServer().getPlayer(store.getOwnerName());
+					final Player player = _plugin.getServer().getPlayer(store.getOwnerName());
 					if (player != null)
 					{
 						sendMessage(player, "Un magasin du coffre {" + store.getStoreName() + "} a été détruit.");
@@ -453,7 +459,7 @@ public class StoresManager
 
 	public void useStore(Player player, Block block, Sign sign) throws HeavenException
 	{
-		Store store = getStore(block);
+		final Store store = getStore(block);
 		if (store == null)
 			return;
 
@@ -467,7 +473,7 @@ public class StoresManager
 	private void useSellStore(final Player player, final Store store, Block block, Sign sign)
 			throws HeavenException
 	{
-		User user = UserProvider.getUserByName(player.getName());
+		final User user = UserProvider.getUserByName(player.getName());
 
 		if (player.getInventory().firstEmpty() == -1)
 		{
@@ -483,8 +489,9 @@ public class StoresManager
 		}
 
 		final Player ownerPlayer = _plugin.getServer().getPlayer(store.getOwnerName());
-		User ownerUser = UserProvider.getUserByName(store.getOwnerName());
-		BankAccount ownerBank = BankAccountsManager.getBankAccount(store.getOwnerName(), BankAccountType.USER);
+		final User ownerUser = UserProvider.getUserByName(store.getOwnerName());
+		final BankAccount ownerBank = BankAccountsManager.getBankAccount(store.getOwnerName(),
+				BankAccountType.USER);
 
 		if (!ownerUser.hasDealerLicense())
 		{
@@ -498,7 +505,7 @@ public class StoresManager
 			return;
 		}
 
-		Block confirmBlock = getShopBlock(user);
+		final Block confirmBlock = getShopBlock(user);
 
 		if (confirmBlock == null || !Utils.blocksEquals(block, confirmBlock))
 		{
@@ -551,9 +558,10 @@ public class StoresManager
 	private void useBuyStore(final Player player, final Store store, Block block, Sign sign)
 			throws HeavenException
 	{
-		User user = UserProvider.getUserByName(player.getName());
-		User ownerUser = UserProvider.getUserByName(store.getOwnerName());
-		BankAccount ownerBank = BankAccountsManager.getBankAccount(store.getOwnerName(), BankAccountType.USER);
+		final User user = UserProvider.getUserByName(player.getName());
+		final User ownerUser = UserProvider.getUserByName(store.getOwnerName());
+		final BankAccount ownerBank = BankAccountsManager.getBankAccount(store.getOwnerName(),
+				BankAccountType.USER);
 
 		if (!ownerUser.hasDealerLicense())
 		{
@@ -567,7 +575,7 @@ public class StoresManager
 			return;
 		}
 
-		Chest chest = store.getLinkedStock().getChest();
+		final Chest chest = store.getLinkedStock().getChest();
 		if (chest.getInventory().firstEmpty() == -1)
 		{
 			sendMessage(player, "Le coffre de ce magasin est plein.");
@@ -580,7 +588,7 @@ public class StoresManager
 			return;
 		}
 
-		Block confirmBlock = getShopBlock(user);
+		final Block confirmBlock = getShopBlock(user);
 
 		if (confirmBlock == null || !Utils.blocksEquals(block, confirmBlock))
 		{
@@ -615,17 +623,17 @@ public class StoresManager
 			{
 				store.getLinkedStock().getChest().getInventory().addItem(items);
 
-				Player ownerPlayer = _plugin.getServer().getPlayer(store.getOwnerName());
+				final Player ownerPlayer = _plugin.getServer().getPlayer(store.getOwnerName());
 				if (ownerPlayer != null)
 				{
 					sendMessage(ownerPlayer, "{" + player.getName() + "} vient de vendre dans votre magasin {"
 							+ store.getStoreName() + "}.");
-					sendMessage(ownerPlayer, "Vous avez maintenant {" + ownerUserMoney
-							+ "} pièces d'or en banque.");
+					sendMessage(ownerPlayer,
+							"Vous avez maintenant {" + ownerUserMoney + "} pièces d'or en banque.");
 				}
 
-				sendMessage(player, "Vous avez bien vendu {" + store.getQuantity() + " "
-						+ store.getMaterial().name() + "}.");
+				sendMessage(player,
+						"Vous avez bien vendu {" + store.getQuantity() + " " + store.getMaterial().name() + "}.");
 				sendMessage(player, "Vous avez maintenant {" + userMoney + "} pièces d'or.");
 			}
 		});
