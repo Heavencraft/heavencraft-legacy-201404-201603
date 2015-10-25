@@ -99,65 +99,35 @@ public class Utils
 		return str.matches("[0-9]+");
 	}
 
-	private static boolean isBlockAboveAir(World world, int x, int y, int z)
-	{
-		return world.getBlockAt(x, y - 1, z).getType() == Material.AIR;
-	}
-
 	private static boolean isBlockUnsafe(World world, int x, int y, int z)
 	{
-		Block below = world.getBlockAt(x, y - 1, z);
-		if ((below.getType() == Material.LAVA) || (below.getType() == Material.STATIONARY_LAVA))
+		if (world.getBlockAt(x, y, z).getType() != Material.AIR
+				|| world.getBlockAt(x, y + 1, z).getType() != Material.AIR)
 		{
 			return true;
 		}
 
-		if (below.getType() == Material.FIRE)
-		{
-			return true;
-		}
+		final Block below = world.getBlockAt(x, y - 1, z);
 
-		if ((world.getBlockAt(x, y, z).getType() != Material.AIR)
-				|| (world.getBlockAt(x, y + 1, z).getType() != Material.AIR))
+		switch (below.getType())
 		{
-			return true;
+			case LAVA:
+			case STATIONARY_LAVA:
+			case FIRE:
+				return true;
+			default:
+				return false;
 		}
-		return isBlockAboveAir(world, x, y, z);
 	}
 
-	public static Location getSafeDestination(Location loc)
+	public static Location getSafeDestination(World world, int x, int z)
 	{
-		World world = loc.getWorld();
-		int x = loc.getBlockX();
-		int y = loc.getBlockY();
-		int z = loc.getBlockZ();
+		final int y = world.getHighestBlockYAt(x, z);
 
-		while (isBlockAboveAir(world, x, y, z))
-		{
-			y--;
-			if (y >= 0)
-				continue;
-			return null;
-		}
+		if (isBlockUnsafe(world, x, y, z))
+			return getSafeDestination(world, x + 1, z);
 
-		while (isBlockUnsafe(world, x, y, z))
-		{
-			y++;
-			if (y < 255)
-				continue;
-			x++;
-		}
-
-		while (isBlockUnsafe(world, x, y, z))
-		{
-			y--;
-			if (y > 1)
-				continue;
-			y = 255;
-			x++;
-		}
-
-		return new Location(world, x + 0.5D, y, z + 0.5D, loc.getYaw(), loc.getPitch());
+		return new Location(world, x + 0.5D, y, z + 0.5D);
 	}
 
 	/**
