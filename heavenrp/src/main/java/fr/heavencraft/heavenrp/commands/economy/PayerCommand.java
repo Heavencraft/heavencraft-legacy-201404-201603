@@ -62,7 +62,8 @@ public class PayerCommand extends HeavenCommand
 
 		final User sender = UserProvider.getUserByName(player.getName());
 
-		QueriesHandler.addQuery(new MoneyTransfertQuery(sender, dest, delta)
+		String text = "Paiement de " + player.getName();
+		QueriesHandler.addQuery(new MoneyTransfertQuery(sender, dest, delta, text)
 		{
 			@Override
 			public void onSuccess()

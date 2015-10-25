@@ -124,20 +124,22 @@ public class LivretSignListener extends SignListener implements Listener
 			User user = UserProvider.getUserByName(playerName);
 			BankAccount bank = BankAccountsManager.getBankAccount(playerName, BankAccountType.USER);
 
-			QueriesHandler.addQuery(new MoneyTransfertQuery(isDepot ? user : bank, isDepot ? bank : user, delta)
-			{
-				@Override
-				public void onSuccess()
-				{
-					ChatUtil.sendMessage(player, "{Trésorier} : L'opération a bien été effectuée.");
-				}
+			String text = (isDepot ? "Dépot de " : "Retrait de ") + playerName;
+			QueriesHandler
+					.addQuery(new MoneyTransfertQuery(isDepot ? user : bank, isDepot ? bank : user, delta, text)
+					{
+						@Override
+						public void onSuccess()
+						{
+							ChatUtil.sendMessage(player, "{Trésorier} : L'opération a bien été effectuée.");
+						}
 
-				@Override
-				public void onHeavenException(HeavenException ex)
-				{
-					ChatUtil.sendMessage(player, ex.getMessage());
-				}
-			});
+						@Override
+						public void onHeavenException(HeavenException ex)
+						{
+							ChatUtil.sendMessage(player, ex.getMessage());
+						}
+					});
 		}
 		catch (HeavenException ex)
 		{
