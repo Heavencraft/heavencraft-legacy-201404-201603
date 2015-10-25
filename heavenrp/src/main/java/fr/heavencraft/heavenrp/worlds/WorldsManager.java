@@ -99,7 +99,7 @@ public class WorldsManager
 		while ((getResources().getBiome(x, z) == Biome.OCEAN)
 				|| (getResources().getBiome(x, z) == Biome.DEEP_OCEAN));
 
-		return Utils.getSafeDestination(new Location(getResources(), x, 100.0D, z));
+		return Utils.getSafeDestination(getResources(), x, z);
 	}
 
 	public static World getWorld()

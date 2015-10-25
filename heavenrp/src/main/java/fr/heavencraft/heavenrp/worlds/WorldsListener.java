@@ -4,11 +4,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityPortalEnterEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import fr.heavencraft.Permissions;
@@ -64,37 +61,34 @@ public class WorldsListener implements Listener
 
 	// Passage dans un portail
 	@EventHandler
-	public void onEntityPortalEnter(EntityPortalEnterEvent event)
+	public void onEntityPortalEnter(PlayerMoveEvent event)
 	{
-		if (event.getEntityType() != EntityType.PLAYER)
+		final Location from = event.getFrom();
+		final Location to = event.getTo();
+
+		if (to.getWorld() != WorldsManager.getWorld())
 			return;
 
-		final Block block = event.getLocation().getBlock();
-
-		if (block.getType() != Material.PORTAL)
-			return;
-
-		if (block.getWorld() != WorldsManager.getWorld())
-			return;
-
-		final Player player = (Player) event.getEntity();
-		Location destination;
-
-		switch (block.getRelative(BlockFace.DOWN).getType())
+		// Player enter into a portal
+		final Block portalBlock = to.getBlock();
+		if (from.getBlock().getType() != Material.PORTAL && portalBlock.getType() == Material.PORTAL)
 		{
-			case NETHERRACK:
-				destination = WorldsManager.getSpawnNether();
-				break;
-			case ENDER_STONE:
-				destination = WorldsManager.getSpawnTheEnd();
-				break;
-			case SAND:
-				destination = WorldsManager.getResourcesSpawn();
-				break;
-			default:
-				return;
+			final Location destination;
+			switch (portalBlock.getRelative(BlockFace.DOWN).getType())
+			{
+				case NETHERRACK:
+					destination = WorldsManager.getSpawnNether();
+					break;
+				case ENDER_STONE:
+					destination = WorldsManager.getSpawnTheEnd();
+					break;
+				case SAND:
+					destination = WorldsManager.getResourcesSpawn();
+					break;
+				default:
+					return;
+			}
+			ActionsHandler.addAction(new TeleportPlayerAction(event.getPlayer(), destination));
 		}
-
-		ActionsHandler.addAction(new TeleportPlayerAction(player, destination));
 	}
 }
