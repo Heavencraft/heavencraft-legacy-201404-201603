@@ -4,8 +4,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import fr.heavencraft.async.queries.AbstractQuery;
+import fr.heavencraft.async.queries.QueriesHandler;
 import fr.heavencraft.exceptions.HeavenException;
 import fr.heavencraft.heavenrp.HeavenRP;
+import fr.heavencraft.heavenrp.database.transactions.AddTransactionQuery;
 
 public class UpdateBankAccountBalanceQuery extends AbstractQuery
 {
@@ -13,11 +15,13 @@ public class UpdateBankAccountBalanceQuery extends AbstractQuery
 
 	private final BankAccount account;
 	private final int delta;
+	private final String text;
 
-	public UpdateBankAccountBalanceQuery(BankAccount account, int delta)
+	public UpdateBankAccountBalanceQuery(BankAccount account, int delta, String text)
 	{
 		this.account = account;
 		this.delta = delta;
+		this.text = text;
 	}
 
 	@Override
@@ -36,6 +40,9 @@ public class UpdateBankAccountBalanceQuery extends AbstractQuery
 
 			if (ps.executeUpdate() == 0)
 				throw new HeavenException("Il n'y a pas assez d'argent sur le compte {%1$s}.", account.getName());
+
+			// No issues : add transaction
+			QueriesHandler.addQuery(new AddTransactionQuery(account, delta, text));
 		}
 	}
 }

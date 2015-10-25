@@ -524,7 +524,9 @@ public class StoresManager
 		final int ownerUserMoney = ownerBank.getBalance() + store.getPrice();
 		final int userMoney = user.getBalance() - store.getPrice();
 
-		QueriesHandler.addQuery(new MoneyTransfertQuery(user, ownerBank, store.getPrice())
+		String text = String.format("Vente de %1$s %2$s à %3$s", store.getQuantity(), store.getMaterial().name(),
+				player.getName());
+		QueriesHandler.addQuery(new MoneyTransfertQuery(user, ownerBank, store.getPrice(), text)
 		{
 			@Override
 			public void onSuccess()
@@ -608,7 +610,9 @@ public class StoresManager
 		final int ownerUserMoney = ownerBank.getBalance() - store.getPrice();
 		final int userMoney = user.getBalance() + store.getPrice();
 
-		QueriesHandler.addQuery(new MoneyTransfertQuery(ownerBank, user, store.getPrice())
+		String text = String.format("Achat de %1$s %2$s à %3$s", store.getQuantity(), store.getMaterial().name(),
+				player.getName());
+		QueriesHandler.addQuery(new MoneyTransfertQuery(ownerBank, user, store.getPrice(), text)
 		{
 			@Override
 			public void onSuccess()
@@ -620,12 +624,12 @@ public class StoresManager
 				{
 					sendMessage(ownerPlayer, "{" + player.getName() + "} vient de vendre dans votre magasin {"
 							+ store.getStoreName() + "}.");
-					sendMessage(ownerPlayer, "Vous avez maintenant {" + ownerUserMoney
-							+ "} pièces d'or en banque.");
+					sendMessage(ownerPlayer,
+							"Vous avez maintenant {" + ownerUserMoney + "} pièces d'or en banque.");
 				}
 
-				sendMessage(player, "Vous avez bien vendu {" + store.getQuantity() + " "
-						+ store.getMaterial().name() + "}.");
+				sendMessage(player,
+						"Vous avez bien vendu {" + store.getQuantity() + " " + store.getMaterial().name() + "}.");
 				sendMessage(player, "Vous avez maintenant {" + userMoney + "} pièces d'or.");
 			}
 		});
