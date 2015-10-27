@@ -33,6 +33,8 @@ import fr.heavencraft.heavenrp.commands.key.KeyCommand;
 import fr.heavencraft.heavenrp.commands.teleport.SpawnCommand;
 import fr.heavencraft.heavenrp.commands.teleport.TutoCommand;
 import fr.heavencraft.heavenrp.commands.warps.WarpCommand;
+import fr.heavencraft.heavenrp.dungeon.DungeonListener;
+import fr.heavencraft.heavenrp.dungeon.DungeonManager;
 import fr.heavencraft.heavenrp.economy.EconomyListener;
 import fr.heavencraft.heavenrp.economy.GoldDropListener;
 import fr.heavencraft.heavenrp.economy.LivretProSignListener;
@@ -205,7 +207,10 @@ public class InitManager
 		ProvinceScoreboard.initialize();
 		new ProvinceListener();
 		new ProvinceSignListener();
-
+		
+		// Dungeons
+		new DungeonListener();
+		
 		// Warps
 		new WarpSignListener();
 
