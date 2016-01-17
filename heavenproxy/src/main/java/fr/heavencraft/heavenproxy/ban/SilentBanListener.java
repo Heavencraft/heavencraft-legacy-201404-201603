@@ -22,8 +22,7 @@ public class SilentBanListener implements Listener
 			"b07d767d-01fa-40e2-89b0-c4696a3ccb1d", // forrto
 			"93f49a17-80f2-47bd-a815-4e2e3336bf83", // Firebest1993
 			"a46f7918-8cbd-4ee7-9048-13eb00dc812a", // batmab56
-			"48183646-2cfe-4847-80ec-5bd4381ead5e", // FaMoUsxj2
-			"5d69a7fa-eced-451e-8f13-9e5731405b88"); // 142536475869
+			"48183646-2cfe-4847-80ec-5bd4381ead5e"); // FaMoUsxj2 
 
 	Collection<String> bannedAddresses = new HashSet<String>();
 
