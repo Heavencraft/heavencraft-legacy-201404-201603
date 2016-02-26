@@ -6,6 +6,8 @@ import org.bukkit.generator.ChunkGenerator;
 
 import fr.heavencraft.HeavenPlugin;
 import fr.heavencraft.generators.EmptyChunkGenerator;
+import fr.heavencraft.heavennexus.commands.SpawnCommand;
+import fr.heavencraft.heavennexus.commands.TutoCommand;
 import fr.heavencraft.heavennexus.listeners.NameTagListener;
 import fr.heavencraft.heavennexus.listeners.ServerListener;
 import fr.heavencraft.heavennexus.listeners.WatchListener;
@@ -18,36 +20,44 @@ import fr.heavencraft.listeners.RedstoneLampListener;
 
 public class HeavenNexus extends HeavenPlugin
 {
-	@Override
-	public void onEnable()
-	{
-		super.onEnable();
+    @Override
+    public void onEnable()
+    {
+        super.onEnable();
 
-		// From HeavenCore
-		new ColoredSignsListener();
-		new NoChatListener();
-		new RedstoneLampListener();
+        // From HeavenCore
+        new ColoredSignsListener();
+        new NoChatListener();
+        new RedstoneLampListener();
 
-		new JumpListener();
-		new NameTagListener();
-		new ServerListener();
-		new WatchListener(this);
-		new WeatherListener(this);
+        new JumpListener();
+        new NameTagListener();
+        new ServerListener();
+        new WatchListener(this);
+        new WeatherListener(this);
 
-		new ChestSignListener();
-	}
+        new ChestSignListener();
 
-	@Override
-	public ChunkGenerator getDefaultWorldGenerator(String worldName, String id)
-	{
-		if (worldName.equalsIgnoreCase("world"))
-			return new EmptyChunkGenerator();
-		else
-			return super.getDefaultWorldGenerator(worldName, id);
-	}
+        new SpawnCommand();
+        new TutoCommand();
+    }
 
-	public static Location getSpawn()
-	{
-		return new Location(Bukkit.getWorld("world"), 0.5, 100, 0.5, 0, 0);
-	}
+    @Override
+    public ChunkGenerator getDefaultWorldGenerator(String worldName, String id)
+    {
+        if (worldName.equalsIgnoreCase("world"))
+            return new EmptyChunkGenerator();
+        else
+            return super.getDefaultWorldGenerator(worldName, id);
+    }
+
+    public static Location getSpawn()
+    {
+        return new Location(Bukkit.getWorld("world"), 0.5, 100, 0.5, 0, 0);
+    }
+
+    public static Location getTuto()
+    {
+        return new Location(Bukkit.getWorld("world"), 606, 60, -27, -90, 0);
+    }
 }
