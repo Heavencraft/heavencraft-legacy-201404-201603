@@ -2,6 +2,7 @@ package fr.heavencraft.heavennexus.listeners;
 
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -12,40 +13,51 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import fr.heavencraft.heavennexus.HeavenNexus;
+import fr.heavencraft.utils.ChatUtil;
 import fr.heavencraft.utils.DevUtil;
 
 public class ServerListener implements Listener
 {
-	public ServerListener()
-	{
-		DevUtil.registerListener(this);
-	}
+    public ServerListener()
+    {
+        DevUtil.registerListener(this);
+    }
 
-	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent event)
-	{
-		event.getPlayer().teleport(HeavenNexus.getSpawn());
-	}
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event)
+    {
+        final Player player = event.getPlayer();
 
-	@EventHandler
-	public void onPlayerRespawn(PlayerRespawnEvent event)
-	{
-		event.setRespawnLocation(HeavenNexus.getSpawn());
-	}
+        if (player.hasPlayedBefore())
+        {
+            player.teleport(HeavenNexus.getSpawn());
+        }
+        else
+        {
+            player.teleport(HeavenNexus.getTuto());
+            ChatUtil.sendMessage(player, "Vous avez été téléporté au {tuto}.");
+        }
+    }
 
-	@EventHandler(ignoreCancelled = true)
-	public void onBlockPhysics(BlockPhysicsEvent event)
-	{
-		if (event.getChangedType() == Material.PORTAL)
-			event.setCancelled(true);
-	}
+    @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent event)
+    {
+        event.setRespawnLocation(HeavenNexus.getSpawn());
+    }
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onEntityDamage(EntityDamageEvent event)
-	{
-		if (!event.getEntityType().equals(EntityType.PLAYER) || !event.getCause().equals(DamageCause.FALL))
-			return;
+    @EventHandler(ignoreCancelled = true)
+    public void onBlockPhysics(BlockPhysicsEvent event)
+    {
+        if (event.getChangedType() == Material.PORTAL)
+            event.setCancelled(true);
+    }
 
-		event.setCancelled(true);
-	}
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onEntityDamage(EntityDamageEvent event)
+    {
+        if (!event.getEntityType().equals(EntityType.PLAYER) || !event.getCause().equals(DamageCause.FALL))
+            return;
+
+        event.setCancelled(true);
+    }
 }

@@ -6,101 +6,93 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import fr.heavencraft.heavenproxy.Utils;
+import fr.heavencraft.heavenproxy.database.users.User;
+import fr.heavencraft.heavenproxy.database.users.UserProvider;
+import fr.heavencraft.heavenproxy.exceptions.HeavenException;
+import fr.heavencraft.heavenproxy.exceptions.UserNotFoundException;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import fr.heavencraft.heavenproxy.Utils;
-import fr.heavencraft.heavenproxy.exceptions.HeavenException;
-import fr.heavencraft.heavenproxy.exceptions.UserNotFoundException;
-import fr.heavencraft.heavenproxy.users.User;
-import fr.heavencraft.heavenproxy.users.UserProvider;
 
 public class ListCommand extends HeavenCommand
 {
-	private final static String LIST_MESSAGE = "Il y a {%1$d} joueurs connectés :";
+    private final static String LIST_MESSAGE = "Il y a {%1$d} joueurs connectés :";
 
-	// private String allServers;
+    // private String allServers;
 
-	public ListCommand()
-	{
-		super("list", "", new String[] { "online", "who", "glist" });
+    public ListCommand()
+    {
+        super("list", "", new String[] { "online", "who", "glist" });
+    }
 
-		// allServers = "";
-		//
-		// for (ServerInfo server : ProxyServer.getInstance().getServers().values())
-		// allServers += (allServers.isEmpty() ? "" : "|") + server.getName();
-	}
+    @Override
+    public void onCommand(CommandSender sender, String[] args) throws HeavenException
+    {
+        if (args.length == 1)
+            listServer(sender, args[0]);
+        else
+            listAll(sender);
+    }
 
-	@Override
-	public void onCommand(CommandSender sender, String[] args) throws HeavenException
-	{
-		if (args.length == 1)
-			listServer(sender, args[0]);
-		else
-			listAll(sender);
-	}
+    private void listAll(CommandSender sender) throws HeavenException
+    {
+        sendList(sender, ProxyServer.getInstance().getPlayers());
+    }
 
-	private void listAll(CommandSender sender) throws HeavenException
-	{
-		sendList(sender, ProxyServer.getInstance().getPlayers());
+    private void listServer(CommandSender sender, String serverName) throws HeavenException
+    {
+        final ServerInfo server = ProxyServer.getInstance().getServerInfo(serverName);
 
-		// Utils.sendMessage(sender, "Pour avoir la liste d'un monde en paticulier :");
-		// Utils.sendMessage(sender, "/{list} <%1$s>", allServers);
-	}
+        if (server == null)
+            listAll(sender);
+        else
+            sendList(sender, server.getPlayers());
+    }
 
-	private void listServer(CommandSender sender, String serverName) throws HeavenException
-	{
-		ServerInfo server = ProxyServer.getInstance().getServerInfo(serverName);
+    private static void sendList(CommandSender sender, Collection<ProxiedPlayer> players) throws HeavenException
+    {
+        if (players.isEmpty())
+        {
+            Utils.sendMessage(sender, "Il n'y a personne ici...");
+            return;
+        }
 
-		if (server == null)
-			listAll(sender);
-		else
-			sendList(sender, server.getPlayers());
-	}
+        final List<String> names = new ArrayList<String>();
 
-	private static void sendList(CommandSender sender, Collection<ProxiedPlayer> players) throws HeavenException
-	{
-		if (players.isEmpty())
-		{
-			Utils.sendMessage(sender, "Il n'y a personne ici...");
-			return;
-		}
+        for (final ProxiedPlayer player : players)
+            names.add(player.getName());
 
-		List<String> names = new ArrayList<String>();
+        Collections.sort(names, new Comparator<String>()
+        {
+            @Override
+            public int compare(String p1, String p2)
+            {
+                return p1.compareToIgnoreCase(p2);
+            }
+        });
 
-		for (ProxiedPlayer player : players)
-			names.add(player.getName());
+        String list = "";
 
-		Collections.sort(names, new Comparator<String>()
-		{
-			@Override
-			public int compare(String p1, String p2)
-			{
-				return p1.compareToIgnoreCase(p2);
-			}
-		});
+        for (String name : names)
+        {
+            try
+            {
+                final User user = UserProvider.getUserByName(name);
 
-		String list = "";
+                if (!ChatColor.WHITE.toString().equals(user.getColor()))
+                    name = user.getColor() + name + ChatColor.GOLD;
+            }
+            catch (final UserNotFoundException ex)
+            {
+            }
 
-		for (String name : names)
-		{
-			try
-			{
-				User user = UserProvider.getUserByName(name);
+            list += (list.isEmpty() ? "" : ", ") + name;
+        }
 
-				if (!ChatColor.WHITE.toString().equals(user.getColor()))
-					name = user.getColor() + name + ChatColor.GOLD;
-			}
-			catch (UserNotFoundException ex)
-			{
-			}
-
-			list += (list.isEmpty() ? "" : ", ") + name;
-		}
-
-		Utils.sendMessage(sender, LIST_MESSAGE, players.size());
-		Utils.sendMessage(sender, list);
-	}
+        Utils.sendMessage(sender, LIST_MESSAGE, players.size());
+        Utils.sendMessage(sender, list);
+    }
 }

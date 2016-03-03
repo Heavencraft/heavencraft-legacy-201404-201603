@@ -1,83 +1,71 @@
 package fr.heavencraft.heavenproxy.chat;
 
-import java.io.IOException;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import fr.heavencraft.heavenproxy.AbstractListener;
+import fr.heavencraft.heavenproxy.Utils;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
-import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
-import fr.heavencraft.heavenproxy.Utils;
 
-public class ChatListener implements Listener
+public class ChatListener extends AbstractListener
 {
-	private static final String TAG = "[ChatListener] ";
-	private static final Logger log = Utils.getLogger();
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerChat(ChatEvent event)
+    {
+        if (event.isCancelled())
+            return;
 
-	public ChatListener() throws IOException
-	{
-		Utils.registerListener(this);
+        if (!(event.getSender() instanceof ProxiedPlayer))
+            return;
 
-		log.info(TAG + "Initialized");
-	}
+        final ProxiedPlayer player = (ProxiedPlayer) event.getSender();
+        String message = event.getMessage();
 
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerChat(ChatEvent event)
-	{
-		if (event.isCancelled())
-			return;
+        if (event.isCommand())
+        {
+            // BUGFIX : pour que la console puisse voir les commandes
+            log.info("[onPlayerChat] " + player.getName() + " issued server command: " + message);
+            return;
+        }
 
-		if (!(event.getSender() instanceof ProxiedPlayer))
-			return;
+        // BUGFIX : pour que la banque du semi-rp fonctionne
+        if (player.getServer().getInfo().getName().equalsIgnoreCase("semirp") && Utils.isInteger(message))
+            return;
 
-		ProxiedPlayer player = (ProxiedPlayer) event.getSender();
-		String message = event.getMessage();
+        if (player.hasPermission("heavencraft.chat.color"))
+        {
+            final Matcher matcher = Pattern.compile("\\&([0-9A-Fa-f])").matcher(message);
+            message = matcher.replaceAll("§$1");
+        }
 
-		if (event.isCommand())
-		{
-			// BUGFIX : pour que la console puisse voir les commandes
-			log.info(TAG + "[onPlayerChat] " + player.getName() + " issued server command: " + message);
-			return;
-		}
+        ChatManager.sendChatMessage(player, message);
+        event.setCancelled(true);
+    }
 
-		// BUGFIX : pour que la banque du semi-rp fonctionne
-		if (player.getServer().getInfo().getName().equalsIgnoreCase("semirp") && Utils.isInteger(message))
-			return;
+    @EventHandler
+    public void onPlayerDisconnect(PlayerDisconnectEvent event)
+    {
+        final String playerName = event.getPlayer().getName();
+        final String reason = DisconnectReasonManager.getReason(playerName);
 
-		if (player.hasPermission("heavencraft.chat.color"))
-		{
-			Matcher matcher = Pattern.compile("\\&([0-9A-Fa-f])").matcher(message);
-			message = matcher.replaceAll("§$1");
-		}
+        if (reason == null)
+            ChatManager.sendQuitMessage(playerName);
+        else
+        {
+            final String[] data = reason.split("\\|", 3);
 
-		ChatManager.sendChatMessage(player, message);
-		event.setCancelled(true);
-	}
-
-	@EventHandler
-	public void onPlayerDisconnect(PlayerDisconnectEvent event)
-	{
-		String playerName = event.getPlayer().getName();
-		String reason = DisconnectReasonManager.getReason(playerName);
-
-		if (reason == null)
-			ChatManager.sendQuitMessage(playerName);
-		else
-		{
-			String[] data = reason.split("\\|", 3);
-
-			if (data[0].equals("R"))
-				ChatManager.sendRagequitMessage(playerName);
-			else if (data[0].equals("K"))
-				ChatManager.sendKickMessage(playerName, data[1], data[2]);
-			else if (data[0].equals("B"))
-				ChatManager.sendBanMessage(playerName, data[1], data[2]);
-			else
-				ChatManager.sendQuitMessage(playerName);
-		}
-	}
+            if (data[0].equals("R"))
+                ChatManager.sendRagequitMessage(playerName);
+            else if (data[0].equals("K"))
+                ChatManager.sendKickMessage(playerName, data[1], data[2]);
+            else if (data[0].equals("B"))
+                ChatManager.sendBanMessage(playerName, data[1], data[2]);
+            else
+                ChatManager.sendQuitMessage(playerName);
+        }
+    }
 }

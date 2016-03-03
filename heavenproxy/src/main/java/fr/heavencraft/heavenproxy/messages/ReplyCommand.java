@@ -1,7 +1,8 @@
-package fr.heavencraft.heavenproxy.commands;
+package fr.heavencraft.heavenproxy.messages;
 
 import net.md_5.bungee.api.CommandSender;
 import fr.heavencraft.heavenproxy.Utils;
+import fr.heavencraft.heavenproxy.commands.HeavenCommand;
 import fr.heavencraft.heavenproxy.exceptions.HeavenException;
 
 public class ReplyCommand extends HeavenCommand

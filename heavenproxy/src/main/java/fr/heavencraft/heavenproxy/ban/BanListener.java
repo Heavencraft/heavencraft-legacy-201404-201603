@@ -1,40 +1,31 @@
 package fr.heavencraft.heavenproxy.ban;
 
-import java.util.logging.Logger;
+import java.util.UUID;
 
+import fr.heavencraft.heavenproxy.AbstractListener;
 import net.md_5.bungee.api.event.LoginEvent;
-import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
-import fr.heavencraft.heavenproxy.Utils;
 
-public class BanListener implements Listener
+public class BanListener extends AbstractListener
 {
-	private static final String TAG = "[BanListener] ";
+    private static final String LOG_BANNED = "[onLogin] Account %1$s is banned : %2$s";
+    private static final String CANCEL_REASON = "Vous êtes banni d'Heavencraft.\n\n";
 
-	private static final Logger log = Utils.getLogger();
+    @EventHandler
+    public void onLogin(LoginEvent event)
+    {
+        if (event.isCancelled())
+            return;
 
-	public BanListener()
-	{
-		Utils.registerListener(this);
+        final UUID uuid = event.getConnection().getUniqueId();
+        final String reason = BanManager.getReason(uuid);
 
-		log.info(TAG + "Initialized");
-	}
+        if (reason != null)
+        {
+            event.setCancelled(true);
+            event.setCancelReason(CANCEL_REASON + reason);
 
-	@EventHandler
-	public void onLogin(LoginEvent event)
-	{
-		if (event.isCancelled())
-			return;
-
-		String uuid = Utils.getUUID(event.getConnection());
-		String reason = BanManager.getReason(uuid);
-
-		if (reason != null)
-		{
-			event.setCancelled(true);
-			event.setCancelReason("Vous êtes banni d'Heavencraft.\n\n" + reason);
-
-			log.info(TAG + "[onLogin] Account " + uuid + " is banned : " + reason);
-		}
-	}
+            log.info(LOG_BANNED, uuid, reason);
+        }
+    }
 }
