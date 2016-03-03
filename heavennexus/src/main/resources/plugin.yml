@@ -2,3 +2,6 @@ name: HeavenNexus
 main: fr.heavencraft.heavennexus.HeavenNexus
 version: 1.0
 load: startup
+commands:
+  tuto:
+  spawn:

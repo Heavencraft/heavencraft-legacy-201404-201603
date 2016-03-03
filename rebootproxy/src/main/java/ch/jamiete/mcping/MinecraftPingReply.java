@@ -37,17 +37,9 @@ import java.util.List;
  */
 public class MinecraftPingReply {
 
-    private String description;
     private Players players;
     private Version version;
     private String favicon;
-
-    /**
-     * @return the MOTD
-     */
-    public String getDescription() {
-        return this.description;
-    }
 
     /**
      * @return @{link Players}

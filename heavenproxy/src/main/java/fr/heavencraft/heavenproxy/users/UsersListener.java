@@ -1,105 +1,98 @@
 package fr.heavencraft.heavenproxy.users;
 
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.logging.Logger;
+import java.util.UUID;
 
+import fr.heavencraft.heavenproxy.AbstractListener;
+import fr.heavencraft.heavenproxy.Utils;
+import fr.heavencraft.heavenproxy.async.QueriesHandler;
+import fr.heavencraft.heavenproxy.chat.ChatManager;
+import fr.heavencraft.heavenproxy.database.users.UpdateUserLastLoginQuery;
+import fr.heavencraft.heavenproxy.database.users.UpdateUserNameQuery;
+import fr.heavencraft.heavenproxy.database.users.User;
+import fr.heavencraft.heavenproxy.database.users.UserProvider;
+import fr.heavencraft.heavenproxy.exceptions.SQLErrorException;
+import fr.heavencraft.heavenproxy.exceptions.UserNotFoundException;
+import fr.heavencraft.heavenproxy.kick.KickCommand;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.LoginEvent;
-import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
-import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
 import net.md_5.bungee.protocol.ProtocolConstants;
-import fr.heavencraft.heavenproxy.Utils;
-import fr.heavencraft.heavenproxy.chat.ChatManager;
-import fr.heavencraft.heavenproxy.exceptions.HeavenException;
-import fr.heavencraft.heavenproxy.kick.KickCommand;
 
-public class UsersListener implements Listener
+public class UsersListener extends AbstractListener
 {
-	private static final String TAG = "[UsersListener] ";
-	private static final Logger log = Utils.getLogger();
-	private static final String MOD_ADDRESS = "licorne.heavencraft.fr";
+    // Connection address for staff members
+    private static final String STAFF_ADDRESS = "licorne.heavencraft.fr";
 
-	public UsersListener()
-	{
-		Utils.registerListener(this);
+    private static final String LOG_BAD_VERSION = "[onLogin] %1$s is not in 1.8/1.9.";
+    private static final String KICK_BAD_VERSION = "§fHeaven§bcraft§r est en 1.8/1.9.\n\nMerci de vous connecter avec cette version.";
 
-		log.info(TAG + "Initialized");
-	}
+    @EventHandler
+    public void onLogin(LoginEvent event)
+    {
+        if (event.isCancelled())
+            return;
 
-	@EventHandler
-	public void onLogin(LoginEvent event)
-	{
-		if (event.isCancelled())
-			return;
+        switch (event.getConnection().getVersion())
+        {
+            case ProtocolConstants.MINECRAFT_1_8:
+            case ProtocolConstants.MINECRAFT_1_9:
+                break;
 
-		if (event.getConnection().getVersion() != ProtocolConstants.MINECRAFT_1_8)
-		{
-			event.setCancelled(true);
-			event.setCancelReason("§fHeaven§bcraft§r est en 1.8.4.\n\nMerci de vous connecter avec cette version.");
+            default:
+                log.info(LOG_BAD_VERSION, event.getConnection().getName());
 
-			log.info(TAG + "[onLogin] " + event.getConnection().getName() + " is not in 1.8.4.");
-		}
-	}
+                event.setCancelled(true);
+                event.setCancelReason(KICK_BAD_VERSION);
+                break;
+        }
+    }
 
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPostLogin(PostLoginEvent event)
-	{
-		final ProxiedPlayer player = event.getPlayer();
+    // Must be run with LOWEST priority, as it create or update the user
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPostLoginLowest(PostLoginEvent event) throws SQLErrorException
+    {
+        final ProxiedPlayer player = event.getPlayer();
+        final UUID uniqueId = player.getUniqueId();
+        final String name = player.getName();
 
-		Utils.sendMessage(player, "§0§2§0§0§e§f"); // Disable schematica printer
-													// functionality.
-		Utils.sendMessage(player, "§0§2§1§0§e§f"); // Disable schematica save
-													// schematic functionality.
+        try
+        {
+            final User user = UserProvider.getUserByUniqueId(uniqueId);
 
-		final String uuid = Utils.getUUID(player);
-		final String name = player.getName();
+            if (!name.equals(user.getName()))
+                QueriesHandler.addQuery(new UpdateUserNameQuery(user, name));
 
-		try
-		{
-			final User user = UserProvider.getUserByUuid(uuid);
-			user.setName(name);
-			user.setLastLogin(new Timestamp(new Date().getTime()));
+            QueriesHandler.addQuery(new UpdateUserLastLoginQuery(user));
+            ChatManager.sendJoinMessage(name, player.getAddress().getAddress(), false);
+        }
+        catch (final UserNotFoundException ex)
+        {
+            UserProvider.createUser(uniqueId, name);
+            ChatManager.sendJoinMessage(name, player.getAddress().getAddress(), true);
+        }
+    }
 
-			ChatManager.sendJoinMessage(name, player.getAddress().getAddress(), false);
+    @EventHandler
+    public void onPostLogin(PostLoginEvent event)
+    {
+        final ProxiedPlayer player = event.getPlayer();
 
-			if (player.hasPermission("heavencraft.commands.modo"))
-			{
-				String hostName = event.getPlayer().getPendingConnection().getVirtualHost().getHostName();
+        if (player.hasPermission("heavencraft.commands.modo"))
+        {
+            final String hostName = event.getPlayer().getPendingConnection().getVirtualHost().getHostName();
 
-				if (!MOD_ADDRESS.equals(hostName))
-				{
-					KickCommand.kickPlayer(player, "Heavencraft", "Authentification invalide");
-					return;
-				}
+            if (!STAFF_ADDRESS.equals(hostName))
+            {
+                KickCommand.kickPlayer(player, "Heavencraft", "Authentification invalide");
+                return;
+            }
 
-				Utils.sendMessage(player, ChatColor.GREEN + "Vous êtes membre du staff, VOTEZ !");
-				Utils.sendMessage(player, ChatColor.GREEN + "http://www.mcserv.org/Heavencraftfr_3002.html");
-				Utils.sendMessage(player, ChatColor.GREEN + "http://mc-topserv.net/top/serveur.php?serv=46");
-			}
-		}
-		catch (final HeavenException ex)
-		{
-			UserProvider.createUser(uuid, name);
-
-			ChatManager.sendJoinMessage(name, player.getAddress().getAddress(), true);
-		}
-	}
-
-	@EventHandler
-	public void onPlayerDisconnect(PlayerDisconnectEvent event)
-	{
-		try
-		{
-			UserProvider.removeFromCache(UserProvider.getUserByName(event.getPlayer().getName()));
-		}
-		catch (final HeavenException ex)
-		{
-			ex.printStackTrace();
-		}
-	}
+            Utils.sendMessage(player, ChatColor.GREEN + "Vous êtes membre du staff, VOTEZ !");
+            Utils.sendMessage(player, ChatColor.GREEN + "http://www.mcserv.org/Heavencraftfr_3002.html");
+            Utils.sendMessage(player, ChatColor.GREEN + "http://mc-topserv.net/top/serveur.php?serv=46");
+        }
+    }
 }
