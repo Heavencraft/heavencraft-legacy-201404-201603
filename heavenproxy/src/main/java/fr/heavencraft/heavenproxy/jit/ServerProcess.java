@@ -11,7 +11,7 @@ public enum ServerProcess
 	// Fun("fun", ServerProcessManager._2G, "/home/minecraft/prod/servers/fun"),
 	UltraHard("ultrahard", ServerProcessManager._1G, "/home/minecraft/prod/servers/ultrahard"),
 	Musee("musee", ServerProcessManager._512M, "/home/minecraft/prod/servers/musee"),
-	Event("infected", ServerProcessManager._1G, "/home/minecraft/prod/servers/event"),
+	Event("event", ServerProcessManager._1G, "/home/minecraft/prod/servers/event"),
 	// Mini-jeux
 	Infected("infected", ServerProcessManager._1G, "/home/minecraft/prod/minigames/infected"),
 	MarioKart("mariokart", ServerProcessManager._1G, "/home/minecraft/prod/minigames/mariokart"),
