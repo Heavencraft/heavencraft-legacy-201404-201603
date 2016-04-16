@@ -6,6 +6,8 @@ import fr.heavencraft.heavenproxy.database.users.UpdateUserMutedUntilQuery;
 import fr.heavencraft.heavenproxy.database.users.User;
 import fr.heavencraft.heavenproxy.exceptions.PlayerNotConnectedException;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class MuteHelper
 {
@@ -20,7 +22,10 @@ public class MuteHelper
             public void onSuccess()
             {
                 final String playerName = user.getName();
-                Utils.sendMessage(sender, "Le joueur {%1$s} a été mute pour {%2$s} minutes.", playerName, nbMinutes);
+                for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers())
+					if (p.hasPermission(MuteCommand.permission))
+						Utils.sendMessage(sender, "Le joueur {%1$s} a été mute pour {%2$s} minutes.",
+								playerName, nbMinutes);
 
                 try
                 {
