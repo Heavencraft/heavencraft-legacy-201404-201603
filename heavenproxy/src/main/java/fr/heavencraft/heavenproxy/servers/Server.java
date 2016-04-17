@@ -21,7 +21,7 @@ public enum Server
     HungerGames("hungergames", "HG", "Hunger Games"),
     Skyblock("skyblock", "Sky", "Skyblock"),
     Robinson("robinson", "1.9", "Robinson"),
-    Event("event", "EVT", "Evènement"),
+    Event("event", "Evt", "Evènement"),
     UnknownServer("", "???", "Monde ???");
 
     private final String name;
