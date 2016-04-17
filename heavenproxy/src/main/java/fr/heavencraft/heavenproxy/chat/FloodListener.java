@@ -53,6 +53,13 @@ public class FloodListener extends AbstractListener
         // Connected from Hyperchat v2.6.04 on a Samsung GT-I9505
         // Connected from Hyperchat v2.6.07 on a HTC One S
         toIgnore.add("hyperchat");
+        
+        // Connected using PickaxeChat for Android
+        toIgnore.add("PickaxeChat");
+        
+        // I joined from Android using ChatCraft for Minecraft! You can access premium servers freely
+        toIgnore.add("ChatCraft");
+        
     }
 
     @EventHandler
