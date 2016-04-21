@@ -45,6 +45,16 @@ public class WarnCommand extends HeavenCommand
 
 			Utils.sendMessage(sender, "Avertissement pour majuscules envoyé à {" + player.getName() + "}.");
 		}
+		else if (warnType.equals("spam"))
+		{
+			Utils.sendMessage(player, " * {Attention !} Vous écrivez de nombreux messages en peu de temps.");
+			Utils.sendMessage(player,
+					"Ce style de conversation est déconseillé sur Heavencraft, car il rend le fil de discussion illisible.");
+			Utils.sendMessage(player,
+					"Faites un effort pour faciliter votre ouverture aux autres joueurs et éviter des sanctions.");
+
+			Utils.sendMessage(sender, "Avertissement pour spam envoyé à {" + player.getName() + "}.");
+		}
 		else if (warnType.equals("er"))
 		{
 			Utils.sendMessage(player, " * {Attention !} Vous semblez avoir du mal avec é/er/ez.");

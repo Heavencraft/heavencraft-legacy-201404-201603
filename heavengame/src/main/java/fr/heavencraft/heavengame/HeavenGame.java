@@ -12,6 +12,7 @@ public class HeavenGame extends JavaPlugin
 		TNT_RUN("TNT Run"),
 		MARIO_KART("Mario Kart"),
 		HUNGER_GAMES("Hunger Games"),
+		PAINTBALL("Paintball"),
 		DEFAULT("Heavencraft");
 
 		private final String _name;
@@ -42,6 +43,8 @@ public class HeavenGame extends JavaPlugin
 			_serverType = ServerType.MARIO_KART;
 		else if (Bukkit.getPluginManager().getPlugin("SurvivalGames") != null)
 			_serverType = ServerType.HUNGER_GAMES;
+		else if (Bukkit.getPluginManager().getPlugin("Paintball") != null)
+			_serverType = ServerType.PAINTBALL;
 		else
 			_serverType = ServerType.DEFAULT;
 
@@ -50,6 +53,8 @@ public class HeavenGame extends JavaPlugin
 
 	public static Location getSpawn()
 	{
+		if(_serverType == ServerType.PAINTBALL)
+			return new Location(Bukkit.getWorld("world"), -52.5, 66, -20.5);
 		return new Location(Bukkit.getWorld("world"), 0.5, 4, 0.5);
 	}
 
