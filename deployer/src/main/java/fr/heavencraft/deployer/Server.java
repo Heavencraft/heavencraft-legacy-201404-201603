@@ -1,21 +1,19 @@
 package fr.heavencraft.deployer;
 
 import java.util.List;
+import java.util.Map;
 
 public class Server
 {
 	private String path;
 	private String server;
+	private String configFile;
 	private List<String> plugins;
+	private Map<String, String> files;
 
 	public String getPath()
 	{
 		return path;
-	}
-
-	public void setPath(String path)
-	{
-		this.path = path;
 	}
 
 	public String getServer()
@@ -23,9 +21,9 @@ public class Server
 		return server;
 	}
 
-	public void setServer(String server)
+	public String getConfigFile()
 	{
-		this.server = server;
+		return configFile;
 	}
 
 	public List<String> getPlugins()
@@ -33,8 +31,8 @@ public class Server
 		return plugins;
 	}
 
-	public void setPlugins(List<String> plugins)
+	public Map<String, String> getFiles()
 	{
-		this.plugins = plugins;
+		return files;
 	}
 }

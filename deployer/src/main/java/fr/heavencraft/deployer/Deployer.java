@@ -10,10 +10,15 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.PosixFilePermission;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 
@@ -22,24 +27,33 @@ import com.google.gson.reflect.TypeToken;
 
 public class Deployer
 {
+	private static final File AVAILABLE_SERVERS_DIR = new File("servers");
+	private static final File AVAILABLE_PLUGINS_DIR = new File("plugins");
+	private static final File CONFIG_DIR = new File("cfg");
+	private static final File AVAILABLE_FILES_DIR = new File("files");
+
+	private static final File DEFAULT_CONFIG_FILE = new File("cfg/default.cfg");
 
 	public static void main(String[] args) throws FileNotFoundException
 	{
+		// Loading default configuration
+		final Properties defaultConfig = loadPropertiesFile(DEFAULT_CONFIG_FILE);
+
 		/*
 		 * Servers to update
 		 */
 
-		Gson gson = new Gson();
-		BufferedReader br = new BufferedReader(new FileReader("servers.json"));
-		Type listType = new TypeToken<ArrayList<Server>>()
+		final Gson gson = new Gson();
+		final BufferedReader br = new BufferedReader(new FileReader("servers.json"));
+		final Type listType = new TypeToken<ArrayList<Server>>()
 		{
 		}.getType();
 
-		List<Server> servers = gson.fromJson(br, listType);
+		final List<Server> servers = gson.fromJson(br, listType);
 
 		System.out.println("Servers to update :");
 
-		for (Server server : servers)
+		for (final Server server : servers)
 			System.out.println("- " + server.getPath());
 
 		System.out.println();
@@ -48,18 +62,19 @@ public class Deployer
 		 * Servers & plugins jars
 		 */
 
-		Map<String, File> availableServers = getJars("servers");
-		Map<String, File> availablePlugins = getJars("plugins");
+		final Map<String, File> availableServers = getJars(AVAILABLE_SERVERS_DIR);
+		final Map<String, File> availablePlugins = getJars(AVAILABLE_PLUGINS_DIR);
+		final Map<String, File> availableFiles = getFiles(AVAILABLE_FILES_DIR);
 
 		System.out.println("Available servers :");
 
-		for (String server : availableServers.keySet())
+		for (final String server : availableServers.keySet())
 			System.out.println("- " + server);
 
 		System.out.println();
 		System.out.println("Available plugins :");
 
-		for (String plugin : availablePlugins.keySet())
+		for (final String plugin : availablePlugins.keySet())
 			System.out.println("- " + plugin);
 
 		System.out.println();
@@ -68,25 +83,62 @@ public class Deployer
 		 * UPDATE !!
 		 */
 
-		for (Server server : servers)
+		for (final Server server : servers)
 		{
-			if (availableServers.containsKey(server.getServer()))
-				copyJar(availableServers.get(server.getServer()), server.getPath() + "/" + server.getServer());
+			// Loading server configuration
+			final Properties serverConfig = loadPropertiesFile(new File(CONFIG_DIR, server.getConfigFile()),
+					defaultConfig);
 
-			for (String plugin : server.getPlugins())
+			final File serverDir = new File(server.getPath());
+			if (!serverDir.exists())
+				serverDir.mkdirs();
+
+			final File pluginsDir = new File(serverDir, "plugins");
+			if (!pluginsDir.exists())
+				pluginsDir.mkdirs();
+
+			if (availableServers.containsKey(server.getServer()))
+				copyJar(availableServers.get(server.getServer()), new File(serverDir, server.getServer()));
+
+			for (final String plugin : server.getPlugins())
 			{
 				if (availablePlugins.containsKey(plugin))
-					copyJar(availablePlugins.get(plugin), server.getPath() + "/plugins/" + plugin);
+					copyJar(availablePlugins.get(plugin), new File(pluginsDir, plugin));
+			}
+
+			for (final Entry<String, String> config : server.getFiles().entrySet())
+			{
+				final File model = availableFiles.get(config.getKey());
+
+				if (model == null)
+				{
+					System.err.println("WARNING: Unable to locate config " + config.getKey());
+					continue;
+				}
+
+				final File destFile = new File(serverDir, config.getValue());
+				final File destDir = destFile.getParentFile();
+				if (destDir != null && !destDir.exists())
+					destDir.mkdirs();
+
+				try
+				{
+					copyConfig(model, destFile, serverConfig);
+				}
+				catch (final IOException e)
+				{
+					System.err.println("WARNING: Unable to copy config " + config.getKey());
+					e.printStackTrace();
+				}
 			}
 		}
 
 	}
 
-	private static void copyJar(File origin, String directory)
+	private static void copyJar(File origin, File destFile)
 	{
-		Path filePath = origin.toPath();
-		File destFile = new File(directory);
-		Path dirPath = destFile.toPath();
+		final Path filePath = origin.toPath();
+		final Path dirPath = destFile.toPath();
 
 		try
 		{
@@ -96,17 +148,81 @@ public class Deployer
 				Files.copy(filePath, dirPath, StandardCopyOption.REPLACE_EXISTING);
 			}
 		}
-		catch (IOException ex)
+		catch (final IOException ex)
 		{
 			ex.printStackTrace();
 		}
 	}
 
-	private static Map<String, File> getJars(String path)
+	private static void copyConfig(File model, File dest, Properties properties) throws IOException
 	{
-		Map<String, File> files = new HashMap<String, File>();
+		String content = FileUtils.readFileToString(model);
+		content = replaceProperties(content, properties);
 
-		for (File file : new File(path).listFiles(new JarFilenameFilter()))
+		if (dest.exists())
+		{
+			final String destContent = FileUtils.readFileToString(dest);
+
+			if (destContent.equals(content))
+				return;
+		}
+
+		System.out.println("Copying " + model + " to " + dest);
+		FileUtils.writeStringToFile(dest, content);
+		if (dest.getName().endsWith(".sh"))
+		{
+			final Set<PosixFilePermission> perms = Files.getPosixFilePermissions(dest.toPath());
+			perms.add(PosixFilePermission.OWNER_EXECUTE);
+			Files.setPosixFilePermissions(dest.toPath(), perms);
+		}
+	}
+
+	public static String replaceProperties(String content, Properties properties)
+	{
+		int currentIndex = 0;
+		while ((currentIndex = content.indexOf("${", currentIndex)) != -1)
+		{
+			final int endIndex = content.indexOf('}', currentIndex);
+
+			final String propertyName = content.substring(currentIndex + 2, endIndex);
+			final String propertyValue = properties.getProperty(propertyName);
+			if (propertyValue != null)
+			{
+				content = content.substring(0, currentIndex) + propertyValue + content.substring(endIndex + 1);
+			}
+
+			currentIndex += propertyValue.length();
+		}
+		return content;
+	}
+
+	private static Map<String, File> getJars(File dir)
+	{
+		if (!dir.exists())
+		{
+			dir.mkdirs();
+			return Collections.emptyMap();
+		}
+
+		final Map<String, File> files = new HashMap<String, File>();
+
+		for (final File file : dir.listFiles(new JarFilenameFilter()))
+			files.put(file.getName(), file);
+
+		return files;
+	}
+
+	private static Map<String, File> getFiles(File dir)
+	{
+		if (!dir.exists())
+		{
+			dir.mkdirs();
+			return Collections.emptyMap();
+		}
+
+		final Map<String, File> files = new HashMap<String, File>();
+
+		for (final File file : dir.listFiles())
 			files.put(file.getName(), file);
 
 		return files;
@@ -119,5 +235,26 @@ public class Deployer
 		{
 			return name.endsWith(".jar");
 		}
+	}
+
+	private static Properties loadPropertiesFile(File file)
+	{
+		return loadPropertiesFile(file, null);
+	}
+
+	private static Properties loadPropertiesFile(File file, Properties defaults)
+	{
+		final Properties properties = new Properties(defaults);
+
+		try (BufferedReader reader = new BufferedReader(new FileReader(file)))
+		{
+			properties.load(reader);
+		}
+		catch (final IOException e)
+		{
+			throw new RuntimeException("Unable to load properties file " + file, e);
+		}
+
+		return properties;
 	}
 }
