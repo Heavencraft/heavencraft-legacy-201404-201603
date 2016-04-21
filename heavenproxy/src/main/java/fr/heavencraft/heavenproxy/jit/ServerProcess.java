@@ -11,6 +11,7 @@ public enum ServerProcess
 	// Fun("fun", ServerProcessManager._2G, "/home/minecraft/prod/servers/fun"),
 	UltraHard("ultrahard", ServerProcessManager._1G, "/home/minecraft/prod/servers/ultrahard"),
 	Musee("musee", ServerProcessManager._512M, "/home/minecraft/prod/servers/musee"),
+	Event("event", ServerProcessManager._1G, "/home/minecraft/prod/servers/event"),
 	// Mini-jeux
 	Infected("infected", ServerProcessManager._1G, "/home/minecraft/prod/minigames/infected"),
 	MarioKart("mariokart", ServerProcessManager._1G, "/home/minecraft/prod/minigames/mariokart"),
@@ -18,7 +19,8 @@ public enum ServerProcess
 	TNTRun("tntrun", ServerProcessManager._1G, "/home/minecraft/prod/minigames/tntrun"),
 	// UAT
 	UAT_SemiRP("uat-semirp", ServerProcessManager._2G, "/home/minecraft/uat/servers/semirp"),
-	UAT_Creative("uat-creative", ServerProcessManager._2G, "/home/minecraft/uat/servers/creative"),
+	UAT_Creative("uat-creative", ServerProcessManager._512M, "/home/minecraft/uat/servers/creative"),
+	UAT_Survival("uat-survival", ServerProcessManager._512M, "/home/minecraft/uat/servers/survival"),
 	Build("build", ServerProcessManager._2G, "/home/minecraft/uat/servers/build");
 
 	public static ServerProcess getUniqueInstanceByName(String name)

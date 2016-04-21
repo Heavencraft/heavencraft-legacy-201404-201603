@@ -9,9 +9,10 @@ import net.md_5.bungee.api.CommandSender;
 
 public class MuteCommand extends HeavenCommand
 {
+	public static String permission = "heavencraft.commands.mute";
     public MuteCommand()
     {
-        super("mute", "heavencraft.commands.mute", new String[] {});
+        super("mute", MuteCommand.permission, new String[] {});
     }
 
     @Override

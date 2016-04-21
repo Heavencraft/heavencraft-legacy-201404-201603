@@ -35,7 +35,7 @@ public class HeavenFun extends HeavenPlugin
 	public static Location getSpawn()
 	{
 		if (spawn == null)
-			spawn = new Location(Bukkit.getWorld("world"), 0, 100, 0);
+			spawn = new Location(Bukkit.getWorld("world"), 0.5, 100.0, 0.5);
 
 		return spawn;
 	}
