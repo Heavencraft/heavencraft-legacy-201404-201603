@@ -224,8 +224,11 @@ public class Deployer
 			{
 				content = content.substring(0, currentIndex) + propertyValue + content.substring(endIndex + 1);
 			}
-
-			currentIndex += propertyValue.length();
+			else
+			{
+				System.err.println("WARNING: property not found: " + propertyName);
+				currentIndex = endIndex + 1;
+			}
 		}
 		return content;
 	}
