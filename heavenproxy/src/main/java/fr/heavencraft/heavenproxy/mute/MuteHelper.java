@@ -24,8 +24,8 @@ public class MuteHelper
                 final String playerName = user.getName();
                 for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers())
 					if (p.hasPermission(MuteCommand.permission))
-						Utils.sendMessage(sender, "Le joueur {%1$s} a été mute pour {%2$s} minutes.",
-								playerName, nbMinutes);
+						Utils.sendMessage(p, "Le joueur {%1$s} a été mute pour {%2$s} minutes par {%3$s}.",
+								playerName, nbMinutes, sender.getName());
 
                 try
                 {
