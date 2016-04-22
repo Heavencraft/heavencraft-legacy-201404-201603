@@ -8,7 +8,6 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.PosixFilePermission;
 import java.util.ArrayList;
@@ -97,8 +96,12 @@ public class Deployer
 			if (!pluginsDir.exists())
 				pluginsDir.mkdirs();
 
-			if (availableServers.containsKey(server.getServer()))
-				copyFile(availableServers.get(server.getServer()), new File(serverDir, server.getServer()));
+			final File serverJar = availableServers.get(server.getServer());
+			if (serverJar != null)
+			{
+				copyFile(serverJar, new File(serverDir, server.getServer()));
+				serverConfig.put("server.jar", server.getServer());
+			}
 
 			// Plugins: just copy them
 			final List<String> plugins = server.getPlugins();
@@ -163,17 +166,18 @@ public class Deployer
 
 	}
 
-	private static void copyFile(File origin, File destFile)
+	private static void copyFile(File sourceFile, File destFile)
 	{
-		final Path filePath = origin.toPath();
-		final Path dirPath = destFile.toPath();
+		final File destDir = destFile.getParentFile();
+		if (destDir != null && !destDir.exists())
+			destDir.mkdirs();
 
 		try
 		{
-			if (!FileUtils.contentEquals(origin, destFile))
+			if (!FileUtils.contentEquals(sourceFile, destFile))
 			{
-				System.out.println("Copying " + filePath + " to " + dirPath);
-				Files.copy(filePath, dirPath, StandardCopyOption.REPLACE_EXISTING);
+				System.out.println("Copying " + sourceFile + " to " + destFile);
+				Files.copy(sourceFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			}
 		}
 		catch (final IOException ex)
@@ -203,7 +207,7 @@ public class Deployer
 
 		System.out.println("Copying " + model + " to " + dest);
 		FileUtils.writeStringToFile(dest, content);
-		if (dest.getName().endsWith(".sh"))
+		if (dest.getName().endsWith(".sh") || model.getName().endsWith(".sh"))
 		{
 			final Set<PosixFilePermission> perms = Files.getPosixFilePermissions(dest.toPath());
 			perms.add(PosixFilePermission.OWNER_EXECUTE);

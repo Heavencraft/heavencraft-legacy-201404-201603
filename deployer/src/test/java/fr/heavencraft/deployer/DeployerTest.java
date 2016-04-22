@@ -57,6 +57,6 @@ public class DeployerTest extends TestCase
 		properties.put("ccc", "C");
 
 		assertEquals("aaa: A; bbb: ${bbb}; ccc: C;", Deployer.replaceProperties(content, properties));
-		assertEquals("WARNING: property not found: bbb\n", syserr.toString());
+		assertEquals("WARNING: property not found: bbb" + System.lineSeparator(), syserr.toString());
 	}
 }
