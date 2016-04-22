@@ -98,12 +98,40 @@ public class Deployer
 				pluginsDir.mkdirs();
 
 			if (availableServers.containsKey(server.getServer()))
-				copyJar(availableServers.get(server.getServer()), new File(serverDir, server.getServer()));
+				copyFile(availableServers.get(server.getServer()), new File(serverDir, server.getServer()));
 
-			for (final String plugin : server.getPlugins())
+			// Plugins: just copy them
+			final List<String> plugins = server.getPlugins();
+			if (plugins != null && !plugins.isEmpty())
 			{
-				if (availablePlugins.containsKey(plugin))
-					copyJar(availablePlugins.get(plugin), new File(pluginsDir, plugin));
+				for (final String plugin : plugins)
+				{
+					final File sourceFile = availablePlugins.get(plugin);
+					if (sourceFile == null)
+					{
+						System.err.println("WARNING: source file not found: " + plugin);
+						continue;
+					}
+
+					copyFile(sourceFile, new File(pluginsDir, plugin));
+				}
+			}
+
+			// Static files: just copy them
+			final Map<String, String> staticFiles = server.getStaticFiles();
+			if (staticFiles != null && !staticFiles.isEmpty())
+			{
+				for (final Entry<String, String> config : staticFiles.entrySet())
+				{
+					final File sourceFile = availableFiles.get(config.getKey());
+					if (sourceFile == null)
+					{
+						System.err.println("WARNING: source file not found: " + config.getKey());
+						continue;
+					}
+
+					copyFile(sourceFile, new File(serverDir, config.getValue()));
+				}
 			}
 
 			for (final Entry<String, String> config : server.getFiles().entrySet())
@@ -135,7 +163,7 @@ public class Deployer
 
 	}
 
-	private static void copyJar(File origin, File destFile)
+	private static void copyFile(File origin, File destFile)
 	{
 		final Path filePath = origin.toPath();
 		final Path dirPath = destFile.toPath();
@@ -156,6 +184,12 @@ public class Deployer
 
 	private static void copyConfig(File model, File dest, Properties properties) throws IOException
 	{
+		if (model == null)
+		{
+			System.err.println("WARNING: file not found " + model);
+			return;
+		}
+
 		String content = FileUtils.readFileToString(model);
 		content = replaceProperties(content, properties);
 

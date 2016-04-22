@@ -10,6 +10,7 @@ public class Server
 	private String configFile;
 	private List<String> plugins;
 	private Map<String, String> files;
+	private Map<String, String> staticFiles;
 
 	public String getPath()
 	{
@@ -34,5 +35,10 @@ public class Server
 	public Map<String, String> getFiles()
 	{
 		return files;
+	}
+
+	public Map<String, String> getStaticFiles()
+	{
+		return staticFiles;
 	}
 }
