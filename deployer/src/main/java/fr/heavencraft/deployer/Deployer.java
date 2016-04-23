@@ -27,10 +27,11 @@ import com.google.gson.reflect.TypeToken;
 
 public class Deployer
 {
-	private static final File AVAILABLE_SERVERS_DIR = new File("servers");
-	private static final File AVAILABLE_PLUGINS_DIR = new File("plugins");
+	private static final File SERVERS_DIR = new File("servers");
+	private static final File PLUGINS_DIR = new File("plugins");
 	private static final File CONFIG_DIR = new File("cfg");
-	private static final File AVAILABLE_FILES_DIR = new File("files");
+	private static final File FILES_DIR = new File("files");
+	private static final File STATIC_FILES_DIR = new File("static-files");
 
 	private static final File DEFAULT_CONFIG_FILE = new File("cfg/default.cfg");
 
@@ -62,9 +63,10 @@ public class Deployer
 		 * Servers & plugins jars
 		 */
 
-		final Map<String, File> availableServers = getJars(AVAILABLE_SERVERS_DIR);
-		final Map<String, File> availablePlugins = getJars(AVAILABLE_PLUGINS_DIR);
-		final Map<String, File> availableFiles = getFiles(AVAILABLE_FILES_DIR);
+		final Map<String, File> availableServers = getJars(SERVERS_DIR);
+		final Map<String, File> availablePlugins = getJars(PLUGINS_DIR);
+		final Map<String, File> availableFiles = getFiles(FILES_DIR);
+		final Map<String, File> availableStaticFiles = getFiles(STATIC_FILES_DIR);
 
 		System.out.println("Available servers :");
 
@@ -127,7 +129,7 @@ public class Deployer
 			{
 				for (final Entry<String, String> config : staticFiles.entrySet())
 				{
-					final File sourceFile = availableFiles.get(config.getKey());
+					final File sourceFile = availableStaticFiles.get(config.getKey());
 					if (sourceFile == null)
 					{
 						System.err.println("WARNING: source file not found: " + config.getKey());
@@ -175,17 +177,32 @@ public class Deployer
 
 		try
 		{
-			if (!FileUtils.contentEquals(sourceFile, destFile))
+			if (!areSameFile(sourceFile, destFile))
 			{
 				System.out.println("Copying " + sourceFile + " to " + destFile);
 				Files.copy(sourceFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING,
 						LinkOption.NOFOLLOW_LINKS);
 			}
 		}
-		catch (final IOException ex)
+		catch (final IOException e)
 		{
-			ex.printStackTrace();
+			e.printStackTrace();
 		}
+	}
+
+	private static boolean areSameFile(File sourceFile, File destFile) throws IOException
+	{
+		if (!sourceFile.exists() || !destFile.exists())
+			return false;
+
+		// Normal files
+		if (!Files.isSymbolicLink(sourceFile.toPath()))
+			return FileUtils.contentEquals(sourceFile, destFile);
+
+		if (!Files.isSymbolicLink(destFile.toPath()))
+			return false;
+
+		return Files.readSymbolicLink(sourceFile.toPath()).equals(Files.readSymbolicLink(destFile.toPath()));
 	}
 
 	private static void copyConfig(File model, File dest, Properties properties) throws IOException
