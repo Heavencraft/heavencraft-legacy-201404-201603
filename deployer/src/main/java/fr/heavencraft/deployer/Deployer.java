@@ -8,6 +8,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.PosixFilePermission;
 import java.util.ArrayList;
@@ -177,7 +178,8 @@ public class Deployer
 			if (!FileUtils.contentEquals(sourceFile, destFile))
 			{
 				System.out.println("Copying " + sourceFile + " to " + destFile);
-				Files.copy(sourceFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+				Files.copy(sourceFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING,
+						LinkOption.NOFOLLOW_LINKS);
 			}
 		}
 		catch (final IOException ex)
