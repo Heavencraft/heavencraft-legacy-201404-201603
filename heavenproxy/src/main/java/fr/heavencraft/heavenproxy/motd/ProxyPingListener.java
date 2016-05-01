@@ -18,7 +18,7 @@ public class ProxyPingListener extends AbstractListener
 
         description += getServerString("Semi-RP", "semirp") + " ";
         description += getServerString("Créatif", "creative", "fun", "musee", "build") + " ";
-        description += getServerString("Skyblock", "skyblock") + " ";
+        //description += getServerString("Skyblock", "skyblock") + " ";
         description += getServerString("Survie", "origines", "ultrahard") + " ";
         description += getServerString("Jeux", "infected", "tntrun", "mariokart", "paintball", "event");
 
