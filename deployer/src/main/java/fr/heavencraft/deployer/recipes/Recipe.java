@@ -1,33 +1,27 @@
-package fr.heavencraft.deployer;
+package fr.heavencraft.deployer.recipes;
 
 import java.util.List;
 import java.util.Map;
 
-public class Server
+public class Recipe
 {
-	private String path;
+	private List<String> applyTo;
 	private String server;
-	private String configFile;
 	private List<String> plugins;
 	private Map<String, String> files;
 	private Map<String, String> staticFiles;
 
-	public String getPath()
+	public List<String> getApplyTo()
 	{
-		return path;
+		return applyTo;
 	}
 
-	public String getServer()
+	public String getServerName()
 	{
 		return server;
 	}
 
-	public String getConfigFile()
-	{
-		return configFile;
-	}
-
-	public List<String> getPlugins()
+	public List<String> getPluginsNames()
 	{
 		return plugins;
 	}
