@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Properties;
 
+import fr.heavencraft.deployer.utils.PropertiesUtil;
 import junit.framework.TestCase;
 
 public class DeployerTest extends TestCase
@@ -35,7 +36,7 @@ public class DeployerTest extends TestCase
 		properties.put("bbb", "B");
 		properties.put("ccc", "C");
 
-		assertEquals("aaa: A; bbb: B; ccc: C;", Deployer.replaceProperties(content, properties));
+		assertEquals("aaa: A; bbb: B; ccc: C;", PropertiesUtil.replaceProperties(content, properties));
 	}
 
 	public void testReplacePropertiesChain()
@@ -46,7 +47,7 @@ public class DeployerTest extends TestCase
 		properties.put("bbb", "${ccc}");
 		properties.put("ccc", "C");
 
-		assertEquals("aaa: C; bbb: C; ccc: C;", Deployer.replaceProperties(content, properties));
+		assertEquals("aaa: C; bbb: C; ccc: C;", PropertiesUtil.replaceProperties(content, properties));
 	}
 
 	public void testReplacePropertiesNotFound()
@@ -56,7 +57,7 @@ public class DeployerTest extends TestCase
 		properties.put("aaa", "A");
 		properties.put("ccc", "C");
 
-		assertEquals("aaa: A; bbb: ${bbb}; ccc: C;", Deployer.replaceProperties(content, properties));
+		assertEquals("aaa: A; bbb: ${bbb}; ccc: C;", PropertiesUtil.replaceProperties(content, properties));
 		assertEquals("WARNING: property not found: bbb" + System.lineSeparator(), syserr.toString());
 	}
 }
