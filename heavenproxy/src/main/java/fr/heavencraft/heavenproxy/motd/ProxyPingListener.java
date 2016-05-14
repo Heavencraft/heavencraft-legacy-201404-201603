@@ -9,34 +9,34 @@ import net.md_5.bungee.event.EventHandler;
 
 public class ProxyPingListener extends AbstractListener
 {
-    private static final String FIRST_LINE = "§l§fHeaven§bcraft§r [1.8.9][1.9]\n";
+	private static final String FIRST_LINE = "§l§fHeaven§bcraft§r [1.9.2]\n";
 
-    @EventHandler
-    public void onProxyPing(ProxyPingEvent event)
-    {
-        String description = FIRST_LINE;
+	@EventHandler
+	public void onProxyPing(ProxyPingEvent event)
+	{
+		String description = FIRST_LINE;
 
-        description += getServerString("Semi-RP", "semirp") + " ";
-        description += getServerString("Créatif", "creative", "fun", "musee", "build") + " ";
-        description += getServerString("Skyblock", "skyblock") + " ";
-        description += getServerString("Survie", "origines", "ultrahard") + " ";
-        description += getServerString("Jeux", "infected", "tntrun", "mariokart", "paintball", "event");
+		description += getServerString("Semi-RP", "semirp") + " ";
+		description += getServerString("Créatif", "creative", "fun", "musee", "build") + " ";
+		description += getServerString("Skyblock", "skyblock") + " ";
+		description += getServerString("Survie", "origines", "ultrahard") + " ";
+		description += getServerString("Jeux", "infected", "tntrun", "mariokart", "paintball", "event");
 
-        event.getResponse().setDescription(description);
-    }
+		event.getResponse().setDescription(description);
+	}
 
-    private static String getServerString(String name, String... servers)
-    {
-        for (final String server : servers)
-        {
-            final ServerInfo serverInfo = ProxyServer.getInstance().getServerInfo(server);
+	private static String getServerString(String name, String... servers)
+	{
+		for (final String server : servers)
+		{
+			final ServerInfo serverInfo = ProxyServer.getInstance().getServerInfo(server);
 
-            if (serverInfo != null && serverInfo.getPlayers().size() != 0)
-            {
-                return ChatColor.GREEN + name;
-            }
-        }
+			if (serverInfo != null && serverInfo.getPlayers().size() != 0)
+			{
+				return ChatColor.GREEN + name;
+			}
+		}
 
-        return ChatColor.RED + name;
-    }
+		return ChatColor.RED + name;
+	}
 }
