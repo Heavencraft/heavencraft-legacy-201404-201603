@@ -9,7 +9,7 @@ import net.md_5.bungee.event.EventHandler;
 
 public class ProxyPingListener extends AbstractListener
 {
-	private static final String FIRST_LINE = "§l§fHeaven§bcraft§r [1.9.4]\n";
+	private static final String FIRST_LINE = "§l§fHeaven§bcraft§r [1.10]\n";
 
 	@EventHandler
 	public void onProxyPing(ProxyPingEvent event)
