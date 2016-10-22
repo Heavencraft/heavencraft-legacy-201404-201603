@@ -49,7 +49,7 @@ import net.md_5.bungee.api.plugin.Plugin;
 
 public class HeavenProxy extends Plugin
 {
-    private final static String DB_URL = "jdbc:mysql://localhost:3306/proxy?user=mc-sql&password=9e781e41f865901850d5c3060063c8ca&zeroDateTimeBehavior=convertToNull";
+    private final static String DB_URL = "jdbc:mysql://localhost:3306/proxy?user=mc-sql&password=0HJ1kmcYZRac985GJIY6Qfg1NoekinUM&zeroDateTimeBehavior=convertToNull";
 
     private static Connection _connection;
 
