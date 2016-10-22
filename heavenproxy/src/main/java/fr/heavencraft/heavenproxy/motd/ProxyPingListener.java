@@ -17,10 +17,11 @@ public class ProxyPingListener extends AbstractListener
 		String description = FIRST_LINE;
 
 		description += getServerString("Semi-RP", "semirp") + " ";
-		description += getServerString("Créatif", "creative", "fun", "musee", "build") + " ";
+		description += getServerString("Créatif", "creative") + " ";
+		// description += getServerString("Créatif", "creative", "fun", "musee", "build") + " ";
 		// description += getServerString("Skyblock", "skyblock") + " ";
-		description += getServerString("Survie", "origines", "ultrahard") + " ";
-		description += getServerString("Jeux", "infected", "tntrun", "mariokart", "paintball", "event");
+		// description += getServerString("Survie", "origines", "ultrahard") + " ";
+		// description += getServerString("Jeux", "infected", "tntrun", "mariokart", "paintball", "event");
 
 		event.getResponse().setDescription(description);
 	}
