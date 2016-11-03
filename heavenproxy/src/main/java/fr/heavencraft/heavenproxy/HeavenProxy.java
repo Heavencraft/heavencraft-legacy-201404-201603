@@ -1,5 +1,6 @@
 package fr.heavencraft.heavenproxy;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -46,203 +47,224 @@ import fr.heavencraft.heavenproxy.users.UsersListener;
 import fr.heavencraft.heavenproxy.warn.WarnCommand;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.config.Configuration;
+import net.md_5.bungee.config.ConfigurationProvider;
+import net.md_5.bungee.config.YamlConfiguration;
 
 public class HeavenProxy extends Plugin
 {
-    private final static String DB_URL = "jdbc:mysql://localhost:3306/proxy?user=mc-sql&password=0HJ1kmcYZRac985GJIY6Qfg1NoekinUM&zeroDateTimeBehavior=convertToNull";
+	private final ProxyLogger log = ProxyLogger.getLogger(getClass());
 
-    private static Connection _connection;
+	private static String databaseUrl;
 
-    private static HeavenProxy _instance;
+	private static Connection _connection;
 
-    private RequestsManager _requestsManager;
+	private static HeavenProxy _instance;
 
-    @Override
-    public void onEnable()
-    {
-        try
-        {
-            updateDatabaseIfNeeded();
+	private RequestsManager _requestsManager;
 
-            super.onEnable();
+	@Override
+	public void onEnable()
+	{
+		try
+		{
+			final File file = new File(getDataFolder(), "config.yml");
+			log.info("Loading configuration file %1$s", file);
+			final Configuration configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(file);
 
-            _instance = this;
-            new QueriesHandler();
+			final String username = configuration.getString("mysql.username");
+			final String password = configuration.getString("mysql.password");
+			final String database = configuration.getString("mysql.database");
 
-            new LogListener();
-            new SpyListener();
+			final StringBuilder builder = new StringBuilder();
+			builder.append("jdbc:mysql://localhost:3306/").append(database);
+			builder.append("?user=").append(username).append("&password=").append(password);
+			builder.append("&zeroDateTimeBehavior=convertToNull");
+			databaseUrl = builder.toString();
 
-            new ActifCommand();
-            new DonCommand();
-            new ListCommand();
-            new MeCommand();
-            new ModoCommand();
-            new NexusCommand();
-            new OuestCommand();
-            new ReplyCommand();
-            new SayCommand();
-            new SendCommand();
-            new SpyCommand();
-            new TellCommand();
-            new TextCommand();
-            new VoterCommand();
-            new WikiCommand();
+			log.info("Using database url %1$s", databaseUrl);
 
-            // Ban
-            new BanCommand();
-            new BanListener();
-            new SilentBanListener();
-            new UnbanCommand();
+			updateDatabaseIfNeeded();
 
-            // Chat
-            new ChatListener();
-            new FloodListener();
-            new ModoListener();
-            new TabCompleteListener();
+			super.onEnable();
 
-            // Kick
-            new KickCommand();
-            new RagequitCommand();
+			_instance = this;
+			new QueriesHandler();
 
-            // MOTD
-            new ProxyPingListener();
+			new LogListener();
+			new SpyListener();
 
-            // Mute
-            new MuteCommand();
-            new MuteListener();
+			new ActifCommand();
+			new DonCommand();
+			new ListCommand();
+			new MeCommand();
+			new ModoCommand();
+			new NexusCommand();
+			new OuestCommand();
+			new ReplyCommand();
+			new SayCommand();
+			new SendCommand();
+			new SpyCommand();
+			new TellCommand();
+			new TextCommand();
+			new VoterCommand();
+			new WikiCommand();
 
-            // Radio
-            new HcsCommand();
-            new RadioCommand();
+			// Ban
+			new BanCommand();
+			new BanListener();
+			new SilentBanListener();
+			new UnbanCommand();
 
-            // Servers
-            new TitleListener();
+			// Chat
+			new ChatListener();
+			new FloodListener();
+			new ModoListener();
+			new TabCompleteListener();
 
-            // Users
-            new UsersListener();
+			// Kick
+			new KickCommand();
+			new RagequitCommand();
 
-            // Warn
-            new WarnCommand();
+			// MOTD
+			new ProxyPingListener();
 
-            new ServerProcessManager();
+			// Mute
+			new MuteCommand();
+			new MuteListener();
 
-            new AutoMessageTask();
-            new MemoryWatcherTask();
+			// Radio
+			new HcsCommand();
+			new RadioCommand();
 
-            _requestsManager = new RequestsManager();
+			// Servers
+			new TitleListener();
 
-        }
-        catch (final Throwable t)
-        {
-            t.printStackTrace();
-            ProxyServer.getInstance().stop();
-        }
-    }
+			// Users
+			new UsersListener();
 
-    @Override
-    public void onDisable()
-    {
-        super.onDisable();
+			// Warn
+			new WarnCommand();
 
-        getProxy().getScheduler().cancel(this);
-    }
+			new ServerProcessManager();
 
-    public RequestsManager getRequestsManager()
-    {
-        return _requestsManager;
-    }
+			new AutoMessageTask();
+			new MemoryWatcherTask();
 
-    public static Connection getConnection()
-    {
-        try
-        {
-            if (_connection == null || _connection.isClosed())
-            {
-                _connection = DriverManager.getConnection(DB_URL);
-            }
-        }
-        catch (final SQLException ex)
-        {
-            ex.printStackTrace();
-            ProxyServer.getInstance().stop();
-        }
+			_requestsManager = new RequestsManager();
 
-        return _connection;
-    }
+		}
+		catch (final Throwable t)
+		{
+			t.printStackTrace();
+			ProxyServer.getInstance().stop();
+		}
+	}
 
-    public static HeavenProxy getInstance()
-    {
-        return _instance;
-    }
+	@Override
+	public void onDisable()
+	{
+		super.onDisable();
 
-    private static final String USERS_TEST_QUERY = "SELECT DISTINCT uuid FROM users WHERE LENGTH(uuid) = 32 ORDER BY last_login DESC;";
+		getProxy().getScheduler().cancel(this);
+	}
 
-    private static final String BANLIST_TEST_QUERY = "SELECT DISTINCT uuid FROM banlist WHERE LENGTH(uuid) = 32;";
-    private static final String BANLIST_UPDATE_QUERY = "UPDATE banlist SET uuid = ? WHERE uuid = ?;";
+	public RequestsManager getRequestsManager()
+	{
+		return _requestsManager;
+	}
 
-    private static void updateDatabaseIfNeeded() throws SQLException
-    {
-        /*
-         * Banlist
-         */
+	public static Connection getConnection()
+	{
+		try
+		{
+			if (_connection == null || _connection.isClosed())
+			{
+				_connection = DriverManager.getConnection(databaseUrl);
+			}
+		}
+		catch (final SQLException ex)
+		{
+			ex.printStackTrace();
+			ProxyServer.getInstance().stop();
+		}
 
-        System.out.println("BANLIST START");
+		return _connection;
+	}
 
-        try (PreparedStatement ps = getConnection().prepareStatement(BANLIST_TEST_QUERY))
-        {
-            final ResultSet rs = ps.executeQuery();
+	public static HeavenProxy getInstance()
+	{
+		return _instance;
+	}
 
-            while (rs.next())
-            {
-                final String uuid = rs.getString("uuid");
-                final String dash = uuid.substring(0, 8) //
-                        + "-" + uuid.substring(8, 12) //
-                        + "-" + uuid.substring(12, 16) //
-                        + "-" + uuid.substring(16, 20) //
-                        + "-" + uuid.substring(20, 32);
+	private static final String USERS_TEST_QUERY = "SELECT DISTINCT uuid FROM users WHERE LENGTH(uuid) = 32 ORDER BY last_login DESC;";
 
-                try (PreparedStatement ps2 = getConnection().prepareStatement(BANLIST_UPDATE_QUERY))
-                {
-                    ps2.setString(1, dash);
-                    ps2.setString(2, uuid);
+	private static final String BANLIST_TEST_QUERY = "SELECT DISTINCT uuid FROM banlist WHERE LENGTH(uuid) = 32;";
+	private static final String BANLIST_UPDATE_QUERY = "UPDATE banlist SET uuid = ? WHERE uuid = ?;";
 
-                    if (ps2.executeUpdate() == 0)
-                        throw new RuntimeException("Failed to update " + uuid);
-                }
-            }
-        }
-        System.out.println("BANLIST END");
+	private static void updateDatabaseIfNeeded() throws SQLException
+	{
+		/*
+		 * Banlist
+		 */
 
-        /*
-         * Users
-         */
+		System.out.println("BANLIST START");
 
-        try (PreparedStatement ps = getConnection().prepareStatement(USERS_TEST_QUERY))
-        {
-            final ResultSet rs = ps.executeQuery();
+		try (PreparedStatement ps = getConnection().prepareStatement(BANLIST_TEST_QUERY))
+		{
+			final ResultSet rs = ps.executeQuery();
 
-            System.out.println("USERS START");
+			while (rs.next())
+			{
+				final String uuid = rs.getString("uuid");
+				final String dash = uuid.substring(0, 8) //
+						+ "-" + uuid.substring(8, 12) //
+						+ "-" + uuid.substring(12, 16) //
+						+ "-" + uuid.substring(16, 20) //
+						+ "-" + uuid.substring(20, 32);
 
-            while (rs.next())
-            {
-                final String uuid = rs.getString("uuid");
+				try (PreparedStatement ps2 = getConnection().prepareStatement(BANLIST_UPDATE_QUERY))
+				{
+					ps2.setString(1, dash);
+					ps2.setString(2, uuid);
 
-                if (rs.isLast())
-                {
-                    QueriesHandler.addQuery(new UpdateUUIDQuery(uuid)
-                    {
-                        @Override
-                        public void onSuccess()
-                        {
-                            System.out.println("USERS END");
-                        }
-                    });
-                }
-                else
-                {
-                    QueriesHandler.addQuery(new UpdateUUIDQuery(uuid));
-                }
-            }
-        }
-    }
+					if (ps2.executeUpdate() == 0)
+						throw new RuntimeException("Failed to update " + uuid);
+				}
+			}
+		}
+		System.out.println("BANLIST END");
+
+		/*
+		 * Users
+		 */
+
+		try (PreparedStatement ps = getConnection().prepareStatement(USERS_TEST_QUERY))
+		{
+			final ResultSet rs = ps.executeQuery();
+
+			System.out.println("USERS START");
+
+			while (rs.next())
+			{
+				final String uuid = rs.getString("uuid");
+
+				if (rs.isLast())
+				{
+					QueriesHandler.addQuery(new UpdateUUIDQuery(uuid)
+					{
+						@Override
+						public void onSuccess()
+						{
+							System.out.println("USERS END");
+						}
+					});
+				}
+				else
+				{
+					QueriesHandler.addQuery(new UpdateUUIDQuery(uuid));
+				}
+			}
+		}
+	}
 }
