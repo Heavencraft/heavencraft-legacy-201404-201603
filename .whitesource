@@ -4,5 +4,5 @@
 
 # Configuration #
 #---------------#
-ws.repo.scan=true
+ws.repo.scan=false
 vulnerable.check.run.conclusion.level=success
